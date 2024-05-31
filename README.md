@@ -1,6 +1,6 @@
 npm install @react-navigation/native @react-navigation/stack @aws-amplify/core@5 @aws-amplify/auth@5
 
-Most probably libraries below will be installed. But check if they are not.
+Most probably libraries below will be installed. But check if they are not.  
 expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context
 
 These are neccessory libraries.
