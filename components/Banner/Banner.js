@@ -28,6 +28,7 @@ function infiniteScroll(dataList) {
     
     try {
       this.flatList.scrollToOffset({ animated: true, offset: scrollValue });
+      scrollStop = false;
     } catch (error) {
       console.log('scroll', scrollValue);          
            scrollStop = true;          
