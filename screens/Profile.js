@@ -1,4 +1,3 @@
-//import React from 'react';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
@@ -36,13 +35,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     borderRadius: 25,
     marginRight: 10,  
-    height: 50,
-    alignContent : 'Right'
+
   },
   userName: {
     fontWeight: '600',
     marginBottom: 5,
-    alignSelf: 'Right',
     marginRight: 10
   },
   logoImage: {
@@ -54,7 +51,7 @@ const styles = StyleSheet.create({
   }
 });
  
-export default function Home({ signOut }) {
+export default function Profile({ signOut }) {
   const [userName, setUserName] = useState('');
   const navigation = useNavigation();
   Auth.currentUserInfo().then((user) => {
@@ -65,28 +62,17 @@ export default function Home({ signOut }) {
     <View style={styles.container}>
                  
       <View style={styles.header}>
-      
-      <Image source={require('../assets/saayamforall.jpeg')} style={styles.logoImage}/>
-        <View>
-          <Text style={styles.userName}>{userName}</Text> 
-        </View>
-        <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
-            <Image  source={require('../assets/rn-logo.png')} style={styles.userImage} 
-            />
+      <TouchableOpacity onPress={() => {navigation.navigate("Home")}}>
+        <Image source={require('../assets/saayamforall.jpeg')} style={styles.logoImage}/>
         </TouchableOpacity>
+        <View>
+          <Text style={styles.userName}>{userName}</Text>
+        </View>
+        <Image source={require('../assets/rn-logo.png')} style={styles.userImage}/>
       </View>
       <View width='35%'>
-        <Button onPress={() => signOut()}>Sign Out</Button>
+      <Button onPress={() => signOut()}>Sign Out</Button>
       </View>
     </View>
-  )
-}
-
-
-function GoToScreen({ screenName }) {
-  const navigation = useNavigation();
-
-  return (
-    navigation.navigate(screenName)
   )
 }

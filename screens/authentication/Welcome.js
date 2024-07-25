@@ -13,7 +13,7 @@ import { useIsFocused } from '@react-navigation/native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
+   //justifyContent: 'center',
   },
   image: {
     flex: 1,
@@ -53,12 +53,11 @@ const styles = StyleSheet.create({
   },
 });
 
-
   
 const Welcome = ({ navigation }) => ( 
-     
+  
   <SafeAreaView style={styles.container}>
-           <Header/>
+            <Header />         
     <View style={styles.scrollImage}>
           <View>{useIsFocused() ? <View><Banner data={BannerData}/></View> : <View></View>}</View>           
        
