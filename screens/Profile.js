@@ -65,9 +65,7 @@ export default function Profile({ signOut }) {
       <TouchableOpacity onPress={() => {navigation.navigate("Home")}}>
         <Image source={require('../assets/saayamforall.jpeg')} style={styles.logoImage}/>
         </TouchableOpacity>
-        <View>
-          <Text style={styles.userName}>{userName}</Text>
-        </View>
+       
         <Image source={require('../assets/rn-logo.png')} style={styles.userImage}/>
       </View>
       <View width='35%'>
