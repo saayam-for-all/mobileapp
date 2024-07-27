@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
-import Auth from '@aws-amplify/auth';
+
 import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
@@ -54,10 +54,7 @@ const styles = StyleSheet.create({
 export default function Profile({ signOut }) {
   const [userName, setUserName] = useState('');
   const navigation = useNavigation();
-  Auth.currentUserInfo().then((user) => {
-   
-    setUserName(user.attributes.name);
-  });
+
   return (    
     <View style={styles.container}>
                  

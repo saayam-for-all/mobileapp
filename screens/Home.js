@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
-import Auth from '@aws-amplify/auth';
+
 import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
   userImage: {
     width: 50,
     aspectRatio: 1,
-    borderRadius: 25,
+    borderRadius: 25,    
     marginRight: 10,  
-    height: 50,
-    alignContent : 'Right'
+    height: 50,     
+    marginLeft: 'auto'
   },
   userName: {
     fontWeight: '600',
@@ -57,10 +57,7 @@ const styles = StyleSheet.create({
 export default function Home({ signOut }) {
   const [userName, setUserName] = useState('');
   const navigation = useNavigation();
-  Auth.currentUserInfo().then((user) => {
-   
-    setUserName(user.attributes.name);
-  });
+
   return (    
     <View style={styles.container}>
                  
