@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import {
   View,
   Text,
@@ -30,7 +30,7 @@ function infiniteScroll(dataList) {
       this.flatList.scrollToOffset({ animated: true, offset: scrollValue });
       scrollStop = false;
     } catch (error) {
-      console.log('scroll', scrollValue);          
+      //console.log('scroll', scrollValue);          
            scrollStop = true;          
     }
     
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
   dotView: { flexDirection: "row", justifyContent: "center" },
 });
 
-export default Banner;
+export default memo(Banner);
