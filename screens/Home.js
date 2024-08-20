@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Linking } from 'react-native';
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-import { useNavigation } from '@react-navigation/native';
+import Icon from '@expo/vector-icons/Ionicons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get("window");
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
  
 export default function Home({ signOut }) {
   const [userName, setUserName] = useState('');
-  const navigation = useNavigation();
+  const Tab = createBottomTabNavigator();
 
   return (    
     <View style={styles.container}>
@@ -94,20 +94,89 @@ export default function Home({ signOut }) {
             <Image  source={require('../assets/profile.jpg')} style={styles.profileIcon} 
             />
         </TouchableOpacity>
-        
       </View>
+      
       <View width='35%'>
         <Button onPress={() => signOut()}>Sign Out</Button>
       </View>
+
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Donate') {
+              iconName = focused ? 'hand-heart' : 'hand-heart-outline';
+            } else if (route.name === 'Chat') {
+              iconName = focused ? 'chatbubble' : 'chatbubble-outline';
+            } else if (route.name === 'Account') {
+              iconName = focused ? 'person' : 'person-outline';
+            }
+
+            return <Icon name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#4285F4',
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle: {
+            height: 60,
+            paddingBottom: 5,
+            paddingTop: 5,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+          },
+        })}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Donate" component={DonateScreen} />
+        <Tab.Screen name="Chat" component={ChatScreen} />
+        <Tab.Screen name="Account" component={AccountScreen} />
+      </Tab.Navigator>
     </View>
+
+    
   )
 }
 
 
 function GoToScreen({ screenName }) {
-  const navigation = useNavigation();
+  const navigation = NavigationContainer();
 
   return (
     navigation.navigate(screenName)
   )
+}
+
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
+
+function DonateScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Donate Screen</Text>
+    </View>
+  );
+}
+
+function ChatScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Chat Screen</Text>
+    </View>
+  );
+}
+
+function AccountScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Account Screen</Text>
+    </View>
+  );
 }
