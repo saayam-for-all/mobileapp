@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { useNavigation } from '@react-navigation/native';
-import { PaperProvider } from 'react-native-paper';
+//import { PaperProvider } from 'react-native-paper';
 import { MyReqData } from '../data/MyReqData';
 import RequestsTable from '../components/RequestsTable';
 import config from '../components/config'
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     //alignSelf: 'center',
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    //alignItems: 'center',
+    //justifyContent: 'center',
     //marginTop: 20,
   },
   text: {
@@ -38,8 +38,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
    // padding: 5,
-    backgroundColor: 'yellow',   
-    marginBottom: 5,
+    backgroundColor: 'yellow', 
+    marginTop: 5,  
+    
+    
   },
   table: {    
     alignItems: 'center',
@@ -77,7 +79,7 @@ export default function Home({ signOut }) {
  
   return (    
     <SafeAreaView style={styles.container}>
-        <PaperProvider>        
+             
       <View style={styles.header}>
       
         <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
@@ -94,10 +96,23 @@ export default function Home({ signOut }) {
         </TouchableOpacity>
         
       </View>
-           
-      <RequestsTable data={MyReqData}/>      
-            
-    </PaperProvider>
+      <View>
+      <TouchableOpacity onPress={() => {navigation.navigate("MyReqs")}}>
+            <Text style={styles.menuItem}>My Requests</Text>
+        </TouchableOpacity>
+      </View> 
+      <View>
+      <TouchableOpacity onPress={() => {navigation.navigate("OtherRequests")}}>
+            <Text style={styles.menuItem}>Other Requests</Text>
+        </TouchableOpacity>
+      </View> 
+      <View>
+      <TouchableOpacity onPress={() => {navigation.navigate("ManagedReqs")}}>
+            <Text style={styles.menuItem}>Managed Requests</Text>
+        </TouchableOpacity>
+      </View>         
+       
+    
     </SafeAreaView>
   )
 }
@@ -110,3 +125,10 @@ function GoToScreen({ screenName }) {
     navigation.navigate(screenName)
   )
 }
+
+/*<View width='25%'>
+<Button onPress={() => signOut()}>Sign Out</Button>
+</View>
+<TouchableOpacity onPress={() => {navigation.navigate("MyReqs")}}>
+            <Text style={styles.menuItem}>My Requests</Text>
+        </TouchableOpacity> */
