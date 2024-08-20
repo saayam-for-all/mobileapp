@@ -4,7 +4,7 @@ import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get("window");
 
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
  
 export default function Home({ signOut }) {
   const [userName, setUserName] = useState('');
+  const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
 
   return (    
@@ -108,7 +109,7 @@ export default function Home({ signOut }) {
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home-outline';
             } else if (route.name === 'Donate') {
-              iconName = focused ? 'hand-heart' : 'hand-heart-outline';
+              iconName = focused ? 'dollar-sign' : 'dollar-sign';
             } else if (route.name === 'Chat') {
               iconName = focused ? 'chatbubble' : 'chatbubble-outline';
             } else if (route.name === 'Account') {
@@ -142,7 +143,8 @@ export default function Home({ signOut }) {
 
 
 function GoToScreen({ screenName }) {
-  const navigation = NavigationContainer();
+  const navigation = useNavigation();
+  // const navigation = NavigationContainer();
 
   return (
     navigation.navigate(screenName)
