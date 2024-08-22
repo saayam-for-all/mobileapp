@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Linking } 
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
@@ -10,7 +11,7 @@ const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
+    flex: 1,
     justifyContent: 'center',
     //alignItems: 'center',
     backgroundColor: 'white',
@@ -21,13 +22,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center'
   },
-  welcomeText: {
-    fontStyle : 'italic',  
-    textDecorationStyle : 'dashed',
-    fontSize : 15,  
-    marginBottom : 20,
-    marginTop : 10     
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -35,6 +29,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',   
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
+  },
+  topBar: {
+    flexDirection: 'row',
+    padding: 5,
+    height: 60,
+    backgroundColor: 'yellow',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1000, // Ensures it stays on top of other components
+  },
+  welcomeText: {
+    fontStyle : 'italic',  
+    textDecorationStyle : 'dashed',
+    fontSize : 15,  
+    marginBottom : 20,
+    marginTop : 10     
   },
   userImage: {
     width: 50,
@@ -58,7 +72,8 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 25,
-    marginRight: width/2.2,
+    marginRight: width/2,
+    paddingLeft: 5,
   },
   menuItem: {
     marginHorizontal: 5,
@@ -71,6 +86,9 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  footer: {
+    marginTop: height/1.8,
+  },
 });
  
 export default function Home({ signOut }) {
@@ -81,16 +99,17 @@ export default function Home({ signOut }) {
   return (    
     <View style={styles.container}>
                  
-      <View style={styles.header}>
+      <View style={styles.topBar}>
       
-      <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
-      <View style={styles.menu}>
+        <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
         
-        <TouchableOpacity 
-          onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
-        <Text style={styles.menuItem}>Donate</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.menu}>
+          <TouchableOpacity 
+            onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
+          <Text style={styles.menuItem}>Donate</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
             <Image  source={require('../assets/profile.jpg')} style={styles.profileIcon} 
             />
@@ -101,40 +120,43 @@ export default function Home({ signOut }) {
         <Button onPress={() => signOut()}>Sign Out</Button>
       </View>
 
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+      <View style={styles.footer}>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Donate') {
-              iconName = focused ? 'dollar-sign' : 'dollar-sign';
-            } else if (route.name === 'Chat') {
-              iconName = focused ? 'chatbubble' : 'chatbubble-outline';
-            } else if (route.name === 'Account') {
-              iconName = focused ? 'person' : 'person-outline';
-            }
+              if (route.name === 'Home') {
+                iconName = focused ? 'home' : 'home-outline';
+              } else if (route.name === 'Donate') {
+                iconName = focused ? 'dollar-sign' : 'dollar-sign';
+                return <Feather name={iconName} size={size} color={color} />;
+              } else if (route.name === 'Chat') {
+                iconName = focused ? 'chatbubble' : 'chatbubble-outline';
+              } else if (route.name === 'Account') {
+                iconName = focused ? 'person' : 'person-outline';
+              }
 
-            return <Icon name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#4285F4',
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: {
-            height: 60,
-            paddingBottom: 5,
-            paddingTop: 5,
-          },
-          tabBarLabelStyle: {
-            fontSize: 12,
-          },
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Donate" component={DonateScreen} />
-        <Tab.Screen name="Chat" component={ChatScreen} />
-        <Tab.Screen name="Account" component={AccountScreen} />
-      </Tab.Navigator>
+              return <Icon name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#4285F4',
+            tabBarInactiveTintColor: 'gray',
+            tabBarStyle: {
+              height: 60,
+              paddingBottom: 5,
+              paddingTop: 5,
+            },
+            tabBarLabelStyle: {
+              fontSize: 12,
+            },
+          })}
+        >
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Donate" component={DonateScreen} />
+          <Tab.Screen name="Chat" component={ChatScreen} />
+          <Tab.Screen name="Account" component={AccountScreen} />
+        </Tab.Navigator>
+      </View>
     </View>
 
     
