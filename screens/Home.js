@@ -6,7 +6,7 @@ import Icon from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-
+import UserRequest from './UserRequest';
 const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -88,6 +88,10 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: height/1.8,
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
 });
  
@@ -117,7 +121,25 @@ export default function Home({ signOut }) {
       </View>
       
       <View width='35%'>
+      <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
+      <View style={styles.menu}>
+        
+        <TouchableOpacity 
+          onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
+        <Text style={styles.menuItem}>Donate</Text>
+        </TouchableOpacity>
+      </View>
+        <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
+            <Image  source={require('../assets/profile.jpg')} style={styles.profileIcon} 
+            />
+        </TouchableOpacity>
+        
+      </View>
+      <View style={styles.buttonRow}>
         <Button onPress={() => signOut()}>Sign Out</Button>
+        <Button onPress={() => navigation.navigate('UserRequest')}>
+          Create Help Request
+        </Button>
       </View>
 
       <View style={styles.footer}>
