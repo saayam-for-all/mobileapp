@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: height/1.8,
+  },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -120,21 +121,6 @@ export default function Home({ signOut }) {
         </TouchableOpacity>
       </View>
       
-      <View width='35%'>
-      <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
-      <View style={styles.menu}>
-        
-        <TouchableOpacity 
-          onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
-        <Text style={styles.menuItem}>Donate</Text>
-        </TouchableOpacity>
-      </View>
-        <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
-            <Image  source={require('../assets/profile.jpg')} style={styles.profileIcon} 
-            />
-        </TouchableOpacity>
-        
-      </View>
       <View style={styles.buttonRow}>
         <Button onPress={() => signOut()}>Sign Out</Button>
         <Button onPress={() => navigation.navigate('UserRequest')}>
