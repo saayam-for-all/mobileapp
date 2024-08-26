@@ -7,6 +7,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import UserRequest from './UserRequest';
+import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get("window");
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -20,8 +21,8 @@ import config from '../components/config'
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
-    //justifyContent: 'center',
+    flex: 1,
+    justifyContent: 'center',
     //alignItems: 'center',
    // backgroundColor: 'white',
     //maxWidth: 600,
