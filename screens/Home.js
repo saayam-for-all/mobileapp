@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Linking } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/Ionicons';
@@ -9,15 +9,29 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import UserRequest from './UserRequest';
 const { width, height } = Dimensions.get("window");
 
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+//import { PaperProvider } from 'react-native-paper';
+import { MyReqData } from '../data/MyReqData';
+import RequestsTable from '../components/RequestsTable';
+import config from '../components/config'
+
+//const { width, height } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    //flex: 1,
+    //justifyContent: 'center',
     //alignItems: 'center',
-    backgroundColor: 'white',
+   // backgroundColor: 'white',
     //maxWidth: 600,
-    width: '100%',
-    alignSelf: 'center',
+   // width: '100%',
+    //alignSelf: 'center',
+    flex: 1,
+    backgroundColor: '#fff',
+    //alignItems: 'center',
+    //justifyContent: 'center',
+    //marginTop: 20,
   },
   text: {
     textAlign: 'center'
@@ -62,18 +76,28 @@ const styles = StyleSheet.create({
     padding: 10
 
   },
-  userName: {
-    fontWeight: '600',
-    marginBottom: 5,
-    alignSelf: 'Right',
-    marginRight: 10
-  }, 
+  buttonStyle: {
+    width: config.deviceWidth/3,
+    paddingTop: config.deviceHeight/1.5,
+  },
+  table: {    
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'red', 
+    marginTop:50,  
+    flexDirection: 'column',
+    height: 600,
+  },
   logo: {
     width: 45,
     height: 45,
     borderRadius: 25,
-    marginRight: width/2,
-    paddingLeft: 5,
+    // marginRight: width/2,
+    // paddingLeft: 5,
+
+    
+    //marginRight: width/2.2,
+    marginRight: config.deviceWidth/2.1,
   },
   menuItem: {
     marginHorizontal: 5,
@@ -165,8 +189,25 @@ export default function Home({ signOut }) {
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
       </View>
+
+      <View>
+      <TouchableOpacity onPress={() => {navigation.navigate("MyReqs")}}>
+            <Text style={styles.menuItem}>My Requests</Text>
+        </TouchableOpacity>
+      </View> 
+      <View>
+      <TouchableOpacity onPress={() => {navigation.navigate("OtherRequests")}}>
+            <Text style={styles.menuItem}>Other Requests</Text>
+        </TouchableOpacity>
+      </View> 
+      <View>
+      <TouchableOpacity onPress={() => {navigation.navigate("ManagedReqs")}}>
+            <Text style={styles.menuItem}>Managed Requests</Text>
+        </TouchableOpacity>
+      </View>      
     </View>
 
+    
     
   )
 }
@@ -212,3 +253,9 @@ function AccountScreen() {
     </View>
   );
 }
+/*<View width='25%'>
+<Button onPress={() => signOut()}>Sign Out</Button>
+</View>
+<TouchableOpacity onPress={() => {navigation.navigate("MyReqs")}}>
+            <Text style={styles.menuItem}>My Requests</Text>
+        </TouchableOpacity> */
