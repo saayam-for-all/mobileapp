@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/Ionicons';
@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     //alignItems: 'center',
-   // backgroundColor: 'white',
+    backgroundColor: 'white',
     //maxWidth: 600,
-   // width: '100%',
-    //alignSelf: 'center',
-    flex: 1,
-    backgroundColor: '#fff',
+    width: '100%',
+    alignSelf: 'center',
+    // flex: 1,
+    // backgroundColor: '#fff',
     //alignItems: 'center',
     //justifyContent: 'center',
     //marginTop: 20,
@@ -93,11 +93,9 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 25,
-    // marginRight: width/2,
-    // paddingLeft: 5,
-
-    
-    //marginRight: width/2.2,
+    marginRight: width/2,
+    paddingLeft: 5,
+    marginRight: width/2.2,
     marginRight: config.deviceWidth/2.1,
   },
   menuItem: {
@@ -111,13 +109,72 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  searchBarContainer: {
+    marginTop: -50, // Adjust this margin to match the height of the top bar
+    paddingHorizontal: 0,
+  },
+  searchBar: {
+    height: 40,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#f5f5f5',
+    marginLeft: 15,
+    marginRight: 15,
+  },
   footer: {
-    marginTop: height/1.8,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderColor: '#ddd',
+    position: 'absolute',
+    bottom:0,
   },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginLeft:15,
+    marginRight:15,
+    marginTop: 40,
+  },
+  buttonView: {
+    width: '45%',
+    paddingVertical: 30,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
+  },
+  actionButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    backgroundColor: '#a9c9ff',
+    borderRadius: 8,
+    marginVertical: 10,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  actionButtonText: {
+    fontSize: 20,
+    color: '#4f8ef7',
+    fontWeight: 'bold',
   },
 });
  
@@ -127,8 +184,9 @@ export default function Home({ signOut }) {
   const Tab = createBottomTabNavigator();
 
   return (    
-    <View style={styles.container}>
-                 
+    <SafeAreaView style={styles.container}>
+
+      {/* Top Bar */}           
       <View style={styles.topBar}>
       
         <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
@@ -146,13 +204,50 @@ export default function Home({ signOut }) {
         </TouchableOpacity>
       </View>
       
-      <View style={styles.buttonRow}>
-        <Button onPress={() => signOut()}>Sign Out</Button>
-        <Button onPress={() => navigation.navigate('UserRequest')}>
-          Create Help Request
-        </Button>
+      {/* Search Bar */}
+      <View style={styles.searchBarContainer}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search categories or request..."
+          placeholderTextColor="#888"
+        />
+      </View>
+      
+       {/* Button Container */}
+       <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("MyReqs")}}>
+          <Text style={styles.buttonText}>My Request</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("ManagedReqs")}}>
+          <Text style={styles.buttonText}>Managed Request</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("OtherRequests")}}>
+          <Text style={styles.buttonText}>Others Request</Text>
+        </TouchableOpacity>
       </View>
 
+      {/* Action Buttons */}
+      <TouchableOpacity style={styles.actionButton}>
+        <Icon name="heart-outline" size={20} color="#4f8ef7" />
+        <Text style={styles.actionButtonText}> Become a volunteer</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={[styles.actionButton, { backgroundColor: 'blue' }]} 
+      onPress={() => navigation.navigate('UserRequest')}>
+        <Icon name="add-outline" size={20} color="#fff" />
+        <Text style={[styles.actionButtonText, { color: '#fff' }]}> Create a request</Text>
+      </TouchableOpacity>
+
+      {/* <View style={styles.buttonRow}>
+        <Button onPress={() => signOut()}>Sign Out</Button>
+        <Button onPress={() => navigation.navigate('UserRequest')}>
+          Create a request
+        </Button>
+      </View> */}
+
+      {/* Bottom Tab Bar */}
       <View style={styles.footer}>
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -164,10 +259,10 @@ export default function Home({ signOut }) {
               } else if (route.name === 'Donate') {
                 iconName = focused ? 'dollar-sign' : 'dollar-sign';
                 return <Feather name={iconName} size={size} color={color} />;
-              } else if (route.name === 'Chat') {
-                iconName = focused ? 'chatbubble' : 'chatbubble-outline';
+              } else if (route.name === 'Notification') {
+                iconName = focused ? 'notifications' : 'notifications-outline';
               } else if (route.name === 'Account') {
-                iconName = focused ? 'person' : 'person-outline';
+                iconName = focused ? 'person-circle' : 'person-circle-outline';
               }
 
               return <Icon name={iconName} size={size} color={color} />;
@@ -176,7 +271,7 @@ export default function Home({ signOut }) {
             tabBarInactiveTintColor: 'gray',
             tabBarStyle: {
               height: 60,
-              paddingBottom: 5,
+              paddingBottom: 15,
               paddingTop: 5,
             },
             tabBarLabelStyle: {
@@ -186,30 +281,13 @@ export default function Home({ signOut }) {
         >
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Donate" component={DonateScreen} />
-          <Tab.Screen name="Chat" component={ChatScreen} />
+          <Tab.Screen name="Notification" component={NotificationScreen} />
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
       </View>
 
-      <View>
-      <TouchableOpacity onPress={() => {navigation.navigate("MyReqs")}}>
-            <Text style={styles.menuItem}>My Requests</Text>
-        </TouchableOpacity>
-      </View> 
-      <View>
-      <TouchableOpacity onPress={() => {navigation.navigate("OtherRequests")}}>
-            <Text style={styles.menuItem}>Other Requests</Text>
-        </TouchableOpacity>
-      </View> 
-      <View>
-      <TouchableOpacity onPress={() => {navigation.navigate("ManagedReqs")}}>
-            <Text style={styles.menuItem}>Managed Requests</Text>
-        </TouchableOpacity>
-      </View>      
-    </View>
+    </SafeAreaView>
 
-    
-    
   )
 }
 
@@ -239,10 +317,10 @@ function DonateScreen() {
   );
 }
 
-function ChatScreen() {
+function NotificationScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Chat Screen</Text>
+      <Text>Notification Screen</Text>
     </View>
   );
 }
@@ -254,9 +332,3 @@ function AccountScreen() {
     </View>
   );
 }
-/*<View width='25%'>
-<Button onPress={() => signOut()}>Sign Out</Button>
-</View>
-<TouchableOpacity onPress={() => {navigation.navigate("MyReqs")}}>
-            <Text style={styles.menuItem}>My Requests</Text>
-        </TouchableOpacity> */
