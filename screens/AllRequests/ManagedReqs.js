@@ -6,9 +6,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import { MyReqData } from '../../data/MyReqData';
-import RequestsTable from '../../components/RequestsTable';
-import config from '../../components/config'
 
+import config from '../../components/config'
+import AllRequests from '../../components/AllRequests';
 
 const styles = StyleSheet.create({
   container: {
@@ -69,24 +69,9 @@ export default function ManagedReqs() {
   return (    
     <SafeAreaView style={styles.container}>
         <PaperProvider>        
-      <View style={styles.header}>
-      
-        <Image source={require('../../assets/saayamforall.jpeg')} style={styles.logo}/>
-        <View style={styles.menu}>
-        
-          <TouchableOpacity 
-          onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
-           <Text style={styles.menuItem}>Donate</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
-            <Image  source={require('../../assets/profile.jpg')} style={styles.profileIcon} 
-            />
-        </TouchableOpacity>
-        
-      </View>
+  
            
-      <RequestsTable data={MyReqData}/>      
+      <AllRequests data={MyReqData}/>      
             
     </PaperProvider>
     </SafeAreaView>

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import Button from '../../components/Button';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { useNavigation } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import { MyReqData } from '../../data/MyReqData';
-import RequestsTable from '../../components/RequestsTable';
+
 import config from '../../components/config'
+import AllRequests from '../../components/AllRequests';
 
 
 const styles = StyleSheet.create({
@@ -67,28 +68,12 @@ export default function OtherRequests() {
   const navigation = useNavigation();
  
   return (    
-    <SafeAreaView style={styles.container}>
-        <PaperProvider>        
-      <View style={styles.header}>
-      
-        <Image source={require('../../assets/saayamforall.jpeg')} style={styles.logo}/>
-        <View style={styles.menu}>
-        
-          <TouchableOpacity 
-          onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
-           <Text style={styles.menuItem}>Donate</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
-            <Image  source={require('../../assets/profile.jpg')} style={styles.profileIcon} 
-            />
-        </TouchableOpacity>
-        
-      </View>
+    <SafeAreaView style={styles.container}>            
+     
            
-      <RequestsTable data={MyReqData}/>      
+      <AllRequests data={MyReqData}/>      
             
-    </PaperProvider>
+    
     </SafeAreaView>
   )
 }

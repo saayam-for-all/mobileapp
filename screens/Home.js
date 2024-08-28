@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 //import { PaperProvider } from 'react-native-paper';
 import { MyReqData } from '../data/MyReqData';
-import RequestsTable from '../components/RequestsTable';
+
 import config from '../components/config'
 
 //const { width, height } = Dimensions.get("window");
