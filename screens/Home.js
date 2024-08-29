@@ -261,7 +261,7 @@ export default function Home({ signOut }) {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
 
-              if (route.name === 'Home') {
+              if (route.name === 'Home1') {
                 iconName = focused ? 'home' : 'home-outline';
               } else if (route.name === 'Donate') {
                 iconName = focused ? 'dollar-sign' : 'dollar-sign';
@@ -286,7 +286,7 @@ export default function Home({ signOut }) {
             },
           })}
         >
-          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Home1" options={{ title: 'Home' }} component={HomeTabScreen} />
           <Tab.Screen name="Donate" component={DonateScreen} />
           <Tab.Screen name="Notification" component={NotificationScreen} />
           <Tab.Screen name="Account" component={AccountScreen} />
@@ -308,7 +308,7 @@ function GoToScreen({ screenName }) {
   )
 }
 
-function HomeScreen() {
+function HomeTabScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home Screen</Text>
