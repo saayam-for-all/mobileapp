@@ -6,14 +6,14 @@ import Icon from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import UserRequest from './UserRequest';
+//import UserRequest from './UserRequest';
 import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get("window");
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 //import { PaperProvider } from 'react-native-paper';
-import { MyReqData } from '../data/MyReqData';
+//import { MyReqData } from '../data/MyReqData';
 
 import config from '../components/config'
 
@@ -22,19 +22,19 @@ import config from '../components/config'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    //justifyContent: 'center',
     //alignItems: 'center',
     backgroundColor: 'white',
     //maxWidth: 600,
     width: '100%',
-    alignSelf: 'center',
+    //alignSelf: 'center',
     // flex: 1,
     // backgroundColor: '#fff',
     //alignItems: 'center',
     //justifyContent: 'center',
     //marginTop: 20,
   },
-  text: {
+ /* text: {
     textAlign: 'center'
   },
   header: {
@@ -44,21 +44,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',   
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-  },
+  },*/
   topBar: {
-    flexDirection: 'row',
+    flexDirection: 'row',   
     padding: 5,
-    height: 60,
+    height: 50,
     backgroundColor: 'yellow',
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
     alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1000, // Ensures it stays on top of other components
+   // position: 'absolute',
+    //top: 0,
+    //left: 0,
+    //right: 0,
+    //zIndex: 1000, // Ensures it stays on top of other components
   },
-  welcomeText: {
+  /*welcomeText: {
     fontStyle : 'italic',  
     textDecorationStyle : 'dashed',
     fontSize : 15,  
@@ -76,19 +76,19 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     padding: 10
 
-  },
+  },*/
   buttonStyle: {
     width: config.deviceWidth/3,
     paddingTop: config.deviceHeight/1.5,
   },
-  table: {    
+ /* table: {    
     alignItems: 'center',
     flex: 1,
     backgroundColor: 'red', 
     marginTop:50,  
     flexDirection: 'column',
     height: 600,
-  },
+  },*/
   logo: {
     width: 45,
     height: 45,
@@ -110,7 +110,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   searchBarContainer: {
-    marginTop: -50, // Adjust this margin to match the height of the top bar
+    marginTop:10,
+    //marginTop: -50, // Adjust this margin to match the height of the top bar
     paddingHorizontal: 0,
   },
   searchBar: {
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     marginLeft: 15,
     marginRight: 15,
+    marginTop:5,
   },
   footer: {
     flexDirection: 'row',
@@ -143,11 +145,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft:15,
     marginRight:15,
-    marginTop: 40,
+    marginTop: 10,
+    //marginTop: 40,
+    marginBottom: 10,
   },
   buttonView: {
     width: '45%',
-    paddingVertical: 30,
+    paddingVertical: 20,
     backgroundColor: '#f5f5f5',
     borderRadius: 12,
     justifyContent: 'center',
@@ -164,12 +168,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 15,
+    //paddingVertical: 15,
     backgroundColor: '#a9c9ff',
     borderRadius: 8,
-    marginVertical: 10,
+    //marginVertical: 10,
     marginLeft: 20,
     marginRight: 20,
+    marginBottom:10,
   },
   actionButtonText: {
     fontSize: 20,
@@ -228,6 +233,7 @@ export default function Home({ signOut }) {
         </TouchableOpacity>
       </View>
 
+      <View>
       {/* Action Buttons */}
       <TouchableOpacity style={styles.actionButton}>
         <Icon name="heart-outline" size={20} color="#4f8ef7" />
@@ -239,6 +245,7 @@ export default function Home({ signOut }) {
         <Icon name="add-outline" size={20} color="#fff" />
         <Text style={[styles.actionButtonText, { color: '#fff' }]}> Create a request</Text>
       </TouchableOpacity>
+      </View>
 
       {/* <View style={styles.buttonRow}>
         <Button onPress={() => signOut()}>Sign Out</Button>
