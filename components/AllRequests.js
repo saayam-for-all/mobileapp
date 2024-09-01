@@ -1,9 +1,10 @@
 import * as React from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
-import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList} from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign' 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import Octicons from '@expo/vector-icons/Octicons'
+import {TextInput, } from 'react-native-paper';
 
 const AllRequests = ({ data }) => {
   const [sortAscending, setSortAscending] = React.useState(true);
@@ -43,10 +44,10 @@ const AllRequests = ({ data }) => {
     const filtered = text === "" ? data : data.filter(
       (data) =>
         data.subject.toLowerCase().includes(text.toLowerCase()) ||
-        data.category.toLowerCase().includes(text.toLowerCase()) 
-        //||
-        //data.mobileno.includes(text) ||
-        //customer.plateno.includes(text)
+        data.category.toLowerCase().includes(text.toLowerCase()) ||
+        data.id.toLowerCase().includes(text.toLowerCase())
+        // ||
+        //data.id.includes(text)
     );
     setFilteredData(filtered);
   };
@@ -60,7 +61,10 @@ const AllRequests = ({ data }) => {
       <View style={{ flexDirection: "row" }}>
         <TextInput
           style={styles.input}
-          placeholder="Search"
+          placeholder="Search the request"
+          //size={28}
+          outlined
+          left={<TextInput.Icon icon="magnify" size={28} style={{pointerEvents: 'none'}} />}
           onChangeText={handleSearch}
           value={searchQuery}
         /><Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
@@ -231,9 +235,11 @@ input: {
     //marginLeft: 5,
     width: "85%",
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: 'lightgray',
-    marginRight: 10
+    //borderWidth: 1,
+    //borderColor: 'lightgray',
+    marginRight: 10,
+    height:28
+
   },
 
 });
