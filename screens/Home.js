@@ -6,97 +6,41 @@ import Icon from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-//import UserRequest from './UserRequest';
-import { Dimensions } from 'react-native';
-const { width, height } = Dimensions.get("window");
+
+//import { Dimensions } from 'react-native';
+//const { width, height } = Dimensions.get("window");
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-//import { PaperProvider } from 'react-native-paper';
-//import { MyReqData } from '../data/MyReqData';
-
 import config from '../components/config'
 
-//const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
     backgroundColor: 'white',
-    //maxWidth: 600,
-    width: '100%',
-    //alignSelf: 'center',
-    // flex: 1,
-    // backgroundColor: '#fff',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-    //marginTop: 20,
+    width: '100%',    
   },
- /* text: {
-    textAlign: 'center'
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 5,
-    backgroundColor: 'yellow',   
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-  },*/
   topBar: {
     flexDirection: 'row',   
     padding: 5,
     height: 50,
     backgroundColor: 'yellow',
     justifyContent: 'space-between',
-    alignItems: 'center',
-   // position: 'absolute',
-    //top: 0,
-    //left: 0,
-    //right: 0,
-    //zIndex: 1000, // Ensures it stays on top of other components
-  },
-  /*welcomeText: {
-    fontStyle : 'italic',  
-    textDecorationStyle : 'dashed',
-    fontSize : 15,  
-    marginBottom : 20,
-    marginTop : 10     
-  },
-  userImage: {
-    width: 50,
-    aspectRatio: 1,
-    borderRadius: 25,    
-    marginRight: 10,  
-    height: 50,     
-    // marginLeft: 'auto',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    padding: 10
-
-  },*/
+    alignItems: 'center',   
+  },  
   buttonStyle: {
     width: config.deviceWidth/3,
     paddingTop: config.deviceHeight/1.5,
   },
- /* table: {    
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: 'red', 
-    marginTop:50,  
-    flexDirection: 'column',
-    height: 600,
-  },*/
   logo: {
     width: 45,
     height: 45,
     borderRadius: 25,
-    marginRight: width/2,
+    //marginRight: width/2,
     paddingLeft: 5,
-    marginRight: width/2.2,
-    marginRight: config.deviceWidth/2.1,
+    //marginRight: width/2.2,
+    marginRight: config.deviceWidth/2,
   },
   menuItem: {
     marginHorizontal: 5,
