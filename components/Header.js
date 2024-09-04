@@ -7,8 +7,9 @@ import {
   StyleSheet, Platform, Linking
 } from "react-native";
 import Button from '../components/Button';
+import config from '../components/config'
 
-
+//const { width, height } = Dimensions.get("window");
 const LogoImage ="https://saayamforall.org/wp-content/uploads/2023/03/saayamforall.jpeg";
 
 export default function Header() {
@@ -16,10 +17,10 @@ export default function Header() {
       <View style={styles.container}>
         <View style={styles.imageContainer}>
       
-         <Image source={{uri: LogoImage}}
+         <Image source={require('../assets/saayamforall.jpeg')}
              style={{width: 50, height: 50, alignItems: 'left'}} />
         </View>
-        <View style={{marginLeft:180, alignItems: 'right'}}>
+        <View style={{marginLeft:config.deviceWidth/1.6, alignItems: 'right'}}>
           <Button
           // onPress={() => navigation.navigate('Donate')}>
           onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
