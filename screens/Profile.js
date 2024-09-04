@@ -1,79 +1,123 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, ScrollView } from 'react-native';
 import Button from '../components/Button';
-
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';  // Using vector icons
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
+    flex: 1,
     backgroundColor: 'white',
-    maxWidth: 600,
-    width: '100%',
-    alignSelf: 'center',
-  },
-  text: {
-    textAlign: 'center'
-  },
-  welcomeText: {
-    fontStyle : 'italic',  
-    textDecorationStyle : 'dashed',
-    fontSize : 15,  
-    marginBottom : 20,
-    marginTop : 10     
+    padding: 20,
   },
   header: {
-    flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    backgroundColor: 'yellow',   
+    marginBottom: 30,
   },
   userImage: {
-    width: 50,
-    aspectRatio: 1,
-    borderRadius: 25,
-    marginRight: 10,  
-
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 10,
   },
   userName: {
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 5,
-    marginRight: 10
   },
-  logoImage: {
-    width: 50,
-    aspectRatio: 1,
-    borderRadius: 25,
-    marginRight: 150,  
-    height: 50,
-  }
+  userEmail: {
+    fontSize: 16,
+    color: '#777',
+    marginBottom: 20,
+  },
+  optionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+  },
+  optionText: {
+    fontSize: 16,
+    fontWeight: 'bold',  // Make the text bold
+    marginLeft: 15,      // Add margin to align text to the left next to the icon
+    flex: 1,             // Make the text take up remaining space
+  },
+  optionIcon: {
+    marginRight: 15,
+  },
+  signOutButton: {
+    marginTop: 30,
+    backgroundColor: '#ff4444',
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  signOutButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
 });
- 
+
 export default function Profile({ signOut }) {
-  const [userName, setUserName] = useState('');
   const navigation = useNavigation();
+  const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
 
-  return (    
-    <View style={styles.container}>
-                 
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-      <TouchableOpacity onPress={() => {navigation.navigate("Home")}}>
-        <Image source={require('../assets/saayamforall.jpeg')} style={styles.logoImage}/>
-        </TouchableOpacity>
-       
-        <Image source={require('../assets/rn-logo.png')} style={styles.userImage}/>
-      </View>
-      <View width='35%'>
-      <Button onPress={() => signOut()}>Sign Out</Button>
+        <Image source={require('../assets/rn-logo.png')} style={styles.userImage} />
+        <Text style={styles.userName}>Jacob Jones</Text>
+        <Text style={styles.userEmail}>youremail@domain.com | +01 234 567 89</Text>
       </View>
 
-      <View style={styles.buttonRow} width='35%'>  
-        <Button onPress={() => navigation.navigate('EditProfile')}> 
-          Edit Profile  
-        </Button> 
-      </View>  
-    </View>
-  )
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('EditProfile')}>
+        <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Edit Profile</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('ChangePassword')}>
+        <FontAwesome name="lock" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Change Password</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
+      <View style={styles.optionRow}>
+        <FontAwesome name="bell" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Notifications</Text>
+        <Switch
+          value={isNotificationsEnabled}
+          onValueChange={setNotificationsEnabled}
+        />
+      </View>
+
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('TermsConditions')}>
+        <FontAwesome name="file-text-o" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Terms & Conditions</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('PrivacyPolicy')}>
+        <FontAwesome name="shield" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Privacy Policy</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('HelpCenter')}>
+        <FontAwesome name="info-circle" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Help Center</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.optionRow} onPress={() => signOut()}>
+        <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Sign out</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
+      
+    </ScrollView>
+  );
 }
