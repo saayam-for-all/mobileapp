@@ -53,8 +53,8 @@ export default function UserRequest() {
       <View style={styles.container}>
         <Text style={styles.title}>Create Help Request</Text>
         <View style={styles.alertBox}>
-          <Text style={styles.alertText}>
-            <Text style={styles.alertTextBold}>Note:</Text> Note: We do not handle life-threatening emergency requests. Please call your local emergency service if you need urgent help.
+          <Text style={styles.alertTextBold}>
+            Note: We do not handle life-threatening emergency requests. Please call your local emergency service if you need urgent help.
           </Text>
         </View>
         <View>
@@ -141,12 +141,13 @@ export default function UserRequest() {
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>
-            Description <Text style={{ color: 'red' }}>*</Text>
+            Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)
           </Text>
           <Input
             style={[styles.textArea, { minHeight: 100 }]}
             multiline
             numberOfLines={4}
+            maxLength={500}
             placeholder="Describe your request..."
             value={description}
             onChangeText={setDescription}
