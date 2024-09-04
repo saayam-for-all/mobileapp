@@ -101,7 +101,10 @@ export default function Home({ signOut }) {
           Create Help Request
         </Button>
       </View>
+      
     </View>
+
+    
   )
 }
 

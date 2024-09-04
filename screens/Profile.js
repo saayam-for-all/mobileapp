@@ -68,6 +68,12 @@ export default function Profile({ signOut }) {
       <View width='35%'>
       <Button onPress={() => signOut()}>Sign Out</Button>
       </View>
+
+      <View style={styles.buttonRow} width='35%'>  
+        <Button onPress={() => navigation.navigate('EditProfile')}> 
+          Edit Profile  
+        </Button> 
+      </View>  
     </View>
   )
 }
