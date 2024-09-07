@@ -105,7 +105,7 @@ export default function Profile({ signOut }) {
         <Ionicons name="chevron-forward" size={20} color="#777" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('HelpCenter')}>
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('Welcome')}>
         <FontAwesome name="info-circle" size={20} style={styles.optionIcon} />
         <Text style={styles.optionText}>Help Center</Text>
         <Ionicons name="chevron-forward" size={20} color="#777" />
