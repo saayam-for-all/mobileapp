@@ -6,6 +6,7 @@ import UserRequest from '../screens/UserRequest';
 import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
+import RequestDetails from '../screens/AllRequests/RequestDetails';
 
 const AppStack = createStackNavigator();
 
@@ -21,11 +22,13 @@ export default function App({ signOut }) {
       <AppStack.Screen name="UserRequest" component={UserRequest} />
       <AppStack.Screen name="MyReqs" component={MyReqs} 
         options={{ title: 'My Requests' }}/>
-    <AppStack.Screen name="OtherRequests" component={OtherRequests} 
+      <AppStack.Screen name="OtherRequests" component={OtherRequests} 
         options={{ title: 'Other Requests' }}/>
-    <AppStack.Screen name="ManagedReqs" component={ManagedReqs} 
-    options={{ title: 'Managed Requests' }}/>
-      
+      <AppStack.Screen name="ManagedReqs" component={ManagedReqs} 
+        options={{ title: 'Managed Requests' }}/>
+      <AppStack.Screen name="RequestDetails" component={RequestDetails} 
+        //options={{ title: 'Request Details' }}
+        options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
     </AppStack.Navigator>
   );
 }
