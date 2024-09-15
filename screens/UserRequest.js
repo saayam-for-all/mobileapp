@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Switch, Alert, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { Picker as SelectPicker } from '@react-native-picker/picker';
 
 export default function UserRequest() {
   const [forSelf, setForSelf] = useState('Yes');
@@ -11,37 +11,41 @@ export default function UserRequest() {
   const [priority, setPriority] = useState('Low');
   const [requestCategory, setRequestCategory] = useState('Health');
   const [requestType, setRequestType] = useState('In Person');
+  const [subject, setSubject] = useState(''); 
   const [description, setDescription] = useState('');
   const navigation = useNavigation();
 
+
   const handleSubmit = () => {
-    // Handle form submission
+    // Validate required fields
+    if (!subject || !description) {
+      Alert.alert('Validation Error', 'Both Subject and Description are required!');
+      return;
+    }
+
+    // Proceed with form submission
     console.log({
       forSelf,
       isCalamity,
       priority,
       requestCategory,
       requestType,
+      subject,
       description,
     });
   };
 
   const handleCancel = () => {
-    Alert.alert(
-      "Are you sure?",
-      "Do you really want to cancel the request?",
-      [
-        {
-          text: "No",
-          style: "cancel",
-        },
-        {
-          text: "Yes",
-          onPress: () => navigation.navigate('Home'),
-        },
-      ],
-      { cancelable: true }
-    );
+    Alert.alert('Are you sure?', 'Do you really want to cancel the request?', [
+      {
+        text: 'No',
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: () => navigation.navigate('Home'),
+      },
+    ]);
   };
 
   return (
@@ -49,20 +53,24 @@ export default function UserRequest() {
       <View style={styles.container}>
         <Text style={styles.title}>Create Help Request</Text>
         <View style={styles.alertBox}>
-          <Text style={styles.alertText}>
-            <Text style={styles.alertTextBold}>Note:</Text> Please call your local emergency number for life-threatening emergencies.
+          <Text style={styles.alertTextBold}>
+            Note: We do not handle life-threatening emergency requests. Please call your local emergency service if you need urgent help.
           </Text>
         </View>
-        <View style={styles.field}>
+        <View>
           <Text style={styles.label}>For Self</Text>
-          <SelectPicker
-            selectedValue={forSelf}
-            onValueChange={(itemValue) => setForSelf(itemValue)}
-            style={styles.picker}
-          >
-            <SelectPicker.Item label="Yes" value="Yes" />
-            <SelectPicker.Item label="No" value="No" />
-          </SelectPicker>
+          <RNPickerSelect
+            onValueChange={(value) => setForSelf(value)}
+            items={[
+              { label: 'Yes', value: 'Yes' },
+              { label: 'No', value: 'No' },
+            ]}
+            value={forSelf}
+            style={{
+                  inputIOS: pickerSelectStyles.inputIOS,
+                  inputAndroid: pickerSelectStyles.inputAndroid,
+            }}
+          />
         </View>
         <View style={styles.rowField}>
           <Text style={styles.label}>Is Calamity?</Text>
@@ -72,48 +80,74 @@ export default function UserRequest() {
             style={styles.switch}
           />
         </View>
-        <View style={styles.field}>
+        <View>
           <Text style={styles.label}>Priority</Text>
-          <SelectPicker
-            selectedValue={priority}
-            onValueChange={(itemValue) => setPriority(itemValue)}
-            style={styles.picker}
-          >
-            <SelectPicker.Item label="Low" value="Low" />
-            <SelectPicker.Item label="Medium" value="Medium" />
-            <SelectPicker.Item label="High" value="High" />
-          </SelectPicker>
+          <RNPickerSelect
+            onValueChange={(value) => setPriority(value)}
+            items={[
+              { label: 'Low', value: 'Low' },
+              { label: 'Medium', value: 'Medium' },
+              { label: 'High', value: 'High' },
+            ]}
+            value={priority}
+            style={{
+                  inputIOS: pickerSelectStyles.inputIOS,
+                  inputAndroid: pickerSelectStyles.inputAndroid,
+            }}
+          />
         </View>
-        <View style={styles.field}>
+        <View>
           <Text style={styles.label}>Request Category</Text>
-          <SelectPicker
-            selectedValue={requestCategory}
-            onValueChange={(itemValue) => setRequestCategory(itemValue)}
-            style={styles.picker}
-          >
-            <SelectPicker.Item label="Health" value="Health" />
-            <SelectPicker.Item label="Education" value="Education" />
-            <SelectPicker.Item label="Electronics" value="Electronics" />
-            <SelectPicker.Item label="Logistics" value="Logistics" />
-          </SelectPicker>
+          <RNPickerSelect
+            onValueChange={(value) => setRequestCategory(value)}
+            items={[
+              { label: 'Health', value: 'Health' },
+              { label: 'Education', value: 'Education' },
+              { label: 'Electronics', value: 'Electronics' },
+              { label: 'Logistics', value: 'Logistics' },
+            ]}
+            value={requestCategory}
+            style={{
+                  inputIOS: pickerSelectStyles.inputIOS,
+                  inputAndroid: pickerSelectStyles.inputAndroid,
+            }}
+          />
         </View>
         <View style={styles.field}>
           <Text style={styles.label}>Request Type</Text>
-          <SelectPicker
-            selectedValue={requestType}
-            onValueChange={(itemValue) => setRequestType(itemValue)}
-            style={styles.picker}
-          >
-            <SelectPicker.Item label="In Person" value="In Person" />
-            <SelectPicker.Item label="Remote" value="Remote" />
-          </SelectPicker>
-        </View>
+          <RNPickerSelect
+            onValueChange={(value) => setRequestType(value)}
+            items={[
+              { label: 'In Person', value: 'In Person' },
+              { label: 'Remote', value: 'Remote' },
+            ]}
+            value={requestType}
+            style={{
+                  inputIOS: pickerSelectStyles.inputIOS,
+                  inputAndroid: pickerSelectStyles.inputAndroid,
+            }}
+          />
         <View style={styles.field}>
-          <Text style={styles.label}>Description</Text>
+          <Text style={styles.label}>
+            Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
+          </Text>
           <Input
             style={styles.textArea}
+            maxLength={70}
+            placeholder="Enter subject..."
+            value={subject}
+            onChangeText={setSubject}
+          />
+        </View>
+        <View style={styles.field}>
+          <Text style={styles.label}>
+            Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)
+          </Text>
+          <Input
+            style={[styles.textArea, { minHeight: 100 }]}
             multiline
             numberOfLines={4}
+            maxLength={500}
             placeholder="Describe your request..."
             value={description}
             onChangeText={setDescription}
@@ -128,9 +162,11 @@ export default function UserRequest() {
           </Button>
         </View>
       </View>
+    </View>
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -174,6 +210,7 @@ const styles = StyleSheet.create({
   rowField: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
   label: {
@@ -181,17 +218,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#374151',
     marginRight: 8,
-  },
-  picker: {
-    height: 50,
-    borderColor: '#d1d5db',
-    borderWidth: 1,
-    borderRadius: 8,
-    color: '#374151',
-    paddingHorizontal: 8,
-  },
-  switch: {
-    marginLeft: 'auto',
   },
   textArea: {
     borderColor: '#d1d5db',
@@ -206,5 +232,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 24,
+  },
+});
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 8,
+    color: '#374151',
+    paddingRight: 30,
+    backgroundColor: '#f9fafb',
+    marginBottom: 16,
+
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 8,
+    color: '#374151',
+    paddingRight: 30,
+    backgroundColor: '#f9fafb',
+    marginBottom: 16,
   },
 });
