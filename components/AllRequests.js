@@ -1,9 +1,8 @@
 import * as React from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
 import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList} from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign' 
-import Ionicons from '@expo/vector-icons/Ionicons'
-import Octicons from '@expo/vector-icons/Octicons'
+import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons' 
+
 import {TextInput, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
