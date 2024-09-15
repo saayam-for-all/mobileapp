@@ -6,6 +6,8 @@ import UserRequest from '../screens/UserRequest';
 import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
+import EditProfile from '../screens/EditProfile';
+import Welcome from '../screens/Welcome';
 
 const AppStack = createStackNavigator();
 
@@ -25,7 +27,12 @@ export default function App({ signOut }) {
         options={{ title: 'Other Requests' }}/>
     <AppStack.Screen name="ManagedReqs" component={ManagedReqs} 
     options={{ title: 'Managed Requests' }}/>
-      
+      <AppStack.Screen name="EditProfile">
+        {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Welcome">
+        {() => <Welcome signOut={signOut} />}
+      </AppStack.Screen>
     </AppStack.Navigator>
   );
 }
