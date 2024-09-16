@@ -179,7 +179,8 @@ export default function Home({ signOut }) {
 
       <View>
       {/* Action Buttons */}
-      <TouchableOpacity style={styles.actionButton}>
+      <TouchableOpacity style={styles.actionButton}
+      onPress={() => navigation.navigate('Availability')}>
         <Icon name="heart-outline" size={20} color="#4f8ef7" />
         <Text style={styles.actionButtonText}> Become a volunteer</Text>
       </TouchableOpacity>
