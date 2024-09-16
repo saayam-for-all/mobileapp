@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 const EditProfile = () => {
@@ -10,6 +10,60 @@ const EditProfile = () => {
   const [zone, setZone] = useState('');
   const [dob, setDob] = useState('');
   const [gender, setGender] = useState('');
+
+  const validateForm = () => {
+    // First Name and Last Name should contain text only (no numbers or special characters)
+    const nameRegex = /^[A-Za-z]+$/;
+    if (!nameRegex.test(firstName)) {
+      Alert.alert('Invalid Input', 'First Name should contain only letters.');
+      return false;
+    }
+    if (!nameRegex.test(lastName)) {
+      Alert.alert('Invalid Input', 'Last Name should contain only letters.');
+      return false;
+    }
+
+    // Email should contain @ and follow general email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      return false;
+    }
+
+    // Phone number should start with '+' and contain digits only
+    const phoneRegex = /^\+[0-9]{1,15}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      Alert.alert('Invalid Phone Number', 'Phone number should start with "+" followed by digits.');
+      return false;
+    }
+
+    // Time Zone should be in uppercase
+    if (zone !== zone.toUpperCase()) {
+      Alert.alert('Invalid Time Zone', 'Time Zone should be in uppercase.');
+      return false;
+    }
+
+    // DOB should match the DD/MM/YY format
+    const dobRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!dobRegex.test(dob)) {
+      Alert.alert('Invalid Date of Birth', 'DOB should be in the format DD/MM/YY.');
+      return false;
+    }
+
+    if (!gender) {
+      Alert.alert('Invalid Gender', 'Please select a gender option.');
+      return false;
+    }
+    // If all validations pass
+    return true;
+  };
+
+  const handleUpdateProfile = () => {
+    if (validateForm()) {
+      Alert.alert('Success', 'Profile updated successfully.');
+      // Proceed with the profile update logic here
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -72,7 +126,7 @@ const EditProfile = () => {
         </Picker>
       </View>
       
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
         <Text style={styles.buttonText}>Update Profile</Text>
       </TouchableOpacity>
     </View>
