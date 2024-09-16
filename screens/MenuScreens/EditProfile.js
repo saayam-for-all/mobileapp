@@ -50,11 +50,7 @@ const EditProfile = () => {
       return false;
     }
 
-    if (!gender) {
-      Alert.alert('Invalid Gender', 'Please select a gender option.');
-      return false;
-    }
-    // If all validations pass
+        // If all validations pass
     return true;
   };
 
