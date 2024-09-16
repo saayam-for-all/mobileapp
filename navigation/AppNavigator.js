@@ -6,8 +6,10 @@ import UserRequest from '../screens/UserRequest';
 import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
-import EditProfile from '../screens/EditProfile';
-import Welcome from '../screens/Welcome';
+import EditProfile from  '../screens/MenuScreens/EditProfile';
+import Welcome from  '../screens/MenuScreens/Welcome';
+
+
 
 const AppStack = createStackNavigator();
 

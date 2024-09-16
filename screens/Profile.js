@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, ScrollView, Alert } from 'react-native';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';  // Using vector icons
+
 
 const styles = StyleSheet.create({
   container: {
@@ -64,6 +65,27 @@ export default function Profile({ signOut }) {
   const navigation = useNavigation();
   const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
 
+  // Function to trigger the sign-out confirmation
+  const confirmSignOut = () => {
+    Alert.alert(
+      'Alert', // Title
+      'Are you sure you want to logout?', // Message
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel', // Makes the button look like a cancel button
+        },
+        {
+          text: 'Logout',
+          onPress: () => signOut(),
+          style: 'destructive', // Adds red color to signify destructive action
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
@@ -111,11 +133,12 @@ export default function Profile({ signOut }) {
         <Ionicons name="chevron-forward" size={20} color="#777" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.optionRow} onPress={() => signOut()}>
-        <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-        <Text style={styles.optionText}>Sign out</Text>
-        <Ionicons name="chevron-forward" size={20} color="#777" />
-      </TouchableOpacity>
+    <TouchableOpacity style={styles.optionRow} onPress={confirmSignOut}>
+      <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
+      <Text style={styles.optionText}>Log out</Text>
+      <Ionicons name="chevron-forward" size={20} color="#777" />
+    </TouchableOpacity>
+
 
       
     </ScrollView>
