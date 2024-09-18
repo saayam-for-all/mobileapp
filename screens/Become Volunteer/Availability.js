@@ -6,14 +6,15 @@ import { SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Checkbox } from 'react-native-paper';
+import { Dimensions } from 'react-native';
 
 const AvailabilitySelector = () => {
         const [timeSlots, setTimeSlots] = useState([{ day: 'Everyday', startTime: '12:00 AM', endTime: '12:00 AM' }]);
         const [notificationsEnabled, setNotificationsEnabled] = useState(false);
         const navigation = useNavigation();
         const [checked, setChecked] = React.useState(false);
+        const screenWidth = Dimensions.get('window').width;
       
         const dayOptions = [
           { label: 'Everyday', value: 'Everyday' },
@@ -157,9 +158,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f3f4f6',
     },
     container: {
-        padding: 16,
+        padding: 12,
         backgroundColor: '#fff',
-        margin: 16,
+        margin: 12,
         borderRadius: 8,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+    flexWrap: 'wrap', // Allow wrapping if needed
   },
   timeButton: {
     flex: 1,
@@ -300,20 +302,19 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 4,
     color: 'black',
-    // paddingRight: 30,
-    width: 100,
+    width: '100%',
     textAlign: 'center'
   },
   inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    fontSize: 14,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
     color: 'black',
-    paddingRight: 30,
-    width: 120,
+    width: '100%',
+    textAlign: 'center'
   },
 });
 
