@@ -7,11 +7,13 @@ import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Checkbox } from 'react-native-paper';
 
 const AvailabilitySelector = () => {
         const [timeSlots, setTimeSlots] = useState([{ day: 'Everyday', startTime: '12:00 AM', endTime: '12:00 AM' }]);
         const [notificationsEnabled, setNotificationsEnabled] = useState(false);
         const navigation = useNavigation();
+        const [checked, setChecked] = React.useState(false);
       
         const dayOptions = [
           { label: 'Everyday', value: 'Everyday' },
@@ -30,7 +32,7 @@ const AvailabilitySelector = () => {
         
           for (let period of periods) {
             for (let hour = 1; hour <= 12; hour++) {
-              for (let minute = 0; minute < 60; minute++) {
+              for (let minute of [0, 30]) {
                 const hourString = hour.toString().padStart(2, '0');
                 const minuteString = minute.toString().padStart(2, '0');
                 const timeString = `${hourString}:${minuteString} ${period}`;
@@ -118,9 +120,12 @@ const AvailabilitySelector = () => {
               <Text style={styles.addButtonText}>+ Add</Text>
             </TouchableOpacity>
             <View style={styles.notificationContainer}>
-              <TouchableOpacity
-                style={[styles.checkbox, notificationsEnabled && styles.checkboxChecked]}
-                onPress={() => setNotificationsEnabled(!notificationsEnabled)}
+              <Checkbox.Android
+                status={checked ? 'checked' : 'unchecked'}
+                color='green'
+                onPress={() => {
+                  setChecked(!checked);
+                }}
               />
               <Text style={styles.notificationText}>
                 Would you like to receive notifications in case of emergencies or critical situations?
