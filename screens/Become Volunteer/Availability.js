@@ -88,25 +88,33 @@ const AvailabilitySelector = () => {
       <Text style={styles.title}>Please Provide Your Available Time Slots for Volunteering</Text>
       {timeSlots.map((slot, index) => (
               <View key={index} style={styles.row}>
-              
+                <View style={styles.pickerContainer}>
                 <RNPickerSelect
                   onValueChange={(value) => updateTimeSlot(index, 'day', value)}
                   items={dayOptions}
                   style={pickerSelectStyles}
                   value={slot.day}
+                  useNativeAndroidPickerStyle={false}
                 />
+                </View>
+                <View style={styles.pickerContainer}>
                 <RNPickerSelect
                   onValueChange={(value) => updateTimeSlot(index, 'startTime', value)}
                   items={timeOptions}
                   style={pickerSelectStyles}
                   value={slot.startTime}
+                  useNativeAndroidPickerStyle={false}
                 />
+                </View>
+                <View style={styles.pickerContainer}>
                 <RNPickerSelect
                   onValueChange={(value) => updateTimeSlot(index, 'endTime', value)}
                   items={timeOptions}
                   style={pickerSelectStyles}
                   value={slot.endTime}
+                  useNativeAndroidPickerStyle={false}
                 />
+                </View>
                 {/* {index > 0 && (
                   <TouchableOpacity style={styles.removeButton} onPress={() => removeTimeSlot(index)}>
                     <Text style={styles.removeButtonText}>×</Text>
@@ -178,9 +186,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  picker: {
-    flex: 2,
-    marginRight: 10,
+  pickerContainer: {
+    marginRight: 5,
+    width: 100,
   },
   row: {
     flexDirection: 'row',
@@ -303,7 +311,8 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 4,
     color: 'black',
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    overflow: 'hidden',
   },
   inputAndroid: {
     fontSize: 14,
