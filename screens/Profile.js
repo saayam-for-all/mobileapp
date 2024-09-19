@@ -115,7 +115,7 @@ export default function Profile({ signOut }) {
         />
       </View>
 
-      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('TermsConditions')}>
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('TermsAndConditions')}>
         <FontAwesome name="file-text-o" size={20} style={styles.optionIcon} />
         <Text style={styles.optionText}>Terms & Conditions</Text>
         <Ionicons name="chevron-forward" size={20} color="#777" />
