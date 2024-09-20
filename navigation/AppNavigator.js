@@ -25,6 +25,12 @@ export default function App({ signOut }) {
       <AppStack.Screen name="Profile">
         {() => <Profile signOut={signOut} />}
       </AppStack.Screen>
+      <AppStack.Screen name="EditProfile">
+        {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Welcome">
+        {() => <Welcome signOut={signOut} />}
+      </AppStack.Screen>
       <AppStack.Screen name="UserRequest" component={UserRequest} />
       <AppStack.Screen name="MyReqs" component={MyReqs} 
         options={{ title: 'My Requests' }}/>
@@ -48,5 +54,6 @@ export default function App({ signOut }) {
         {() => <Welcome signOut={signOut} />}
       </AppStack.Screen>
     </AppStack.Navigator>
+    
   );
 }
