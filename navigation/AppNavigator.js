@@ -8,6 +8,7 @@ import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
 import RequestDetails from '../screens/AllRequests/RequestDetails';
+import PromoteToVolunteer from '../screens/Volunteer/PromoteToVolunteer';
 
 const AppStack = createStackNavigator();
 
@@ -31,6 +32,8 @@ export default function App({ signOut }) {
       <AppStack.Screen name="RequestDetails" component={RequestDetails} 
         //options={{ title: 'Request Details' }}
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
+      <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
+      
     </AppStack.Navigator>
   );
 }
