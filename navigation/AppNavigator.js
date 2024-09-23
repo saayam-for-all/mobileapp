@@ -6,6 +6,11 @@ import UserRequest from '../screens/UserRequest';
 import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
+import Welcome from  '../screens/MenuScreens/Welcome';
+import ChangePassword from '../screens/MenuScreens/ChangePassword';
+import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
+import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
+import EditProfile from  '../screens/MenuScreens/EditProfile';
 
 const AppStack = createStackNavigator();
 
@@ -25,6 +30,21 @@ export default function App({ signOut }) {
         options={{ title: 'Other Requests' }}/>
     <AppStack.Screen name="ManagedReqs" component={ManagedReqs} 
     options={{ title: 'Managed Requests' }}/>
+    <AppStack.Screen name="EditProfile">
+        {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="ChangePassword">
+        {() => <ChangePassword signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="PrivacyPolicy">
+        {() => <PrivacyPolicy signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="TermsAndConditions">
+        {() => <TermsAndConditions signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Welcome">
+        {() => <Welcome signOut={signOut} />}
+      </AppStack.Screen>
       
     </AppStack.Navigator>
   );
