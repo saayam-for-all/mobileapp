@@ -102,6 +102,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
+  fullWidthButton: {
+    width: '100%', // Full width when only one button is in the row
+  },
   buttonText: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -172,7 +175,7 @@ export default function Home({ signOut }) {
           <Text style={styles.buttonText}>Managed Requests</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("OtherRequests")}}>
+        <TouchableOpacity style={[styles.buttonView, styles.fullWidthButton]} onPress={() => {navigation.navigate("OtherRequests")}}>
           <Text style={styles.buttonText}>Others Requests</Text>
         </TouchableOpacity>
       </View>
