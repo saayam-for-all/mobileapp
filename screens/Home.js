@@ -12,7 +12,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import config from '../components/config'
+import config from '../components/config';
 
 
 const styles = StyleSheet.create({
