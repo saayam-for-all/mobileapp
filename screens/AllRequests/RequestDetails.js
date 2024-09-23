@@ -21,22 +21,35 @@ export default function RequestDetails(item) {
   const url = "https://my-json-server.typicode.com/rmb2020/database/comments" //Using a test json server
 
 
-  //useEffect(() => {
-    Auth.currentUserInfo().then((user) => {
-      setUserName(user.attributes.name);
-    });
- // });
 
   useEffect(() => {
-    fetch(url)
-      .then((resp) => resp.json())
-      .then((json) => setData(json))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    getUser()
+    fetchData()
+
   }, []);
 
+  const fetchData = async () => {
+    try{
+    const res = await fetch(url)
+    const resdata = await res.json()
+    setData(resdata)
+    // console.log(resdata)
+     setLoading(false)
+    }catch(err){
+       console.log('error from fetch : ',err)
+    }
+  }
   
-  
+  const getUser = async () => {
+    try{
+      const user = await Auth.currentUserInfo();
+      setUserName(user.attributes.name);
+
+    }catch(err){
+      console.log('error from cognito : ',err)
+   }
+ }
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
