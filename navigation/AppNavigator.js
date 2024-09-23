@@ -8,6 +8,13 @@ import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
 import RequestDetails from '../screens/AllRequests/RequestDetails';
 import PromoteToVolunteer from '../screens/Volunteer/PromoteToVolunteer';
+import EditProfile from  '../screens/MenuScreens/EditProfile';
+import Welcome from  '../screens/MenuScreens/Welcome';
+import ChangePassword from '../screens/MenuScreens/ChangePassword';
+import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
+import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
+
+
 
 const AppStack = createStackNavigator();
 
@@ -20,18 +27,33 @@ export default function App({ signOut }) {
       <AppStack.Screen name="Profile">
         {() => <Profile signOut={signOut} />}
       </AppStack.Screen>
+      <AppStack.Screen name="EditProfile">
+        {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Welcome">
+        {() => <Welcome signOut={signOut} />}
+      </AppStack.Screen>
       <AppStack.Screen name="UserRequest" component={UserRequest} />
       <AppStack.Screen name="MyReqs" component={MyReqs} 
         options={{ title: 'My Requests' }}/>
       <AppStack.Screen name="OtherRequests" component={OtherRequests} 
         options={{ title: 'Other Requests' }}/>
+
       <AppStack.Screen name="ManagedReqs" component={ManagedReqs} 
         options={{ title: 'Managed Requests' }}/>
       <AppStack.Screen name="RequestDetails" component={RequestDetails} 
         //options={{ title: 'Request Details' }}
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
-      
+      <AppStack.Screen name="ChangePassword">
+        {() => <ChangePassword signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="PrivacyPolicy">
+        {() => <PrivacyPolicy signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="TermsAndConditions">
+        {() => <TermsAndConditions signOut={signOut} />}
+      </AppStack.Screen>
     </AppStack.Navigator>
   );
 }
