@@ -8,6 +8,11 @@ import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
 import RequestDetails from '../screens/AllRequests/RequestDetails';
 import PromoteToVolunteer from '../screens/Volunteer/PromoteToVolunteer';
+import Welcome from  '../screens/MenuScreens/Welcome';
+import ChangePassword from '../screens/MenuScreens/ChangePassword';
+import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
+import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
+import EditProfile from  '../screens/MenuScreens/EditProfile';
 
 const AppStack = createStackNavigator();
 
@@ -31,6 +36,21 @@ export default function App({ signOut }) {
         //options={{ title: 'Request Details' }}
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
+    <AppStack.Screen name="EditProfile">
+        {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="ChangePassword">
+        {() => <ChangePassword signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="PrivacyPolicy">
+        {() => <PrivacyPolicy signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="TermsAndConditions">
+        {() => <TermsAndConditions signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Welcome">
+        {() => <Welcome signOut={signOut} />}
+      </AppStack.Screen>
       
     </AppStack.Navigator>
   );
