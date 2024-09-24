@@ -5,8 +5,12 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import Octicons from '@expo/vector-icons/Octicons'
 import {TextInput, } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 const AllRequests = ({ data }) => {
+  const navigation = useNavigation();
   const [sortAscending, setSortAscending] = React.useState(true);
   const [page, setPage] = React.useState(0);
   const [numberOfItemsPerPageList] = React.useState([4,5]);
@@ -67,7 +71,10 @@ const AllRequests = ({ data }) => {
           left={<TextInput.Icon icon="magnify" size={28} style={{pointerEvents: 'none'}} />}
           onChangeText={handleSearch}
           value={searchQuery}
-        /><Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
+        />
+        <TouchableOpacity onPress={() => navigation.navigate('ReqFilter')}>
+        <Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         keyExtractor={(item) => item.id}
