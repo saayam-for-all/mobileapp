@@ -12,7 +12,7 @@ const AuthModalStack = createStackNavigator();
 const AuthNavigator = ({ signIn }) => (
   <AuthModalStack.Navigator   > 
         
-    <AuthModalStack.Screen name="AuthPages">
+    <AuthModalStack.Screen name="AuthPages" options={{ headerShown: false, presentation: "modal" }}>
       {() => (
         <AuthStack.Navigator>
           <AuthStack.Screen options={{ headerShown: false, presentation: "modal" }} name="Welcome" component={WelcomeScreen} />
@@ -22,7 +22,7 @@ const AuthNavigator = ({ signIn }) => (
           </AuthStack.Screen>
           <AuthStack.Screen
             name="ForgetPassword"
-            component={ForgetPasswordScreen}
+            component={ForgetPasswordScreen} options={{ title: 'Forgot Password' }}
           />
         </AuthStack.Navigator>
       )}
