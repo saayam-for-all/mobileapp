@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { MyReqData } from '../../data/MyReqData';
 
-import config from '../../components/config'
+//import config from '../../components/config'
 import AllRequests from '../../components/AllRequests';
 
 const styles = StyleSheet.create({
