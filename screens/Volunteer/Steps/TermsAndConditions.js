@@ -54,7 +54,7 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
           - Communicate promptly with the Organization regarding availability, progress, and challenges.{'\n'}
           - Complete assigned tasks promptly and to the best of their ability, adhering to any specified deadlines.{'\n\n'}
 
-          <Text style={styles.sectionTitle}>3. Code of Conduct</Text>{'\n'}
+          <Text style={styles.sectionTitle}>3. Code of Conduct</Text>
           <Text style={styles.sectionText}>
             The Volunteer agrees to maintain the highest standards of ethical behavior while representing the Organization. This includes:{'\n'}
             - Treating all individuals with respect and dignity, regardless of race, religion, gender, sexual orientation, age, or disability.{'\n'}
@@ -62,7 +62,7 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
             - Avoiding conflicts of interest and ensuring that personal interests do not interfere with their volunteer duties.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>4. Confidentiality Agreement</Text>{'\n'}
+          <Text style={styles.sectionTitle}>4. Confidentiality Agreement</Text>
           <Text style={styles.sectionText}>
             The Volunteer acknowledges that during their service, they may be privy to confidential, proprietary, or personal information relating to the Organization, other volunteers, or individuals seeking assistance. The Volunteer agrees to:{'\n'}
             - Maintain confidentiality of all information, both during & after the term of this Agreement.{'\n'}
@@ -70,7 +70,7 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
             - Not disclose any confidential information to third parties without the explicit written consent of the Organization.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>5. Data Protection and Privacy</Text>{'\n'}
+          <Text style={styles.sectionTitle}>5. Data Protection and Privacy</Text>
           <Text style={styles.sectionText}>
             The Volunteer agrees to comply with all applicable data protection laws and regulations, including but not limited to the General Data Protection Regulation (GDPR) or any other local data protection laws. The Volunteer agrees to:{'\n'}
             - Handle all personal data in accordance with the Organization’s data protection policies.{'\n'}
@@ -78,14 +78,14 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
             - Immediately report any data breaches or incidents of unauthorized access to the Organization.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>6. Intellectual Property</Text>{'\n'}
+          <Text style={styles.sectionTitle}>6. Intellectual Property</Text>
           <Text style={styles.sectionText}>
             Any work, materials, or intellectual property created by the Volunteer in the course of their volunteer activities shall be the sole property of the Organization. The Volunteer agrees to:{'\n'}
             - Assign all rights, titles, and interests in such intellectual property to the Organization.{'\n'}
             - Refrain from using, reproducing, or distributing any intellectual property created during their service without the Organization’s explicit consent.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>7. Liability Waiver and Assumption of Risk</Text>{'\n'}
+          <Text style={styles.sectionTitle}>7. Liability Waiver and Assumption of Risk</Text>
           <Text style={styles.sectionText}>
             The Volunteer acknowledges that participation in volunteer activities may involve inherent risks, including but not limited to physical injury, emotional distress, or property damage. The Volunteer agrees to:{'\n'}
             - Assume all risks associated with their volunteer activities, including any travel or transportation risks.{'\n'}
@@ -93,19 +93,19 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
             - Acknowledge that the Organization does not provide insurance coverage for volunteers, and the Volunteer is responsible for obtaining any necessary insurance.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>8. Indemnification</Text>{'\n'}
+          <Text style={styles.sectionTitle}>8. Indemnification</Text>
           <Text style={styles.sectionText}>
             The Volunteer agrees to indemnify and hold harmless the Organization, its officers, directors, employees, and affiliates from and against any and all claims, damages, losses, liabilities, costs, and expenses (including legal fees) arising out of or related to the Volunteer’s actions or omissions during their service.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>9. Commitment and Expectations</Text>{'\n'}
+          <Text style={styles.sectionTitle}>9. Commitment and Expectations</Text>
           <Text style={styles.sectionText}>
             The Volunteer agrees to commit to the responsibilities and timeframes as communicated by the Organization. If the Volunteer is unable to fulfill these commitments, they agree to:{'\n'}
             - Notify the Organization as soon as possible, providing a valid reason for their unavailability.{'\n'}
             - Work collaboratively with the Organization to ensure a smooth transition of responsibilities, if necessary.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>10. Training and Supervision</Text>{'\n'}
+          <Text style={styles.sectionTitle}>10. Training and Supervision</Text>
           <Text style={styles.sectionText}>
             The Organization will provide necessary training and supervision to the Volunteer. The Volunteer agrees to:{'\n'}
             - Attend all required training sessions.{'\n'}
@@ -113,24 +113,24 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
             - Seek clarification or assistance when needed to perform their duties effectively.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>11. Health and Safety</Text>{'\n'}
+          <Text style={styles.sectionTitle}>11. Health and Safety</Text>
           <Text style={styles.sectionText}>
             The Volunteer acknowledges their responsibility to follow all health and safety guidelines provided by the Organization. The Volunteer agrees to:{'\n'}
             - Report any unsafe conditions or incidents immediately to the Organization.{'\n'}
             - Take reasonable precautions to protect their health and safety as well as that of others during their volunteer activities.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>12. Dispute Resolution</Text>{'\n'}
+          <Text style={styles.sectionTitle}>12. Dispute Resolution</Text>
           <Text style={styles.sectionText}>
             In the event of any disputes arising out of or related to this Agreement, the parties agree to attempt to resolve the matter through good faith negotiations. If a resolution cannot be reached, the parties agree to submit to mediation or arbitration, as mutually agreed, before pursuing any legal action.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>13. Governing Law</Text>{'\n'}
+          <Text style={styles.sectionTitle}>13. Governing Law</Text>
           <Text style={styles.sectionText}>
             This Agreement shall be governed by and construed in accordance with global laws applicable to the activities and interactions facilitated by the Organization. Any legal proceedings arising out of or related to this Agreement shall be brought in the appropriate courts of a jurisdiction mutually agreed upon by both parties.{'\n\n'}
           </Text>
 
-          <Text style={styles.sectionTitle}>14. Acknowledgment and Consent</Text>{'\n'}
+          <Text style={styles.sectionTitle}>14. Acknowledgment and Consent</Text>
           <Text style={styles.sectionText}>
             By agreeing to this document, the Volunteer acknowledges that they have read, understood, and accepted these terms. The Volunteer agrees to abide by all the guidelines, policies, and expectations outlined herein and understands that their volunteer status is contingent upon adherence to this Agreement.{'\n'}
           </Text>
