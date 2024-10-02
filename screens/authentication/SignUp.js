@@ -6,6 +6,8 @@ import {
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import PhoneInput from '../../components/PhoneInput';
+import {CountryPicker} from "react-native-country-codes-picker";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,6 +30,9 @@ export default function SignUp({ navigation }) {
   const [name, onChangeName] = useState('');
   const [email, onChangeEmail] = useState('');
   const [phone_number, onChangePhone] = useState('');
+  const [full_phone,setFullPhone] = useState('');
+  const [show, onChangeShow] = useState(false);
+  const [country_code, onChangeCountryCode] = useState('+91');
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
   const [repeatPassword, onChangeRepeatPassword] = useState('');
@@ -44,7 +49,8 @@ export default function SignUp({ navigation }) {
         attributes: {
           email, // optional
           name,
-          phone_number,
+          // country_code, // later added to db
+          phone_number: full_phone, // later changed into phone without country code
           zoneinfo
         },
         validationData: [], // optional
@@ -81,13 +87,25 @@ export default function SignUp({ navigation }) {
         autoCompleteType="email"
         keyboardType="email-address"
       />
-      <Input
+      {/* <Input
         value={phone_number}
         placeholder="Phone number"
         onChange={(text) => onChangePhone(text)}
         autoCapitalize="none"
         autoCompleteType="tel"
         keyboardType="phone-pad"
+      /> */}
+      <PhoneInput
+        show = {show}
+        setShow = {(show) => {onChangeShow(!show)}}
+        countryCode= {country_code}
+        setCountryCode={(text) => onChangeCountryCode(text)}
+        setFullPhone={setFullPhone}
+        phone={phone_number}
+        onChangePhone={(text) => onChangePhone(text)}
+        preferredCountries ={['US']}
+        label=''
+        errorMessage = ""
       />
       <Input
         value={zoneinfo}
