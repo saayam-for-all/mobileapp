@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import {CountryPicker} from "react-native-country-codes-picker";
+import {CountryPicker, CountryButton} from "react-native-country-codes-picker";
 
 const styles = StyleSheet.create({
     row: {
@@ -29,7 +29,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
 });
-  
+
+function ListHeaderComponent({countries, lang, onPress}) {
+    return (
+        <View
+            style={{
+                paddingBottom: 20,
+            }}
+        >
+            {countries?.map((country, index) => {
+                return (
+                    <CountryButton key={index} item={country} name={country?.name?.[lang || 'en']} onPress={() => onPress(country)} />
+                )
+            })}
+        </View>
+    )
+}
+
 const PhoneInput = ({
   show = false,
   setShow,
@@ -41,6 +57,8 @@ const PhoneInput = ({
   preferredCountries,
   ...wrapperProps
 }) => {
+
+    const [search_message, setSearchMessage] = React.useState("+1");
 
   const handleChangeText = (value) => {
     onChangePhone(value);
@@ -61,12 +79,15 @@ const PhoneInput = ({
             </TouchableOpacity>
             <CountryPicker
                 show={show}
+                searchMessage={search_message}
                 // when picker button press you will get the country object with dial code
                 pickerButtonOnPress={(item) => {
                     setCountryCode(item.dial_code);
                     setFullPhone(item.dial_code + phone)
                     setShow(show);
                 }}
+                ListHeaderComponent={ListHeaderComponent}
+                popularCountries={['ca','us', 'in']}
             />
             <TextInput
                 style={styles.phone}
