@@ -82,7 +82,6 @@ const PhoneInput = ({
                 style={{
                     modal:{
                         width:"100%",
-                        height:"100px"
                     },
                     itemsList:{
                         overflow:"hidden",
