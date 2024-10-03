@@ -79,6 +79,18 @@ const PhoneInput = ({
             </TouchableOpacity>
             <CountryPicker
                 show={show}
+                style={{
+                    modal:{
+                        width:"100%",
+                        height:"100px"
+                    },
+                    itemsList:{
+                        overflow:"hidden",
+                        height:"50vh",
+                        flexGrow: 0,
+                        flexBasis:"60%"
+                    }
+                }}
                 searchMessage={search_message}
                 // when picker button press you will get the country object with dial code
                 pickerButtonOnPress={(item) => {
