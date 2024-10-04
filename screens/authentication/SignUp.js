@@ -32,6 +32,7 @@ export default function SignUp({ navigation }) {
   const [phone_number, onChangePhone] = useState('');
   const [full_phone,setFullPhone] = useState('');
   const [country_code, onChangeCountryCode] = useState('+1');
+  const [country_name, onChangeCountryName] = useState("United States");
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
   const [repeatPassword, onChangeRepeatPassword] = useState('');
@@ -96,8 +97,9 @@ export default function SignUp({ navigation }) {
       /> */}
       <PhoneInput
         countryCode= {country_code}
-        countryName={'United States'} 
         setCountryCode={(text) => onChangeCountryCode(text)}
+        countryName={country_name} 
+        onChangeCountryName={onChangeCountryName}
         setFullPhone={setFullPhone}
         phone={phone_number}
         onChangePhone={(text) => onChangePhone(text)}
@@ -109,6 +111,14 @@ export default function SignUp({ navigation }) {
         value={zoneinfo}
         placeholder="PST"
         onChange={(text) => onChangeTimeZone(text)}
+        autoCapitalize="none"
+       // autoCompleteType="email"
+       // keyboardType="email-address"
+      />
+      <Input
+        value={country_name}
+        placeholder="United States"
+        onChange={(text) => onChangeCountryName(text)}
         autoCapitalize="none"
        // autoCompleteType="email"
        // keyboardType="email-address"
