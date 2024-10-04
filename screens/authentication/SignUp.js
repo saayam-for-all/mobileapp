@@ -31,8 +31,7 @@ export default function SignUp({ navigation }) {
   const [email, onChangeEmail] = useState('');
   const [phone_number, onChangePhone] = useState('');
   const [full_phone,setFullPhone] = useState('');
-  const [show, onChangeShow] = useState(false);
-  const [country_code, onChangeCountryCode] = useState('+91');
+  const [country_code, onChangeCountryCode] = useState('+1');
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
   const [repeatPassword, onChangeRepeatPassword] = useState('');
@@ -96,9 +95,8 @@ export default function SignUp({ navigation }) {
         keyboardType="phone-pad"
       /> */}
       <PhoneInput
-        show = {show}
-        setShow = {(show) => {onChangeShow(!show)}}
         countryCode= {country_code}
+        countryName={'United States'} 
         setCountryCode={(text) => onChangeCountryCode(text)}
         setFullPhone={setFullPhone}
         phone={phone_number}

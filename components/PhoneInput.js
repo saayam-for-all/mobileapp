@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     },
     countryCode:{
         height: 40,
+        maxWidth:"40%",
         margin: '3%',
         padding: '3%',
         flexGrow: 1,
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fff',
     },
+
 });
 
 function ListHeaderComponent({countries, lang, onPress}) {
@@ -47,9 +49,8 @@ function ListHeaderComponent({countries, lang, onPress}) {
 }
 
 const PhoneInput = ({
-  show = false,
-  setShow,
-  countryCode='US',
+  countryCode, // Default as '+1' in sign up page
+  countryName,
   setCountryCode,
   phone,
   onChangePhone,
@@ -57,9 +58,9 @@ const PhoneInput = ({
   preferredCountries,
   ...wrapperProps
 }) => {
-
+    const [show, setShow] = React.useState(false);
     const [search_message, setSearchMessage] = React.useState("+1");
-
+    const [country_name, setCountryName] = React.useState(countryName);
   const handleChangeText = (value) => {
     onChangePhone(value);
     setFullPhone(countryCode + value);
@@ -70,11 +71,11 @@ const PhoneInput = ({
     <View style={{}}>
         <View style={styles.row}>
             <TouchableOpacity
-                onPress={() => setShow(show)}
+                onPress={() => setShow(!show)}
                 style={styles.countryCode}
             >
                 <Text style={{}}>
-                    {countryCode}
+                    {country_name + " (" + countryCode + ")"}
                 </Text>
             </TouchableOpacity>
             <CountryPicker
@@ -87,15 +88,17 @@ const PhoneInput = ({
                         overflow:"hidden",
                         height:"50vh",
                         flexGrow: 0,
-                        flexBasis:"60%"
+                        flexShrink: 0,
+                        flexBasis: "60%"
                     }
                 }}
                 searchMessage={search_message}
                 // when picker button press you will get the country object with dial code
                 pickerButtonOnPress={(item) => {
                     setCountryCode(item.dial_code);
+                    setCountryName(item.name.en);
                     setFullPhone(item.dial_code + phone)
-                    setShow(show);
+                    setShow(!show);
                 }}
                 ListHeaderComponent={ListHeaderComponent}
                 popularCountries={['ca','us', 'in']}
