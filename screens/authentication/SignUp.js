@@ -6,6 +6,7 @@ import {
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import PhoneInput from '../../components/PhoneInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,6 +29,9 @@ export default function SignUp({ navigation }) {
   const [name, onChangeName] = useState('');
   const [email, onChangeEmail] = useState('');
   const [phone_number, onChangePhone] = useState('');
+  const [full_phone,setFullPhone] = useState('');
+  const [country_code, onChangeCountryCode] = useState('+1');
+  const [country_name, onChangeCountryName] = useState("United States");
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
   const [repeatPassword, onChangeRepeatPassword] = useState('');
@@ -44,7 +48,8 @@ export default function SignUp({ navigation }) {
         attributes: {
           email, // optional
           name,
-          phone_number,
+          // country_code, // later added to db
+          phone_number: full_phone, // later changed into phone without country code
           zoneinfo
         },
         validationData: [], // optional
@@ -81,18 +86,38 @@ export default function SignUp({ navigation }) {
         autoCompleteType="email"
         keyboardType="email-address"
       />
-      <Input
+      {/* <Input
         value={phone_number}
         placeholder="Phone number"
         onChange={(text) => onChangePhone(text)}
         autoCapitalize="none"
         autoCompleteType="tel"
         keyboardType="phone-pad"
+      /> */}
+      <PhoneInput
+        countryCode= {country_code}
+        setCountryCode={(text) => onChangeCountryCode(text)}
+        countryName={country_name} 
+        onChangeCountryName={onChangeCountryName}
+        setFullPhone={setFullPhone}
+        phone={phone_number}
+        onChangePhone={(text) => onChangePhone(text)}
+        preferredCountries ={['US']}
+        label=''
+        errorMessage = ""
       />
       <Input
         value={zoneinfo}
         placeholder="PST"
         onChange={(text) => onChangeTimeZone(text)}
+        autoCapitalize="none"
+       // autoCompleteType="email"
+       // keyboardType="email-address"
+      />
+      <Input
+        value={country_name}
+        placeholder="United States"
+        onChange={(text) => onChangeCountryName(text)}
         autoCapitalize="none"
        // autoCompleteType="email"
        // keyboardType="email-address"
