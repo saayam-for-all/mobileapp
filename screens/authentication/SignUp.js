@@ -7,7 +7,6 @@ import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import PhoneInput from '../../components/PhoneInput';
-import {CountryPicker} from "react-native-country-codes-picker";
 
 const styles = StyleSheet.create({
   container: {
