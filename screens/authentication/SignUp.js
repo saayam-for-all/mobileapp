@@ -132,7 +132,7 @@ export default function SignUp({ navigation }) {
         value={password}
         placeholder="password"
         onChange={(text) => {
-          const valid = new RegExp("^(?=.*[a-z])[A-Za-z\d]{8,}$");
+          const valid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
           const isValid = valid.test(text);
           if(!isValid) {
             setPasswordValid(false);
