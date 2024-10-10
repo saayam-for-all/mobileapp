@@ -34,6 +34,7 @@ export default function SignUp({ navigation }) {
   const [country_name, onChangeCountryName] = useState("United States");
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
+  const [passwordValid, setPasswordValid] = useState(true);
   const [repeatPassword, onChangeRepeatPassword] = useState('');
 
   const [invalidMessage, setInvalidMessage] = useState(null);
@@ -122,10 +123,24 @@ export default function SignUp({ navigation }) {
        // autoCompleteType="email"
        // keyboardType="email-address"
       />
+      {!passwordValid && 
+        <Text style={{ color: 'red' }}>
+          Password must be at least 8 characters long and contain at least one lowercase letter
+        </Text>
+      }
       <Input
         value={password}
         placeholder="password"
-        onChange={(text) => onChangePassword(text)}
+        onChange={(text) => {
+          const valid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
+          const isValid = valid.test(text);
+          if(!isValid) {
+            setPasswordValid(false);
+          } else {
+            setPasswordValid(true);
+          }
+          onChangePassword(text);
+        }}
         secureTextEntry
         autoCompleteType="password"
       />

@@ -100,7 +100,8 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
                     },
                     searchMessageText: {
                         padding: "5%"
-                    }
+                    },
+
                 }}
                 searchMessage={search_message}
                 // when picker button press you will get the country object with dial code
@@ -111,6 +112,9 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
                     // Then Change country field in signup page
                     onChangeCountryName(item.name.en);
                     setFullPhone(item.dial_code + phone)
+                    setShow(!show);
+                }}
+                onBackdropPress={()=>{
                     setShow(!show);
                 }}
                 ListHeaderComponent={ListHeaderComponent}
