@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Linking, Sa
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/Ionicons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -148,10 +149,9 @@ export default function Home({ signOut }) {
         </View>
 
         <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
-            <Image  source={require('../assets/profile.jpg')} style={styles.profileIcon} 
-            />
+           <Ionicons name="person-circle-outline" size={40} color="black" />
         </TouchableOpacity>
-      </View>
+        </View>
       
       {/* Search Bar */}
       <View style={styles.searchBarContainer}>
@@ -207,10 +207,17 @@ export default function Home({ signOut }) {
 
               if (route.name === 'Home1') {
                 iconName = focused ? 'home' : 'home-outline';
-              } else if (route.name === 'Donate') {
-                iconName = focused ? 'dollar-sign' : 'dollar-sign';
-                return <Feather name={iconName} size={size} color={color} />;
-              } else if (route.name === 'Notification') {
+              } else if (route.name === 'Donate') 
+                {
+                iconName = 'hand-holding-heart';
+                return (
+                  <FontAwesome5
+                    name='hand-holding-heart'
+                    size={size}
+                    color={focused ? '#4285F4' : 'gray'} 
+                  />
+                ); 
+              }  else if (route.name === 'Notification') {
                 iconName = focused ? 'notifications' : 'notifications-outline';
               } else if (route.name === 'Account') {
                 iconName = focused ? 'person-circle' : 'person-circle-outline';
@@ -231,7 +238,15 @@ export default function Home({ signOut }) {
           })}
         >
           <Tab.Screen name="Home1" options={{ title: 'Home' }} component={HomeTabScreen} />
-          <Tab.Screen name="Donate" component={DonateScreen} />
+          <Tab.Screen name="Donate" component={DonateScreen}
+          listeners={{
+            tabPress: (e) => {
+              openPayPal();
+            },
+          }}
+        />
+
+          
           <Tab.Screen name="Notification" component={NotificationScreen} />
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
@@ -241,7 +256,6 @@ export default function Home({ signOut }) {
 
   )
 }
-
 
 function GoToScreen({ screenName }) {
   const navigation = useNavigation();
@@ -259,6 +273,14 @@ function HomeTabScreen() {
     </View>
   );
 }
+
+const Tab = createBottomTabNavigator();
+const openPayPal = () => {
+  const paypalUrl = 'https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S';
+  Linking.openURL(paypalUrl).catch(() =>
+    Alert.alert('Error', 'Failed to open PayPal link. Please try again later.')
+  );
+};
 
 function DonateScreen() {
   return (
