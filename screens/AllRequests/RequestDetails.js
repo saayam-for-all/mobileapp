@@ -6,6 +6,7 @@ import {AntDesign, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome5}
 import {List, PaperProvider} from 'react-native-paper'
 import Input from '../../components/Input';
 import config from '../../components/config';
+import api from '../../components/api'
 
 
 
@@ -111,13 +112,15 @@ export default function RequestDetails(item) {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(url);
-      const resdata = await res.json();
+      //const res = await fetch(url); //not needed now
+      const res = await api.get('rmb2020/database/comments') //Get data axios instance
+      //const resdata = await res.json(); //not needed now
+      const resdata = res.data;
       setData(resdata);
-      // console.log(resdata)
+       console.log(resdata)
       setLoading(false);
     } catch (err) {
-      console.log("error from fetch : ", err);
+      console.log("error from axios : ", err);
     }
   }
   
