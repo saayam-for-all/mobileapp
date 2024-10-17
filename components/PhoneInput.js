@@ -22,14 +22,13 @@ const styles = StyleSheet.create({
         height: 40,
         maxWidth:"40%",
         margin: '3%',
-        padding: '3%',
+        padding: 10,
         flexGrow: 1,
         borderWidth: 1,
         borderColor: 'lightgray',
         borderRadius: 5,
         backgroundColor: '#fff',
     },
-
 });
 
 function ListHeaderComponent({countries, lang, onPress}) {
