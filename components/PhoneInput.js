@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     phone: {
         height: 40,
         margin: '3%',
-        padding: '3%',
+        padding: 10,
         flexGrow: 8,
         borderWidth: 1,
         borderColor: 'lightgray',
