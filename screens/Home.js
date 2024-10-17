@@ -165,21 +165,21 @@ export default function Home({ signOut }) {
        {/* Button Container */}
        <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("MyReqs")}}>
-          <Text style={styles.buttonText}>My Request</Text>
+          <Text style={styles.buttonText}>My Requests</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("ManagedReqs")}}>
-          <Text style={styles.buttonText}>Managed Request</Text>
+          <Text style={styles.buttonText}>Managed Requests</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("OtherRequests")}}>
-          <Text style={styles.buttonText}>Others Request</Text>
+          <Text style={styles.buttonText}>Others Requests</Text>
         </TouchableOpacity>
       </View>
 
       <View>
       {/* Action Buttons */}
-      <TouchableOpacity style={styles.actionButton}>
+      <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('PromoteToVolunteer')}>
         <Icon name="heart-outline" size={20} color="#4f8ef7" />
         <Text style={styles.actionButtonText}> Become a volunteer</Text>
       </TouchableOpacity>

@@ -1,13 +1,10 @@
 import * as React from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
 import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList} from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign' 
-import Ionicons from '@expo/vector-icons/Ionicons'
-import Octicons from '@expo/vector-icons/Octicons'
+import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons' 
+
 import {TextInput, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-
-
 
 const AllRequests = ({ data }) => {
   const navigation = useNavigation();
@@ -17,7 +14,8 @@ const AllRequests = ({ data }) => {
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
- 
+  
+  const navigation = useNavigation();
   const [isVisible,setVisible] = React.useState(false);
   const toggleVisibility = () => setVisible(!isVisible);
   const [idBasic, setIdBasic] = React.useState();
@@ -83,11 +81,11 @@ const AllRequests = ({ data }) => {
         renderItem={({ item }) => (
           <View style={styles.reqData}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold", marginRight: 65 }}>
+              <Text style={{ fontWeight: "bold" }}>
                 {" "}
                 Id : {item.id}{" "}
               </Text>
-              <View>
+             
                 <Text style={{ flex: 1, textAlign: "right" }}>
                   <Octicons
                     name="dot-fill"
@@ -96,7 +94,7 @@ const AllRequests = ({ data }) => {
                   />
                   <Text> {item.status} </Text>
                 </Text>
-              </View>
+             
             </View>
             <View>
               <Text style={{ fontWeight: "350" }}> {item.category} </Text>
@@ -108,7 +106,7 @@ const AllRequests = ({ data }) => {
               </Text>
               <Text style={{ flex: 1, textAlign: "right" }}>
                 {" "}
-                <AntDesign name="right" size={15} color="black" />
+                <AntDesign name="right" size={15} color="black" onPress={() => {navigation.navigate("RequestDetails", { item, reqTitle: item.id} )}} />
               </Text>
             </View>
 
