@@ -15,7 +15,7 @@ const AllRequests = ({ data }) => {
     numberOfItemsPerPageList[0]
   );
   
-  const navigation = useNavigation();
+  
   const [isVisible,setVisible] = React.useState(false);
   const toggleVisibility = () => setVisible(!isVisible);
   const [idBasic, setIdBasic] = React.useState();
