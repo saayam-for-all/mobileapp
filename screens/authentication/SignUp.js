@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, Text,
+  View, StyleSheet, Text, Alert
 } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
@@ -41,6 +41,8 @@ export default function SignUp({ navigation }) {
 
   const signUp = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
+    let errorMessage = null;
+    let hasError = false;
     if (validPassword) {
       setInvalidMessage(null);
       Auth.signUp({
@@ -62,15 +64,21 @@ export default function SignUp({ navigation }) {
         })
         .catch((err) => {
           if (err.message) {
+            popError(err.message);
             setInvalidMessage(err.message);
           }
           console.log(err);
         });
     } else {
       setInvalidMessage('Password must be equal and have greater lenght than 6.');
+      errorMessage = 'Password must be equal and have greater lenght than 6.';
+      popError(errorMessage);
     }
   };
-
+  const popError = (errorMessage) =>
+    Alert.alert('Submission Failed', errorMessage, [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+  ]);
   return (
     <View style={styles.container}>
       <Input

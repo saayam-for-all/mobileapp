@@ -14,8 +14,6 @@ const AllRequests = ({ data }) => {
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
-  
-  
   const [isVisible,setVisible] = React.useState(false);
   const toggleVisibility = () => setVisible(!isVisible);
   const [idBasic, setIdBasic] = React.useState();
