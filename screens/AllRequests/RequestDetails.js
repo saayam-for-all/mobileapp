@@ -6,7 +6,8 @@ import {AntDesign, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome5}
 import {List, PaperProvider} from 'react-native-paper'
 import Input from '../../components/Input';
 import config from '../../components/config';
-import api from '../../components/api'
+import api from '../../components/api';
+import { TextInput } from 'react-native';
 
 
 
@@ -215,23 +216,39 @@ export default function RequestDetails(item) {
 
       {/*3 Buttons view code below*/}
       <View style={{ flexDirection: "row", marginBottom:10, marginTop:10 }}>
-      <TouchableOpacity style={{width:100, height:50, borderRadius:10, alignContent:'center', backgroundColor:"#E6E6FA"}}>
-            <Text style={{fontSize:15, marginTop:1}}> Volunteer Organizations </Text>
+      <TouchableOpacity style={{width:125, height:50, borderRadius:10, alignContent:'center',flexDirection: "row",alignItems: "center", backgroundColor:"#2F80ED"}}>
+      <FontAwesome5 name="users" size={16} color="white" style={{ marginRight: 5 }} />
+            <Text style={{fontSize:15, marginTop:1, color: "white"}}>Volunteer Organizations </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{width:100, height:50, borderRadius:10, marginLeft:10, alignContent:'center', backgroundColor:"#E6E6FA"}}>
-            <Text style={{fontSize:15, marginTop:1, marginLeft:10}}> Emergency Contact </Text>
+        <TouchableOpacity style={{width:125, height:50, borderRadius:10, marginLeft:10, alignContent:'center',flexDirection: "row",alignItems: "center", backgroundColor:"#EB5757"}}>
+        <MaterialIcons name="emergency" size={20} color="white" style={{ marginRight: 5 }} />
+            <Text style={{fontSize:15, marginTop:1, marginLeft:10, color: "white"}}>Emergency Contact </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{width:100, height:50, borderRadius:10, marginLeft:10, alignContent:'center', backgroundColor:"#E6E6FA"}}>
-            <Text style={{fontSize:15, marginTop:1, marginLeft:10}}> More Information </Text>
+        <TouchableOpacity style={{width:125, height:50, borderRadius:10, marginLeft:10, alignContent:'center',flexDirection: "row",alignItems: "center", backgroundColor:"#F2C94C"}}>
+        <FontAwesome5 name="info-circle" size={16} color="white" style={{ marginRight: 5 }} />
+            <Text style={{fontSize:15, marginTop:1, marginLeft:10, color: "white"}}>More Information </Text>
         </TouchableOpacity>
       </View>
-      <List.Accordion       //From react native paper
-        title="Helping Volunteers"
-        //left={props => <List.Icon {...props} icon="folder" />}
-        >
-        <List.Item title="First item" /> 
-        <List.Item title="Second item" />
-      </List.Accordion>
+      <List.Accordion  //From react native paper
+  title="Helping Volunteers"
+  //left={props => <List.Icon {...props} icon="folder" />}
+>
+  <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+    <View style={styles.inputContainer}>
+      <TextInput
+        placeholder="Enter number of volunteers required..."
+        style={styles.input}
+        keyboardType="numeric"
+      />
+    </View>
+
+    <TouchableOpacity style={styles.requestButton}>
+      <FontAwesome5 name="user-plus" size={16} color="white" />
+      <Text style={styles.buttonText}> Request Volunteers</Text>
+    </TouchableOpacity>
+  </View>
+</List.Accordion>
+
     </SafeAreaView>
   );
 }
@@ -322,6 +339,38 @@ export default function RequestDetails(item) {
         //alignItems:'center',
         height:30,
         borderRadius:100
-      }
+      },
+        accordion: {
+          backgroundColor: '#F7F7F8',
+          borderRadius: 10,
+          marginTop: 10,
+          marginBottom: 10,
+        },
+        inputContainer: {
+          flex: 1,
+          marginRight: 10,
+        },
+        input: {
+          borderWidth: 1,
+          borderColor: 'lightgray',
+          borderRadius: 5,
+          padding: 10,
+          height: 40,
+          backgroundColor: '#F5F5F5',
+        },
+        requestButton: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: '#2F80ED',
+          borderRadius: 5,
+          paddingVertical: 10,
+          paddingHorizontal: 15,
+        },
+        buttonText: {
+          color: 'white',
+          marginLeft: 5,
+          fontWeight: 'bold',
+        },
+      
   });
 
