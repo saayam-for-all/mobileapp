@@ -8,7 +8,6 @@ import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
 import RequestDetails from '../screens/AllRequests/RequestDetails';
 import PromoteToVolunteer from '../screens/Volunteer/PromoteToVolunteer';
-import Notification from '../screens/Notifications/Notification';
 import Welcome from  '../screens/MenuScreens/Welcome';
 import ChangePassword from '../screens/MenuScreens/ChangePassword';
 import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
@@ -38,8 +37,6 @@ export default function App({ signOut }) {
         //options={{ title: 'Request Details' }}
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
-      <AppStack.Screen name="Notification" component={Notification} 
-        options={{ title: 'Notification' }}/>
     <AppStack.Screen name="EditProfile">
         {() => <EditProfile signOut={signOut} />}
       </AppStack.Screen>
