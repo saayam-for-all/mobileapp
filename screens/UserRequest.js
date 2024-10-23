@@ -13,8 +13,8 @@ We also need donations of trash bags, gloves, and refreshments.";
 export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [forSelf, setForSelf] = useState('Yes');
   const [isCalamity, setIsCalamity] = useState(false);
-  const [priority, setPriority] = useState('Low');
-  const [requestCategory, setRequestCategory] = useState('Health');
+  const [priority, setPriority] = useState(isEdit&&requestItem?.priority ? requestItem.priority : 'Low');
+  const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : 'Health');
   const [requestType, setRequestType] = useState('In Person');
   const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
   const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : sampleDescription);
