@@ -6,6 +6,7 @@ import Icon from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { AppStack } from '../navigation/AppNavigator';
 
 //import { Dimensions } from 'react-native';
 //const { width, height } = Dimensions.get("window");
@@ -212,6 +213,8 @@ export default function Home({ signOut }) {
                 return <Feather name={iconName} size={size} color={color} />;
               } else if (route.name === 'Notification') {
                 iconName = focused ? 'notifications' : 'notifications-outline';
+                console.log("notification");
+                navigation.navigate('Notification');
               } else if (route.name === 'Account') {
                 iconName = focused ? 'person-circle' : 'person-circle-outline';
               }
@@ -232,7 +235,7 @@ export default function Home({ signOut }) {
         >
           <Tab.Screen name="Home1" options={{ title: 'Home' }} component={HomeTabScreen} />
           <Tab.Screen name="Donate" component={DonateScreen} />
-          <Tab.Screen name="Notification" component={NotificationScreen} />
+          <Tab.Screen name="Notification" component={NotificationScreen}/>
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
       </View>
