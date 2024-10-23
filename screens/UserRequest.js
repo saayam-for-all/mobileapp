@@ -5,7 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-export default function UserRequest() {
+export default function UserRequest({isEdit = false, onClose}) {
   const [forSelf, setForSelf] = useState('Yes');
   const [isCalamity, setIsCalamity] = useState(false);
   const [priority, setPriority] = useState('Low');
@@ -51,7 +51,7 @@ export default function UserRequest() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        <Text style={styles.title}>Create Help Request</Text>
+        <Text style={styles.title}>{isEdit ? 'Edit Help Request' : 'Create Help Request'}</Text>
         <View style={styles.alertBox}>
           <Text style={styles.alertTextBold}>
             Note: We do not handle life-threatening emergency requests. Please call your local emergency service if you need urgent help.
@@ -154,7 +154,7 @@ export default function UserRequest() {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button backgroundColor="red" onPress={handleCancel}>
+          <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
             Cancel
           </Button>
           <Button backgroundColor="blue" onPress={handleSubmit}>

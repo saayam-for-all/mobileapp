@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {AntDesign, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome5} from '@expo/vector-icons' 
@@ -8,6 +8,7 @@ import Input from '../../components/Input';
 import config from '../../components/config';
 import api from '../../components/api';
 import { TextInput } from 'react-native';
+import UserRequest from '../UserRequest';
 
 
 
@@ -20,6 +21,7 @@ export default function RequestDetails(item) {
   const [addComment, setComment] = useState("");
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const url = "https://my-json-server.typicode.com/rmb2020/database/comments" //Using a test json server
   const [expanded, setExpanded] = useState(false);
   const [showName, setShowName] = useState(false);
@@ -33,6 +35,20 @@ export default function RequestDetails(item) {
   const showVolunteer =() => {    
     setVolunteerName(!showVolunteerName);
   }
+
+  const closeForm = () => {
+    setIsEditing(false);
+  }
+
+  const handleEditClick = (event) => {
+    event.stopPropagation();
+    setIsEditing(true)
+  }
+
+  const handleOverlayClick = () => {
+    setIsEditing(false);
+  }
+
   const title=(
     <View style={styles.header}>
         <Text> 
@@ -137,6 +153,23 @@ export default function RequestDetails(item) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {isEditing && <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isEditing}
+        onRequestClose={() => {
+          Alert.alert('Edit closed.');
+          setIsEditing(!isEditing);
+        }}>
+          <View
+            style={{
+              height: '90%',
+              marginTop: 'auto',
+            }}
+          >
+            <UserRequest isEdit={true} onClose={closeForm} />
+          </View>
+      </Modal>}
       <View>        
         <View style={{  borderWidth:1,
         borderColor:'grey',
@@ -155,7 +188,7 @@ export default function RequestDetails(item) {
                     {reqStatus}  
                   </Text></TouchableOpacity></Text>
          <Text style={{flex:1, marginLeft:10}}>  
-            <AntDesign name="edit" size={24} color="black" />
+            <AntDesign name="edit" size={24} color="black" onPress={()=>setIsEditing(true)}/>
                   {/*Using edit icon instead of button <TouchableOpacity style={{height: 20, width: 50,
                     backgroundColor:'#2986cc', borderRadius: 5}}> 
                     <Text style={{ color: "white", alignSelf: "center" }}>Edit</Text>
