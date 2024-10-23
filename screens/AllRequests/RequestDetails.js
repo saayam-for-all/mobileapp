@@ -167,7 +167,7 @@ export default function RequestDetails(item) {
               marginTop: 'auto',
             }}
           >
-            <UserRequest isEdit={true} onClose={closeForm} />
+            <UserRequest isEdit={true} onClose={closeForm} requestItem={req} />
           </View>
       </Modal>}
       <View>        
@@ -207,10 +207,10 @@ export default function RequestDetails(item) {
       >       
       <View style={{alignItems: 'center'}} >
         <Text style={styles.textDescription}>
-          We need volunteers for our upcoming Community Clean-Up Day on August
-          15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking
-          up litter, sorting recyclables, and managing the registration table.
-          We also need donations of trash bags, gloves, and refreshments.
+          {req?.description || "We need volunteers for our upcoming Community Clean-Up Day on August \
+15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking \
+up litter, sorting recyclables, and managing the registration table. \
+We also need donations of trash bags, gloves, and refreshments."}
         </Text></View>        
       </List.Accordion>
       </View>

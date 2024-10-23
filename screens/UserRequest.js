@@ -5,14 +5,19 @@ import RNPickerSelect from 'react-native-picker-select';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
-export default function UserRequest({isEdit = false, onClose}) {
+const sampleDescription = "We need volunteers for our upcoming Community Clean-Up Day on August \
+15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking \
+up litter, sorting recyclables, and managing the registration table. \
+We also need donations of trash bags, gloves, and refreshments.";
+
+export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [forSelf, setForSelf] = useState('Yes');
   const [isCalamity, setIsCalamity] = useState(false);
   const [priority, setPriority] = useState('Low');
   const [requestCategory, setRequestCategory] = useState('Health');
   const [requestType, setRequestType] = useState('In Person');
-  const [subject, setSubject] = useState(''); 
-  const [description, setDescription] = useState('');
+  const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
+  const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : sampleDescription);
   const navigation = useNavigation();
 
 
