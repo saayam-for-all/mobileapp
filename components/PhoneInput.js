@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import {CountryPicker, CountryButton} from "react-native-country-codes-picker";
 
 const styles = StyleSheet.create({
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     phone: {
         height: 40,
         margin: '3%',
-        padding: '3%',
+        padding: 10,
         flexGrow: 8,
         borderWidth: 1,
         borderColor: 'lightgray',
@@ -22,14 +22,13 @@ const styles = StyleSheet.create({
         height: 40,
         maxWidth:"40%",
         margin: '3%',
-        padding: '3%',
+        padding: 10,
         flexGrow: 1,
         borderWidth: 1,
         borderColor: 'lightgray',
         borderRadius: 5,
         backgroundColor: '#fff',
     },
-
 });
 
 function ListHeaderComponent({countries, lang, onPress}) {
@@ -100,7 +99,8 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
                     },
                     searchMessageText: {
                         padding: "5%"
-                    }
+                    },
+
                 }}
                 searchMessage={search_message}
                 // when picker button press you will get the country object with dial code
@@ -111,6 +111,9 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
                     // Then Change country field in signup page
                     onChangeCountryName(item.name.en);
                     setFullPhone(item.dial_code + phone)
+                    setShow(!show);
+                }}
+                onBackdropPress={()=>{
                     setShow(!show);
                 }}
                 ListHeaderComponent={ListHeaderComponent}

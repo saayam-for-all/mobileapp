@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, Text,
+  View, StyleSheet, Text, Alert
 } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
@@ -34,12 +34,15 @@ export default function SignUp({ navigation }) {
   const [country_name, onChangeCountryName] = useState("United States");
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
+  const [passwordValid, setPasswordValid] = useState(true);
   const [repeatPassword, onChangeRepeatPassword] = useState('');
 
   const [invalidMessage, setInvalidMessage] = useState(null);
 
   const signUp = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
+    let errorMessage = null;
+    let hasError = false;
     if (validPassword) {
       setInvalidMessage(null);
       Auth.signUp({
@@ -61,15 +64,21 @@ export default function SignUp({ navigation }) {
         })
         .catch((err) => {
           if (err.message) {
+            popError(err.message);
             setInvalidMessage(err.message);
           }
           console.log(err);
         });
     } else {
       setInvalidMessage('Password must be equal and have greater lenght than 6.');
+      errorMessage = 'Password must be equal and have greater lenght than 6.';
+      popError(errorMessage);
     }
   };
-
+  const popError = (errorMessage) =>
+    Alert.alert('Submission Failed', errorMessage, [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+  ]);
   return (
     <View style={styles.container}>
       <Input
@@ -122,10 +131,24 @@ export default function SignUp({ navigation }) {
        // autoCompleteType="email"
        // keyboardType="email-address"
       />
+      {!passwordValid && 
+        <Text style={{ color: 'red' }}>
+          Password must be at least 8 characters long and contain at least one lowercase letter
+        </Text>
+      }
       <Input
         value={password}
         placeholder="password"
-        onChange={(text) => onChangePassword(text)}
+        onChange={(text) => {
+          const valid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
+          const isValid = valid.test(text);
+          if(!isValid) {
+            setPasswordValid(false);
+          } else {
+            setPasswordValid(true);
+          }
+          onChangePassword(text);
+        }}
         secureTextEntry
         autoCompleteType="password"
       />
