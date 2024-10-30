@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   View, StyleSheet, Text,
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { confirmSignUp } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
@@ -34,13 +34,15 @@ const Confirmation = ({ route, navigation }) => {
   console.log('confirmation navigation: ', navigation);
   const { email } = route.params;
 
-  const confirmSignUp = async () => {
+  const confirmUser = async () => {
     if (authCode.length > 0) {
-      await Auth.confirmSignUp(email, authCode)
+     console.log('email ',email)
+     await confirmSignUp({username: email, confirmationCode: authCode})
         .then(() => {
           navigation.navigate('SignIn');
         })
         .catch((err) => {
+          console.log("Error confirmation:", err.underlyingError);
           if (!err.message) {
             setError('Something went wrong, please contact support!');
           } else {
@@ -60,7 +62,7 @@ const Confirmation = ({ route, navigation }) => {
         placeholder="123456"
         onChange={(text) => setAuthCode(text)}
       />
-      <Button onPress={() => confirmSignUp()}>Confirm Sign Up</Button>
+      <Button onPress={() => confirmUser()}>Confirm Sign Up</Button>
       <Text>{error}</Text>
     </View>
   );

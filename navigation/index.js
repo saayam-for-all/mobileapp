@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleSheet, View, ActivityIndicator,
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { getCurrentUser, signOut ,fetchAuthSession} from 'aws-amplify/auth'
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
@@ -32,12 +32,16 @@ class AuthLoadingScreen extends React.Component {
   }
 
   async loadApp() {
-    await Auth.currentAuthenticatedUser()
-      .then((user) => {
+
+    
+    await getCurrentUser() 
+        .then((user) => {
         this.signIn(user);
+        console.log('user ', user.username);
       })
-      .catch(() => {
+      .catch((error) => {
         console.log('err signing in');
+        //console.log("Error signing in:", error.underlyingError);
       });
     this.setState({
       loading: false,
@@ -45,17 +49,20 @@ class AuthLoadingScreen extends React.Component {
   }
 
   async signOut() {
-    await Auth.signOut()
+    await signOut()
       .catch((err) => {
         console.log('ERROR: ', err);
+        console.log("Error signing out:", err.underlyingError);
       });
     this.setState({ userToken: null });
   }
 
   async signIn(user) {
+    const session = await fetchAuthSession();
     this.setState({
-      userToken: user.signInUserSession.accessToken.jwtToken,
+      userToken: session.tokens.accessToken.toString(),     
     });
+    console.log('User token', userToken);
   }
 
   render() {

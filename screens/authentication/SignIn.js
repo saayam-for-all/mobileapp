@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   View, StyleSheet, Alert, Text,
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import {  signIn } from 'aws-amplify/auth'
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
@@ -23,13 +23,24 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const [password, onChangePassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const signIn = async () => {
+  const logIn = async () => {
     if (email.length > 4 && password.length > 2) {
-      await Auth.signIn(email, password)
+      await signIn({username: email, password: password, 
+         // options: {
+       // authFlowType: 'REFRESH_TOKEN_AUTH'    }
+      })     
         .then((user) => {
+          //console.log('user sign in', user)
+          //user.nextStep.signInStep == 'DONE';
           signInCb(user);
         })
+      /* try {
+        signIn({username: email, password: password,})
+       } catch (error) {
+        console.log('error', error.underlyingError)
+       }*/
         .catch((err) => {
+          console.log("Error signing in:", err.underlyingError);
           if (!err.message) {
             console.log('1 Error when signing in: ', err);
             Alert.alert('Error when signing in: ', err);
@@ -69,7 +80,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         autoCompleteType="password"
       />
       <Button
-        onPress={() => signIn()}
+        onPress={() => logIn()}
       >
         Sign In
       </Button>

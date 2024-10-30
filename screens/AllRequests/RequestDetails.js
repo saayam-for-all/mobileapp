@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {AntDesign, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome5} from '@expo/vector-icons' 
 import {List, PaperProvider} from 'react-native-paper'
@@ -123,9 +123,9 @@ export default function RequestDetails(item) {
   
   const getUser = async () => {
     try{
-      const user = await Auth.currentUserInfo();
-      setUserName(user.attributes.name);
-
+     const userAttributes = await fetchUserAttributes();
+      setUserName(userAttributes.name);
+      //console.log("username", userAttributes.name);
     }catch(err){
       console.log('error from cognito : ',err)
    }

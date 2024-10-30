@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { resetPassword, confirmResetPassword } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 
@@ -21,14 +21,20 @@ function ForgetPassword({ navigation }) {
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [nextStep, setNextStep] = useState('');
 
   const getConfirmationCode = async () => {
     if (email.length > 4) {
-      Auth.forgotPassword(email)
+      //Auth.forgotPassword(email)
+      console.log('email is ', email);
+      resetPassword({username: email})
         .then(() => {
           setEditableInput(true);
           setConfirmationStep(true);
           setErrorMessage('');
+          setNextStep(output);
+                console.log(
+        `Confirmation code was sent to ${nextStep.codeDeliveryDetails.deliveryMedium}`)
         })
         .catch((err) => {
           if (err.message) {
@@ -41,12 +47,14 @@ function ForgetPassword({ navigation }) {
   };
 
   const postNewPassword = async () => {
-    Auth.forgotPasswordSubmit(email, code, newPassword)
+    //Auth.forgotPasswordSubmit(email, code, newPassword)
+    confirmResetPassword({username: email, confirmationCode: code, newPassword: newPassword})
       .then(() => {
         setErrorMessage('');
         navigation.navigate('SignIn');
       })
       .catch((err) => {
+        console.log("Error confirm pwd:", err.underlyingError);
         if (err.message) {
           setErrorMessage(err.message);
         }

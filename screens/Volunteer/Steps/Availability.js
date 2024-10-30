@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, CustomButton,IconButton,Button, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';

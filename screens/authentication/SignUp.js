@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
   View, StyleSheet, Text,
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { signUp } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import PhoneInput from '../../components/PhoneInput';
@@ -39,20 +39,21 @@ export default function SignUp({ navigation }) {
 
   const [invalidMessage, setInvalidMessage] = useState(null);
 
-  const signUp = async () => {
+  const userSignUp = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
     if (validPassword) {
       setInvalidMessage(null);
-      Auth.signUp({
+      signUp({
         username: email, 
         password,
-        attributes: {
-          email, // optional
+        options: {
+        userAttributes: {
+          email, 
           name,
           // country_code, // later added to db
           phone_number: full_phone, // later changed into phone without country code
           zoneinfo
-        },
+        }},
         validationData: [], // optional
       })
         .then((data) => {
@@ -61,6 +62,7 @@ export default function SignUp({ navigation }) {
           navigation.navigate('Confirmation', { email });
         })
         .catch((err) => {
+          console.log("Error signing up:", err.underlyingError);
           if (err.message) {
             setInvalidMessage(err.message);
           }
@@ -152,7 +154,7 @@ export default function SignUp({ navigation }) {
         autoCompleteType="password"
       />
       <Button
-        onPress={() => signUp()}
+        onPress={() => userSignUp()}
       >
         Sign Up
       </Button>
