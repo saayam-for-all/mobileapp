@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import axios from 'axios';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform } from 'react-native'; // To check platform type (iOS/Android)
+
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
@@ -10,6 +14,50 @@ const EditProfile = () => {
   const [zone, setZone] = useState('');
   const [dob, setDob] = useState('');
   const [gender, setGender] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false); // To control date picker visibility
+  const API_URL = 'http://10.0.2.2:3000/users'; // For Android Emulator
+
+  // Fetch the user's data when the component mounts
+ useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(API_URL); // Fetch data from API
+      console.log('API Response:', response.data); // Log the API response
+
+      const users = response.data || []; // Use the response directly as an array
+
+      if (users.length === 0) {
+        throw new Error('No users found');
+      }
+
+      const user = users.find((u) => u.id === "5"); // Use string comparison for 'id'
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      // Set form fields with fetched data
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+      setEmail(user.email);
+      setPhoneNumber(user.phone);
+      setZone(user.zone);
+      setDob(user.dob);
+      setGender(user.gender);
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      Alert.alert('Error', error.message); // Display the error message
+    }
+  };
+
+  fetchUserData(); // Call the function on component mount
+}, []);
+
+  
+  
+  
+
+
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -43,12 +91,6 @@ const EditProfile = () => {
       return false;
     }
 
-    // DOB should match the DD/MM/YY format
-    const dobRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{2}$/;
-    if (!dobRegex.test(dob)) {
-      Alert.alert('Invalid Date of Birth', 'DOB should be in the format DD/MM/YY.');
-      return false;
-    }
 
         // If all validations pass
     return true;
@@ -61,6 +103,17 @@ const EditProfile = () => {
     }
   };
 
+  const onDateChange = (event, selectedDate) => {
+    setShowDatePicker(false); // Hide the date picker after selection
+
+    if (selectedDate) {
+      // Format the date as DD/MM/YY
+      const day = selectedDate.getDate().toString().padStart(2, '0');
+      const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+      const year = selectedDate.getFullYear().toString().slice(-2);
+      setDob(`${day}/${month}/${year}`); // Update DOB state with the selected date
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
@@ -101,14 +154,25 @@ const EditProfile = () => {
         value={zone}
         onChangeText={setZone}
       />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="DOB (DD/MM/YY)"
-        value={dob}
-        onChangeText={setDob}
-      />
-      
+       {/* DOB Input - Opens Date Picker */}
+       <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+        <TextInput
+          style={styles.input}
+          placeholder="DOB (DD/MM/YY)"
+          value={dob}
+          editable={false} // Prevent manual editing
+        />
+      </TouchableOpacity>
+
+      {/* Show Date Picker if state is true */}
+      {showDatePicker && (
+        <DateTimePicker
+          value={new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={onDateChange}
+        />
+      )}
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={gender}

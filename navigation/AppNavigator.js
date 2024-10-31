@@ -14,6 +14,7 @@ import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
 import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
 import EditProfile from  '../screens/MenuScreens/EditProfile';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
+import UserSearch from '../screens/MenuScreens/UserSearch';
 
 const AppStack = createStackNavigator();
 
@@ -39,6 +40,9 @@ export default function App({ signOut }) {
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
     <AppStack.Screen name="EditProfile">
         {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="UserSearch">
+        {() => <UserSearch signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="ChangePassword">
         {() => <ChangePassword signOut={signOut} />}

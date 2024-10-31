@@ -25,6 +25,27 @@ export default function RequestDetails(item) {
   const [showName, setShowName] = useState(false);
   const [showVolunteerName, setVolunteerName] = useState(false);
   const handlePress = () => setExpanded(!expanded);
+  const [showVolunteers, setShowVolunteers] = useState(false);
+  const [rowHeights, setRowHeights] = useState({}); // Store max height for each row
+  const columnWidths = {
+    name: 150,
+    cause: 120,
+    phone: 150,
+    email: 200,
+    location: 180,
+    rating: 100,
+  };
+  //Ashan's change
+
+  const volunteers = [
+    { id: 1, name: 'Floyd Miles', cause: 'Banking', phone: '(205) 555-0100', email: 'floyd@yahoo.com', location: 'New York, USA', rating: '★★★★☆' },
+    { id: 2, name: 'Jane Cooper', cause: 'Cooking', phone: '(225) 555-0118', email: 'jane@microsoft.com', location: 'Boston, USA', rating: '★★★★★' },
+    { id: 3, name: 'Jerome Bell', cause: 'Housing', phone: '(629) 555-0129', email: 'jerome@google.com', location: 'Texas, USA', rating: '★★★★☆' },
+    { id: 4, name: 'Kathryn Murphy', cause: 'Cooking', phone: '(406) 555-0120', email: 'kathryn@micro.com', location: 'Chicago, USA', rating: '★★★★★' },
+    { id: 5, name: 'Marvin McKinney', cause: 'College admission', phone: '(252) 555-0126', email: 'marvin@tesla.com', location: 'Delhi, India', rating: '★★★★☆' },
+  ];
+  
+  //end Ashan's change
 
   const showUserName =() => {    
     setShowName(!showName);
@@ -75,7 +96,14 @@ export default function RequestDetails(item) {
       </Text>
     </View>
   );
-
+  const updateRowHeight = (rowIndex, height) => {
+    setRowHeights((prevHeights) => ({
+      ...prevHeights,
+      [rowIndex]: Math.max(prevHeights[rowIndex] || 0, height),
+    }));
+  };
+  
+  const getColumnWidth = (key) => columnWidths[key] || 100;
   const commentsView = (
     <View style={{ flexDirection: "row" }}>
     {isLoading ? <Text>Loading...</Text> : 
@@ -242,11 +270,58 @@ export default function RequestDetails(item) {
       />
     </View>
 
-    <TouchableOpacity style={styles.requestButton}>
-      <FontAwesome5 name="user-plus" size={16} color="white" />
-      <Text style={styles.buttonText}> Request Volunteers</Text>
-    </TouchableOpacity>
+    <TouchableOpacity
+  style={styles.requestButton}
+  onPress={() => setShowVolunteers(true)}
+>
+  <FontAwesome5 name="user-plus" size={16} color="white" />
+  <Text style={styles.buttonText}> Request Volunteers</Text>
+</TouchableOpacity>
   </View>
+   {/* Volunteer Table - Rendered Below the Button */}
+   {showVolunteers && (
+  <View style={styles.volunteerTableContainer}>
+    <ScrollView horizontal>
+      <View>
+        {/* Header Row */}
+        <View style={styles.tableHeader}>
+          <Text style={[styles.columnHeader, { width: 150 }]}>Name</Text>
+          <Text style={[styles.columnHeader, { width: 120 }]}>Cause</Text>
+          <Text style={[styles.columnHeader, { width: 150 }]}>Phone</Text>
+          <Text style={[styles.columnHeader, { width: 200 }]}>Email</Text>
+          <Text style={[styles.columnHeader, { width: 180 }]}>Location</Text>
+          <Text style={[styles.columnHeader, { width: 100 }]}>Rating</Text>
+        </View>
+
+        {/* Data Rows */}
+        {volunteers.map((volunteer, rowIndex) => (
+          <View
+            key={volunteer.id}
+            style={[
+              styles.tableRow,
+              { height: rowHeights[rowIndex] || 'auto' }, // Apply max height for the row
+            ]}
+          >
+            {Object.entries(volunteer)
+              .filter(([key]) => key !== 'id') // Exclude 'id'
+              .map(([key, value], colIndex) => (
+                <Text
+                  key={`${rowIndex}-${colIndex}`}
+                  style={[styles.tableCell, { width: getColumnWidth(key) }]}
+                  onLayout={(event) =>
+                    updateRowHeight(rowIndex, event.nativeEvent.layout.height)
+                  }
+              >
+                {value}
+              </Text>
+            ))}
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  </View>
+)}
+
 </List.Accordion>
 
     </SafeAreaView>
@@ -371,6 +446,37 @@ export default function RequestDetails(item) {
           marginLeft: 5,
           fontWeight: 'bold',
         },
+        volunteerTableContainer: {
+          marginTop: 10,
+          paddingHorizontal: 10,
+          borderColor: '#DDD',
+          borderWidth: 1,
+          borderRadius: 10,
+          backgroundColor: '#F5F5F5',
+          overflow: 'hidden',
+        },
+        tableHeader: {
+          flexDirection: 'row',
+          backgroundColor: '#E0E0E0',
+          padding: 10,
+          borderBottomWidth: 1,
+          borderColor: '#DDD',
+        },
+        columnHeader: {
+          fontWeight: 'bold',
+          textAlign: 'center',
+          paddingVertical: 10,
+        },
+        tableRow: {
+          flexDirection: 'row',
+          borderBottomWidth: 1,
+          borderColor: '#EEE',
+        },
+        tableCell: {
+          textAlign: 'center',
+          paddingVertical: 10,
+        },
+        
       
   });
 
