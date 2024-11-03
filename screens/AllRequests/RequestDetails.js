@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {AntDesign, MaterialCommunityIcons, Feather, MaterialIcons, FontAwesome5} from '@expo/vector-icons' 
 import {List, PaperProvider} from 'react-native-paper'
 import Input from '../../components/Input';
 import config from '../../components/config';
-import api from '../../components/api'
+import api from '../../components/api';
+import { TextInput } from 'react-native';
+import UserRequest from '../UserRequest';
 
 
 
@@ -19,6 +21,7 @@ export default function RequestDetails(item) {
   const [addComment, setComment] = useState("");
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const url = "https://my-json-server.typicode.com/rmb2020/database/comments" //Using a test json server
   const [expanded, setExpanded] = useState(false);
   const [showName, setShowName] = useState(false);
@@ -32,6 +35,20 @@ export default function RequestDetails(item) {
   const showVolunteer =() => {    
     setVolunteerName(!showVolunteerName);
   }
+
+  const closeForm = () => {
+    setIsEditing(false);
+  }
+
+  const handleEditClick = (event) => {
+    event.stopPropagation();
+    setIsEditing(true)
+  }
+
+  const handleOverlayClick = () => {
+    setIsEditing(false);
+  }
+
   const title=(
     <View style={styles.header}>
         <Text> 
@@ -136,6 +153,23 @@ export default function RequestDetails(item) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {isEditing && <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isEditing}
+        onRequestClose={() => {
+          Alert.alert('Edit closed.');
+          setIsEditing(!isEditing);
+        }}>
+          <View
+            style={{
+              height: '90%',
+              marginTop: 'auto',
+            }}
+          >
+            <UserRequest isEdit={true} onClose={closeForm} requestItem={req} />
+          </View>
+      </Modal>}
       <View>        
         <View style={{  borderWidth:1,
         borderColor:'grey',
@@ -154,7 +188,7 @@ export default function RequestDetails(item) {
                     {reqStatus}  
                   </Text></TouchableOpacity></Text>
          <Text style={{flex:1, marginLeft:10}}>  
-            <AntDesign name="edit" size={24} color="black" />
+            <AntDesign name="edit" size={24} color="black" onPress={()=>setIsEditing(true)}/>
                   {/*Using edit icon instead of button <TouchableOpacity style={{height: 20, width: 50,
                     backgroundColor:'#2986cc', borderRadius: 5}}> 
                     <Text style={{ color: "white", alignSelf: "center" }}>Edit</Text>
@@ -173,10 +207,10 @@ export default function RequestDetails(item) {
       >       
       <View style={{alignItems: 'center'}} >
         <Text style={styles.textDescription}>
-          We need volunteers for our upcoming Community Clean-Up Day on August
-          15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking
-          up litter, sorting recyclables, and managing the registration table.
-          We also need donations of trash bags, gloves, and refreshments.
+          {req?.description || "We need volunteers for our upcoming Community Clean-Up Day on August \
+15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking \
+up litter, sorting recyclables, and managing the registration table. \
+We also need donations of trash bags, gloves, and refreshments."}
         </Text></View>        
       </List.Accordion>
       </View>
@@ -215,23 +249,39 @@ export default function RequestDetails(item) {
 
       {/*3 Buttons view code below*/}
       <View style={{ flexDirection: "row", marginBottom:10, marginTop:10 }}>
-      <TouchableOpacity style={{width:100, height:50, borderRadius:10, alignContent:'center', backgroundColor:"#E6E6FA"}}>
-            <Text style={{fontSize:15, marginTop:1}}> Volunteer Organizations </Text>
+      <TouchableOpacity style={{width:125, height:50, borderRadius:10, alignContent:'center',flexDirection: "row",alignItems: "center", backgroundColor:"#2F80ED"}}>
+      <FontAwesome5 name="users" size={16} color="white" style={{ marginRight: 5 }} />
+            <Text style={{fontSize:15, marginTop:1, color: "white"}}>Volunteer Organizations </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{width:100, height:50, borderRadius:10, marginLeft:10, alignContent:'center', backgroundColor:"#E6E6FA"}}>
-            <Text style={{fontSize:15, marginTop:1, marginLeft:10}}> Emergency Contact </Text>
+        <TouchableOpacity style={{width:125, height:50, borderRadius:10, marginLeft:10, alignContent:'center',flexDirection: "row",alignItems: "center", backgroundColor:"#EB5757"}}>
+        <MaterialIcons name="emergency" size={20} color="white" style={{ marginRight: 5 }} />
+            <Text style={{fontSize:15, marginTop:1, marginLeft:10, color: "white"}}>Emergency Contact </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{width:100, height:50, borderRadius:10, marginLeft:10, alignContent:'center', backgroundColor:"#E6E6FA"}}>
-            <Text style={{fontSize:15, marginTop:1, marginLeft:10}}> More Information </Text>
+        <TouchableOpacity style={{width:125, height:50, borderRadius:10, marginLeft:10, alignContent:'center',flexDirection: "row",alignItems: "center", backgroundColor:"#F2C94C"}}>
+        <FontAwesome5 name="info-circle" size={16} color="white" style={{ marginRight: 5 }} />
+            <Text style={{fontSize:15, marginTop:1, marginLeft:10, color: "white"}}>More Information </Text>
         </TouchableOpacity>
       </View>
-      <List.Accordion       //From react native paper
-        title="Helping Volunteers"
-        //left={props => <List.Icon {...props} icon="folder" />}
-        >
-        <List.Item title="First item" /> 
-        <List.Item title="Second item" />
-      </List.Accordion>
+      <List.Accordion  //From react native paper
+  title="Helping Volunteers"
+  //left={props => <List.Icon {...props} icon="folder" />}
+>
+  <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+    <View style={styles.inputContainer}>
+      <TextInput
+        placeholder="Enter number of volunteers required..."
+        style={styles.input}
+        keyboardType="numeric"
+      />
+    </View>
+
+    <TouchableOpacity style={styles.requestButton}>
+      <FontAwesome5 name="user-plus" size={16} color="white" />
+      <Text style={styles.buttonText}> Request Volunteers</Text>
+    </TouchableOpacity>
+  </View>
+</List.Accordion>
+
     </SafeAreaView>
   );
 }
@@ -322,6 +372,38 @@ export default function RequestDetails(item) {
         //alignItems:'center',
         height:30,
         borderRadius:100
-      }
+      },
+        accordion: {
+          backgroundColor: '#F7F7F8',
+          borderRadius: 10,
+          marginTop: 10,
+          marginBottom: 10,
+        },
+        inputContainer: {
+          flex: 1,
+          marginRight: 10,
+        },
+        input: {
+          borderWidth: 1,
+          borderColor: 'lightgray',
+          borderRadius: 5,
+          padding: 10,
+          height: 40,
+          backgroundColor: '#F5F5F5',
+        },
+        requestButton: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: '#2F80ED',
+          borderRadius: 5,
+          paddingVertical: 10,
+          paddingHorizontal: 15,
+        },
+        buttonText: {
+          color: 'white',
+          marginLeft: 5,
+          fontWeight: 'bold',
+        },
+      
   });
 
