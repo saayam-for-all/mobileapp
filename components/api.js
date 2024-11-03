@@ -1,4 +1,5 @@
 import axios from "axios";
+import Auth from '@aws-amplify/auth'
 
 const api = axios.create(
     {
@@ -8,13 +9,20 @@ const api = axios.create(
         },
       
     });
-
+  
    // Request interceptor
   api.interceptors.request.use(
-    (config) => {
-      // Modify the request config (e.g., add headers)
+    async (config) => {    
+      // Modify the request config (e.g., add headers) 
         // config.headers.Authorization = 'Bearer YOUR_TOKEN';
-      return config;
+        const session = ((await Auth.currentSession()));
+        let token = session.getIdToken().getJwtToken();
+        //console.log ('token api', token)
+        if (token) {
+          config.headers['Authorization'] =  token; 
+         // console.log('header', config.headers.Authorization)
+        }
+     return config;
     },
     (error) => {
       // Handle request errors
@@ -34,4 +42,4 @@ const api = axios.create(
       return Promise.reject(error);
     }
   );
-    export default api;
+    export default api;    
