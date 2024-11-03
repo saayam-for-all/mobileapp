@@ -112,12 +112,12 @@ export default function RequestDetails(item) {
 
   const fetchData = async () => {
     try {
-      //const res = await fetch(url); //not needed now
-      const res = await api.get('rmb2020/database/comments') //Get data axios instance
-      //const resdata = await res.json(); //not needed now
-      const resdata = res.data;
+      const res = await fetch(url); //not needed now //temp reverting back to fetch
+      //const res = await api.get('rmb2020/database/comments') //Get data axios instance
+      const resdata = await res.json(); //not needed now
+     // const resdata = res.data;//Axios data
       setData(resdata);
-       console.log(resdata)
+      // console.log(resdata)
       setLoading(false);
     } catch (err) {
       console.log("error from axios : ", err);
