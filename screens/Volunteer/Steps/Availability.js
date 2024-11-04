@@ -8,7 +8,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Checkbox } from 'react-native-paper';
 import { Dimensions } from 'react-native';
-import api from '../../components/api';
+// import api from '../../components/api';
 
 export default function Availability() {
   const [timeSlots, setTimeSlots] = useState([{ day: 'Everyday', startTime: '12:00 AM', endTime: '12:00 AM' }]);
@@ -84,7 +84,7 @@ export default function Availability() {
 
 
   useEffect(() => {
-    fetchAvailability(); // Call the function on component mount
+    // fetchAvailability(); // Call the function on component mount
   }, []);
 
   const CustomButton = ({ title, onPress, style, textStyle }) => (
