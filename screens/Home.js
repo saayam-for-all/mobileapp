@@ -235,7 +235,17 @@ export default function Home({ signOut }) {
         >
           <Tab.Screen name="Home1" options={{ title: 'Home' }} component={HomeTabScreen} />
           <Tab.Screen name="Donate" component={DonateScreen} />
-          <Tab.Screen name="Notification" component={NotificationScreen} />
+          <Tab.Screen name="Notification" 
+          component={NotificationScreen} 
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                {...props}
+                onPress={() => navigation.navigate("Notification")}
+              />
+            ),
+          }}
+          />
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
       </View>
