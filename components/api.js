@@ -3,7 +3,7 @@ import Auth from '@aws-amplify/auth'
 
 const api = axios.create(
     {
-        baseURL: "https://my-json-server.typicode.com/",//Example url for testing
+        baseURL: process.env.EXPO_PUBLIC_API_URL,//Example url for testing
         headers: {
           "Content-Type": "application/json",
         },
