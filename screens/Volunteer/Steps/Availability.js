@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, CustomButton,IconButton,Button, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -8,12 +8,14 @@ import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Checkbox } from 'react-native-paper';
 import { Dimensions } from 'react-native';
+// import api from '../../components/api';
 
 export default function Availability() {
   const [timeSlots, setTimeSlots] = useState([{ day: 'Everyday', startTime: '12:00 AM', endTime: '12:00 AM' }]);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const navigation = useNavigation();
   const [checked, setChecked] = React.useState(false);
+  const [loading, setLoading] = useState(true);
   const screenWidth = Dimensions.get('window').width;
 
   const dayOptions = [
@@ -61,6 +63,29 @@ export default function Availability() {
     newTimeSlots[index][field] = value;
     setTimeSlots(newTimeSlots);
   };
+
+  // Function to fetch availability from the API
+  const fetchAvailability = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/volunteers/availability'); // Make the API call
+      const availabilityData = response.data; // Assuming the data is in response.data
+
+      // If the API returns availability in a format that can directly populate timeSlots
+      setTimeSlots(availabilityData.timeSlots || []); // Adjust according to the API response structure
+      setChecked(availabilityData.notificationsEnabled || false); // Set notification preference if available
+    } catch (error) {
+      console.error('Error fetching availability:', error);
+      // Handle error appropriately (e.g., show a message to the user)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    // fetchAvailability(); // Call the function on component mount
+  }, []);
 
   const CustomButton = ({ title, onPress, style, textStyle }) => (
     <TouchableOpacity style={[styles.button, style]} onPress={onPress}>

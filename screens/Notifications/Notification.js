@@ -1,7 +1,7 @@
 import { Button } from "react-native";
 import { MyReqData } from "../../data/MyReqData";
 import { useEffect,useState } from "react";
-import { View, FlatList, StyleSheet, Text } from "react-native";
+import { View, FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import NotificationCard from "./NotificationCard";
 
 export default function Notification() {
@@ -12,7 +12,7 @@ export default function Notification() {
     useEffect(()=>{
         if(dataOptions === 1) {
             setData(reqdata.filter(item=>item.status==="Open"));
-        }
+        }   
         else if(dataOptions === 2) {
             setData(reqdata.filter(item=>item.status==="Closed"));
         }
@@ -23,19 +23,72 @@ export default function Notification() {
 
     return (
         <>
-        <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
-            <Button title="All" onPress={()=>setDataOptions(0)}/>
-            <Button title="Volunteer Match" onPress={()=>setDataOptions(1)}/>
-            <Button title="Help Request" onPress={()=>setDataOptions(2)}/>
-        </View>
-        <FlatList
+          {/* Custom Top Tab Bar */}
+          <View style={styles.tabContainer}>
+            <View style={styles.tabWrapper}>
+              <TouchableOpacity
+                style={[styles.tab, dataOptions === 0 && styles.activeTab]}
+                onPress={() => setDataOptions(0)}
+              >
+                <Text style={[styles.tabText, dataOptions === 0 && styles.activeTabText]}>All</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.tabWrapper}>
+              <TouchableOpacity
+                style={[styles.tab, dataOptions === 1 && styles.activeTab]}
+                onPress={() => setDataOptions(1)}
+              >
+                <Text style={[styles.tabText, dataOptions === 1 && styles.activeTabText]}>Volunteer Match</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.tabWrapper}>
+              <TouchableOpacity
+                style={[styles.tab, dataOptions === 2 && styles.activeTab]}
+                onPress={() => setDataOptions(2)}
+              >
+                <Text style={[styles.tabText, dataOptions === 2 && styles.activeTabText]}>Help Request</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+    
+          {/* Data List */}
+          <FlatList
             keyExtractor={(item) => item.id}
-            //data={data}
             data={data}
             renderItem={({ item }) => (
-                <NotificationCard item={item}/>
+              <NotificationCard item={item}/>
             )}
-        />
-      </>
-    )
-}
+          />
+        </>
+      );
+    };
+    
+    const styles = StyleSheet.create({
+      tabContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderColor: '#ddd',
+      },
+      tabWrapper: {
+        flex: 1, // Each tab takes equal width
+        alignItems: 'center', // Center content within each tab
+      },
+      tab: {
+        paddingVertical: 8,
+        alignItems: 'center', // Ensures text stays centered within the tab
+      },
+      tabText: {
+        fontSize: 16,
+        color: 'gray',
+      },
+      activeTab: {
+        borderBottomWidth: 2,
+        borderBottomColor: '#4285F4',
+      },
+      activeTabText: {
+        color: '#4285F4',
+        fontWeight: 'bold',
+      },
+    });

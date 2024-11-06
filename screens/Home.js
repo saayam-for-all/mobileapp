@@ -12,7 +12,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import config from '../components/config'
+import config from '../components/config';
 
 
 const styles = StyleSheet.create({
@@ -102,6 +102,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
+  fullWidthButton: {
+    width: '100%', // Full width when only one button is in the row
+  },
   buttonText: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -172,7 +175,7 @@ export default function Home({ signOut }) {
           <Text style={styles.buttonText}>Managed Requests</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("OtherRequests")}}>
+        <TouchableOpacity style={[styles.buttonView, styles.fullWidthButton]} onPress={() => {navigation.navigate("OtherRequests")}}>
           <Text style={styles.buttonText}>Others Requests</Text>
         </TouchableOpacity>
       </View>
@@ -232,7 +235,17 @@ export default function Home({ signOut }) {
         >
           <Tab.Screen name="Home1" options={{ title: 'Home' }} component={HomeTabScreen} />
           <Tab.Screen name="Donate" component={DonateScreen} />
-          <Tab.Screen name="Notification" component={NotificationScreen} />
+          <Tab.Screen name="Notification" 
+          component={NotificationScreen} 
+          options={{
+            tabBarButton: (props) => (
+              <TouchableOpacity
+                {...props}
+                onPress={() => navigation.navigate("Notification")}
+              />
+            ),
+          }}
+          />
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
       </View>
