@@ -1,39 +1,56 @@
-import React from 'react';
-import { View,Text,Modal,StyleSheet, Image } from 'react-native';
+import {useState, useEffect} from 'react';
+import { View,Text,Modal,StyleSheet, Image, Alert } from 'react-native';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import * as ImagePicker from 'expo-image-picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
 function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePhoto }) {
-    const handlePhotoChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const photo = e.target.result;
-                setProfilePhoto(photo);
-            };
-            reader.readAsDataURL(file);
+    const [file, setFile] = useState({});
+    const [error, setError] = useState(null);
+
+    // *** For Testing, android devices might have different behavior
+
+    // useEffect(() => {
+    //     console.log(file);
+    //     fetch(file.uri?.replace("file://",'')).then(res=>console.log(res))
+    //         .catch(err=>console.log(err))
+    // },[file])
+
+    const pickImage = async () => {
+        const { status } = await ImagePicker.
+            requestMediaLibraryPermissionsAsync();
+        
+        if (status !== "granted") {
+            Alert.alert(
+                "Permission Denied",
+                "Sorry, we need camera roll permission to upload images."
+            );
+        } else {
+            const result =
+                await ImagePicker.launchImageLibraryAsync();
+            if (!result?.canceled) {
+                setFile({uri:result?.assets[0].uri});
+                setError(null);
+            }
         }
     };
-    const handleUpload = () => {
-
-    }
     
     const handleSaveClick = () => {
-        setProfilePhoto(profilePhoto);
-        localStorage.setItem('profilePhoto', profilePhoto);
-        window.dispatchEvent(new Event('profile-photo-updated'));
+        setProfilePhoto(file);
         setIsModalOpen(false);
     };
 
     const handleCancelClick = () => {
         setProfilePhoto(profilePhoto);
+        setFile(profilePhoto);
         setIsModalOpen(false);
     };
 
     const handleDeleteClick = () => {
+        setFile({});
         setProfilePhoto(DEFAULT_PROFILE_ICON);
     };
     return (
@@ -63,30 +80,38 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
           >
                 <Text style={styles.titleText}>Profile Photo</Text>
 
-               
-                <View className="relative mb-4 flex justify-center">
+                <View>
+                    
                     {profilePhoto ? (
-                        // <Image source={profilePhoto!=''?require(profilePhoto):require('../assets/rn-logo.png')} style={styles.userImage} />
                         <View style={styles.img}>
-                        <Image
-                            source={require('../assets/rn-logo.png')}
+                        {file?.uri ? (<Image
+                            source={file}
+                            alt="Profile"
+                            style={{
+                                width:"100%",
+                                height:"100%",
+                                flex: 1,
+                                resizeMode: 'cover',
+                            }}
+                        />) : (<Image
+                            source={DEFAULT_PROFILE_ICON}
                             alt="Profile"
                             style={{
                                 flex: 1,
                                 resizeMode: 'contain',
                             }}
-                        />
+                        />)}
                         </View>
                     ) : (
                         <View style={styles.img}>
                             <Text>No Photo</Text>
                         </View>
                     )}
-                </View>
 
+                </View>
                
                 <View style={{ width: '60%', ...styles.rowContainer}}>
-                    <TouchableOpacity style={{marginHorizontal:10}} onPress={handleUpload}>
+                    <TouchableOpacity style={{marginHorizontal:10}} onPress={pickImage}>
                         <View style={{ width: '100%', ...styles.colContainer}}>
                             <FontAwesome name="camera" size={24} color="black" />
                             <Text className="text-blue-600">Upload</Text>

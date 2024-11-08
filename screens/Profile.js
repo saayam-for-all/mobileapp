@@ -62,11 +62,13 @@ const styles = StyleSheet.create({
   },
 });
 
+const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
+
 export default function Profile({ signOut }) {
   const navigation = useNavigation();
   const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState('../assets/rn-logo.png');
+  const [profilePhoto, setProfilePhoto] = useState({});
 
   // Function to trigger the sign-out confirmation
   const confirmSignOut = () => {
@@ -101,7 +103,10 @@ export default function Profile({ signOut }) {
       <View style={styles.header}>
         {/* <Image source={require('../assets/rn-logo.png')} style={styles.userImage} onPress={setIsModalOpen(true)}/> */}
         <TouchableOpacity onPress={()=>setIsModalOpen(true)}>
-          <Image source={require('../assets/rn-logo.png')} style={styles.userImage} />
+          {profilePhoto?.uri?
+            (<Image source={profilePhoto} style={styles.userImage} />)
+            :(<Image source={DEFAULT_PROFILE_ICON} style={styles.userImage} />)
+          }
         </TouchableOpacity>
         <Text style={styles.userName}>Jacob Jones</Text>
         <Text style={styles.userEmail}>youremail@domain.com | +01 234 567 89</Text>
