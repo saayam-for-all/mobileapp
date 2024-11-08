@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, ScrollView, Alert } from 'react-native';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';  // Using vector icons
 
 import ProfileImage from './ProfileImage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,6 +71,13 @@ export default function Profile({ signOut }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState({});
 
+  useEffect(() => {
+    const getImage = async () => {
+      const value = await AsyncStorage.getItem('profilePhoto');
+      if(value) setProfilePhoto(JSON.parse(value));
+    }
+    getImage();
+  }, [profilePhoto]);
   // Function to trigger the sign-out confirmation
   const confirmSignOut = () => {
     Alert.alert(

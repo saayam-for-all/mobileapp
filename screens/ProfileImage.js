@@ -5,19 +5,25 @@ import Button from '../components/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
 function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePhoto }) {
-    const [file, setFile] = useState({});
+    const [file, setFile] = useState(profilePhoto);
     const [error, setError] = useState(null);
 
     // *** For Testing, android devices might have different behavior
 
-    // useEffect(() => {
-    //     console.log(file);
-    //     fetch(file.uri?.replace("file://",'')).then(res=>console.log(res))
-    //         .catch(err=>console.log(err))
-    // },[file])
+    useEffect(() => {
+        const getImage = async () => {
+            const value = await AsyncStorage.getItem('profilePhoto');
+            if(value) setFile(JSON.parse(value));
+        }
+        if(!file?.uri) getImage();
+        // console.log(file);
+        // fetch(file.uri?.replace("file://",'')).then(res=>console.log(res))
+        //     .catch(err=>console.log(err))
+    },[file])
 
     const pickImage = async () => {
         const { status } = await ImagePicker.
@@ -40,6 +46,7 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
     
     const handleSaveClick = () => {
         setProfilePhoto(file);
+        AsyncStorage.setItem('profilePhoto', JSON.stringify(file));
         setIsModalOpen(false);
     };
 
@@ -49,9 +56,10 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
         setIsModalOpen(false);
     };
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = async () => {
         setFile({});
-        setProfilePhoto(DEFAULT_PROFILE_ICON);
+        await AsyncStorage.clear();
+        setProfilePhoto({});
     };
     return (
         <Modal
