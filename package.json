@@ -2,7 +2,7 @@
   "name": "saayammobileapp",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
-  "scripts": {    
+  "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -20,7 +20,7 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "axios": "^1.7.7",
-    "expo": "~51.0.37",
+    "expo": "~51.0.39",
     "expo-checkbox": "~3.0.0",
     "expo-document-picker": "~12.0.2",
     "expo-status-bar": "~1.12.1",
