@@ -1,10 +1,9 @@
 import {useState, useEffect} from 'react';
-import { View,Text,Modal,StyleSheet, Image, Alert, TouchableOpacity } from 'react-native';
+import { View,Text,Modal,StyleSheet, Image, Alert, TouchableOpacity} from 'react-native';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
-// import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
@@ -173,13 +172,13 @@ const styles = StyleSheet.create(
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' 
         },
         buttonText: {
-            color:"white",fontSize:"18px"
+            color:"white",fontSize:18
         },
         img: {
             width: "33.3%",
             aspectRatio: 1,
             marginHorizontal:'auto',
-            borderRadius:"100%",
+            borderRadius:100,
             backgroundColor:"white",
             display: 'flex',
             justifyContent: 'center',
