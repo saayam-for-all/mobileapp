@@ -1,10 +1,10 @@
 import {useState, useEffect} from 'react';
-import { View,Text,Modal,StyleSheet, Image, Alert } from 'react-native';
+import { View,Text,Modal,StyleSheet, Image, Alert, TouchableOpacity } from 'react-native';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as ImagePicker from 'expo-image-picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
