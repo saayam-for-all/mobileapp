@@ -13,6 +13,8 @@ import ChangePassword from '../screens/MenuScreens/ChangePassword';
 import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
 import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
 import EditProfile from  '../screens/MenuScreens/EditProfile';
+import ReqFilter from '../screens/AllRequests/ReqFilter';
+import Notification from '../screens/Notifications/Notification';
 
 const AppStack = createStackNavigator();
 
@@ -51,7 +53,10 @@ export default function App({ signOut }) {
       <AppStack.Screen name="Welcome">
         {() => <Welcome signOut={signOut} />}
       </AppStack.Screen>
-      
+      <AppStack.Screen name="ReqFilter" component={ReqFilter}
+      options={{ title: 'Filter' }}/> 
+      <AppStack.Screen name="Notification" component={Notification} 
+      options={{ title: 'Notifications' }}/>
     </AppStack.Navigator>
   );
 }

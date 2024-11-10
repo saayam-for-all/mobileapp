@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import {
-  View, StyleSheet, Text,
+  View, StyleSheet, Text, Alert
 } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import PhoneInput from '../../components/PhoneInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,14 +29,20 @@ export default function SignUp({ navigation }) {
   const [name, onChangeName] = useState('');
   const [email, onChangeEmail] = useState('');
   const [phone_number, onChangePhone] = useState('');
+  const [full_phone,setFullPhone] = useState('');
+  const [country_code, onChangeCountryCode] = useState('+1');
+  const [country_name, onChangeCountryName] = useState("United States");
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
+  const [passwordValid, setPasswordValid] = useState(true);
   const [repeatPassword, onChangeRepeatPassword] = useState('');
 
   const [invalidMessage, setInvalidMessage] = useState(null);
 
   const signUp = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
+    let errorMessage = null;
+    let hasError = false;
     if (validPassword) {
       setInvalidMessage(null);
       Auth.signUp({
@@ -44,7 +51,8 @@ export default function SignUp({ navigation }) {
         attributes: {
           email, // optional
           name,
-          phone_number,
+          // country_code, // later added to db
+          phone_number: full_phone, // later changed into phone without country code
           zoneinfo
         },
         validationData: [], // optional
@@ -56,15 +64,21 @@ export default function SignUp({ navigation }) {
         })
         .catch((err) => {
           if (err.message) {
+            popError(err.message);
             setInvalidMessage(err.message);
           }
           console.log(err);
         });
     } else {
       setInvalidMessage('Password must be equal and have greater lenght than 6.');
+      errorMessage = 'Password must be equal and have greater lenght than 6.';
+      popError(errorMessage);
     }
   };
-
+  const popError = (errorMessage) =>
+    Alert.alert('Submission Failed', errorMessage, [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+  ]);
   return (
     <View style={styles.container}>
       <Input
@@ -81,13 +95,25 @@ export default function SignUp({ navigation }) {
         autoCompleteType="email"
         keyboardType="email-address"
       />
-      <Input
+      {/* <Input
         value={phone_number}
         placeholder="Phone number"
         onChange={(text) => onChangePhone(text)}
         autoCapitalize="none"
         autoCompleteType="tel"
         keyboardType="phone-pad"
+      /> */}
+      <PhoneInput
+        countryCode= {country_code}
+        setCountryCode={(text) => onChangeCountryCode(text)}
+        countryName={country_name} 
+        onChangeCountryName={onChangeCountryName}
+        setFullPhone={setFullPhone}
+        phone={phone_number}
+        onChangePhone={(text) => onChangePhone(text)}
+        preferredCountries ={['US']}
+        label=''
+        errorMessage = ""
       />
       <Input
         value={zoneinfo}
@@ -98,9 +124,31 @@ export default function SignUp({ navigation }) {
        // keyboardType="email-address"
       />
       <Input
+        value={country_name}
+        placeholder="United States"
+        onChange={(text) => onChangeCountryName(text)}
+        autoCapitalize="none"
+       // autoCompleteType="email"
+       // keyboardType="email-address"
+      />
+      {!passwordValid && 
+        <Text style={{ color: 'red' }}>
+          Password must be at least 8 characters long and contain at least one lowercase letter
+        </Text>
+      }
+      <Input
         value={password}
         placeholder="password"
-        onChange={(text) => onChangePassword(text)}
+        onChange={(text) => {
+          const valid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
+          const isValid = valid.test(text);
+          if(!isValid) {
+            setPasswordValid(false);
+          } else {
+            setPasswordValid(true);
+          }
+          onChangePassword(text);
+        }}
         secureTextEntry
         autoCompleteType="password"
       />

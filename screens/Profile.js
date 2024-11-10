@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Switch, ScrollView, Alert } from 'react-native';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';  // Using vector icons
 
+import ProfileImage from './ProfileImage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,10 +63,21 @@ const styles = StyleSheet.create({
   },
 });
 
+const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
+
 export default function Profile({ signOut }) {
   const navigation = useNavigation();
   const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState({});
 
+  useEffect(() => {
+    const getImage = async () => {
+      const value = await AsyncStorage.getItem('profilePhoto');
+      if(value) setProfilePhoto(JSON.parse(value));
+    }
+    getImage();
+  }, [profilePhoto]);
   // Function to trigger the sign-out confirmation
   const confirmSignOut = () => {
     Alert.alert(
@@ -87,9 +100,22 @@ export default function Profile({ signOut }) {
   };
 
   return (
+  <>  
+    <ProfileImage
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        profilePhoto={profilePhoto}
+        setProfilePhoto={setProfilePhoto}
+    />
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Image source={require('../assets/rn-logo.png')} style={styles.userImage} />
+        {/* <Image source={require('../assets/rn-logo.png')} style={styles.userImage} onPress={setIsModalOpen(true)}/> */}
+        <TouchableOpacity onPress={()=>setIsModalOpen(true)}>
+          {profilePhoto?.uri?
+            (<Image source={profilePhoto} style={styles.userImage} />)
+            :(<Image source={DEFAULT_PROFILE_ICON} style={styles.userImage} />)
+          }
+        </TouchableOpacity>
         <Text style={styles.userName}>Jacob Jones</Text>
         <Text style={styles.userEmail}>youremail@domain.com | +01 234 567 89</Text>
       </View>
@@ -142,5 +168,6 @@ export default function Profile({ signOut }) {
 
       
     </ScrollView>
+  </>
   );
 }

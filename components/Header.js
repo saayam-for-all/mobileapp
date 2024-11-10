@@ -9,7 +9,6 @@ import {
 import Button from '../components/Button';
 import config from '../components/config'
 
-//const { width, height } = Dimensions.get("window");
 const LogoImage ="https://saayamforall.org/wp-content/uploads/2023/03/saayamforall.jpeg";
 
 export default function Header() {
@@ -17,7 +16,7 @@ export default function Header() {
       <View style={styles.container}>
         <View style={styles.imageContainer}>
       
-         <Image source={require('../assets/saayamforall.jpeg')}
+        <Image source={require('../assets/saayamforall.jpeg')}
              style={{width: 50, height: 50, alignItems: 'left'}} />
         </View>
         <View style={{marginLeft:config.deviceWidth/1.6, alignItems: 'right'}}>
