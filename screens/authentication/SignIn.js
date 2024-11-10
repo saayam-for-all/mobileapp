@@ -78,9 +78,13 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         Forgot Password
       </Button>
     </View>
+
+    
   );
 }
 
 SignIn.propTypes = {
   signIn: PropTypes.func.isRequired,
 };
+
+
