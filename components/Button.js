@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const Button = ({ onPress, children, backgroundColor, style }) => {
+const Button = ({ onPress, children, backgroundColor }) => {
   const btnStyle = backgroundColor ? [styles.buttonStyle, { backgroundColor }] : styles.buttonStyle;
   return (
     <TouchableHighlight
       onPress={onPress}
-      style={{...btnStyle,...style}}
+      style={btnStyle}
     >
       <Text style={styles.textStyle}>
         {children}
