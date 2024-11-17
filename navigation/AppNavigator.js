@@ -13,6 +13,7 @@ import ChangePassword from '../screens/MenuScreens/ChangePassword';
 import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
 import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
 import EditProfile from  '../screens/MenuScreens/EditProfile';
+import EditOrganization from  '../screens/MenuScreens/EditOrganization';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
 
@@ -38,8 +39,11 @@ export default function App({ signOut }) {
         //options={{ title: 'Request Details' }}
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
-    <AppStack.Screen name="EditProfile">
+      <AppStack.Screen name="EditProfile">
         {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="EditOrganization">
+        {() => <EditOrganization signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="ChangePassword">
         {() => <ChangePassword signOut={signOut} />}
