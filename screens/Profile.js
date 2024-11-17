@@ -132,6 +132,12 @@ export default function Profile({ signOut }) {
         <Ionicons name="chevron-forward" size={20} color="#777" />
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate('EditOrganization')}>
+        <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
+        <Text style={styles.optionText}>Edit Organization</Text>
+        <Ionicons name="chevron-forward" size={20} color="#777" />
+      </TouchableOpacity>
+
       <View style={styles.optionRow}>
         <FontAwesome name="bell" size={20} style={styles.optionIcon} />
         <Text style={styles.optionText}>Notifications</Text>
