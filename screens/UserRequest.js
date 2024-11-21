@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Switch, Alert, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Button from '../components/Button';
 import Input from '../components/Input';
 
@@ -15,7 +16,8 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [isCalamity, setIsCalamity] = useState(false);
   const [priority, setPriority] = useState(isEdit&&requestItem?.priority ? requestItem.priority : 'Low');
   const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : 'Health');
-  const [requestType, setRequestType] = useState('In Person');
+  const [requestType, setRequestType] = useState('Remote');
+  const [location, setLocation] = useState('');
   const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
   const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : sampleDescription);
   const navigation = useNavigation();
@@ -35,6 +37,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       priority,
       requestCategory,
       requestType,
+      location,
       subject,
       description,
     });
@@ -132,6 +135,28 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
                   inputAndroid: pickerSelectStyles.inputAndroid,
             }}
           />
+        {/* GOOGLE MAP API KEY TO BE ADDED TO ENV */}
+          {requestType === "In Person" && (
+            <View className="mt-3">
+              <Text style={styles.label}>Location</Text>
+              <GooglePlacesAutocomplete
+                placeholder='Search'
+                onPress={(data, details = null) => {
+                  // 'details' is provided when fetchDetails = true
+                  // console.log(data, details);
+                  setLocation(details.description);
+                }}
+                query={{
+                  key: 'AIzaSyDv7--yEnq84ZN3l03y50O33M4S89Un4U0',
+                  language: 'en',
+                }}
+                styles={{
+                  textInput: pickerSelectStyles.inputAndroid,
+                }}
+                disableScroll={false}
+              />
+            </View>
+          )}
         <View style={styles.field}>
           <Text style={styles.label}>
             Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
