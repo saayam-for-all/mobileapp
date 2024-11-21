@@ -16,7 +16,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [isCalamity, setIsCalamity] = useState(false);
   const [priority, setPriority] = useState(isEdit&&requestItem?.priority ? requestItem.priority : 'Low');
   const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : 'Health');
-  const [requestType, setRequestType] = useState('In Person');
+  const [requestType, setRequestType] = useState('Remote');
   const [location, setLocation] = useState('');
   const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
   const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : sampleDescription);
