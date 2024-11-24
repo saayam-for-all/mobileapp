@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 
 export default function SignUp({ navigation }) {
   const [name, onChangeName] = useState('');
+  const [lastName, onChangeLastName] = useState('');
   const [email, onChangeEmail] = useState('');
   const [phone_number, onChangePhone] = useState('');
   const [full_phone,setFullPhone] = useState('');
@@ -46,14 +47,16 @@ export default function SignUp({ navigation }) {
     if (validPassword) {
       setInvalidMessage(null);
       Auth.signUp({
-        username: email, 
+        username: email, //emailOrPhoneNumber
         password,
         attributes: {
           email, // optional
           name,
           // country_code, // later added to db
+          //"custom:Country": country_name,
           phone_number: full_phone, // later changed into phone without country code
-          zoneinfo
+          zoneinfo,
+          family_name: lastName
         },
         validationData: [], // optional
       })
@@ -81,12 +84,20 @@ export default function SignUp({ navigation }) {
   ]);
   return (
     <View style={styles.container}>
-      <Input
+      <View style={{ flexDirection: "row"}}><Input
         value={name}
-        placeholder="Name"
-        onChange={(text) => onChangeName(text)}
+        placeholder="First Name"
+        onChange={(text) => onChangeName(text)} 
+        width = '45%'  
         autoFocus
       />
+      <Input
+        value={lastName}
+        placeholder="Last Name"
+        onChange={(text) => onChangeLastName(text)}
+        width = '45%'
+        //autoFocus
+      /></View>
       <Input
         value={email}
         placeholder="email@example.com"
