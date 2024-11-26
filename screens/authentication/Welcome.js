@@ -8,7 +8,6 @@ import Header from '../../components/Header';
 import { BannerData } from '../../data/BannerData';
 import Banner from '../../components/Banner/Banner';
 import { useIsFocused } from '@react-navigation/native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,47 +32,15 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 10,
   },
-  socialButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
   orText: {
     marginVertical: 15,
     fontSize: 16,
     fontWeight: '600',
     color: 'gray',
   },
-  socialButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    marginHorizontal: 10,
-  },
-  icon: {
-    marginRight: 8,
-  },
 });
 
 const Welcome = ({ navigation }) => {
-  const signInWithGoogle = async () => {
-    try {
-      await Auth.federatedSignIn({ provider: 'Google' });
-    } catch (error) {
-      console.error('Error signing in with Google', error);
-    }
-  };
-
-  const signInWithFacebook = async () => {
-    try {
-      await Auth.federatedSignIn({ provider: 'Facebook' });
-    } catch (error) {
-      console.error('Error signing in with Facebook', error);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,21 +70,6 @@ const Welcome = ({ navigation }) => {
         <View style={styles.button}>
           <Button onPress={() => navigation.navigate('SignUp')}>
             Sign Up
-          </Button>
-        </View>
-
-        {/* "Or with" separator */}
-        <Text style={styles.orText}>Or sign in with</Text>
-
-        {/* Social sign-in buttons side by side */}
-        <View style={styles.socialButtonContainer}>
-          <Button style={styles.socialButton} onPress={signInWithGoogle}>
-            <FontAwesome5 name="google" size={20} color="black" style={styles.icon} />
-            Google
-          </Button>
-          <Button style={styles.socialButton} onPress={signInWithFacebook}>
-            <FontAwesome5 name="facebook-square" size={20} color="blue" style={styles.icon} />
-            Facebook
           </Button>
         </View>
       </View>

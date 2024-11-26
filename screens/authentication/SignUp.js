@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 
 export default function SignUp({ navigation }) {
   const [name, onChangeName] = useState('');
+  const [lastName, onChangeLastName] = useState('');
   const [email, onChangeEmail] = useState('');
   const [phone_number, onChangePhone] = useState('');
   const [full_phone,setFullPhone] = useState('');
@@ -50,10 +51,12 @@ export default function SignUp({ navigation }) {
         password,
         attributes: {
           email, // optional
-          name,
+          given_name: name,
           // country_code, // later added to db
+          "custom:Country": country_name,
           phone_number: full_phone, // later changed into phone without country code
-          zoneinfo
+          //zoneinfo,
+          family_name: lastName
         },
         validationData: [], // optional
       })
@@ -81,12 +84,20 @@ export default function SignUp({ navigation }) {
   ]);
   return (
     <View style={styles.container}>
-      <Input
+      <View style={{ flexDirection: "row"}}><Input
         value={name}
-        placeholder="Name"
-        onChange={(text) => onChangeName(text)}
+        placeholder="First Name"
+        onChange={(text) => onChangeName(text)} 
+        width = '45%'  
         autoFocus
       />
+      <Input
+        value={lastName}
+        placeholder="Last Name"
+        onChange={(text) => onChangeLastName(text)}
+        width = '45%'
+        //autoFocus
+      /></View>
       <Input
         value={email}
         placeholder="email@example.com"
@@ -110,19 +121,20 @@ export default function SignUp({ navigation }) {
         onChangeCountryName={onChangeCountryName}
         setFullPhone={setFullPhone}
         phone={phone_number}
+        placeholder="1234567890"
         onChangePhone={(text) => onChangePhone(text)}
         preferredCountries ={['US']}
         label=''
         errorMessage = ""
       />
-      <Input
+      {/*<Input
         value={zoneinfo}
         placeholder="PST"
         onChange={(text) => onChangeTimeZone(text)}
         autoCapitalize="none"
        // autoCompleteType="email"
        // keyboardType="email-address"
-      />
+      />*/}
       <Input
         value={country_name}
         placeholder="United States"

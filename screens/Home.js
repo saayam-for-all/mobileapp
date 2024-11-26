@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
@@ -7,7 +7,7 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-
+import Auth from '@aws-amplify/auth';
 //import { Dimensions } from 'react-native';
 //const { width, height } = Dimensions.get("window");
 
@@ -135,6 +135,11 @@ export default function Home({ signOut }) {
   const [userName, setUserName] = useState('');
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
+
+  /*useEffect(() => {  //Get user's role/group
+    Auth.currentAuthenticatedUser()
+    .then(data => console.log(data.signInUserSession.accessToken.payload['cognito:groups']));
+  }, []);*/
 
   return (    
     <SafeAreaView style={styles.container}>
