@@ -144,7 +144,7 @@ export default function RequestDetails(item) {
   const getUser = async () => {
     try{
       const user = await Auth.currentUserInfo();
-      setUserName(user.attributes.name);
+      setUserName(user.attributes.given_name + ' ' + user.attributes.family_name);
 
     }catch(err){
       console.log('error from cognito : ',err)
