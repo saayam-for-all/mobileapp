@@ -19,7 +19,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [requestType, setRequestType] = useState('Remote');
   const [location, setLocation] = useState('');
   const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
-  const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : sampleDescription);
+  const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : '');
   const navigation = useNavigation();
 
 
@@ -153,7 +153,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
                 styles={{
                   textInput: pickerSelectStyles.inputAndroid,
                 }}
-                disableScroll={false}
+                disableScroll={true}
               />
             </View>
           )}
