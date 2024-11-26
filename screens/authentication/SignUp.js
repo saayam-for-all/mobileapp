@@ -51,7 +51,12 @@ export default function SignUp({ navigation }) {
     const validPassword = password.length > 5 && (password === repeatPassword);
     let errorMessage = null;
     let hasError = false;
-    if (validPassword && validEmail && isPhoneValid) {
+    const allFields = [name, lastName, email, phone_number, password, repeatPassword];
+    // Detect if there is an empty field
+    const isNotEmpty = (value) => typeof value === 'string' && value.trim()!== '';
+    const allInputsFilled = allFields.every(isNotEmpty);
+    console.log(allInputsFilled);
+    if (validPassword && validEmail && isPhoneValid && allInputsFilled) {
       setInvalidMessage(null);
       Auth.signUp({
         username: email, 
@@ -89,8 +94,12 @@ export default function SignUp({ navigation }) {
         errorMessage = 'Please enter a valid email address.';
       }
       if (!isPhoneValid || phone_number == '') {  
-        setInvalidMessage('Phone number must be numeric values and not empty.');
-        errorMessage = 'Phone number must be numeric values and not empty.';
+        setInvalidMessage('Phone number must be valid numeric values.');
+        errorMessage = 'Phone number must be valid numeric values.';
+      }
+      if (!allInputsFilled) {
+        setInvalidMessage('Please fill all fields.');
+        errorMessage = 'Please fill all fields.';
       }
       popError(errorMessage);
     }

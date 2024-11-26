@@ -66,7 +66,7 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
     const [country_name, setCountryName] = React.useState(countryName);
 
   const handleChangeText = (value) => {
-    const valid = /^\d+$/;
+    const valid = /^\d{3,14}$/;
     const isValid = valid.test(value);
     if (!isValid) {
        setIsPhoneValid(false);
