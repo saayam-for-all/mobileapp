@@ -31,6 +31,7 @@
     "react-native-document-picker": "^8.1.6",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-get-random-values": "^1.11.0",
+    "react-native-google-places-autocomplete": "^2.5.7",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-paper": "^5.12.5",
     "react-native-picker-select": "*",
