@@ -56,7 +56,7 @@ export default function SignUp({ navigation }) {
     const isNotEmpty = (value) => typeof value === 'string' && value.trim()!== '';
     const allInputsFilled = allFields.every(isNotEmpty);
     console.log(allInputsFilled);
-    if (validPassword && validEmail && isPhoneValid && allInputsFilled) {
+    if (validPassword && emailValid && isPhoneValid && allInputsFilled) {
       setInvalidMessage(null);
       Auth.signUp({
         username: email, 
@@ -86,8 +86,8 @@ export default function SignUp({ navigation }) {
         });
     } else {
       if (!validPassword || password == '') {
-        setInvalidMessage('Password must be equal and have greater length than 6.');
-        errorMessage = 'Password must be equal and have greater length than 6.';
+        setInvalidMessage('Password must be equal and have greater length than 8 with uppercase, digits and special characters.');
+        errorMessage = 'Password must be equal and have greater length than 8 with uppercase, digits and special characters.';
       }
       if (!emailValid || email == '') {
         setInvalidMessage('Please enter a valid email address.');
