@@ -56,6 +56,8 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
   onChangePhone,
   setFullPhone,
   preferredCountries,
+  isPhoneValid,
+  setIsPhoneValid,
   ...wrapperProps
 }) => {
     const [show, setShow] = React.useState(false);
@@ -64,6 +66,13 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
     const [country_name, setCountryName] = React.useState(countryName);
 
   const handleChangeText = (value) => {
+    const valid = /^\d{3,14}$/;
+    const isValid = valid.test(value);
+    if (!isValid) {
+       setIsPhoneValid(false);
+    } else {
+        setIsPhoneValid(true);
+    }
     onChangePhone(value);
     setFullPhone(countryCode + value);
     wrapperProps?.clearErrorMessage?.();
