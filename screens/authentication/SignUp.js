@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
   innerText:{
     color:'Blue'
   },
+  alertText: {
+    color: 'red',
+    marginHorizontal: '3%',
+    width: '94%'
+  }
 });
 
 export default function SignUp({ navigation }) {
@@ -36,6 +41,8 @@ export default function SignUp({ navigation }) {
   const [zoneinfo, onChangeTimeZone] = useState('');
   const [password, onChangePassword] = useState('');
   const [passwordValid, setPasswordValid] = useState(true);
+  const [emailValid, setEmailValid] = useState(true);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [repeatPassword, onChangeRepeatPassword] = useState('');
 
   const [invalidMessage, setInvalidMessage] = useState(null);
@@ -44,7 +51,7 @@ export default function SignUp({ navigation }) {
     const validPassword = password.length > 5 && (password === repeatPassword);
     let errorMessage = null;
     let hasError = false;
-    if (validPassword) {
+    if (validPassword && validEmail && isPhoneValid) {
       setInvalidMessage(null);
       Auth.signUp({
         username: email, 
@@ -73,8 +80,18 @@ export default function SignUp({ navigation }) {
           console.log(err);
         });
     } else {
-      setInvalidMessage('Password must be equal and have greater lenght than 6.');
-      errorMessage = 'Password must be equal and have greater lenght than 6.';
+      if (!validPassword || password == '') {
+        setInvalidMessage('Password must be equal and have greater length than 6.');
+        errorMessage = 'Password must be equal and have greater length than 6.';
+      }
+      if (!emailValid || email == '') {
+        setInvalidMessage('Please enter a valid email address.');
+        errorMessage = 'Please enter a valid email address.';
+      }
+      if (!isPhoneValid || phone_number == '') {  
+        setInvalidMessage('Phone number must be numeric values and not empty.');
+        errorMessage = 'Phone number must be numeric values and not empty.';
+      }
       popError(errorMessage);
     }
   };
@@ -98,10 +115,27 @@ export default function SignUp({ navigation }) {
         width = '45%'
         //autoFocus
       /></View>
+      {!emailValid && 
+        <Text style={styles.alertText}>
+          Please enter a valid email address.
+        </Text>
+      }
       <Input
         value={email}
         placeholder="email@example.com"
-        onChange={(text) => onChangeEmail(text)}
+        
+        onChange={(text) => {
+          onChangeEmail(text);
+          const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          const valid = regex.test(text);
+            // address is invalid
+            if (!valid) {
+              setEmailValid(false);
+            } else {
+              setEmailValid(true);
+            }
+          }
+        }
         autoCapitalize="none"
         autoCompleteType="email"
         keyboardType="email-address"
@@ -114,6 +148,11 @@ export default function SignUp({ navigation }) {
         autoCompleteType="tel"
         keyboardType="phone-pad"
       /> */}
+      {!isPhoneValid && 
+        <Text style={styles.alertText}>
+          Phone number must be numeric values and not empty.
+        </Text>
+      }
       <PhoneInput
         countryCode= {country_code}
         setCountryCode={(text) => onChangeCountryCode(text)}
@@ -123,6 +162,8 @@ export default function SignUp({ navigation }) {
         phone={phone_number}
         placeholder="1234567890"
         onChangePhone={(text) => onChangePhone(text)}
+        isPhoneValid = {isPhoneValid}
+        setIsPhoneValid = {setIsPhoneValid}
         preferredCountries ={['US']}
         label=''
         errorMessage = ""
@@ -144,7 +185,7 @@ export default function SignUp({ navigation }) {
        // keyboardType="email-address"
       />
       {!passwordValid && 
-        <Text style={{ color: 'red' }}>
+        <Text style={styles.alertText}>
           Password must be at least 8 characters long and contain at least one lowercase letter
         </Text>
       }
