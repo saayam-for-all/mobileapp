@@ -135,12 +135,26 @@ export default function Home({ signOut }) {
   const [userName, setUserName] = useState('');
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
+  const [userVolunteer, setVolunteer] = useState(false);
+  const volunteer = "SaayamVolunteers"
 
-  /*useEffect(() => {  //Get user's role/group
-    Auth.currentAuthenticatedUser()
-    .then(data => console.log(data.signInUserSession.accessToken.payload['cognito:groups']));
-  }, []);*/
-
+  const getGroup = async () => {
+    try {
+      const user = await Auth.currentAuthenticatedUser()    
+      const userGroup = user.signInUserSession.accessToken.payload['cognito:groups']
+      //console.log('user group', userGroup)
+        if (userGroup.includes(volunteer)) {
+        setVolunteer(true);
+      } 
+    } catch (error) {
+      console.log('error getting group', error)
+    }
+  }
+ 
+  useEffect(() => {  //Get user's role/group
+   getGroup();  
+  }, []);
+ 
   return (    
     <SafeAreaView style={styles.container}>
 
@@ -149,13 +163,6 @@ export default function Home({ signOut }) {
       
         <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
         
-        <View style={styles.menu}>
-          <TouchableOpacity 
-            onPress={() => {Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')}}>
-          <Text style={styles.menuItem}>Donate</Text>
-          </TouchableOpacity>
-        </View>
-
         <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
            <Ionicons name="person-circle-outline" size={40} color="black" />
         </TouchableOpacity>
@@ -175,22 +182,23 @@ export default function Home({ signOut }) {
         <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("MyReqs")}}>
           <Text style={styles.buttonText}>My Requests</Text>
         </TouchableOpacity>
-
+        { userVolunteer && 
         <TouchableOpacity style={styles.buttonView} onPress={() => {navigation.navigate("ManagedReqs")}}>
           <Text style={styles.buttonText}>Managed Requests</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> }
 
-        <TouchableOpacity style={[styles.buttonView, styles.fullWidthButton]} onPress={() => {navigation.navigate("OtherRequests")}}>
+        <TouchableOpacity style={[ styles.buttonView, userVolunteer===true?styles.fullWidthButton : styles.buttonView]} onPress={() => {navigation.navigate("OtherRequests")}}>
           <Text style={styles.buttonText}>Others Requests</Text>
         </TouchableOpacity>
       </View>
 
       <View>
       {/* Action Buttons */}
+      { !userVolunteer && 
       <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('PromoteToVolunteer')}>
         <Icon name="heart-outline" size={20} color="#4f8ef7" />
         <Text style={styles.actionButtonText}> Become a volunteer</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> }
 
       <TouchableOpacity style={[styles.actionButton, { backgroundColor: 'blue' }]} 
       onPress={() => navigation.navigate('UserRequest')}>
