@@ -8,6 +8,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Auth from '@aws-amplify/auth';
+import api from '../components/api'
 //import { Dimensions } from 'react-native';
 //const { width, height } = Dimensions.get("window");
 
@@ -153,8 +154,20 @@ export default function Home({ signOut }) {
  
   useEffect(() => {  //Get user's role/group
    getGroup();  
+   //getData(); //uncomment this to test api url
   }, []);
  
+  const getData = async () => { //test the deplyed api
+    try {
+      const res = await api.get('/volunteers/v0.0.1/skills');
+      console.log('Data from Axios', res.data);
+      
+    } catch (error) {
+      console.log('data error',error)
+    }
+   
+  }
+  //getData();
   return (    
     <SafeAreaView style={styles.container}>
 
