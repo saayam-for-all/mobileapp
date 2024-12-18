@@ -1,2 +1,6 @@
-# saayam-mobile
-Only the Saayam mobile related React Native code will be in this repository
+Clone the branch
+
+To install libraries  
+`npm install`
+
+Works with Expo go 51
