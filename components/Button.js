@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Button = ({ onPress, children, backgroundColor }) => {
-  const btnStyle = backgroundColor ? [styles.buttonStyle, { backgroundColor }] : styles.buttonStyle;
+const Button = ({ onPress, children, backgroundColor, style={}}) => {
+  const btnStyle = backgroundColor ? {...styles.buttonStyle, ...style, backgroundColor } : {...styles.buttonStyle,...style};
   return (
     <TouchableHighlight
       onPress={onPress}
