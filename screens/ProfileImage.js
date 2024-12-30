@@ -133,24 +133,28 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
                 </View>
 
                 <View style={{ width: '80%', ...styles.rowContainer, justifyContent:'space-between'}}>
-                    <Button 
-                        style={{width:"45%"}}
-                        onPress={handleSaveClick}
-                    >
-                        <View style={{...styles.rowContainer, width:"100%", }}>
-                            <FontAwesome style={{marginHorizontal:5}} name="save" size={24} color="white" />
-                            <Text style={{marginHorizontal:5,...styles.buttonText}}>Save</Text>
-                        </View>
-                    </Button>
-                    <Button
-                        style={{width:"45%"}}
-                        onPress={handleCancelClick}
-                    >   
-                        <View style={{...styles.rowContainer, width:"100%", }}>
-                            <FontAwesome style={{marginHorizontal:5}} name="times" size={24} color="white" />
-                            <Text style={{marginHorizontal:5,...styles.buttonText}}>Cancel</Text>
-                        </View>
-                    </Button>
+                    <View style={styles.blueButton}>
+                        <Button 
+                            style={{width:"45%"}}
+                            onPress={handleSaveClick}
+                        >
+                            <View style={{...styles.rowContainer, width:"100%", }}>
+                                <FontAwesome style={{marginHorizontal:5}} name="save" size={24} color="white" />
+                                <Text style={{marginHorizontal:5,...styles.buttonText}}>Save</Text>
+                            </View>
+                        </Button>
+                    </View>
+                    <View style={styles.blueButton}>
+                        <Button
+                            style={{width:"45%"}}
+                            onPress={handleCancelClick}
+                        >   
+                            <View style={{...styles.rowContainer, width:"100%", }}>
+                                <FontAwesome style={{marginHorizontal:5}} name="times" size={24} color="white" />
+                                <Text style={{marginHorizontal:5,...styles.buttonText}}>Cancel</Text>
+                            </View>
+                        </Button>
+                    </View>
                 </View>
 
                 <View style={{position: 'absolute', top: 10, right: 15, }} >
@@ -173,6 +177,9 @@ const styles = StyleSheet.create(
         },
         buttonText: {
             color:"white",fontSize:18
+        },
+        blueButton:{
+            width: "45%"
         },
         img: {
             width: "33.3%",
