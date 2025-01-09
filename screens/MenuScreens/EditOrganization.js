@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert, ScrollView} from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 
-const EditProfile = () => {
+const EditOrganization = () => {
   const [organizationName, setOrganizationName] = useState('');
   const [organizationType, setOrganizationType] = useState('');
   const [email, setEmail] = useState('');
@@ -180,4 +179,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default EditProfile;
+export default EditOrganization;
