@@ -16,6 +16,7 @@ import EditProfile from  '../screens/MenuScreens/EditProfile';
 import EditOrganization from  '../screens/MenuScreens/EditOrganization';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
+import AdminPanel from '../screens/Admin/AdminPanel';
 
 const AppStack = createStackNavigator();
 
@@ -61,6 +62,8 @@ export default function App({ signOut }) {
       options={{ title: 'Filter' }}/> 
       <AppStack.Screen name="Notification" component={Notification} 
       options={{ title: 'Notifications' }}/>
+      <AppStack.Screen name="Admin" component={AdminPanel} 
+        options={{ title: 'Administration' }}/>
     </AppStack.Navigator>
   );
 }

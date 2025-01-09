@@ -175,7 +175,12 @@ export default function Home({ signOut }) {
       <View style={styles.topBar}>
       
         <Image source={require('../assets/saayamforall.jpeg')} style={styles.logo}/>
-        
+
+        {/*To be replaced with the actual logo*/}
+        <TouchableOpacity onPress={() => {navigation.navigate("Admin")}}>
+           <Ionicons name="person-circle-outline" size={40} color="red" />
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => {navigation.navigate("Profile")}}>
            <Ionicons name="person-circle-outline" size={40} color="black" />
         </TouchableOpacity>
