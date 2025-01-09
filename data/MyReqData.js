@@ -8,6 +8,6 @@ export const MyReqData =
         { id: 'REQ-00-000-000-0006', type: "Personal", subject: "Book return to library", creationDate: "2024-06-14", closedDate: null, status: "Open", category: "Education", priority: "Medium", calamity: "None" },
         { id: 'REQ-00-000-000-0007', type: "Personal", subject: "House cleaning", creationDate: "2024-06-15", closedDate: null, status: "Open", category: "Maintenance", priority: "High", calamity: "None" },
         { id: 'REQ-00-000-000-0008', type: "Personal", subject: "Car wash", creationDate: "2024-06-16", closedDate: null, status: "Open", category: "Maintenance", priority: "Low", calamity: "None" },
-        { id: 'REQ-00-000-000-0009', type: "Personal", subject: "Dog walking", creationDate: "2024-06-17", closedDate: null, status: "Open", category: "Pets", priority: "Medium", calamity: "None" },
+        { id: 'REQ-00-000-000-0009', type: "Personal", subject: "Dog walking", creationDate: "2024-06-17", closedDate: null, status: "In Progress", category: "Pets", priority: "Medium", calamity: "None" },
         { id: 'REQ-00-000-000-0010', type: "Personal", subject: "Buy gift", creationDate: "2024-06-18", closedDate: null, status: "Closed", category: "Shopping", priority: "High", calamity: "None" },
       ]

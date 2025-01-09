@@ -15,7 +15,7 @@ const defaultConfig = {
 }
 const renderLegend = (text='', color) => {
     return (
-      <View style={{flexDirection: 'row', marginBottom: 12, backgroundColor: 'white', height:24, width:100}}>
+      <View key={`${text}-${color}`} style={{flexDirection: 'row', marginBottom: 12, backgroundColor: 'white', height:24, width:100}}>
         <View
           style={{
             height: 18,
@@ -29,11 +29,14 @@ const renderLegend = (text='', color) => {
       </View>
     );
   };
+
+// AdminPieChart takes in 'title', 'data' <- list, 'groupCol' <- string (column in data to group by), 
+// 'groupCriteria' <- object {color1: value1, color2: value2, ...}
 const AdminPieChart = ({title, data, groupCol, groupCriteria, width=300, height=300, chartConfig=defaultConfig}) => {
     const [chartData,setChartData] = useState(filterData(data, groupCol, groupCriteria));
     return (
         <>
-        <View style={{backgroundColor: 'white', height:48, width:"100%"}}>
+        <View style={{height:48, width:"100%"}}>
             <Text
                 style={{
                     color: 'black',
@@ -99,7 +102,6 @@ const filterData = (data, groupCol, groupCriteria) => {
         entry["color"] = color;
         res.push(entry);
     }
-    console.log(res)
     return res;
 }
 
