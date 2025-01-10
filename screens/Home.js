@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView, Touchable } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
 import Button from '../components/Button';
 //import { Button } from '@react-native-material/core';
 import Icon from '@expo/vector-icons/Ionicons';
@@ -263,7 +263,7 @@ export default function Home({ signOut }) {
               return <Icon name={iconName} size={size} color={color} />;
             },
             tabBarActiveTintColor: '#4285F4',
-            tabBarInactiveTintColor: 'grey',
+            tabBarInactiveTintColor: 'gray',
             tabBarStyle: {
               height: 60,
               paddingBottom: 15,
