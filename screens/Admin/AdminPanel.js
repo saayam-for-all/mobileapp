@@ -11,10 +11,8 @@ const AdminPanel = () => {
     const inProgressColor = "rgb(78,191,177)"
 
     return (
-        <View >
-            <View style={styles.container}>
-               <AdminPieChart title="User/Voluteer Requests" data={data} groupCol="status" groupCriteria={{[openColor]: "Open", [closedColor]: "Closed", [inProgressColor]: "In Progress"}}/>
-            </View>
+        <View style={styles.container}>
+            <AdminPieChart title="User/Voluteer Requests" data={data} groupCol="status" groupCriteria={{[openColor]: "Open", [closedColor]: "Closed", [inProgressColor]: "In Progress"}}/>
         </View>
     )
 }
