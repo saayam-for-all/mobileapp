@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import AppNavigation from './navigation';
 import config from './aws-exports';
 import Amplify from '@aws-amplify/core';
+import 'react-native-get-random-values' //Added for warning about insecure random no generator
 
 Amplify.configure(config);
 

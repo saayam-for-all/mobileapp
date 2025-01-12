@@ -138,6 +138,9 @@ const styles = StyleSheet.create({
     color: "#4f8ef7",
     fontWeight: "bold",
   },
+  adminButton: {
+    marginRight: -40,
+  },
 });
 
 export default function Home({ signOut }) {
@@ -185,6 +188,19 @@ export default function Home({ signOut }) {
           source={require("../assets/saayamforall.jpeg")}
           style={styles.logo}
         />
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Administration");
+          }}
+        >
+          <Ionicons
+            name="build-outline"
+            size={33}
+            color="black"
+            style={styles.adminButton}
+          />
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => {
