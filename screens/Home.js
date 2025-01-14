@@ -147,6 +147,12 @@ export default function Home({ signOut }) {
         if (userGroup.includes(volunteer)) {
         setVolunteer(true);
       } 
+       //Refresh token 
+      const currentSession = await Auth.currentSession();
+      user.refreshSession(currentSession.refreshToken, (err, session) => {
+      //console.log('session', err, session);
+       const { idToken, refreshToken, accessToken } = session; });
+       //console.log('group');
     } catch (error) {
       console.log('error getting group', error)
     }
