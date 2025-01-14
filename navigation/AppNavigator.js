@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import Profile from '../screens/Profile';
+import Administration from '../screens/Administration';
 import UserRequest from '../screens/UserRequest';
 import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
@@ -16,6 +17,7 @@ import EditProfile from  '../screens/MenuScreens/EditProfile';
 import EditOrganization from  '../screens/MenuScreens/EditOrganization';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
+import AdminPanel from '../screens/Admin/AdminPanel';
 
 const AppStack = createStackNavigator();
 
@@ -27,6 +29,9 @@ export default function App({ signOut }) {
       </AppStack.Screen>
       <AppStack.Screen name="Profile">
         {() => <Profile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Administration">
+        {() => <Administration signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="UserRequest" component={UserRequest} />
       <AppStack.Screen name="MyReqs" component={MyReqs} 
@@ -61,6 +66,8 @@ export default function App({ signOut }) {
       options={{ title: 'Filter' }}/> 
       <AppStack.Screen name="Notification" component={Notification} 
       options={{ title: 'Notifications' }}/>
+      <AppStack.Screen name="Admin" component={AdminPanel} 
+        options={{ title: 'Administration' }}/>
     </AppStack.Navigator>
   );
 }

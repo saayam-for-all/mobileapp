@@ -1,5 +1,5 @@
 import axios from "axios";
-import Auth from '@aws-amplify/auth'
+import Auth from "@aws-amplify/auth";
 
 const api = axios.create(
     {
@@ -50,18 +50,19 @@ const api = axios.create(
       // Handle request errors
       return Promise.reject(error);
     }
-  );
-  
-  //Response interceptor
-  api.interceptors.response.use(
-    (response) => {
-        //Modify the response data
-      // response.data = transformData(response.data);
-      return response;
-    },
-    (error) => {
-      // Handle response errors
-      return Promise.reject(error);
-    }
-  );
-    export default api;    
+    
+);
+
+//Response interceptor
+api.interceptors.response.use(
+  (response) => {
+    //Modify the response data
+    // response.data = transformData(response.data);
+    return response;
+  },
+  (error) => {
+    // Handle response errors
+    return Promise.reject(error);
+  }
+);
+export default api;

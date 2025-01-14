@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
@@ -109,18 +109,20 @@ const EditProfile = () => {
         onChangeText={setDob}
       />
       
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={gender}
-          onValueChange={(itemValue) => setGender(itemValue)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Select" value="" />
-          <Picker.Item label="Male" value="male" />
-          <Picker.Item label="Female" value="female" />
-          <Picker.Item label="Other" value="other" />
-        </Picker>
-      </View>
+      <RNPickerSelect
+          onValueChange={(value) => setGender(value)}
+          items={[
+            { label: 'Select', value: '' },
+            { label: 'Male', value: 'male' },
+            { label: 'Female', value: 'female' },
+            { label: 'Other', value: 'other' },
+          ]}
+          value={gender}
+          style={{
+            inputIOS: styles.inputIOS,
+            inputAndroid: styles.inputAndroid,
+          }}
+        />
       
       <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
         <Text style={styles.buttonText}>Update Profile</Text>
@@ -166,6 +168,31 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 8,
+    color: '#374151',
+    paddingRight: 30,
+    backgroundColor: '#f9fafb',
+    marginBottom: 16,
+
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 8,
+    color: '#374151',
+    paddingRight: 30,
+    backgroundColor: '#f9fafb',
+    marginBottom: 16,
   },
 });
 
