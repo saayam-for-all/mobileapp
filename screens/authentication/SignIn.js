@@ -159,7 +159,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         Forgot password?
       </Text>
       <TouchableOpacity style={styles.button} onPress={() => signIn()}>
-        <Text style={styles.buttonText}>Log in</Text>
+        <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
       <Text style={styles.orText}>Or with</Text>
       <View style={styles.socialButtonsContainer}>
