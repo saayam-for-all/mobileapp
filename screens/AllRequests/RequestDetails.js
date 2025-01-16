@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  Alert
 } from "react-native";
 import Auth from "@aws-amplify/auth";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -30,7 +31,7 @@ const comments = [
   { id: 2, name: "Peter Parker", comment: "Some comment text" },
   { id: 3, name: "Peter Parker", comment: "Some comment1" },
 ];
-export default function RequestDetails(item) {
+export default function RequestDetails({ signOut }) {
   //const navigation = useNavigation();
   const route = useRoute();
   const req = route.params?.item;
@@ -257,7 +258,7 @@ export default function RequestDetails(item) {
 
   useEffect(() => {
     getUser();
-    fetchData(); //fetching data for comments
+    fetchData(); //fetching data for comments    
   }, []);
 
   const fetchData = async () => {
@@ -281,6 +282,18 @@ export default function RequestDetails(item) {
         user.attributes.given_name + " " + user.attributes.family_name
       );
     } catch (err) {
+      //signOut();  // If error getting usern then signout
+      Alert.alert( // show alert to signout
+            "Alert", // Title
+            "Session timeout. Please sign in again", // Message
+            [            
+              {
+                text: "Logout",
+                onPress: () => signOut(),
+                style: "destructive", 
+              },
+            ],
+          );  
       console.log("error from cognito : ", err);
     }
   };

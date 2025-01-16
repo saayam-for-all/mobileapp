@@ -140,6 +140,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         autoCompleteType="email"
         autoCapitalize="none"
         keyboardType="email-address"
+        autoFocus
       />
       <TextInput
         style={styles.input}
