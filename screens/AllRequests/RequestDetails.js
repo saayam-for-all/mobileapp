@@ -153,7 +153,7 @@ export default function RequestDetails({ signOut }) {
           id: "",
         });
       }
-      console.log("volunteer", volunteerData);
+      //console.log("volunteer", volunteerData);
     } catch (error) {
       console.error("Error requesting volunteers:", error);
     }
@@ -604,7 +604,7 @@ We also need donations of trash bags, gloves, and refreshments."}
                           {value}
                         </Text>*/}
 
-                {volunteerData
+                {volunteerData === null ? <Text> Loading... </Text> :volunteerData
                   .slice(0, volunteerCount)
                   .map((volunteer, rowIndex) => (
                     <View
