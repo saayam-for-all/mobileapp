@@ -40,9 +40,10 @@ export default function App({ signOut }) {
         options={{ title: 'Other Requests' }}/>
       <AppStack.Screen name="ManagedReqs" component={ManagedReqs} 
         options={{ title: 'Managed Requests' }}/>
-      <AppStack.Screen name="RequestDetails" component={RequestDetails} 
+      <AppStack.Screen name="RequestDetails" 
         //options={{ title: 'Request Details' }}
-        options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}/>
+        options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}>
+          {() => <RequestDetails signOut={signOut} />}</AppStack.Screen>
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
       <AppStack.Screen name="EditProfile">
         {() => <EditProfile signOut={signOut} />}
