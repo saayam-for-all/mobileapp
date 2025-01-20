@@ -15,6 +15,7 @@ import PrivacyPolicy from '../screens/MenuScreens/PrivacyPolicy';
 import TermsAndConditions from '../screens/MenuScreens/TermsAndConditions';
 import EditProfile from  '../screens/MenuScreens/EditProfile';
 import EditOrganization from  '../screens/MenuScreens/EditOrganization';
+import EditPersonal from  '../screens/MenuScreens/EditPersonal';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
 import AdminPanel from '../screens/Admin/AdminPanel';
@@ -47,6 +48,9 @@ export default function App({ signOut }) {
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
       <AppStack.Screen name="EditProfile">
         {() => <EditProfile signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="EditPersonal">
+        {() => <EditPersonal signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="EditOrganization">
         {() => <EditOrganization signOut={signOut} />}

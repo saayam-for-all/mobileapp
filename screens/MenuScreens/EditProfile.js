@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [primaryEmail, setPrimaryEmail] = useState('');
+  const [secondaryEmail, setSecondaryEmail] = useState('');
+  const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
+  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
   const [zone, setZone] = useState('');
-  const [dob, setDob] = useState('');
-  const [gender, setGender] = useState('');
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -81,18 +80,34 @@ const EditProfile = () => {
       
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Primary Email"
         keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
+        value={primaryEmail}
+        onChangeText={setPrimaryEmail}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Secondary Email"
+        keyboardType="email-address"
+        value={secondaryEmail}
+        onChangeText={setSecondaryEmail}
       />
       
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
+        placeholder="Primary Phone Number"
         keyboardType="phone-pad"
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
+        value={primaryPhoneNumber}
+        onChangeText={setPrimaryPhoneNumber}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Secondary Phone Number"
+        keyboardType="phone-pad"
+        value={secondaryPhoneNumber}
+        onChangeText={setSecondaryPhoneNumber}
       />
       
       <TextInput
@@ -101,28 +116,6 @@ const EditProfile = () => {
         value={zone}
         onChangeText={setZone}
       />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="DOB (DD/MM/YY)"
-        value={dob}
-        onChangeText={setDob}
-      />
-      
-      <RNPickerSelect
-          onValueChange={(value) => setGender(value)}
-          items={[
-            { label: 'Select', value: '' },
-            { label: 'Male', value: 'male' },
-            { label: 'Female', value: 'female' },
-            { label: 'Other', value: 'other' },
-          ]}
-          value={gender}
-          style={{
-            inputIOS: styles.inputIOS,
-            inputAndroid: styles.inputAndroid,
-          }}
-        />
       
       <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
         <Text style={styles.buttonText}>Update Profile</Text>
