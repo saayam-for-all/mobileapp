@@ -167,6 +167,19 @@ export default function Profile({ signOut }) {
 
         <TouchableOpacity
           style={styles.optionRow}
+          onPress={() => navigation.navigate("EditPersonal")}
+        >
+          <FontAwesome
+            name="user-circle-o"
+            size={20}
+            style={styles.optionIcon}
+          />
+          <Text style={styles.optionText}>Personal Details</Text>
+          <Ionicons name="chevron-forward" size={20} color="#777" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.optionRow}
           onPress={() => navigation.navigate("ChangePassword")}
         >
           <FontAwesome name="lock" size={20} style={styles.optionIcon} />
@@ -183,7 +196,7 @@ export default function Profile({ signOut }) {
             size={20}
             style={styles.optionIcon}
           />
-          <Text style={styles.optionText}>Edit Organization</Text>
+          <Text style={styles.optionText}>Organization Details</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 

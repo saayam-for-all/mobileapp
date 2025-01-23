@@ -50,7 +50,7 @@ const EditOrganization = () => {
   return (
     <ScrollView>
         <View style={styles.container}>
-            <Text style={styles.header}>Edit Organization</Text>
+            <Text style={styles.header}>Edit Organization Details</Text>
             
             <TextInput
                 style={styles.input}

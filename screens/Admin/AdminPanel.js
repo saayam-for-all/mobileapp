@@ -6,13 +6,14 @@ import { MyReqData } from "../../data/MyReqData";
 
 const AdminPanel = () => {
     const [data, setData] = useState(MyReqData)
-    const openColor = "rgb(42,97,245)";
-    const closedColor = "rgb(162,86,213)";
-    const inProgressColor = "rgb(78,191,177)"
+    const userColor = "rgb(42,97,245)";
+    const volunteerColor = "rgb(162,86,213)";
+    const othersColor = "rgb(78,191,177)"
 
     return (
+
         <View style={styles.container}>
-            <AdminPieChart title="User/Voluteer Requests" data={data} groupCol="status" groupCriteria={{[openColor]: "Open", [closedColor]: "Closed", [inProgressColor]: "In Progress"}}/>
+            <AdminPieChart title="User/Voluteer Requests" data={data} groupCol="role" groupCriteria={{[userColor]: "User", [volunteerColor]: "Volunteer", [othersColor]: "Others"}}/>
         </View>
     )
 }
