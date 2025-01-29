@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 20,
+    marginVertical: 10,
   },
   fullWidthButton: {
     width: "100%", // Full width when only one button is in the row
@@ -228,7 +228,7 @@ export default function Home({ signOut }) {
       {/* Button Container */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.buttonView}
+          style={[styles.buttonView, styles.fullWidthButton]}
           onPress={() => {
             navigation.navigate("MyReqs");
           }}
@@ -237,7 +237,7 @@ export default function Home({ signOut }) {
         </TouchableOpacity>
         {userVolunteer && (
           <TouchableOpacity
-            style={styles.buttonView}
+            style={[styles.buttonView, styles.fullWidthButton]}
             onPress={() => {
               navigation.navigate("ManagedReqs");
             }}
@@ -247,10 +247,7 @@ export default function Home({ signOut }) {
         )}
 
         <TouchableOpacity
-          style={[
-            styles.buttonView,
-            userVolunteer === true ? styles.fullWidthButton : styles.buttonView,
-          ]}
+          style={[styles.buttonView, styles.fullWidthButton]}
           onPress={() => {
             navigation.navigate("OtherRequests");
           }}
