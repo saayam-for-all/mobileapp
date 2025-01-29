@@ -247,10 +247,7 @@ export default function Home({ signOut }) {
         )}
 
         <TouchableOpacity
-          style={[
-            styles.buttonView,
-            userVolunteer === true ? styles.fullWidthButton : styles.buttonView,
-          ]}
+          style={[styles.buttonView, styles.fullWidthButton]}
           onPress={() => {
             navigation.navigate("OtherRequests");
           }}
