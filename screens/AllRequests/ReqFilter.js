@@ -1,3 +1,4 @@
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   View,
@@ -10,6 +11,9 @@ import {
 } from "react-native";
 
 const ReqFilter = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { onGoBack, cat } = route.params;
   const [status, setStatus] = useState("All");
   const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
   const [isSubCategoryModalVisible, setSubCategoryModalVisible] =
@@ -55,6 +59,9 @@ const ReqFilter = () => {
         ", "
       )}\nSubCategories: ${selectedSubCategories.join(", ")}`
     );
+    onGoBack(status);
+    cat(selectedCategories+selectedSubCategories);
+    navigation.goBack();
   };
 
   const categories = [

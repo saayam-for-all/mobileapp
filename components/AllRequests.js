@@ -28,6 +28,14 @@ const AllRequests = ({ data }) => {
 
   const [items] = React.useState(data);
 
+  const handleNavigate = () => {    
+    navigation.navigate('ReqFilter', {onGoBack:(data)=>{
+    //console.log('Received data', data);
+    }, cat:(category=>{
+     // console.log('Categories', category)
+    }) }
+  )
+  }
   const sortedItems = items
     .slice()
     .sort((item1, item2) =>
@@ -68,7 +76,7 @@ const AllRequests = ({ data }) => {
           onChangeText={handleSearch}
           value={searchQuery}
         />
-        <TouchableOpacity onPress={() => navigation.navigate('ReqFilter')}>
+        <TouchableOpacity onPress={handleNavigate}>        
         <Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
         </TouchableOpacity>
       </View>
