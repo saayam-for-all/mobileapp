@@ -27,7 +27,7 @@ import { TextInput } from "react-native";
 import UserRequest from "../../UserRequest";
 
 const ButtonsView = () => 
-    <View style={{ flexDirection: "row", marginBottom: 10, marginTop: 10 }}>
+    <View style={{ flexDirection: "row", marginBottom: 15, marginTop: 15 }}>
         <TouchableOpacity
         style={{
             width: 125,
@@ -594,8 +594,6 @@ export default function RequestDetails({ signOut }) {
         setVolunteerName(!showVolunteerName);
     };
 
-    
-
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -622,14 +620,13 @@ export default function RequestDetails({ signOut }) {
         <ButtonsView/>
         <View>
             {/* titles */}
-            <View style={{display: "flex", flexDirection: "row"}}>
+            <View style={{display: "flex", flexDirection: "row", marginBottom:10}}>
                 {tabs.map((tab, index) => (
-                    
-                        <TouchableOpacity key={tab.title} style={{flex: 1, padding: 10}}
-                            onPress={() => setStatus(index)}
-                        >
-                            <Text style={{}}>{tab.title}</Text>
-                        </TouchableOpacity>
+                    <TouchableOpacity key={tab.title} style={index==status ? {...styles.tab,...styles.tabSelected} : styles.tab}
+                        onPress={() => setStatus(index)}
+                    >
+                        <Text style={styles.tabTitle}>{tab.title}</Text>
+                    </TouchableOpacity>
                 ))}
             </View>
             {/* content */}
@@ -659,6 +656,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     //marginBottom:2,
+  },
+  tab: {
+    flex: 1,
+    padding:10,
+    height: 50,
+    borderWidth: 1,
+  },
+  tabSelected: {
+    borderBottomWidth: 0
+  },
+  tabTitle: {
+    fontSize:20,
+    fontWeight: "bold",
   },
   userImage: {
     width: 30,
