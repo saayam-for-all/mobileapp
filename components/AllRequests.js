@@ -17,9 +17,10 @@ const AllRequests = ({ data }) => {
   const [isVisible,setVisible] = React.useState(false);
   const toggleVisibility = () => setVisible(!isVisible);
   const [idBasic, setIdBasic] = React.useState();
-  
+  const [status, setStatus] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
+  const [isDataBAck, setDataBack] = React.useState(false);
 
   const showModalBasic = (id, status, category) => {
     toggleVisibility();
@@ -28,6 +29,29 @@ const AllRequests = ({ data }) => {
 
   const [items] = React.useState(data);
 
+  const handleNavigate = () => {    
+    navigation.navigate('ReqFilter', {onGoBack:(iStatus)=>{
+    //console.log('Received data', iStatus);    
+    let reqStatus = iStatus;  
+    handleFilter(reqStatus);
+    }, cat:(category=>{
+     // console.log('Categories', category)
+    }) }
+  )
+  }
+
+  const handleFilter = (text) => {
+    const filtered = text === "" ? data : data.filter(
+      (data) =>
+        data.status.toLowerCase().includes(text.toLowerCase())
+      // ||
+       // data.category.toLowerCase().includes(text.toLowerCase())
+        
+        // ||
+        //data.id.includes(text)
+    );
+    setFilteredData(filtered);
+  }
   const sortedItems = items
     .slice()
     .sort((item1, item2) =>
@@ -68,7 +92,7 @@ const AllRequests = ({ data }) => {
           onChangeText={handleSearch}
           value={searchQuery}
         />
-        <TouchableOpacity onPress={() => navigation.navigate('ReqFilter')}>
+        <TouchableOpacity onPress={handleNavigate}>        
         <Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
         </TouchableOpacity>
       </View>

@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import Button from "../components/Button";
+import Auth from "@aws-amplify/auth";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icons
 import api from "../components/api";
@@ -37,6 +37,11 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   userEmail: {
+    fontSize: 16,
+    color: "#777",
+    marginBottom: 10,
+  },
+  userCountry: {
     fontSize: 16,
     color: "#777",
     marginBottom: 20,
@@ -78,31 +83,25 @@ export default function Profile({ signOut }) {
   const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState({});
+  const [userName, setUserName] = useState(''); 
+  const [phoneNumber, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [country, setCountry] = useState('');
 
   const [profileData, setProfileData] = useState(null);
   useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchData();
-      console.log(data);
-      if (data.body && data.body.length > 0) {
-        setProfileData(data.body[0]); // Set the first user object
-      } else {
-        setProfileData({}); // Set to an empty object if no data
-      } // Call the fetch function on component mount
-    };
-    loadData();
+    getUser();
   }, []);
 
   useEffect(() => {
-    const getImage = async () => {
-      const value = profileData?.profilePicture;
-      //const value = await AsyncStorage.getItem("profilePhoto");
+    const getImage = async () => {      
+      const value = await AsyncStorage.getItem("profilePhoto");
       if (value)
-        //setProfilePhoto(JSON.parse(value))
-        setProfilePhoto({ uri: value });
+        setProfilePhoto(JSON.parse(value))        
     };
     getImage();
-  }, [profileData]);
+  }, []);
+
   // Function to trigger the sign-out confirmation
   const confirmSignOut = () => {
     Alert.alert(
@@ -124,6 +123,32 @@ export default function Profile({ signOut }) {
     );
   };
 
+  const getUser = async () => {
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        setUserName(
+          user.attributes.given_name + " " + user.attributes.family_name
+        );
+        setEmail(user.attributes.email);
+        setPhone(user.attributes.phone_number);
+        setCountry(user.attributes["custom:Country"]);
+      } catch (err) {
+        //signOut();  // If error getting user then signout
+        Alert.alert( // show alert to signout
+              "Alert", // Title
+              "Session timeout. Please sign in again", // Message
+              [            
+                {
+                  text: "Logout",
+                  onPress: () => signOut(),
+                  style: "destructive", 
+                },
+              ],
+            );  
+        console.log("error from cognito : ", err);
+      }
+    };
+
   return (
     <>
       <ProfileImage
@@ -143,13 +168,13 @@ export default function Profile({ signOut }) {
             )}
           </TouchableOpacity>
           <Text style={styles.userName}>
-            {profileData?.firstName + " " + profileData?.lastName ||
-              "Unknown Name"}
+            {userName}
           </Text>
           <Text style={styles.userEmail}>
-            {profileData?.email || "unknown Email"} |{" "}
-            {profileData?.phone || "unknown Phone"}
+            {email} |{" "}
+            {phoneNumber}
           </Text>
+          <Text style={styles.userCountry}>{country}</Text>
         </View>
 
         <TouchableOpacity
