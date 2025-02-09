@@ -11,7 +11,7 @@ import { Dimensions } from 'react-native';
 // import api from '../../components/api';
 
 export default function Availability() {
-  const [timeSlots, setTimeSlots] = useState([{ day: 'Everyday', startTime: '12:00 AM', endTime: '12:00 AM' }]);
+  const [timeSlots, setTimeSlots] = useState([{ day: '', startTime: '', endTime: '' }]);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const navigation = useNavigation();
   const [checked, setChecked] = React.useState(false);
@@ -49,8 +49,42 @@ export default function Availability() {
   
   const timeOptions = generateTimeOptions();
   
+  const isTimeSlotValid = (slot) => {
+    return slot.day && slot.startTime && slot.endTime;
+  };
+
+  const isValidTimeRange = (startTime, endTime) => {
+    if (!startTime || !endTime) return false;
+    
+    const parseTime = (timeStr) => {
+      const [time, period] = timeStr.split(' ');
+      let [hours, minutes] = time.split(':');
+      hours = parseInt(hours);
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+      return hours * 60 + parseInt(minutes);
+    };
+
+    const startMinutes = parseTime(startTime);
+    const endMinutes = parseTime(endTime);
+    
+    return endMinutes > startMinutes;
+  };
+  
   const addTimeSlot = () => {
-    setTimeSlots([...timeSlots, { day: 'Everyday', startTime: '12:00 AM', endTime: '12:00 AM' }]);
+    const lastSlot = timeSlots[timeSlots.length - 1];
+    
+    if (!isTimeSlotValid(lastSlot)) {
+      alert('Please complete the current time slot before adding a new one.');
+      return;
+    }
+    
+    if (!isValidTimeRange(lastSlot.startTime, lastSlot.endTime)) {
+      alert('End time must be after start time.');
+      return;
+    }
+    
+    setTimeSlots([...timeSlots, { day: '', startTime: '', endTime: '' }]);
   };
 
   const removeTimeSlot = (index) => {
@@ -107,6 +141,7 @@ export default function Availability() {
                 style={pickerSelectStyles}
                 value={slot.day}
                 useNativeAndroidPickerStyle={false}
+                placeholder={{ label: 'Select Day', value: null }}
               />
               </View>
               <View style={styles.pickerContainer}>
@@ -116,6 +151,7 @@ export default function Availability() {
                 style={pickerSelectStyles}
                 value={slot.startTime}
                 useNativeAndroidPickerStyle={false}
+                placeholder={{ label: 'Start Time', value: null }}
               />
               </View>
               <View style={styles.pickerContainer}>
@@ -125,6 +161,7 @@ export default function Availability() {
                 style={pickerSelectStyles}
                 value={slot.endTime}
                 useNativeAndroidPickerStyle={false}
+                placeholder={{ label: 'End Time', value: null }}
               />
               </View>
               {/* {index > 0 && (
