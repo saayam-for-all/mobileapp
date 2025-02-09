@@ -167,7 +167,7 @@ const ReqFilter = () => {
 
       <Text style={styles.sectionTitle}>Status</Text>
       <View style={styles.optionsContainer}>
-        {["All", "Open", "Close"].map((option) => (
+        {["All", "Open", "Closed"].map((option) => (
           <TouchableOpacity
             key={option}
             style={[
