@@ -7,7 +7,7 @@ import UserRequest from '../screens/UserRequest';
 import MyReqs from '../screens/AllRequests/MyReqs';
 import OtherRequests from '../screens/AllRequests/OtherRequests';
 import ManagedReqs from '../screens/AllRequests/ManagedReqs';
-import RequestDetails from '../screens/AllRequests/RequestDetails';
+import RequestDetails from '../screens/AllRequests/RequestDetails/RequestDetails';
 import PromoteToVolunteer from '../screens/Volunteer/PromoteToVolunteer';
 import Welcome from  '../screens/MenuScreens/Welcome';
 import ChangePassword from '../screens/MenuScreens/ChangePassword';
