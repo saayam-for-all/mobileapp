@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Children } from "react";
 import {
   View,
   Text,
@@ -109,7 +109,7 @@ const ButtonsView = () =>
         </TouchableOpacity>
     </View>
 
-const Comments = () => {
+const Comments = ({title="Comments"}) => {
     const url = "https://my-json-server.typicode.com/rmb2020/database/comments"; //Using a test json server
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
@@ -208,7 +208,7 @@ const Comments = () => {
     
 }
 
-const Volunteer = () => {
+const Volunteer = ({title="Volunteer"}) => {
     const [volunteerData, setVolunteerData] = useState(null);
     const [volunteerCount, setVolunteerCount] = useState(0);
     const [rowHeights, setRowHeights] = useState({}); // Store max height for each row
@@ -426,212 +426,217 @@ const Volunteer = () => {
     )
 }
 
-const Attributes = () => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [expanded, setExpanded] = useState(false);
-    const handlePress = () => setExpanded(!expanded);
-    const route = useRoute();
-    const req = route.params?.item;
+const Attributes = ({title="Details", userName, setUserName}) => {
+  const [showName, setShowName] = useState(false);
+  const [showVolunteerName, setVolunteerName] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const handlePress = () => setExpanded(!expanded);
+  const route = useRoute();
+  const req = route.params?.item;
 
-    const closeForm = () => {
-        setIsEditing(false);
-    };
+  const showUserName = () => {
+    setShowName(!showName);
+  };
 
-    const reqStatus = req.status;
-    
-    const request = (
-        <View style={styles.header}>
-            <Text>
-                <AntDesign name="calendar" size={24} color="black" /> {req.creationDate}
-                {"   "}
-            </Text>
-            <Text>
-                <MaterialCommunityIcons
-                    name="layers-triple-outline"
-                    size={24}
-                    color="black"
-                />{" "}
-                {req.category} {"   "}
-            </Text>
-        
-            <Text>
-                <FontAwesome5
-                    name="exclamation-triangle"
-                    size={20}
-                    color={
-                        req.priority === "High"
-                        ? "#f44336"
-                        : req.priority === "Medium"
-                        ? "#fcc286"
-                        : "#eae5f6"
-                    }
-                />{" "}
-                {req.priority}
-            </Text>
-        </View>
-    );
-        
-    return (
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: "grey",
-            borderRadius: 10,
-            marginBottom: 10,
-          }}
-        >
-            {isEditing && (
-                <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isEditing}
-                onRequestClose={() => {
-                    Alert.alert("Edit closed.");
-                    setIsEditing(!isEditing);
-                }}
-                >
-                <View
-                    style={{
-                    height: "90%",
-                    marginTop: "auto",
-                    }}
-                >
-                    <UserRequest isEdit={true} onClose={closeForm} requestItem={req} />
-                </View>
-                </Modal>
-            )}
-          <View style={styles.header}>
-            <Text style={styles.subTitle}> {req.subject} </Text>
-            <Text style={{ flex: 1 }}>
-              <TouchableOpacity
-                style={{
-                  height: 20,
-                  width: 65,
-                  backgroundColor: reqStatus === "Open" ? "#d4f980" : "#cfe2f3",
-                  borderRadius: 17,
-                }}
+  const showVolunteer = () => {
+    setVolunteerName(!showVolunteerName);
+  };
+  const closeForm = () => {
+      setIsEditing(false);
+  };
+
+  const reqStatus = req.status;
+  
+  const request = (
+      <View style={styles.header}>
+          <Text>
+              <AntDesign name="calendar" size={24} color="black" /> {req.creationDate}
+              {"   "}
+          </Text>
+          <Text>
+              <MaterialCommunityIcons
+                  name="layers-triple-outline"
+                  size={24}
+                  color="black"
+              />{" "}
+              {req.category} {"   "}
+          </Text>
+      
+          <Text>
+              <FontAwesome5
+                  name="exclamation-triangle"
+                  size={20}
+                  color={
+                      req.priority === "High"
+                      ? "#f44336"
+                      : req.priority === "Medium"
+                      ? "#fcc286"
+                      : "#eae5f6"
+                  }
+              />{" "}
+              {req.priority}
+          </Text>
+      </View>
+  );
+      
+  return (
+      <View
+        style={{
+          borderWidth: 1,
+          borderColor: "grey",
+          borderRadius: 10,
+          marginBottom: 10,
+        }}
+      >
+          {isEditing && (
+              <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isEditing}
+              onRequestClose={() => {
+                  Alert.alert("Edit closed.");
+                  setIsEditing(!isEditing);
+              }}
               >
-                <Text style={{ color: "black", alignSelf: "center" }}>
-                  {reqStatus}
-                </Text>
-              </TouchableOpacity>
-            </Text>
-            <Text style={{ flex: 1, marginLeft: 10 }}>
-              <AntDesign
-                name="edit"
-                size={24}
-                color="black"
-                onPress={() => setIsEditing(true)}
-              />
-              {/*Using edit icon instead of button <TouchableOpacity style={{height: 20, width: 50,
-                    backgroundColor:'#2986cc', borderRadius: 5}}> 
-                    <Text style={{ color: "white", alignSelf: "center" }}>Edit</Text>
-                    </TouchableOpacity>*/}
-            </Text>
-            
-          </View>
+              <View
+                  style={{
+                  height: "90%",
+                  marginTop: "auto",
+                  }}
+              >
+                  <UserRequest isEdit={true} onClose={closeForm} requestItem={req} />
+              </View>
+              </Modal>
+          )}
+        <View style={styles.header}>
+          <Text style={styles.subTitle}> {req.subject} </Text>
+          <Text style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={{
+                height: 20,
+                width: 65,
+                backgroundColor: reqStatus === "Open" ? "#d4f980" : "#cfe2f3",
+                borderRadius: 17,
+              }}
+            >
+              <Text style={{ color: "black", alignSelf: "center" }}>
+                {reqStatus}
+              </Text>
+            </TouchableOpacity>
+          </Text>
+          <Text style={{ flex: 1 }}>
+            <FontAwesome5
+              name="user-circle"
+              size={20}
+              color="black"
+              onPress={showUserName}
+            />
+            {showName && <Text> {userName}</Text>}
+            {/*userName*/}{" "}
+          </Text>
+          <Text style={{ flex: 1 }}>
+            <MaterialCommunityIcons
+              name="account-star-outline"
+              size={24}
+              color="black"
+              onPress={showVolunteer}
+            />{" "}
+            {showVolunteerName && <Text> Ethan Marshall</Text>}
+          </Text>
+          <Text style={{ flex: 1, marginLeft: 10 }}>
+            <AntDesign
+              name="edit"
+              size={24}
+              color="black"
+              onPress={() => setIsEditing(true)}
+            />
+            {/*Using edit icon instead of button <TouchableOpacity style={{height: 20, width: 50,
+                  backgroundColor:'#2986cc', borderRadius: 5}}> 
+                  <Text style={{ color: "white", alignSelf: "center" }}>Edit</Text>
+                  </TouchableOpacity>*/}
+          </Text>
+          
+        </View>
 
-            {request}
-            <View style={{ alignItems: "center" }}>
-              <Text style={styles.textDescription}>
-                {req?.description ||
-                  "We need volunteers for our upcoming Community Clean-Up Day on August \
+          {request}
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.textDescription}>
+              {req?.description ||
+                "We need volunteers for our upcoming Community Clean-Up Day on August \
 15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking \
 up litter, sorting recyclables, and managing the registration table. \
 We also need donations of trash bags, gloves, and refreshments."}
-              </Text>
-            </View>
-        </View>
-    )
+            </Text>
+          </View>
+      </View>
+  )
+}
+
+const TabsToggle = ({children}) => {
+  const tabs = Children.toArray(children);
+  const [status, setStatus] = useState(0);
+  return (
+    <View>
+      {/* titles */}
+      <View style={{display: "flex", flexDirection: "row", marginBottom:10}}>
+          {Children.map(children, (tab, index) => (
+              <TouchableOpacity key={tab.props.title} style={index==status ? {...styles.tab,...styles.tabSelected} : styles.tab}
+                onPress={() => setStatus(index)}
+              >
+                <Text style={styles.tabTitle}>{tab.props.title}</Text>
+              </TouchableOpacity>
+          ))}
+      </View>
+      {/* content */}
+      { tabs[status] }
+    </View>
+  )
 }
 
 export default function RequestDetails({ signOut }) {
-    const [userName, setUserName] = useState("");
-    const [showName, setShowName] = useState(false);
-    const [showVolunteerName, setVolunteerName] = useState(false);
-    //const navigation = useNavigation();
-    const route = useRoute();
-    const req = route.params?.item;
-    // Panel Tabs
-    const tabs = [
-        {title: "Comments", section: Comments()},
-        {title:"Volunteer", section: Volunteer()},
-        {title:"Attributes", section: Attributes()}
-    ];
-    const [status,setStatus] = useState(0);
+  //const navigation = useNavigation();
+  const [userName, setUserName] = useState("");
+  const route = useRoute();
+  const req = route.params?.item;
+  
+  useEffect(() => {
+    getUser();
+  }, []);
 
-    useEffect(() => {
-        getUser();
-    }, []);
-
-    const getUser = async () => {
-        try {
-            const user = await Auth.currentUserInfo();
-            setUserName(
-                user.attributes.given_name + " " + user.attributes.family_name
-            );
-        } catch (err) {
-            //signOut();  // If error getting usern then signout
-            Alert.alert( // show alert to signout
-                "Alert", // Title
-                "Session timeout. Please sign in again", // Message
-                [            
-                {
-                    text: "Logout",
-                    onPress: () => signOut(),
-                    style: "destructive", 
-                },
-                ],
-            );  
-            console.log("error from cognito : ", err);
-        }
-    };
-    const showUserName = () => {
-        setShowName(!showName);
-    };
-
-    const showVolunteer = () => {
-        setVolunteerName(!showVolunteerName);
-    };
+  const getUser = async () => {
+    try {
+      const user = await Auth.currentUserInfo();
+      setUserName(
+        user.attributes.given_name + " " + user.attributes.family_name
+      );
+    } catch (err) {
+      //signOut();  // If error getting usern then signout
+      Alert.alert( // show alert to signout
+        "Alert", // Title
+        "Session timeout. Please sign in again", // Message
+        [            
+          {
+            text: "Logout",
+            onPress: () => signOut(),
+            style: "destructive", 
+          },
+        ],
+      );  
+      console.log("error from cognito : ", err);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <Text style={styles.title}> {req.subject} </Text>
-        <Text style={{ flex: 1 }}>
-              <FontAwesome5
-                name="user-circle"
-                size={20}
-                color="black"
-                onPress={showUserName}
-              />
-              {showName && <Text> {userName}</Text>}
-              {/*userName*/}{" "}
-            </Text>
-            <Text style={{ flex: 1 }}>
-              <MaterialCommunityIcons
-                name="account-star-outline"
-                size={24}
-                color="black"
-                onPress={showVolunteer}
-              />{" "}
-              {showVolunteerName && <Text> Ethan Marshall</Text>}
-            </Text>
         <ButtonsView/>
-        <View>
-            {/* titles */}
-            <View style={{display: "flex", flexDirection: "row", marginBottom:10}}>
-                {tabs.map((tab, index) => (
-                    <TouchableOpacity key={tab.title} style={index==status ? {...styles.tab,...styles.tabSelected} : styles.tab}
-                        onPress={() => setStatus(index)}
-                    >
-                        <Text style={styles.tabTitle}>{tab.title}</Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
-            {/* content */}
-            { tabs[status].section }
-        </View>
+        <TabsToggle>
+          <Comments title="Comments"/>
+          <Volunteer title="Volunteer"/>
+          <Attributes title="Details" userName = {userName} setUserName = {setUserName}/>
+        </TabsToggle>
       </View>
     </SafeAreaView>
   );
