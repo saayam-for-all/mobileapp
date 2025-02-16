@@ -29,14 +29,32 @@ const ReqFilter = () => {
     if (category.subCategories) {
       setCurrentCategory(category);
       setSubCategoryModalVisible(true); // Open modal for subcategories
-    } else {
-      setSelectedCategories((prev) =>
-        prev.includes(category.name)
-          ? prev.filter((cat) => cat !== category.name)
-          : [...prev, category.name]
-      );
     }
+    
+    setSelectedCategories((prevState) =>
+      {
+        if (!prevState.includes(category.name)) {
+          return [...prevState, category.name];
+        }
+        return prevState;
+      }
+    );
   };
+
+  // when exiting from a subcategory list, check if any of the subcategories selected
+  // if not, remove category from the list in order to properly update incasegu subcategories removed or none selected
+  const checkToRemoveCategory = (category) => {
+    for (const sub of category.subCategories) {
+        if (selectedSubCategories.includes(sub)) {
+          return;
+        }
+    }
+    setSelectedCategories((prevState) =>
+    {
+      return prevState.filter((item) => item !== category.name);
+    }
+    );
+  }
 
   const toggleSubCategory = (subCategory) => {
     setSelectedSubCategories((prev) =>
@@ -205,7 +223,10 @@ const ReqFilter = () => {
             renderItem={renderSubCategory}
           />
           <TouchableOpacity
-            onPress={() => setSubCategoryModalVisible(false)}
+            onPress={() => {
+              setSubCategoryModalVisible(false);
+              checkToRemoveCategory(currentCategory);
+            }}
             style={styles.doneButton}
           >
             <Text style={styles.doneText}>Done</Text>
