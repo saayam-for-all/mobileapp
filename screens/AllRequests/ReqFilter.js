@@ -26,7 +26,6 @@ const ReqFilter = () => {
   };
 
   const toggleCategory = (category) => {
-    console.log(category);
     if (category.subCategories) {
       setCurrentCategory(category);
       setSubCategoryModalVisible(true); // Open modal for subcategories
@@ -43,7 +42,7 @@ const ReqFilter = () => {
   };
 
   // when exiting from a subcategory list, check if any of the subcategories selected
-  // if not, remove category from the list in order to properly update incase subcategories removed or none selected
+  // if not, remove category from the list in order to properly update incasegu subcategories removed or none selected
   const checkToRemoveCategory = (category) => {
     for (const sub of category.subCategories) {
         if (selectedSubCategories.includes(sub)) {
@@ -58,7 +57,6 @@ const ReqFilter = () => {
   }
 
   const toggleSubCategory = (subCategory) => {
-    console.log(subCategory);
     setSelectedSubCategories((prev) =>
       prev.includes(subCategory)
         ? prev.filter((item) => item !== subCategory)
