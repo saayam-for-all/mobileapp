@@ -13,8 +13,8 @@ import {
 const ReqFilter = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { onGoBack, cat } = route.params;
-  const [status, setStatus] = useState("All");
+  const { onGoBack } = route.params;
+  const [status, setStatus] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
   const [isSubCategoryModalVisible, setSubCategoryModalVisible] =
     useState(false); // Modal for subcategories
@@ -65,7 +65,7 @@ const ReqFilter = () => {
   };
 
   const resetFilter = () => {
-    setStatus("All");
+    setStatus("");
     setSelectedCategories([]);
     setSelectedSubCategories([]);
   };
@@ -77,8 +77,9 @@ const ReqFilter = () => {
         ", "
       )}\nSubCategories: ${selectedSubCategories.join(", ")}`
     );
-    onGoBack(status);
-    cat(selectedCategories+selectedSubCategories);
+    const newFilters = {status, selectedCategories};
+    onGoBack(newFilters);
+    //cat(selectedCategories);
     navigation.goBack();
   };
 

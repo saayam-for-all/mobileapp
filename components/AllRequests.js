@@ -1,4 +1,5 @@
-import * as React from 'react';
+//import * as React from 'react';
+import React, {useEffect} from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
 import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList} from 'react-native';
 import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons' 
@@ -21,37 +22,23 @@ const AllRequests = ({ data }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
   const [isDataBAck, setDataBack] = React.useState(false);
+  const [filters ,setFilters] = React.useState({status: '', selectedCategories: []})
 
-  const showModalBasic = (id, status, category) => {
+ /* const showModalBasic = (id, status, category) => {
     toggleVisibility();
     setIdBasic('' + id + '\nStatus: ' + status + '\nCategory: ' + category);
-  }
+  }*/
 
   const [items] = React.useState(data);
 
   const handleNavigate = () => {    
-    navigation.navigate('ReqFilter', {onGoBack:(iStatus)=>{
-    //console.log('Received data', iStatus);    
-    let reqStatus = iStatus;  
-    handleFilter(reqStatus);
-    }, cat:(category=>{
-     // console.log('Categories', category)
-    }) }
-  )
-  }
+    navigation.navigate('ReqFilter', {currentFilters: filters,
+      onGoBack:
+   (newFilters) => setFilters(newFilters),
+    }
+  );
+  };
 
-  const handleFilter = (text) => {
-    const filtered = text === "" ? data : data.filter(
-      (data) =>
-        data.status.toLowerCase().includes(text.toLowerCase())
-      // ||
-       // data.category.toLowerCase().includes(text.toLowerCase())
-        
-        // ||
-        //data.id.includes(text)
-    );
-    setFilteredData(filtered);
-  }
   const sortedItems = items
     .slice()
     .sort((item1, item2) =>
@@ -65,20 +52,33 @@ const AllRequests = ({ data }) => {
 
   const handleSearch = (text) => {
     setSearchQuery(text);
-    const filtered = text === "" ? data : data.filter(
-      (data) =>
-        data.subject.toLowerCase().includes(text.toLowerCase()) ||
-        data.category.toLowerCase().includes(text.toLowerCase()) ||
-        data.id.toLowerCase().includes(text.toLowerCase())
-        // ||
-        //data.id.includes(text)
-    );
-    setFilteredData(filtered);
   };
 
-  React.useEffect(() => {
+ /* React.useEffect(() => {
     setPage(0);
-  }, [itemsPerPage]);
+  }, [itemsPerPage]);*/
+
+  useEffect(() =>{
+    let result = [...data];
+
+    if(searchQuery){
+      result= result.filter(item =>
+        item.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.id.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+
+    if (filters.status){
+      result= result.filter(item => item.status === filters.status);
+    }
+    
+    if (filters.selectedCategories.length > 0){      
+      result= result.filter(item =>  filters.selectedCategories.includes(item.category));
+    }
+    setFilteredData(result);
+  }, [searchQuery, filters]
+);
 
   return (
     <View style={styles.container}>
