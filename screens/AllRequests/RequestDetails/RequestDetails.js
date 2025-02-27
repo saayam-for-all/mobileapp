@@ -1,4 +1,6 @@
 import React, { useEffect, useState, Children } from "react";
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import {
   View,
   Text,
@@ -8,7 +10,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
-  Alert
+  Alert,
+  FlatList,
 } from "react-native";
 import Auth from "@aws-amplify/auth";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -208,6 +211,144 @@ const Comments = ({title="Comments"}) => {
     
 }
 
+const ExpandableListItem = ({ item, expanded, onPress }) => {
+  return (
+    <View style={volunteerStyles.itemContainer}>
+      <TouchableOpacity 
+        style={volunteerStyles.headerRow} 
+        onPress={onPress}
+      >
+        <View style={volunteerStyles.titleContainer}>
+          <Text style={volunteerStyles.name}>{item.name}</Text>
+          <View style={volunteerStyles.ratingContainer}>
+            <Icon 
+              name="star" 
+              size={20} 
+              color="#FFD700"
+            />
+            <Text style={volunteerStyles.rating}>{item.rating}</Text>
+          </View>
+        </View>
+        <Icon 
+          name={expanded ? "expand-less" : "expand-more"} 
+          size={24} 
+          color="#3D2A1F" 
+        />
+      </TouchableOpacity>
+      
+      {expanded && (
+        <View style={volunteerStyles.expandedContent}>
+          <View style={volunteerStyles.detailsContainer}>
+            <Text style={volunteerStyles.detailText}>Address: {item.address}</Text>
+            <Text style={volunteerStyles.detailText}>Size: {item.size}</Text>
+            <Text style={volunteerStyles.detailText}>Cause: {item.causes}</Text>
+          </View>
+          <View style={volunteerStyles.actionButtons}>
+            <TouchableOpacity style={volunteerStyles.actionButton}>
+              <Icon name="phone" size={24} color="#4CAF50" />
+              <Text style={volunteerStyles.actionText}>Call</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={volunteerStyles.actionButton}>
+              <Icon name="email" size={24} color="#2196F3" />
+              <Text style={volunteerStyles.actionText}>Message</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const ExpandableList = ({data}) => {
+  const [expandedId, setExpandedId] = useState(null);
+
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
+  return (
+    <View style={volunteerStyles.container}>
+      <FlatList
+        data={data}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <ExpandableListItem
+            item={item}
+            expanded={expandedId === item.id}
+            onPress={() => toggleExpand(item.id)}
+          />
+        )}
+      />
+    </View>
+  );
+};
+
+const volunteerStyles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: 500,
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  itemContainer: {
+    width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: '#3D2A1F',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+  },
+  titleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  rating: {
+    marginLeft: 4,
+    fontSize: 16,
+  },
+  expandedContent: {
+    display: 'flex',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    backgroundColor: '#fff',
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'lightgrey',
+  },
+  actionButtons: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  actionButton: {
+    alignItems: 'center',
+  },
+  actionText: {
+    marginTop: 4,
+    fontSize: 12,
+  },
+  detailsContainer: {
+    marginTop: 16,
+  },
+  detailText: {
+    marginBottom: 8,
+    fontSize: 14,
+  },
+});
+
 const Volunteer = ({title="Volunteer"}) => {
     const [volunteerData, setVolunteerData] = useState(null);
     const [volunteerCount, setVolunteerCount] = useState(0);
@@ -262,7 +403,7 @@ const Volunteer = ({title="Volunteer"}) => {
         try {
             const res = await api.get("/volunteer-orgs/v0.0.1/organizations-list"); //get data axios instance
             const resdata = res.data; //axios data
-            //console.log("resdata", resdata);
+            // console.log("resdata", resdata);
             return resdata;
         } catch (error) {
             console.log("error from axios:", error);
@@ -277,8 +418,7 @@ const Volunteer = ({title="Volunteer"}) => {
         }));
       };
     
-      const getColumnWidth = (key) => columnWidths[key] || 100;
-
+    const getColumnWidth = (key) => columnWidths[key] || 100;
     return (
         <View>
             <View
@@ -309,119 +449,11 @@ const Volunteer = ({title="Volunteer"}) => {
             </View>
 
             {/* Volunteer Table - Rendered Below the Button */}
-            {showVolunteers && (
-            <View style={styles.volunteerTableContainer}>
-                <ScrollView horizontal>
-                <View>
-                    {/* Header Row */}
-                    <View style={styles.tableHeader}>
-                    {Object.keys(columnMapping).map((key, index) => (
-                        <Text style={[styles.columnHeader, { width: columnWidths[key] }]} key={"columnheader-"+key}>
-                            {columnMapping[key]}
-                        </Text>
-                    ))}
-                    </View>
-
-                    {volunteerData === null ? <Text> Loading... </Text> :volunteerData
-                    .slice(0, volunteerCount)
-                    .map((volunteer, rowIndex) => (
-                        <View
-                        key={volunteer.id}
-                        style={[
-                            styles.tableRow,
-                            { height: rowHeights[rowIndex] || "auto" }, // Apply max height for the row
-                        ]}
-                        >
-                        <Text
-                            style={[
-                            styles.tableCell,
-                            { width: columnWidths.name, textAlign: "center" },
-                            ]}
-                            onLayout={(event) =>
-                            updateRowHeight(
-                                rowIndex,
-                                event.nativeEvent.layout.height
-                            )
-                            }
-                        >
-                            {volunteer.name}
-                        </Text>
-                        <Text
-                            style={[
-                            styles.tableCell,
-                            { width: columnWidths.cause, textAlign: "center" },
-                            ]}
-                            onLayout={(event) =>
-                            updateRowHeight(
-                                rowIndex,
-                                event.nativeEvent.layout.height
-                            )
-                            }
-                        >
-                            {volunteer.causes}
-                        </Text>
-                        <Text
-                            style={[
-                            styles.tableCell,
-                            { width: columnWidths.phone, textAlign: "center" },
-                            ]}
-                            onLayout={(event) =>
-                            updateRowHeight(
-                                rowIndex,
-                                event.nativeEvent.layout.height
-                            )
-                            }
-                        >
-                            {}
-                        </Text>
-                        <Text
-                            style={[
-                            styles.tableCell,
-                            { width: columnWidths.email, textAlign: "center" },
-                            ]}
-                            onLayout={(event) =>
-                            updateRowHeight(
-                                rowIndex,
-                                event.nativeEvent.layout.height
-                            )
-                            }
-                        >
-                            {volunteer.size}
-                        </Text>
-                        <Text
-                            style={[
-                            styles.tableCell,
-                            { width: columnWidths.location, textAlign: "center" },
-                            ]}
-                            onLayout={(event) =>
-                            updateRowHeight(
-                                rowIndex,
-                                event.nativeEvent.layout.height
-                            )
-                            }
-                        >
-                            {volunteer.location}
-                        </Text>
-                        <Text
-                            style={[
-                            styles.tableCell,
-                            { width: columnWidths.rating, textAlign: "center" },
-                            ]}
-                            onLayout={(event) =>
-                            updateRowHeight(
-                                rowIndex,
-                                event.nativeEvent.layout.height
-                            )
-                            }
-                        >
-                            {volunteer.rating}
-                        </Text>
-                        </View>
-                    ))}
-                </View>
-                </ScrollView>
-            </View>
-            )}
+            {showVolunteers && 
+              (<View style={styles.volunteerTableContainer}>
+                {volunteerData === null ? <Text> Loading... </Text> : <ExpandableList data={volunteerData.slice(0, volunteerCount)} />}
+              </View>)
+            }
         </View>
     )
 }
@@ -779,6 +811,7 @@ const styles = StyleSheet.create({
   },
 
   volunteerTableContainer: {
+    height:"500",
     marginTop: 10,
     paddingHorizontal: 10,
     borderColor: "#DDD",

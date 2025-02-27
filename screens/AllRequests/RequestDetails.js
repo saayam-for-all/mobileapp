@@ -31,6 +31,7 @@ const comments = [
   { id: 2, name: "Peter Parker", comment: "Some comment text" },
   { id: 3, name: "Peter Parker", comment: "Some comment1" },
 ];
+
 export default function RequestDetails({ signOut }) {
   //const navigation = useNavigation();
   const route = useRoute();
