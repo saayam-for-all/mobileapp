@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Linking,
   SafeAreaView,
+  Alert
 } from "react-native";
 import Button from "../components/Button";
 //import { Button } from '@react-native-material/core';
@@ -143,12 +144,33 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Home({ signOut }) {
+export default function Home({ signOut, firstTime=false }) {
   const [userName, setUserName] = useState("");
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
   const [userVolunteer, setVolunteer] = useState(false);
   const volunteer = "SaayamVolunteers";
+
+  useEffect(()=>{
+    console.log(firstTime)
+    if(firstTime) {
+      Alert.alert('Dear User', 'Please fill your personal information for better experience', [
+        {
+          text: 'Ask me later',
+          onPress: () => console.log('Ask me later pressed'),
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => {
+          navigation.navigate('EditProfile')
+        }},
+      ]);
+  
+    }
+  },[])
 
   const getGroup = async () => {
     try {

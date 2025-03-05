@@ -63,7 +63,7 @@ const Welcome = ({ navigation }) => {
 
         {/* Sign In and Sign Up buttons */}
         <View style={styles.button}>
-          <Button onPress={() => navigation.navigate('SignIn')}>
+          <Button onPress={() => navigation.navigate('SignIn', {firstTime: true})}>
             Sign In
           </Button>
         </View>

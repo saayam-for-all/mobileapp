@@ -94,16 +94,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SignIn({ navigation, signIn: signInCb }) {
+export default function SignIn({ route, navigation, signIn: signInCb }) {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const firstTime = route?.params?.firstTime || false;
 
   const signIn = async () => {
     if (email.length > 4 && password.length > 2) {
       await Auth.signIn(email, password)
         .then((user) => {
-          signInCb(user);
+          signInCb(user, firstTime);
         })
         .catch((err) => {
           if (!err.message) {

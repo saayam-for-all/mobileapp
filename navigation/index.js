@@ -52,14 +52,15 @@ class AuthLoadingScreen extends React.Component {
     this.setState({ userToken: null });
   }
 
-  async signIn(user) {
+  async signIn(user, firstTime=false) {
     this.setState({
       userToken: user.signInUserSession.accessToken.jwtToken,
+      firstTime: firstTime
     });
   }
 
   render() {
-    const { userToken, loading } = this.state;
+    const { userToken, loading, firstTime } = this.state;
     const showLoadingSpinner = (!userToken && loading);
     let view = '';
     if (showLoadingSpinner) {
@@ -71,7 +72,7 @@ class AuthLoadingScreen extends React.Component {
     } else if (!userToken) {
       view = <AuthNavigator signIn={this.signIn} />;
     } else {
-      view = <AppNavigator signOut={this.signOut} />;
+      view = <AppNavigator signOut={this.signOut} firstTime={firstTime || false}/>;
     }
     return (
       <NavigationContainer>
