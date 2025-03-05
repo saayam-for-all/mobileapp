@@ -22,11 +22,11 @@ import AdminPanel from '../screens/Admin/AdminPanel';
 
 const AppStack = createStackNavigator();
 
-export default function App({ signOut }) {
+export default function App({ signOut, firstTime = false }) {
   return (
     <AppStack.Navigator>
       <AppStack.Screen name="Home">
-        {() => <Home signOut={signOut} />}
+        {() => <Home signOut={signOut} firstTime={firstTime} />}
       </AppStack.Screen>
       <AppStack.Screen name="Profile">
         {() => <Profile signOut={signOut} />}

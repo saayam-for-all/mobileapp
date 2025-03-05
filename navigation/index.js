@@ -54,8 +54,8 @@ class AuthLoadingScreen extends React.Component {
 
   async signIn(user, firstTime=false) {
     this.setState({
+      firstTime: firstTime,
       userToken: user.signInUserSession.accessToken.jwtToken,
-      firstTime: firstTime
     });
   }
 

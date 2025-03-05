@@ -35,8 +35,6 @@ const Confirmation = ({ route, navigation }) => {
   const { email } = route.params;
 
   const confirmSignUp = async () => {
-    // For testing only, will delete
-    navigation.navigate('SignIn', {firstTime: true});
     if (authCode.length > 0) {
       await Auth.confirmSignUp(email, authCode)
         .then(() => {

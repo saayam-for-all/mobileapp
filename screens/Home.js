@@ -152,7 +152,7 @@ export default function Home({ signOut, firstTime=false }) {
   const volunteer = "SaayamVolunteers";
 
   useEffect(()=>{
-    console.log(firstTime)
+    console.log("isFirstTime: ",firstTime)
     if(firstTime) {
       Alert.alert('Dear User', 'Please fill your personal information for better experience', [
         {
