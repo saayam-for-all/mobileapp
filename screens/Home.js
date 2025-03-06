@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Linking,
   SafeAreaView,
+  Alert
 } from "react-native";
 import Button from "../components/Button";
 //import { Button } from '@react-native-material/core';
@@ -24,6 +25,8 @@ import api from "../components/api";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import config from "../components/config";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -169,9 +172,36 @@ export default function Home({ signOut }) {
       console.log("error getting group", error);
     }
   }
- 
+  const getFirstTime = async () => {
+    const user = await Auth.currentAuthenticatedUser();
+    console.log(user.attributes.email)
+    const username = user?.attributes?.email;
+    if(username) {
+      AsyncStorage.getItem(username).then(item=>{
+        const ft = JSON.parse(item);
+        console.log(user.attributes.email);
+        console.log("FT", ft);
+        if(ft) {
+          Alert.alert('Dear User', 'Please fill your personal information for better experience', [
+            {
+              text: 'Cancel',
+              onPress: () => {
+                AsyncStorage.setItem(username, JSON.stringify(false))
+              },
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {
+              navigation.navigate('EditProfile')
+            }},
+          ]);
+      }
+      })
+      
+    }
+  }
   useEffect(() => {  //Get user's role/group
-   getGroup();  
+    getGroup(); 
+    getFirstTime();
    //getData(); //uncomment this to test api url
   }, []);
 

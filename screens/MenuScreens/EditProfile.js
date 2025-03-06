@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
+import Auth from '@aws-amplify/auth';
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
@@ -9,6 +11,17 @@ const EditProfile = () => {
   const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
   const [zone, setZone] = useState('');
+
+  useEffect(()=>{
+    Auth.currentAuthenticatedUser().then((user)=>{
+      const attributes = user?.attributes;
+      const {email, family_name, given_name, phone_number} = attributes;
+      setFirstName(given_name);
+      setLastName(family_name);
+      setPrimaryEmail(email);
+      setPrimaryPhoneNumber(phone_number);
+    });
+  })
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -24,15 +37,15 @@ const EditProfile = () => {
 
     // Email should contain @ and follow general email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+    if (!emailRegex.test(primaryEmail)) {
+      Alert.alert('Invalid Email', 'Please enter a valid primary email address.');
       return false;
     }
 
     // Phone number should start with '+' and contain digits only
     const phoneRegex = /^\+[0-9]{1,15}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      Alert.alert('Invalid Phone Number', 'Phone number should start with "+" followed by digits.');
+    if (!phoneRegex.test(primaryPhoneNumber)) {
+      Alert.alert('Invalid Phone Number', 'Primary Phone number should start with "+" followed by digits.');
       return false;
     }
 
@@ -42,20 +55,22 @@ const EditProfile = () => {
       return false;
     }
 
-    // DOB should match the DD/MM/YY format
-    const dobRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{2}$/;
-    if (!dobRegex.test(dob)) {
-      Alert.alert('Invalid Date of Birth', 'DOB should be in the format DD/MM/YY.');
-      return false;
-    }
-
-        // If all validations pass
+    // If all validations pass
     return true;
   };
 
+  const removeFirstTime = async () => {
+    const user = await Auth.currentAuthenticatedUser();
+    console.log(user.attributes.email)
+    const username = user?.attributes?.email;
+    if(username) {
+      AsyncStorage.removeItem(username);
+    }
+  }
   const handleUpdateProfile = () => {
     if (validateForm()) {
       Alert.alert('Success', 'Profile updated successfully.');
+      removeFirstTime();
       // Proceed with the profile update logic here
     }
   };

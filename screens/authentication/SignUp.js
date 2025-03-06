@@ -7,6 +7,7 @@ import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import PhoneInput from '../../components/PhoneInput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -73,7 +74,10 @@ export default function SignUp({ navigation }) {
         validationData: [], // optional
       })
         .then((data) => {
-          console.log(data);
+          console.log(data?.user?.username);
+          if(data?.user?.username){
+            AsyncStorage.setItem(data?.user?.username, JSON.stringify(true))
+          }
           console.log('navigation: ', navigation);
           navigation.navigate('Confirmation', { email });
         })
