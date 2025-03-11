@@ -191,7 +191,7 @@ export default function Home({ signOut }) {
               style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-              navigation.navigate('EditProfile')
+              navigation.navigate('EditPersonal');
             }},
           ]);
       }
