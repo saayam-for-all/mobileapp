@@ -47,6 +47,11 @@ export default function SignUp({ navigation }) {
   const [repeatPassword, onChangeRepeatPassword] = useState('');
 
   const [invalidMessage, setInvalidMessage] = useState(null);
+  const errorMessages = {
+    password: 'Password must be equal and have greater length than 8 with uppercase, digits and special characters.',
+    email: 'Please enter a valid email address.',
+    phone: 'Phone number must be valid numeric values.'
+  }
 
   const signUp = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
@@ -90,21 +95,18 @@ export default function SignUp({ navigation }) {
         });
     } else {
       if (!validPassword || password == '') {
-        setInvalidMessage('Password must be equal and have greater length than 8 with uppercase, digits and special characters.');
-        errorMessage = 'Password must be equal and have greater length than 8 with uppercase, digits and special characters.';
+        errorMessage = errorMessages.password;
       }
       if (!emailValid || email == '') {
-        setInvalidMessage('Please enter a valid email address.');
-        errorMessage = 'Please enter a valid email address.';
+        errorMessage = errorMessages.email;
       }
-      if (!isPhoneValid || phone_number == '') {  
-        setInvalidMessage('Phone number must be valid numeric values.');
-        errorMessage = 'Phone number must be valid numeric values.';
+      if (!isPhoneValid || phone_number == '') {
+        errorMessage = errorMessages.phone;
       }
       if (!allInputsFilled) {
-        setInvalidMessage('Please fill all fields.');
         errorMessage = 'Please fill all fields.';
       }
+      setInvalidMessage(errorMessage);
       popError(errorMessage);
     }
   };
@@ -130,7 +132,7 @@ export default function SignUp({ navigation }) {
       /></View>
       {!emailValid && 
         <Text style={styles.alertText}>
-          Please enter a valid email address.
+          {errorMessages.email}
         </Text>
       }
       <Input
@@ -163,7 +165,7 @@ export default function SignUp({ navigation }) {
       /> */}
       {!isPhoneValid && 
         <Text style={styles.alertText}>
-          Phone number must be numeric values and not empty.
+          {errorMessages.phone}
         </Text>
       }
       <PhoneInput
@@ -199,7 +201,7 @@ export default function SignUp({ navigation }) {
       />
       {!passwordValid && 
         <Text style={styles.alertText}>
-          Password must be at least 8 characters long and contain at least one lowercase letter
+          {errorMessages.password}
         </Text>
       }
       <Input
