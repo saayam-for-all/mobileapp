@@ -92,6 +92,13 @@ const styles = StyleSheet.create({
     color: "#3B82F6",
     textDecorationLine: "underline",
   },
+  alertText: {
+    color: 'red',
+    marginHorizontal: '3%',
+    width: '94%',
+    marginBottom: 20,
+    marginLeft: 5,
+  }
 });
 
 export default function SignIn({ navigation, signIn: signInCb }) {
@@ -162,6 +169,13 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       <TouchableOpacity style={styles.button} onPress={() => signIn()}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
+      {errorMessage && (
+        <Text
+          style = {styles.alertText}
+        >
+          {errorMessage}
+        </Text>
+      )}
       <Text style={styles.orText}>Or with</Text>
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>

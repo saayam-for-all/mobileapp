@@ -72,7 +72,7 @@ function ForgetPassword({ navigation }) {
       </Button>
       {confirmationStep && (
         <>
-          <Text>Check your phone for the confirmation code.</Text>
+          <Text>Check your email for the confirmation code.</Text>
           <Input
             value={code}
             placeholder="123456"
