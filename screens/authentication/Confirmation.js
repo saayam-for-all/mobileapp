@@ -54,7 +54,7 @@ const Confirmation = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Check your phone for the confirmation code.</Text>
+      <Text>Check your email for the confirmation code.</Text>
       <Input
         value={authCode}
         placeholder="123456"
