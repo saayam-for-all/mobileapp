@@ -5,6 +5,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import api from '../components/api';
 
 const sampleDescription = "We need volunteers for our upcoming Community Clean-Up Day on August \
 15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking \
@@ -22,12 +23,33 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : '');
   const navigation = useNavigation();
 
-
-  const handleSubmit = () => {
+  // Integrate API for checking profanity
+  const checkProfanity = async () => {
+    const res = await api.post(
+      "/requests/v0.0.1/checkProfanity",
+      {subject: subject, description: description}
+    );
+    return res.data;
+  }
+  const handleSubmit = async () => {
     // Validate required fields
     if (!subject || !description) {
       Alert.alert('Validation Error', 'Both Subject and Description are required!');
       return;
+    }
+    const profanityResponse = await checkProfanity();
+    if(profanityResponse.contains_profanity) {
+      const profanity = profanityResponse.profanity;
+      Alert.alert(
+        'Dear User', 'The system detects profanity in your help request, please edit your request.\nTrigger words: '
+        +profanity, 
+        [
+          {text: 'OK', onPress: () => {
+            console.log("OK pressed for check profanity");
+          }},
+        ]
+      );
+      return
     }
 
     // Proceed with form submission
@@ -41,6 +63,20 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       subject,
       description,
     });
+
+    Alert.alert(
+      'Dear User','Help Request Created Successfully',
+      [
+        {text: 'OK', onPress: () => {
+          if(isEdit) {
+            onClose();
+          }
+          else {
+            navigation.navigate('Home');
+          }
+        }},
+      ]
+    );
   };
 
   const handleCancel = () => {
