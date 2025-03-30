@@ -151,7 +151,7 @@ export default function Home({ signOut }) {
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
   const [userVolunteer, setVolunteer] = useState(false);
-  const volunteer = "SaayamVolunteers";
+  const volunteer = "Volunteers";
 
   const getGroup = async () => {
     try {
@@ -174,13 +174,13 @@ export default function Home({ signOut }) {
   }
   const getFirstTime = async () => {
     const user = await Auth.currentAuthenticatedUser();
-    console.log(user.attributes.email)
+    //console.log(user.attributes.email)
     const username = user?.attributes?.email;
     if(username) {
       AsyncStorage.getItem(username).then(item=>{
         const ft = JSON.parse(item);
-        console.log(user.attributes.email);
-        console.log("FT", ft);
+        //console.log(user.attributes.email);
+        //console.log("FT", ft);
         if(ft) {
           Alert.alert('Dear User', 'Please fill your personal information for better experience', [
             {

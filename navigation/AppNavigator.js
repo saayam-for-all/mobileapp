@@ -34,7 +34,7 @@ export default function App({ signOut }) {
       <AppStack.Screen name="Administration">
         {() => <Administration signOut={signOut} />}
       </AppStack.Screen>
-      <AppStack.Screen name="UserRequest" component={UserRequest} />
+      <AppStack.Screen name="UserRequest" component={UserRequest} options={{ title: 'User Request' }} />
       <AppStack.Screen name="MyReqs" component={MyReqs} 
         options={{ title: 'My Requests' }}/>
       <AppStack.Screen name="OtherRequests" component={OtherRequests} 
@@ -45,23 +45,23 @@ export default function App({ signOut }) {
         //options={{ title: 'Request Details' }}
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}>
           {() => <RequestDetails signOut={signOut} />}</AppStack.Screen>
-      <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer}/>  
-      <AppStack.Screen name="EditProfile">
+      <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer} options={{ title: 'Promote To Volunteer' }}/>  
+      <AppStack.Screen name="EditProfile" options={{ title: 'Edit Profile' }}>
         {() => <EditProfile signOut={signOut} />}
       </AppStack.Screen>
-      <AppStack.Screen name="EditPersonal">
+      <AppStack.Screen name="EditPersonal" options={{ title: 'Personal Information' }}>
         {() => <EditPersonal signOut={signOut} />}
       </AppStack.Screen>
-      <AppStack.Screen name="EditOrganization">
+      <AppStack.Screen name="EditOrganization" options={{ title: 'Edit Organization' }}>
         {() => <EditOrganization signOut={signOut} />}
       </AppStack.Screen>
-      <AppStack.Screen name="ChangePassword">
+      <AppStack.Screen name="ChangePassword" options={{ title: 'Change Password' }}>
         {() => <ChangePassword signOut={signOut} />}
       </AppStack.Screen>
-      <AppStack.Screen name="PrivacyPolicy">
+      <AppStack.Screen name="PrivacyPolicy" options={{ title: 'Privacy Policy' }}>
         {() => <PrivacyPolicy signOut={signOut} />}
       </AppStack.Screen>
-      <AppStack.Screen name="TermsAndConditions">
+      <AppStack.Screen name="TermsAndConditions" options={{ title: 'Terms And Conditions' }}>
         {() => <TermsAndConditions signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="Welcome">
