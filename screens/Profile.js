@@ -263,7 +263,7 @@ export default function Profile({ signOut }) {
 
         <TouchableOpacity style={styles.optionRow} onPress={confirmSignOut}>
           <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Log out</Text>
+          <Text style={styles.optionText}>Log Out</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
       </ScrollView>
