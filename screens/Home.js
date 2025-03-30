@@ -294,7 +294,7 @@ export default function Home({ signOut }) {
             onPress={() => navigation.navigate("PromoteToVolunteer")}
           >
             <Icon name="heart-outline" size={20} color="#4f8ef7" />
-            <Text style={styles.actionButtonText}> Become a volunteer</Text>
+            <Text style={styles.actionButtonText}> Become A Volunteer</Text>
           </TouchableOpacity>
         )}
 
@@ -305,7 +305,7 @@ export default function Home({ signOut }) {
           <Icon name="add-outline" size={20} color="#fff" />
           <Text style={[styles.actionButtonText, { color: "#fff" }]}>
             {" "}
-            Create a request
+            Create A Request
           </Text>
         </TouchableOpacity>
       </View>
