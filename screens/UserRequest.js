@@ -35,10 +35,11 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
     return res.data;
   }
   const getSuggestedCategories = async () => {
-    const res = await api.get(
-      "/genai/v0.0.1/predict_categories"
+    const res = await api.post(
+      "/genai/v0.0.1/predict_categories",
+      {subject: subject, description: description}
     );
-    return res.data.suggestedCateogries;
+    return res.data;
   }
   const submit = async (category='') => {
     if(category != '') requestCategory = category;
@@ -55,7 +56,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
     });
 
     Alert.alert(
-      'Dear User','Help Request Created Successfully',
+      'Dear User','Help Request Created Successfully.\nCategory: '+requestCategory,
       [
         {text: 'OK', onPress: () => {
           if(isEdit) {
@@ -88,11 +89,10 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       );
       return
     }
-    if(requestCategory == ''){
+    if(!requestCategory){
       defaultCateogries = ["Health", "Education", "Electronics"];
-      // let suggestedCateogries = getSuggestedCategories();
-      // if(!suggestedCateogries) suggestedCateogries = defaultCateogries;
-      const suggestedCateogries = defaultCateogries;
+      let suggestedCateogries = await getSuggestedCategories();
+      if(!suggestedCateogries) suggestedCateogries = defaultCateogries;
       const alertCategories = suggestedCateogries.map((category)=>{
         return {
           text: category, onPress: async () => {
