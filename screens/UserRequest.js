@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { View, Text, Switch, Alert, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
@@ -16,11 +17,13 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [forSelf, setForSelf] = useState('Yes');
   const [isCalamity, setIsCalamity] = useState(false);
   const [priority, setPriority] = useState(isEdit&&requestItem?.priority ? requestItem.priority : 'Low');
-  const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : 'Health');
+  const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : '');
   const [requestType, setRequestType] = useState('Remote');
   const [location, setLocation] = useState('');
   const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
   const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : '');
+
+  const [toSubmit, setToSubmit] = useState(false);
   const navigation = useNavigation();
 
   // Integrate API for checking profanity
@@ -31,27 +34,14 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
     );
     return res.data;
   }
-  const handleSubmit = async () => {
-    // Validate required fields
-    if (!subject || !description) {
-      Alert.alert('Validation Error', 'Both Subject and Description are required!');
-      return;
-    }
-    const profanityResponse = await checkProfanity();
-    if(profanityResponse.contains_profanity) {
-      const profanity = profanityResponse.profanity;
-      Alert.alert(
-        'Dear User', 'The system detects profanity in your help request, please edit your request.\nTrigger words: '
-        +profanity, 
-        [
-          {text: 'OK', onPress: () => {
-            console.log("OK pressed for check profanity");
-          }},
-        ]
-      );
-      return
-    }
-
+  const getSuggestedCategories = async () => {
+    const res = await api.get(
+      "/genai/v0.0.1/predict_categories"
+    );
+    return res.data.suggestedCateogries;
+  }
+  const submit = async (category='') => {
+    if(category != '') requestCategory = category;
     // Proceed with form submission
     console.log({
       forSelf,
@@ -77,6 +67,53 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
         }},
       ]
     );
+  }
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!subject || !description) {
+      Alert.alert('Validation Error', 'Both Subject and Description are required!');
+      return;
+    }
+    const profanityResponse = await checkProfanity();
+    if(profanityResponse.contains_profanity) {
+      const profanity = profanityResponse.profanity;
+      Alert.alert(
+        'Dear User', 'The system detects profanity in your help request, please edit your request.\nTrigger words: '
+        +profanity, 
+        [
+          {text: 'OK', onPress: () => {
+            console.log("OK pressed for check profanity");
+          }},
+        ]
+      );
+      return
+    }
+    if(requestCategory == ''){
+      defaultCateogries = ["Health", "Education", "Electronics"];
+      // let suggestedCateogries = getSuggestedCategories();
+      // if(!suggestedCateogries) suggestedCateogries = defaultCateogries;
+      const suggestedCateogries = defaultCateogries;
+      const alertCategories = suggestedCateogries.map((category)=>{
+        return {
+          text: category, onPress: async () => {
+            setRequestCategory(category);
+            setToSubmit(true);
+          }
+        }
+      });
+      Alert.alert(
+        'Dear User', 'Please fill in categories or select one of the recommended categories',
+        [
+          ...alertCategories,
+          {text: 'Others', onPress: () => {
+            console.log("Reselect categories");
+          }},
+        ]
+      );
+    }
+    else {
+      setToSubmit(true);
+    }
   };
 
   const handleCancel = () => {
@@ -91,6 +128,10 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       },
     ]);
   };
+
+  useEffect(()=>{
+    if(toSubmit) submit();
+  },[toSubmit])
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
