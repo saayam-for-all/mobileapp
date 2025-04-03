@@ -89,10 +89,11 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       );
       return
     }
-    if(!requestCategory){
-      defaultCateogries = ["Health", "Education", "Electronics"];
+    if(!requestCategory || requestCategory=='General'){
+      const defaultCateogries = ["Health", "Education", "Electronics", "General"];
       let suggestedCateogries = await getSuggestedCategories();
       if(!suggestedCateogries) suggestedCateogries = defaultCateogries;
+      suggestedCateogries.push("General");
       const alertCategories = suggestedCateogries.map((category)=>{
         return {
           text: category, onPress: async () => {
@@ -104,10 +105,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       Alert.alert(
         'Dear User', 'Please fill in categories or select one of the recommended categories',
         [
-          ...alertCategories,
-          {text: 'Others', onPress: () => {
-            console.log("Reselect categories");
-          }},
+          ...alertCategories
         ]
       );
     }
@@ -186,6 +184,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
           <RNPickerSelect
             onValueChange={(value) => setRequestCategory(value)}
             items={[
+              { label: 'General', value: 'General' },
               { label: 'Health', value: 'Health' },
               { label: 'Education', value: 'Education' },
               { label: 'Electronics', value: 'Electronics' },
