@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { View, Text, Switch, Alert, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import api from '../components/api';
 
 const sampleDescription = "We need volunteers for our upcoming Community Clean-Up Day on August \
 15 from 9:00 AM to 1:00 PM at Cherry Creek Park. Tasks include picking \
@@ -15,21 +17,32 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [forSelf, setForSelf] = useState('Yes');
   const [isCalamity, setIsCalamity] = useState(false);
   const [priority, setPriority] = useState(isEdit&&requestItem?.priority ? requestItem.priority : 'Low');
-  const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : 'Health');
+  const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : '');
   const [requestType, setRequestType] = useState('Remote');
   const [location, setLocation] = useState('');
   const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
   const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : '');
+
+  const [toSubmit, setToSubmit] = useState(false);
   const navigation = useNavigation();
 
-
-  const handleSubmit = () => {
-    // Validate required fields
-    if (!subject || !description) {
-      Alert.alert('Validation Error', 'Both Subject and Description are required!');
-      return;
-    }
-
+  // Integrate API for checking profanity
+  const checkProfanity = async () => {
+    const res = await api.post(
+      "/requests/v0.0.1/checkProfanity",
+      {subject: subject, description: description}
+    );
+    return res.data;
+  }
+  const getSuggestedCategories = async () => {
+    const res = await api.post(
+      "/genai/v0.0.1/predict_categories",
+      {subject: subject, description: description}
+    );
+    return res.data;
+  }
+  const submit = async (category='') => {
+    if(category != '') requestCategory = category;
     // Proceed with form submission
     console.log({
       forSelf,
@@ -41,6 +54,64 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       subject,
       description,
     });
+
+    Alert.alert(
+      'Dear User','Help Request Created Successfully.\nCategory: '+requestCategory,
+      [
+        {text: 'OK', onPress: () => {
+          if(isEdit) {
+            onClose();
+          }
+          else {
+            navigation.navigate('Home');
+          }
+        }},
+      ]
+    );
+  }
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!subject || !description) {
+      Alert.alert('Validation Error', 'Both Subject and Description are required!');
+      return;
+    }
+    const profanityResponse = await checkProfanity();
+    if(profanityResponse.contains_profanity) {
+      const profanity = profanityResponse.profanity;
+      Alert.alert(
+        'Dear User', 'The system detects profanity in your help request, please edit your request.\nTrigger words: '
+        +profanity, 
+        [
+          {text: 'OK', onPress: () => {
+            console.log("OK pressed for check profanity");
+          }},
+        ]
+      );
+      return
+    }
+    if(!requestCategory || requestCategory=='General'){
+      const defaultCateogries = ["Health", "Education", "Electronics", "General"];
+      let suggestedCateogries = await getSuggestedCategories();
+      if(!suggestedCateogries) suggestedCateogries = defaultCateogries;
+      suggestedCateogries.push("General");
+      const alertCategories = suggestedCateogries.map((category)=>{
+        return {
+          text: category, onPress: async () => {
+            setRequestCategory(category);
+            setToSubmit(true);
+          }
+        }
+      });
+      Alert.alert(
+        'Dear User', 'Please fill in categories or select one of the recommended categories',
+        [
+          ...alertCategories
+        ]
+      );
+    }
+    else {
+      setToSubmit(true);
+    }
   };
 
   const handleCancel = () => {
@@ -55,6 +126,10 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       },
     ]);
   };
+
+  useEffect(()=>{
+    if(toSubmit) submit();
+  },[toSubmit])
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -109,6 +184,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
           <RNPickerSelect
             onValueChange={(value) => setRequestCategory(value)}
             items={[
+              { label: 'General', value: 'General' },
               { label: 'Health', value: 'Health' },
               { label: 'Education', value: 'Education' },
               { label: 'Electronics', value: 'Electronics' },
