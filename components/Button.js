@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
   textStyle: {
     fontSize: 18,
     color: 'white',
+    marginHorizontal: 'auto'
   },
 });
 

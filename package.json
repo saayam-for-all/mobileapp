@@ -36,6 +36,7 @@
     "react-native-gifted-charts": "^1.4.53",
     "react-native-google-places-autocomplete": "^2.5.7",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-markdown-display": "^7.0.2",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-paper": "^5.12.5",
     "react-native-picker-select": "*",
