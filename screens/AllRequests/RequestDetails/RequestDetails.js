@@ -13,6 +13,7 @@ import {
   Alert,
   FlatList,
 } from "react-native";
+import Markdown from 'react-native-markdown-display';
 import Auth from "@aws-amplify/auth";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -28,9 +29,58 @@ import config from "../../../components/config";
 import api from "../../../components/api";
 import { TextInput } from "react-native";
 import UserRequest from "../../UserRequest";
+import Button from '../../../components/Button';
 
-const ButtonsView = () => 
+const ButtonsView = () => {
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [info, setInfo] = useState('');
+  const route = useRoute();
+  const req = route.params?.item;
+  const generateAnswer = async () => {
+    const res = await api.post(
+      "/genai/v0.0.1/generate_answer",
+      {category: req?.category, subject:req?.subject, description: req?.description}
+    );
+    setInfo(res.data);
+    setInfoOpen(true);
+  }
+  return (
     <View style={{ flexDirection: "row", marginBottom: 15, marginTop: 15 }}>
+      {infoOpen && (
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={infoOpen}
+          onRequestClose={() => {
+              Alert.alert("Edit closed.");
+              setInfoOpen(!infoOpen);
+          }}
+          >
+          <View
+              style={{
+              height: "90%",
+              marginTop: "auto",
+              }}
+          >
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+              <View style={styles.infoContainer}>
+              <Markdown>
+                {info}
+              </Markdown>
+              <View style={styles.buttonContainer}>
+                <Button 
+                  backgroundColor="blue" 
+                  style={{width:'25%', marginRight:0, marginLeft:"auto"}}
+                  onPress={()=>{setInfoOpen(false)}}
+                >
+                  Ok
+                </Button>
+              </View>
+              </View>
+            </ScrollView>
+          </View>
+        </Modal>
+      )}
         <TouchableOpacity
         style={{
             width: 125,
@@ -82,35 +132,38 @@ const ButtonsView = () =>
         </Text>
         </TouchableOpacity>
         <TouchableOpacity
-        style={{
-            width: 125,
-            height: 50,
-            borderRadius: 10,
-            marginLeft: 10,
-            alignContent: "center",
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "#F2C94C",
-        }}
+          style={{
+              width: 125,
+              height: 50,
+              borderRadius: 10,
+              marginLeft: 10,
+              alignContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "#F2C94C",
+          }}
+          onPress={generateAnswer}
         >
         <FontAwesome5
-            name="info-circle"
-            size={16}
-            color="white"
-            style={{ marginRight: 5 }}
+          name="info-circle"
+          size={16}
+          color="white"
+          style={{ marginRight: 5 }}
         />
         <Text
-            style={{
-            fontSize: 15,
-            marginTop: 1,
-            marginLeft: 10,
-            color: "white",
-            }}
+          style={{
+          fontSize: 15,
+          marginTop: 1,
+          marginLeft: 10,
+          color: "white",
+          }}
         >
             More Information{" "}
         </Text>
         </TouchableOpacity>
     </View>
+  )
+}
 
 const Comments = ({title="Comments"}) => {
     const url = "https://my-json-server.typicode.com/rmb2020/database/comments"; //Using a test json server
@@ -675,6 +728,27 @@ export default function RequestDetails({ signOut }) {
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    backgroundColor: '#f3f4f6',
+  },
+  infoContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    margin: 16,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 24,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
