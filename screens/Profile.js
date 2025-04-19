@@ -96,6 +96,7 @@ export default function Profile({ signOut }) {
   useEffect(() => {
     const getImage = async () => {      
       const value = await AsyncStorage.getItem("profilePhoto");
+      console.log(profilePhoto);
       if (value)
         setProfilePhoto(JSON.parse(value))        
     };
