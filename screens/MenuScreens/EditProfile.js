@@ -4,6 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from
 import Auth from '@aws-amplify/auth';
 
 const EditProfile = () => {
+  const [user, setUser] = useState(undefined);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
@@ -14,6 +15,7 @@ const EditProfile = () => {
 
   useEffect(()=>{
     Auth.currentAuthenticatedUser().then((user)=>{
+      setUser(user);
       const attributes = user?.attributes;
       const {email, family_name, given_name, phone_number} = attributes;
       setFirstName(given_name);
@@ -21,7 +23,7 @@ const EditProfile = () => {
       setPrimaryEmail(email);
       setPrimaryPhoneNumber(phone_number);
     });
-  })
+  },[])
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -59,19 +61,40 @@ const EditProfile = () => {
     return true;
   };
 
-  const removeFirstTime = async () => {
-    const user = await Auth.currentAuthenticatedUser();
+  const removeFirstTime = async (user) => {
     console.log(user.attributes.email)
     const username = user?.attributes?.email;
     if(username) {
       AsyncStorage.removeItem(username);
     }
   }
-  const handleUpdateProfile = () => {
+
+  async function updateUser(user) {
+    // Not sure whether to change email and phone number
+    try {
+      const result = await Auth.updateUserAttributes(user, {
+        // email: primaryEmail,
+        family_name: lastName, 
+        given_name: firstName,
+        // phone_number: primaryPhoneNumber
+      });
+      return result; // SUCCESS
+    } catch (err) {
+      return err;
+    }
+  }
+  const handleUpdateProfile = async () => {
     if (validateForm()) {
-      Alert.alert('Success', 'Profile updated successfully.');
-      removeFirstTime();
+      const user = await Auth.currentAuthenticatedUser();
       // Proceed with the profile update logic here
+      const updateResult = await updateUser(user);
+      console.log("Result: ",updateResult);
+      if(updateResult === -1) {
+        Alert.alert('User Update Error', 'Please contact administrator or try later');
+      } else {
+        Alert.alert('Success', 'Profile updated successfully.');
+        removeFirstTime(user);
+      }
     }
   };
 
