@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import Auth from '@aws-amplify/auth';
 
@@ -12,6 +13,9 @@ const EditProfile = () => {
   const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
   const [zone, setZone] = useState('');
+  const [needVerification, setNeedVerification] = useState(false);
+
+  const navigation = useNavigation();
 
   useEffect(()=>{
     Auth.currentAuthenticatedUser().then((user)=>{
@@ -23,7 +27,18 @@ const EditProfile = () => {
       setPrimaryEmail(email);
       setPrimaryPhoneNumber(phone_number);
     });
-  },[])
+    setNeedVerification(false);
+  },[]);
+
+  useEffect(()=>{
+    if (needVerification) {
+      navigation.navigate("ConfirmUpdate", {
+        email: user?.attributes?.email, 
+        isUpdate: true
+      });
+      setNeedVerification(false);
+    }
+  },[needVerification]);
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -62,7 +77,6 @@ const EditProfile = () => {
   };
 
   const removeFirstTime = async (user) => {
-    console.log(user.attributes.email)
     const username = user?.attributes?.email;
     if(username) {
       AsyncStorage.removeItem(username);
@@ -70,14 +84,22 @@ const EditProfile = () => {
   }
 
   async function updateUser(user) {
-    // Not sure whether to change email and phone number
     try {
       const result = await Auth.updateUserAttributes(user, {
-        // email: primaryEmail,
+        email: primaryEmail,
         family_name: lastName, 
         given_name: firstName,
-        // phone_number: primaryPhoneNumber
+        phone_number: primaryPhoneNumber
       });
+      // If Primary Email was changed, direct user to send confirmation code
+      // v5 doesn't return detailed response in updateUserAttributes, have to write the logic mannually
+      console.log("New Email: ",primaryEmail);
+      console.log("Original Email: ", user?.attributes?.email);
+      if (primaryEmail != user?.attributes?.email) {
+        console.log("Needs verification");
+        console.log(needVerification);
+        setNeedVerification(true); // Then users would be redirected to enter confirmation code
+      }
       return result; // SUCCESS
     } catch (err) {
       return err;
@@ -88,9 +110,8 @@ const EditProfile = () => {
       const user = await Auth.currentAuthenticatedUser();
       // Proceed with the profile update logic here
       const updateResult = await updateUser(user);
-      console.log("Result: ",updateResult);
-      if(updateResult === -1) {
-        Alert.alert('User Update Error', 'Please contact administrator or try later');
+      if (updateResult != 'SUCCESS') {
+        Alert.alert('User Update Error', updateResult.message);
       } else {
         Alert.alert('Success', 'Profile updated successfully.');
         removeFirstTime(user);

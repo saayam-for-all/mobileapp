@@ -19,6 +19,7 @@ import EditPersonal from  '../screens/MenuScreens/EditPersonal';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
 import AdminPanel from '../screens/Admin/AdminPanel';
+import Confirmation from '../screens/authentication/Confirmation';
 
 const AppStack = createStackNavigator();
 
@@ -73,6 +74,9 @@ export default function App({ signOut }) {
       options={{ title: 'Notifications' }}/>
       <AppStack.Screen name="Admin" component={AdminPanel} 
         options={{ title: 'Administration' }}/>
+      <AppStack.Screen name="ConfirmUpdate" options={{ headerShown: false }}>
+        {() => <Confirmation isUpdate={true}/>}
+      </AppStack.Screen>
     </AppStack.Navigator>
   );
 }
