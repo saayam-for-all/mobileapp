@@ -99,10 +99,12 @@ const EditProfile = () => {
         console.log("Needs verification");
         console.log(needVerification);
         setNeedVerification(true); // Then users would be redirected to enter confirmation code
+        return;
       }
-      return result; // SUCCESS
+      Alert.alert('Success', 'Profile updated successfully.');
+      removeFirstTime(user);
     } catch (err) {
-      return err;
+      Alert.alert('User Update Error', err.message);
     }
   }
   const handleUpdateProfile = async () => {
@@ -110,12 +112,7 @@ const EditProfile = () => {
       const user = await Auth.currentAuthenticatedUser();
       // Proceed with the profile update logic here
       const updateResult = await updateUser(user);
-      if (updateResult != 'SUCCESS') {
-        Alert.alert('User Update Error', updateResult.message);
-      } else {
-        Alert.alert('Success', 'Profile updated successfully.');
-        removeFirstTime(user);
-      }
+      removeFirstTime(user);
     }
   };
 
