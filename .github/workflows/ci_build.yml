@@ -1,0 +1,32 @@
+name: Android Build (Expo)
+
+on:
+  push:
+    branches: [ "main", "dev", "test" ]
+  pull_request:
+    branches: [ "main", "dev", "test" ]
+
+jobs:
+  android:
+    name: Android build using Expo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Build Android with EAS
+        run: eas build --platform android
+        env:
+          EXPO_TOKEN: gseRs0pl_Mp_DKE9bAMUV9plxTZOJl23PJWyxPOO
