@@ -2,7 +2,7 @@ name: Android Build (Expo)
 
 on:
   push:
-    branches: [ "main", "dev", "test" ]
+    branches: [ "main", "dev", "test", "CI_CD" ]
   pull_request:
     branches: [ "main", "dev", "test" ]
 
