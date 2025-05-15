@@ -81,11 +81,7 @@ const Confirmation = ({ route, navigation, isUpdate=false }) => {
         placeholder="123456"
         onChange={(text) => setAuthCode(text)}
       />
-      {!isUpdate ?
-        <Button onPress={() => confirmSignUp()}>Confirm Sign Up</Button>
-        :
-        <Button onPress={() => confirmUpdate()}>Confirm Email</Button>
-      }
+      <Button style={{width:'94%', margin:'3%'}} onPress={() => confirmSignUp()}>{!isUpdate ? 'Confirm Sign Up' : 'Confirm Email'}</Button>
       <Text>{error}</Text>
     </View>
   );
