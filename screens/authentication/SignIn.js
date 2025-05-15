@@ -184,7 +184,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity> */}
       <Spacer size={30} />
-      <Button onPress={() => navigation.navigate('SignIn')} style={{width: '100%'}}>
+      <Button onPress={() => signIn()} style={{width: '100%'}}>
         Log In
       </Button>
       {errorMessage && (
