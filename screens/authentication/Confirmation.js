@@ -5,6 +5,7 @@ import {
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,11 +29,11 @@ const styles = StyleSheet.create({
 });
 
 
-const Confirmation = ({ route, navigation }) => {
+const Confirmation = ({ route, navigation, isUpdate=false }) => {
   const [authCode, setAuthCode] = useState('');
   const [error, setError] = useState(' ');
-  console.log('confirmation navigation: ', navigation);
-  const { email } = route.params;
+  const email = !isUpdate ? route.params.email : "";
+  const nav = useNavigation();
 
   const confirmSignUp = async () => {
     if (authCode.length > 0) {
@@ -51,6 +52,26 @@ const Confirmation = ({ route, navigation }) => {
       setError('You must enter confirmation code');
     }
   };
+  const confirmUpdate = async () => {
+    if (authCode.length > 0) {
+      await Auth.verifyCurrentUserAttributeSubmit(
+        'email',
+        authCode
+      )
+        .then(() => {
+          nav.navigate('EditProfile');
+        })
+        .catch((err) => {
+          if (!err.message) {
+            setError('Something went wrong, please contact support!');
+          } else {
+            setError(err.message);
+          }
+        });
+    } else {
+      setError('You must enter confirmation code');
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -60,7 +81,7 @@ const Confirmation = ({ route, navigation }) => {
         placeholder="123456"
         onChange={(text) => setAuthCode(text)}
       />
-      <Button onPress={() => confirmSignUp()}>Confirm Sign Up</Button>
+      <Button style={{width:'94%', margin:'3%'}} onPress={() => confirmSignUp()}>{!isUpdate ? 'Confirm Sign Up' : 'Confirm Email'}</Button>
       <Text>{error}</Text>
     </View>
   );

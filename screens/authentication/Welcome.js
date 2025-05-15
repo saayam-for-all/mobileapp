@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import { BannerData } from '../../data/BannerData';
 import Banner from '../../components/Banner/Banner';
 import { useIsFocused } from '@react-navigation/native';
+import Spacer from '../../components/Spacer';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +22,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   content: {
+    width: '80%',
+    margin: '10%',
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -50,7 +53,8 @@ const Welcome = ({ navigation }) => {
       </View>
 
       <View style={styles.content}>
-        <Text>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam</Text>
+        <Text style={{fontSize: 16, margin:'2%'}} >
           Saayam is a software platform that brings requesters of help, volunteers,
           volunteer organizations, and donors together. Please find out more
           <Text
@@ -60,18 +64,14 @@ const Welcome = ({ navigation }) => {
             {' here.'}
           </Text>
         </Text>
-
+        <Spacer size='30'/>
         {/* Sign In and Sign Up buttons */}
-        <View style={styles.button}>
-          <Button onPress={() => navigation.navigate('SignIn')}>
-            Sign In
-          </Button>
-        </View>
-        <View style={styles.button}>
-          <Button onPress={() => navigation.navigate('SignUp')}>
-            Sign Up
-          </Button>
-        </View>
+        <Button onPress={() => navigation.navigate('SignIn')} style={{width:'100%', marginVertical:'3%'}}>
+          Sign In
+        </Button>
+        <Button onPress={() => navigation.navigate('SignUp')} style={{width:'100%', marginVertical:'3%'}}>
+          Sign Up
+        </Button>
       </View>
     </SafeAreaView>
   );

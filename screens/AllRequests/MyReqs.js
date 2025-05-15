@@ -27,7 +27,8 @@ export default function MyReqs() {
       const resdata = res.data;  
       setData(resdata["body"]);
     } catch (error) {
-      console.log('data error',error)    }   
+      console.log('data error',error)    
+    }   
   }
 
   useEffect(() => { 
