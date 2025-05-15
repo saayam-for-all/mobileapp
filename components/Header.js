@@ -17,7 +17,7 @@ export default function Header() {
         <View style={styles.imageContainer}>
       
         <Image source={require('../assets/saayamforall.jpeg')}
-             style={{width: 50, height: 50, alignItems: 'left'}} />
+          style={{width: 50, height: 50, alignItems: 'left'}} />
         </View>
         <View style={{marginLeft:config.deviceWidth/1.6, alignItems: 'right'}}>
           <Button

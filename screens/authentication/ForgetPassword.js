@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import Spacer from '../../components/Spacer';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +12,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingTop: 100,
+  },
+  textDescriptionontainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
 });
 
@@ -66,19 +73,27 @@ function ForgetPassword({ navigation }) {
         keyboardType="email-address"
       />
       <Button
+        style={{width: '94%', margin: '3%'}}
         onPress={() => getConfirmationCode()}
       >
         Reset password
       </Button>
       {confirmationStep && (
         <>
-          <Text>Check your email for the confirmation code.</Text>
+          <Spacer size={10} />
+          <View style={styles.textDescriptionontainer}>
+            <Text style={{marginHorizontal:'3%'}}>Check your email for the confirmation code.</Text>
+            <Spacer size={20} />
+          </View>
           <Input
             value={code}
             placeholder="123456"
             onChange={(text) => setCode(text)}
           />
-          <Text>New password</Text>
+          <View style={styles.textDescriptionontainer}>
+            <Text style={{marginHorizontal:'3%'}}>New Password</Text>
+            <Spacer size={20} />
+          </View>
           <Input
             value={newPassword}
             placeholder="password"
@@ -87,6 +102,7 @@ function ForgetPassword({ navigation }) {
             autoCompleteType="password"
           />
           <Button
+            style={{width: '94%', margin: '3%'}}
             onPress={() => postNewPassword()}
           >
             Submit new password
