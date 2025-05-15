@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import Auth from "@aws-amplify/auth";
 import Button from "../../components/Button";
+import Spacer from "../../components/Spacer";
 import Input from "../../components/Input";
 
 const styles = StyleSheet.create({
@@ -69,6 +70,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
   },
+  textDescriptionontainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
   socialButton: {
     width: "45%",
     height: 50,
@@ -84,7 +91,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   signupText: {
-    marginTop: 20,
     fontSize: 14,
     color: "#6B7280",
   },
@@ -139,16 +145,24 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         source={require("../../assets/saayamforall.jpeg")}
         style={styles.logo}
       />
+      <View style={styles.textDescriptionontainer}>
+        <Text>Email Address</Text>
+        <Spacer size={20} />
+      </View>
       <TextInput
         style={styles.input}
         value={email}
-        placeholder="Email address"
+        placeholder="Your Email"
         onChangeText={(text) => onChangeEmail(text)}
         autoCompleteType="email"
         autoCapitalize="none"
         keyboardType="email-address"
         autoFocus
       />
+      <View style={styles.textDescriptionontainer}>
+        <Text>Password</Text>
+        <Spacer size={20} />
+      </View>
       <TextInput
         style={styles.input}
         value={password}
@@ -166,9 +180,13 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       >
         Forgot password?
       </Text>
-      <TouchableOpacity style={styles.button} onPress={() => signIn()}>
+      {/* <TouchableOpacity style={styles.button} onPress={() => signIn()}>
         <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <Spacer size={30} />
+      <Button onPress={() => navigation.navigate('SignIn')} style={{width: '100%'}}>
+        Log In
+      </Button>
       {errorMessage && (
         <Text
           style = {styles.alertText}
@@ -176,7 +194,15 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           {errorMessage}
         </Text>
       )}
-      <Text style={styles.orText}>Or with</Text>
+      <Spacer size={40} />
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flex: 1, height: 1, backgroundColor: '#6B7280'}} />
+        <View>
+          <Text style={{width: 50, textAlign: 'center', ...styles.orText}}>Or With</Text>
+        </View>
+        <View style={{flex: 1, height: 1, backgroundColor: '#6B7280'}} />
+      </View>
+      {/* <Text style={styles.orText}>Or with</Text> */}
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>
           <Image
@@ -193,6 +219,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           <Text>Google</Text>
         </TouchableOpacity>
       </View>
+      <Spacer size={40} />
       <Text style={styles.signupText}>
         Don’t have an account?{" "}
         <Text
