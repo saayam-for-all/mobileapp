@@ -60,8 +60,31 @@ api.interceptors.response.use(
     // response.data = transformData(response.data);
     return response;
   },
-  (error) => {
+  async (error) => {
     // Handle response errors
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true; // Mark as retried to avoid infinite loops
+ 
+      try {
+        // Refresh the token
+        const user = await Auth.currentAuthenticatedUser();
+        const session = await Auth.currentSession(); // Refreshes tokens if expired
+        const newToken = session.getIdToken().getJwtToken();
+ 
+        // Update the Authorization header with the new token
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        console.log("Token refreshing: ", newToken);
+ 
+        // Retry the original request
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        console.error('Token refresh failed:', refreshError);
+        // Optionally redirect to login or handle logout
+        await Auth.signOut();
+       
+        return Promise.reject(refreshError);
+      }
+    }
     return Promise.reject(error);
   }
 );
