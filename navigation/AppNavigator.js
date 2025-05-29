@@ -20,6 +20,8 @@ import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
 import AdminPanel from '../screens/Admin/AdminPanel';
 import Confirmation from '../screens/authentication/Confirmation';
+import Skills from '../screens/MenuScreens/Skills';
+import Availability from '../screens/MenuScreens/Availability';
 
 const AppStack = createStackNavigator();
 
@@ -58,6 +60,12 @@ export default function App({ signOut }) {
       </AppStack.Screen>
       <AppStack.Screen name="ChangePassword" options={{ title: 'Change Password' }}>
         {() => <ChangePassword signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Skills" options={{ title: 'Skills' }}>
+        {() => <Skills signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Availability" options={{ title: 'Availability' }}>
+        {() => <Availability signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="PrivacyPolicy" options={{ title: 'Privacy Policy' }}>
         {() => <PrivacyPolicy signOut={signOut} />}
