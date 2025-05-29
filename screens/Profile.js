@@ -226,6 +226,33 @@ export default function Profile({ signOut }) {
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate("Skills")}
+        >
+          <FontAwesome 
+            name="tags" 
+            size={20} 
+            style={styles.optionIcon} 
+          />
+          <Text style={styles.optionText}>Skills</Text>
+          <Ionicons name="chevron-forward" size={20} color="#777" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate("Availability")}
+        >
+          <FontAwesome 
+            name="calendar" 
+            size={20} 
+            style={styles.optionIcon}
+          />
+          <Text style={styles.optionText}>Availability</Text>
+          <Ionicons name="chevron-forward" size={20} color="#777" />
+        </TouchableOpacity>
+        
+
         <View style={styles.optionRow}>
           <FontAwesome name="bell" size={20} style={styles.optionIcon} />
           <Text style={styles.optionText}>Notifications</Text>
@@ -234,7 +261,7 @@ export default function Profile({ signOut }) {
             onValueChange={setNotificationsEnabled}
           />
         </View>
-
+        
         <TouchableOpacity
           style={styles.optionRow}
           onPress={() => navigation.navigate("TermsAndConditions")}
