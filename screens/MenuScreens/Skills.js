@@ -111,7 +111,7 @@ const Skills = () => {
       const currentPath = parentPath ? `${parentPath}.${categoryName}` : categoryName;
 
       return (
-        <View key={index} style={styles.categoryContainer}>
+        <View key={index}>
           <View style={styles.checkboxContainer}>
             <Checkbox
               value={getCheckedStatus(currentPath)}
@@ -203,13 +203,17 @@ const Skills = () => {
         {!isEditing ? 
             <>
                 <Text style={styles.title}>Selected Skills</Text>
-                {getSelectedSkills(categoriesData.categories)}
+                <View style={styles.contentContainer}>
+                    {getSelectedSkills(categoriesData.categories)}
+                </View>
                 <Button onPress={() => setIsEditing(true)}>Edit</Button>
             </>
             :
             <>
                 <Text style={styles.title}>Select Your Skills For Volunteer Assignments</Text>
-                {renderCategories(categoriesData.categories)}
+                <View style={styles.contentContainer}>
+                    {renderCategories(categoriesData.categories)}
+                </View>
                 <Button onPress={() => setIsEditing(false)}>Save</Button>
             </>
         }
@@ -226,10 +230,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  categoryContainer: {
-    marginBottom: 10,
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -240,10 +240,14 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 16,
+    lineHeight: 32
   },
   subCategoryContainer: {
     paddingLeft: 20,
   },
+  contentContainer: {
+    marginVertical: 20
+  }
 });
 
 export default Skills;
