@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, CustomButton,IconButton,Button, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, CustomButton,AntDesignButton,Button, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SafeAreaView } from 'react-native';
@@ -8,15 +8,19 @@ import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Checkbox } from 'react-native-paper';
 import { Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import TimezonePicker from '../../components/TimeZonePicker';
 // import api from '../../components/api';
 
 export default function Availability() {
   const [timeSlots, setTimeSlots] = useState([{ day: '', startTime: '', endTime: '' }]);
+  const [selectedTimezone, setSelectedTimezone] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [vacationMode, setVacationMode] = useState(true);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const navigation = useNavigation();
   const [checked, setChecked] = React.useState(false);
-  const [loading, setLoading] = useState(true);
-  const screenWidth = Dimensions.get('window').width;
 
   const dayOptions = [
     { label: 'Everyday', value: 'Everyday' },
@@ -72,18 +76,18 @@ export default function Availability() {
   };
   
   const addTimeSlot = () => {
-    const lastSlot = timeSlots[timeSlots.length - 1];
-    
-    if (!isTimeSlotValid(lastSlot)) {
-      alert('Please complete the current time slot before adding a new one.');
-      return;
+    if (timeSlots.length) {
+        const lastSlot = timeSlots[timeSlots.length - 1];
+        if (!isTimeSlotValid(lastSlot)) {
+        alert('Please complete the current time slot before adding a new one.');
+        return;
+        }
+        
+        if (!isValidTimeRange(lastSlot.startTime, lastSlot.endTime)) {
+        alert('End time must be after start time.');
+        return;
+        }
     }
-    
-    if (!isValidTimeRange(lastSlot.startTime, lastSlot.endTime)) {
-      alert('End time must be after start time.');
-      return;
-    }
-    
     setTimeSlots([...timeSlots, { day: '', startTime: '', endTime: '' }]);
   };
 
@@ -101,7 +105,6 @@ export default function Availability() {
   // Function to fetch availability from the API
   const fetchAvailability = async () => {
     try {
-      setLoading(true);
       const response = await api.get('/volunteers/availability'); // Make the API call
       const availabilityData = response.data; // Assuming the data is in response.data
 
@@ -111,14 +114,95 @@ export default function Availability() {
     } catch (error) {
       console.error('Error fetching availability:', error);
       // Handle error appropriately (e.g., show a message to the user)
-    } finally {
-      setLoading(false);
+    }
+  };
+  const fetchAvailabilityFromLocal = async () => {
+    const availabilityData = await AsyncStorage.getItem("availabilityData");
+    const savedAvailability = JSON.parse(
+        availabilityData || "null",
+      );
+      if (savedAvailability) {
+        setTimeSlots(savedAvailability.slots || []);
+        setVacationMode(savedAvailability.vacationMode || false);
+        setStartDate(new Date(savedAvailability.startDate) || new Date());
+        setEndDate(new Date(savedAvailability.endDate) || new Date());
+        setSelectedTimezone(savedAvailability.selectedTimezone || "UTC");
+      }
+  }
+
+  const validateTimeSlots = () => {
+    if (timeSlots.length == 0) {
+        return { isValid: false, message: "Availability validation fail, please fill in at least one available time" };
+    }
+    for (const slot of timeSlots) {
+      if (!slot.day || !slot.startTime || !slot.endTime) {
+        return { isValid: false, message: "Availability validation fail, please fill in all required fields" };
+      }
+      // TODO: check whether end is later than start
+      if (slot.startTime === slot.endTime) {
+        return {
+          isValid: false,
+          message: "Start time and end time should be different",
+        };
+      }
+    }
+    return { isValid: true };
+  };
+  // Handle submit
+  const handleSaveClick = async () => {
+    try {
+      const slotsValidation = validateTimeSlots();
+      if (!slotsValidation.isValid) {
+        alert(slotsValidation.message);
+        return;
+      }
+
+      const availabilityData = {
+        slots: timeSlots,
+        vacationMode,
+        startDate,
+        endDate,
+        selectedTimezone,
+        lastUpdated: new Date().toISOString(),
+      };
+
+      await AsyncStorage.setItem(
+        "availabilityData",
+        JSON.stringify(availabilityData),
+      );
+
+      Alert.alert(
+        'Success', 
+        'Time zone: ' + selectedTimezone + ', \n' + 'Time slots: \n' + timeSlots.reduce((acc,curr)=>{
+            return acc + '  ' + curr.day + ': ' + curr.startTime + ' to ' + curr.endTime + '\n'
+        },''), 
+        [
+            {
+                text: 'Back', 
+                onPress: ()=>{navigation.navigate('Profile');}
+            },
+            {
+                text: 'Edit More',
+                onPress: ()=>{}
+            }
+        ]
+      );
+      // TODO: Replace with actual API call when backend is ready
+      // await updateUserAvailability(availabilityData);
+
+    } catch (error) {
+      console.error("Error saving availability:", error);
+      Alert.alert('Error Saving Availability', error, [{text: 'Ok', onPress: ()=>{}}]);
     }
   };
 
 
+  
   useEffect(() => {
+    // TODO after backend setup
     // fetchAvailability(); // Call the function on component mount
+    fetchAvailabilityFromLocal();
+  
   }, []);
 
   const CustomButton = ({ title, onPress, style, textStyle }) => (
@@ -131,7 +215,20 @@ export default function Availability() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
-    <Text style={styles.title}>Please Provide Your Available Time Slots for Volunteering</Text>
+    <Text style={styles.title}>Timezone</Text>
+    <TimezonePicker 
+        selectedTimezone={selectedTimezone}
+        setSelectedTimezone={setSelectedTimezone}
+    />
+    <VacationMode
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        vacationMode={vacationMode}
+        setVacationMode={setVacationMode}
+    />
+    <Text style={styles.title}>Your Available Time Slots</Text>
     {timeSlots.map((slot, index) => (
             <View key={index} style={styles.row}>
               <View style={styles.pickerContainer}>
@@ -198,7 +295,7 @@ export default function Availability() {
             /> */}
             <CustomButton 
               title="CONFIRM" 
-              onPress={() => console.log('Confirm pressed')} 
+              onPress={handleSaveClick} 
               style={styles.confirmButton}
               textStyle={styles.confirmButtonText}
             />
@@ -207,6 +304,127 @@ export default function Availability() {
     </ScrollView>
   ); 
 }
+
+const VacationMode = ({startDate, setStartDate, endDate, setEndDate, vacationMode, setVacationMode}) => {
+    const [showStartPicker, setShowStartPicker] = useState(false);
+    const [showEndPicker, setShowEndPicker] = useState(false);
+  
+    // Format date to MM/DD/YYYY
+    const formatDate = (date) => {
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${month}/${day}/${year}`;
+    };
+  
+    // Handle start date change
+    const handleStartDateChange = (event, selectedDate) => {
+      const date = selectedDate || startDate;
+      setShowStartPicker();
+      setStartDate(date);
+      
+      // Ensure end date is not before start date
+      if (date > endDate) {
+        setEndDate(date);
+      }
+    };
+  
+    // Handle end date change
+    const handleEndDateChange = (event, selectedDate) => {
+      const date = selectedDate || endDate;
+      setShowEndPicker();
+      setEndDate(date);
+      
+      // Ensure end date is not before start date
+      if (date < startDate) {
+        setStartDate(date);
+      }
+    };
+  
+    // Show start date picker
+    const showStartDatePicker = () => {
+      setShowStartPicker(true);
+    };
+  
+    // Show end date picker
+    const showEndDatePicker = () => {
+      setShowEndPicker(true);
+    };
+  
+    return (
+      <View style={vacationStyles.container}>
+        {/* Vacation Mode Toggle */}
+        <TouchableOpacity 
+          style={vacationStyles.vacationModeContainer}
+          onPress={() => setVacationMode(!vacationMode)}
+        >
+          <View style={[vacationStyles.checkbox, vacationMode && vacationStyles.checkedBox]}>
+            {vacationMode && <AntDesign name="check" size={18} color="#fff" />}
+          </View>
+          <Text style={vacationStyles.vacationModeLabel}>Vacation Mode</Text>
+        </TouchableOpacity>
+  
+        {/* Description */}
+        <Text style={vacationStyles.descriptionText}>Vacation Mode Description</Text>
+  
+        {/* Date Inputs Container */}
+        {vacationMode &&
+        <View style={vacationStyles.datePickerContainer}>
+            <View style={vacationStyles.dateContainer}>
+            {/* Start Date */}
+            <View style={vacationStyles.dateSection}>
+                <Text style={vacationStyles.dateLabel}>Start Date</Text>
+                <TouchableOpacity 
+                style={vacationStyles.dateInput}
+                onPress={showStartDatePicker}
+                >
+                <Text style={vacationStyles.dateText}>{formatDate(startDate)}</Text>
+                <AntDesign name="calendar" size={20} color="#666" />
+                </TouchableOpacity>
+            </View>
+    
+            {/* End Date */}
+            <View style={vacationStyles.dateSection}>
+                <Text style={vacationStyles.dateLabel}>End Date</Text>
+                <TouchableOpacity 
+                style={vacationStyles.dateInput}
+                onPress={showEndDatePicker}
+                >
+                <Text style={vacationStyles.dateText}>{formatDate(endDate)}</Text>
+                <AntDesign name="calendar" size={20} color="#666" />
+                </TouchableOpacity>
+            </View>
+            </View>
+    
+            {/* Date Pickers */}
+            {showStartPicker && (
+            <DateTimePicker
+                testID="startDateTimePicker"
+                value={startDate}
+                mode="date"
+                is24Hour={true}
+                display="default"
+                onChange={handleStartDateChange}
+                minimumDate={new Date()}
+            />
+            )}
+    
+            {showEndPicker && (
+            <DateTimePicker
+                testID="endDateTimePicker"
+                value={endDate}
+                mode="date"
+                is24Hour={true}
+                display="default"
+                onChange={handleEndDateChange}
+                minimumDate={new Date()}
+            />
+            )}
+        </View>
+        }
+      </View>
+    );
+  };
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -228,7 +446,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginVertical: 10,
   },
   availabilityRow: {
     flexDirection: 'row',
@@ -372,3 +590,80 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
 });
+
+const vacationStyles = StyleSheet.create({
+    container: {
+        marginVertical: 10
+    },
+    
+    // Vacation Mode Toggle Styles
+    vacationModeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderWidth: 2,
+      borderColor: '#ddd',
+      borderRadius: 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: 10,
+      backgroundColor: '#fff',
+    },
+    checkedBox: {
+      backgroundColor: '#4285f4',
+      borderColor: '#4285f4',
+    },
+    vacationModeLabel: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: '#333',
+    },
+    
+    // Description Styles
+    descriptionText: {
+      fontSize: 14,
+      color: '#888',
+      marginLeft: 30, // Align with checkbox text
+    },
+    
+    datePickerContainer: {
+        marginVertical: 5,
+        marginLeft: 30,
+    },
+    // Date Container Styles
+    dateContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      gap: 15,
+    },
+    dateSection: {
+      flex: 1,
+    },
+    dateLabel: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: '#666',
+      marginBottom: 8,
+      letterSpacing: 0.5,
+    },
+    dateInput: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: '#fff',
+      borderWidth: 1,
+      borderColor: '#ddd',
+      borderRadius: 8,
+      padding: 10,
+      minHeight: 40,
+    },
+    dateText: {
+      fontSize: 16,
+      color: '#333',
+      flex: 1,
+    },
+  });
