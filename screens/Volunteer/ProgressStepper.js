@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   label: {
     color: '#9CA3AF',
     textAlign: 'center',
-    fontSize: 11,
+    fontSize: 12,
     maxWidth: 83,
   },
   line: {
