@@ -5,8 +5,8 @@ import { FontAwesome } from '@expo/vector-icons';
 export default function ProgressStepper({ currentStep }) {
   const steps = [
     { label: 'Terms & Conditions', id: 1 },
-    { label: 'Skills', id: 2 },
-    { label: 'Personal Information', id: 3 },
+    { label: 'Identification', id: 2 },
+    { label: 'Skills', id: 3 },
     { label: 'Availability', id: 4 }
   ];
 
