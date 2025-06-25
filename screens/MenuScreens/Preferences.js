@@ -60,9 +60,9 @@ const Preferences = () => {
             ]}
             placeholder = {defaultDefaultDashboardView}
             value={defaultDashboardView}
+            useNativeAndroidPickerStyle={false}
             style={{
-                    inputIOS: pickerSelectStyles.inputIOS,
-                    inputAndroid: pickerSelectStyles.inputAndroid,
+                ...pickerSelectStyles
             }}
         />
       
@@ -97,9 +97,9 @@ const Preferences = () => {
             ]}
             placeholder = {defaultEmailPreference}
             value={emailPreference}
+            useNativeAndroidPickerStyle={false}
             style={{
-                    inputIOS: pickerSelectStyles.inputIOS,
-                    inputAndroid: pickerSelectStyles.inputAndroid,
+                ...pickerSelectStyles
             }}
         />
 
@@ -111,8 +111,9 @@ const Preferences = () => {
             ]}
             placeholder = {defaultPhonePreference}
             value={phonePreference}
+            useNativeAndroidPickerStyle={false}
             style={{
-                    ...pickerSelectStyles
+                ...pickerSelectStyles
             }}
         />
         
@@ -186,31 +187,14 @@ const styles = StyleSheet.create({
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
+        height: 50,
+        borderColor: '#ccc',
         borderWidth: 1,
-        borderColor: '#d1d5db',
         borderRadius: 8,
-        color: '#374151',
-        paddingRight: 30,
-        backgroundColor: '#f9fafb',
-        marginBottom: 16,
-
+        paddingLeft: 10,
+        marginBottom: 15,
     },
     inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        borderWidth: 1,
-        borderColor: '#d1d5db',
-        borderRadius: 8,
-        color: '#374151',
-        paddingRight: 30,
-        backgroundColor: '#f9fafb',
-        marginBottom: 16,
-    },
-    iconContainer: {
         height: 50,
         borderColor: '#ccc',
         borderWidth: 1,
@@ -220,7 +204,7 @@ const pickerSelectStyles = StyleSheet.create({
     },
     placeholder: {
         height: 50,
-        color: '#ccc',
+        color: '#374151',
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 8,
