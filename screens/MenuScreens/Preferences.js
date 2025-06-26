@@ -14,26 +14,50 @@ const Preferences = () => {
     }
     const [defaultDashboardView, setDefaultDashboardView] = useState(defaultDefaultDashboardView);
     const [firstLanguage, setFirstLanguage] = useState('');
+    const defaultFirstLanguage = {
+        label: 'First Language Preference', 
+        value: 'default' 
+    }
     const [secondLanguage, setSecondLanguage] = useState('');
+    const defaultSecondLanguage = {
+        label: 'Second Language Preference', 
+        value: 'default' 
+    }
     const [thirdLanguage, setThirdLanguage] = useState('');
-    const defaultEmailPreference = {
-        label: 'Email Communication Preference', 
+    const defaultThirdLanguage = {
+        label: 'Third Language Preference', 
         value: 'default' 
     }
-    const [emailPreference, setEmailPreference] = useState(defaultEmailPreference);
-    const defaultPhonePreference = {
-        label: 'Phone Communication Preference', 
-        value: 'default' 
-    }
-    const [phonePreference, setPhonePreference] = useState(defaultPhonePreference);
+    const [emailPreference, setEmailPreference] = useState(true);
+    const [phonePreference, setPhonePreference] = useState(true);
+    const [primaryPhone, setPrimaryPhone] = useState('')
+    const [secondaryPhone, setSecondaryPhone] = useState('')
+    const [primaryEmail, setPrimaryEmail] = useState('')
+    const [secondaryEmail, setSecondaryEmail] = useState('')
     const [checked, setChecked] = React.useState(false);
-    const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+    const languageOptions = [
+        { value: "bn", label: "Bengali" },
+        { value: "de", label: "German" },
+        { value: "en", label: "English" },
+        { value: "es", label: "Spanish" },
+        { value: "fr", label: "French" },
+        { value: "hi", label: "Hindi" },
+        { value: "pt", label: "Portuguese" },
+        { value: "ru", label: "Russian" },
+        { value: "te", label: "Telugu" },
+        { value: "zh", label: "Mandarin Chinese" },
+    ];
 
     const navigation = useNavigation();
 
     useEffect(()=>{
         Auth.currentAuthenticatedUser().then((user)=>{
-        setUser(user);
+            setUser(user);
+            setPrimaryPhone(user.attributes.phone_number);
+            setSecondaryPhone('1111111111');
+            setPrimaryEmail(user.attributes.email);
+            setSecondaryEmail('secondary@email.com');
         });
     },[]);
 
@@ -66,63 +90,89 @@ const Preferences = () => {
             }}
         />
       
-        <TextInput
-            style={styles.input}
-            placeholder="First Language Preference"
+        <RNPickerSelect
+            onValueChange={(value) => setFirstLanguage(value)}
+            items={languageOptions}
+            placeholder = {defaultFirstLanguage}
             value={firstLanguage}
-            onChangeText={setFirstLanguage}
+            useNativeAndroidPickerStyle={false}
+            style={{
+                ...pickerSelectStyles
+            }}
         />
         
-        <TextInput
-            style={styles.input}
-            placeholder="Second Language Preference"
-            keyboardType="email-address"
+        <RNPickerSelect
+            onValueChange={(value) => setSecondLanguage(value)}
+            items={languageOptions}
+            placeholder = {defaultSecondLanguage}
             value={secondLanguage}
-            onChangeText={setSecondLanguage}
+            useNativeAndroidPickerStyle={false}
+            style={{
+                ...pickerSelectStyles
+            }}
         />
 
-        <TextInput
-            style={styles.input}
-            placeholder="Third Language Preference"
-            keyboardType="email-address"
+         <RNPickerSelect
+            onValueChange={(value) => setThirdLanguage(value)}
+            items={languageOptions}
+            placeholder = {defaultThirdLanguage}
             value={thirdLanguage}
-            onChangeText={setThirdLanguage}
-        />
-
-        <RNPickerSelect
-            onValueChange={(value) => setEmailPreference(value)}
-            items={[
-                { label: 'Primary Email', value: 'Primary Email' },
-                { label: 'Secondary Email', value: 'Secondary Email' },
-            ]}
-            placeholder = {defaultEmailPreference}
-            value={emailPreference}
             useNativeAndroidPickerStyle={false}
             style={{
                 ...pickerSelectStyles
             }}
         />
 
-        <RNPickerSelect
-            onValueChange={(value) => setPhonePreference(value)}
-            items={[
-                { label: 'Primary Phone', value: 'Primary Phone' },
-                { label: 'Secondary Phone', value: 'Secondary Phone' },
-            ]}
-            placeholder = {defaultPhonePreference}
-            value={phonePreference}
-            useNativeAndroidPickerStyle={false}
-            style={{
-                ...pickerSelectStyles
-            }}
-        />
+        <Text style={styles.title}>Email Communication Preference</Text>
+        <View style={styles.checkboxContainer}>
+            <Checkbox
+                status={emailPreference ? 'checked' : 'unchecked'}
+                color='#007BFF'
+                onPress={() => {
+                    setEmailPreference(true);
+                }}
+            />
+            <Text style={styles.label}>Primary Email: {primaryEmail}</Text>
+        </View>
+        <View style={styles.checkboxContainer}>
+            <Checkbox
+                status={!emailPreference ? 'checked' : 'unchecked'}
+                color='#007BFF'
+                onPress={() => {
+                    setEmailPreference(false);
+                }}
+            />
+            <Text style={styles.label}>Secondary Email: {secondaryEmail}</Text>
+        </View>
+
+        <Text style={styles.title}>Phone Communication Preference</Text>
+        <View style={styles.checkboxContainer}>
+            <Checkbox
+                status={phonePreference ? 'checked' : 'unchecked'}
+                color='#007BFF'
+                onPress={() => {
+                    setPhonePreference(true);
+                }}
+            />
+            <Text style={styles.label}>Primary Phone: {primaryPhone}</Text>
+        </View>
+        <View style={styles.checkboxContainer}>
+            <Checkbox
+                status={!phonePreference ? 'checked' : 'unchecked'}
+                color='#007BFF'
+                onPress={() => {
+                    setPhonePreference(false);
+                }}
+            />
+            <Text style={styles.label}>Secondary Phone: {secondaryPhone}</Text>
+        </View>
         
         <View style={styles.notificationContainer}>
-            <Checkbox.Android
+            <Checkbox
                 status={checked ? 'checked' : 'unchecked'}
                 color='green'
                 onPress={() => {
-                setChecked(!checked);
+                    setChecked(!checked);
                 }}
             />
             <Text style={styles.notificationText}>
@@ -148,6 +198,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
     },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginVertical: 10,
+        marginHorizontal: 5
+    }, 
     input: {
         height: 50,
         borderColor: '#ccc',
@@ -174,6 +230,10 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 18,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     notificationContainer: {
         flexDirection: 'row',
