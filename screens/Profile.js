@@ -206,6 +206,19 @@ export default function Profile({ signOut }) {
 
         <TouchableOpacity
           style={styles.optionRow}
+          onPress={() => navigation.navigate("IdentityDocument")}
+        >
+          <FontAwesome
+            name="user-circle-o"
+            size={20}
+            style={styles.optionIcon}
+          />
+          <Text style={styles.optionText}>Identity Document</Text>
+          <Ionicons name="chevron-forward" size={20} color="#777" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.optionRow}
           onPress={() => navigation.navigate("ChangePassword")}
         >
           <FontAwesome name="lock" size={20} style={styles.optionIcon} />
