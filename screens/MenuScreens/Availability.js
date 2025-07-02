@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Checkbox } from 'react-native-paper';
 import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TimezonePicker from '../../components/TimeZonePicker';
@@ -18,9 +17,7 @@ export default function Availability() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [vacationMode, setVacationMode] = useState(true);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const navigation = useNavigation();
-  const [checked, setChecked] = React.useState(false);
 
   const dayOptions = [
     { label: 'Everyday', value: 'Everyday' },
@@ -274,18 +271,6 @@ export default function Availability() {
           <TouchableOpacity style={styles.addButton} onPress={addTimeSlot}>
             <Text style={styles.addButtonText}>+ Add</Text>
           </TouchableOpacity>
-          <View style={styles.notificationContainer}>
-            <Checkbox.Android
-              status={checked ? 'checked' : 'unchecked'}
-              color='green'
-              onPress={() => {
-                setChecked(!checked);
-              }}
-            />
-            <Text style={styles.notificationText}>
-              Would you like to receive notifications in case of emergencies or critical situations?
-            </Text>
-          </View>
           <View style={styles.buttonContainer}>
             {/* <CustomButton 
               title="BACK" 
@@ -502,11 +487,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  notificationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-  },
   checkbox: {
     width: 20,
     height: 20,
@@ -516,9 +496,6 @@ const styles = StyleSheet.create({
   },
   checkboxChecked: {
     backgroundColor: 'black',
-  },
-  notificationText: {
-    flex: 1,
   },
   buttonContainer: {
     flexDirection: 'row',

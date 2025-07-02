@@ -22,6 +22,7 @@ import AdminPanel from '../screens/Admin/AdminPanel';
 import Confirmation from '../screens/authentication/Confirmation';
 import Skills from '../screens/MenuScreens/Skills';
 import Availability from '../screens/MenuScreens/Availability';
+import Preferences from '../screens/MenuScreens/Preferences';
 
 const AppStack = createStackNavigator();
 
@@ -66,6 +67,9 @@ export default function App({ signOut }) {
       </AppStack.Screen>
       <AppStack.Screen name="Availability" options={{ title: 'Availability' }}>
         {() => <Availability signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="Preferences" options={{ title: 'Preferences' }}>
+        {() => <Preferences signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="PrivacyPolicy" options={{ title: 'Privacy Policy' }}>
         {() => <PrivacyPolicy signOut={signOut} />}
