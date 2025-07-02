@@ -23,7 +23,7 @@ import Confirmation from '../screens/authentication/Confirmation';
 import Skills from '../screens/MenuScreens/Skills';
 import Availability from '../screens/MenuScreens/Availability';
 import Preferences from '../screens/MenuScreens/Preferences';
-import IdentityDocument from '../screens/MenuScreens/identityDocument';
+import IdentityDocument from '../screens/MenuScreens/IdentityDocument';
 
 const AppStack = createStackNavigator();
 
