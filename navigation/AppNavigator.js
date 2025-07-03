@@ -23,6 +23,7 @@ import Confirmation from '../screens/authentication/Confirmation';
 import Skills from '../screens/MenuScreens/Skills';
 import Availability from '../screens/MenuScreens/Availability';
 import Preferences from '../screens/MenuScreens/Preferences';
+import IdentityDocument from '../screens/MenuScreens/IdentityDocument';
 
 const AppStack = createStackNavigator();
 
@@ -55,6 +56,9 @@ export default function App({ signOut }) {
       </AppStack.Screen>
       <AppStack.Screen name="EditPersonal" options={{ title: 'Personal Information' }}>
         {() => <EditPersonal signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="IdentityDocument" options={{ title: 'Identity Document' }}>
+        {() => <IdentityDocument signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="EditOrganization" options={{ title: 'Edit Organization' }}>
         {() => <EditOrganization signOut={signOut} />}
