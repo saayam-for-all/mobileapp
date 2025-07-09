@@ -18,6 +18,8 @@ import EditOrganization from  '../screens/MenuScreens/EditOrganization';
 import EditPersonal from  '../screens/MenuScreens/EditPersonal';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import Notification from '../screens/Notifications/Notification';
+import Donation from '../screens/Donation/Donation';
+import BenevityInfo from '../screens/Benevity/Benevity';
 import AdminPanel from '../screens/Admin/AdminPanel';
 import Confirmation from '../screens/authentication/Confirmation';
 import Skills from '../screens/MenuScreens/Skills';
@@ -85,9 +87,13 @@ export default function App({ signOut }) {
         {() => <Welcome signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="ReqFilter" component={ReqFilter}
-      options={{ title: 'Filter' }}/> 
+        options={{ title: 'Filter' }}/> 
       <AppStack.Screen name="Notification" component={Notification} 
-      options={{ title: 'Notifications' }}/>
+        options={{ title: 'Notifications' }}/>
+      <AppStack.Screen name="Donation" component={Donation} 
+        options={{ title: 'Donation' }}/>
+      <AppStack.Screen name="Benevity" component={BenevityInfo} 
+        options={{ title: 'Benevity' }}/>
       <AppStack.Screen name="Admin" component={AdminPanel} 
         options={{ title: 'Administration' }}/>
       <AppStack.Screen name="ConfirmUpdate" options={{ headerShown: false }}>
