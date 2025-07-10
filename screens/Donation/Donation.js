@@ -17,7 +17,8 @@ import { useNavigation } from "@react-navigation/native";
 import BenevityLogo from "../../assets/donate_buttons/benevity.png";
 import CharityNavLogo from "../../assets/donate_buttons/CharityNav.png";
 import PayPalLogo from "../../assets/donate_buttons/PayPal.png";
-import StripeLogo from "../../assets/donate_buttons/Stripe.png";
+// import StripeLogo from "../../assets/donate_buttons/Stripe.png";
+StripeLogo = ''
 import donateImgBg from "../../assets/donate_img_bg.png";
 import SaayamLogo from "../../assets/saayamforall.jpeg"
 
@@ -89,7 +90,7 @@ const Donate = () => {
       key: "stripe",
       label: "Stripe",
       img: StripeLogo,
-      alt: "Stripe",
+      alt: "Donate",
       href: null,
     },
     {
@@ -188,10 +189,15 @@ const Donate = () => {
                   }
                 }}
               >
-                <Image
-                  source={opt.img}
-                  style={styles.donationOptionIcon}
-                />
+                {
+                  opt?.img ?
+                  (<Image
+                    source={opt.img}
+                    style={styles.donationOptionIcon}
+                  />) : (<Text style={styles.donationOptionIcon}>
+                    {opt.alt}
+                  </Text>)
+                }
               </TouchableOpacity>
             ))}
           </View>
@@ -305,8 +311,15 @@ const styles = StyleSheet.create({
   },
   donationOptionIcon: {
     height: 25,
+    lineHeight: 25,
     width: 60,
     resizeMode: 'contain',
+    color: 'navy',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignContent: 'center',
+    paddingVertical: 0,
   },
   faqSection: {
     paddingHorizontal: 16,
