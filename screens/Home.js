@@ -363,10 +363,13 @@ export default function Home({ signOut }) {
           <Tab.Screen
             name="Donate"
             component={DonateScreen}
-            listeners={{
-              tabPress: (e) => {
-                openPayPal();
-              },
+            options={{
+              tabBarButton: (props) => (
+                <TouchableOpacity
+                  {...props}
+                  onPress={() => navigation.navigate("Donation")}
+                />
+              ),
             }}
           />
           <Tab.Screen
