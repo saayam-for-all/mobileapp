@@ -11,16 +11,15 @@ import {
   Dimensions,
   ImageBackground
 } from "react-native";
+import { WebView } from 'react-native-webview';
 import { useNavigation } from "@react-navigation/native";
 
 // Import your local images
 import BenevityLogo from "../../assets/donate_buttons/benevity.png";
 import CharityNavLogo from "../../assets/donate_buttons/CharityNav.png";
 import PayPalLogo from "../../assets/donate_buttons/PayPal.png";
-// import StripeLogo from "../../assets/donate_buttons/Stripe.png";
-StripeLogo = ''
+import StripeLogo from "../../assets/donate_buttons/Stripe.png";
 import donateImgBg from "../../assets/donate_img_bg.png";
-import SaayamLogo from "../../assets/saayamforall.jpeg"
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,6 +29,7 @@ const Donate = () => {
   const [showStripeDonation, setShowStripeDonation] = useState(false);
   const [donationType, setDonationType] = useState("one-time");
   const [selectedOption, setSelectedOption] = useState(null);
+  const [stripeHtmlContent, setStripeHtmlContent] = useState('');
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -37,10 +37,89 @@ const Donate = () => {
 
   useEffect(() => {
     if (showStripeDonation) {
-      // For React Native, you'll need to integrate with Stripe React Native SDK
-      // This replaces the web script loading logic
+      const publishableKey = "pk_live_51RLYdDFTNrTBTK6lenmwJGxbrv1uxOqKWi4GnpWIocFGTpIJNVr7p4OwP0n2vcJwp8c89vw7fOHGFISOAMYtOwUZ002no86gkT";
+      const stripeButtons = {
+        oneTime: "buy_btn_1ROTosFTNrTBTK6lack9IclC",
+        monthly: "buy_btn_1ROTobFTNrTBTK6lJdV1DIpA",
+      };
+
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <script src="https://js.stripe.com/v3/buy-button.js" async onload='initializeStripeButtons()'></script>
+          <script>
+            function initializeStripeButtons() {
+              const publishableKey = "${publishableKey}";
+              const stripeButtons = {
+                oneTime: "${stripeButtons.oneTime}",
+                monthly: "${stripeButtons.monthly}",
+              };
+
+              function insertStripeButton(containerId, buttonId) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                  container.innerHTML = '';
+                  const btn = document.createElement("stripe-buy-button");
+                  btn.setAttribute("buy-button-id", buttonId);
+                  btn.setAttribute("publishable-key", publishableKey);
+                  container.appendChild(btn);
+                }
+              }
+              
+              insertStripeButton("one-time-button-container", stripeButtons.oneTime);
+              insertStripeButton("monthly-button-container", stripeButtons.monthly);
+            }
+          </script>
+          <style>
+            /* Stripe Donation Styles */
+            .donation-section {
+              min-height: 320px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .tab-btn {
+              padding: 0.5rem 1rem;
+              border-radius: 9999px;
+              font-weight: 500;
+              color: #4b5563;
+              transition: all 0.3s ease;
+              background: none;
+              border: none;
+              cursor: pointer;
+            }
+            .tab-btn.active {
+              background-color: #dbeafe;
+              color: #1d4ed8;
+              font-weight: 600;
+            }
+            .tab-btn:hover {
+              background-color: #eff6ff;
+            }
+            .hidden {
+              display: none;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="section-one-time" class="donation-section ${donationType === "one-time" ? "" : "hidden"}">
+            <div id="one-time-button-container"></div>
+          </div>
+
+          <div id="section-monthly" class="donation-section ${donationType === "monthly" ? "" : "hidden"}">
+            <div id="monthly-button-container"></div>
+          </div>
+        </body>
+        </html>
+      `;
+      setStripeHtmlContent(html);
+    } else {
+      setStripeHtmlContent('');
     }
-  }, [showStripeDonation]);
+  }, [showStripeDonation, donationType]);
 
   const handleStripeClick = () => {
     setShowStripeDonation(true);
@@ -113,7 +192,7 @@ const Donate = () => {
     return (
       <View style={styles.donateContainer}>
         <View style={styles.stripeCard}>
-          <View style={{postion:'relative', width: '100%'}}>
+          <View style={{position:'relative', width: '100%'}}>
             <TouchableOpacity
               onPress={() => setShowStripeDonation(false)}
               style={styles.backButton}
@@ -140,23 +219,26 @@ const Donate = () => {
             </TouchableOpacity>
           </View>
 
-          <Image source={SaayamLogo} resizeMode="cover" style={styles.logo}/>
-
-          <View style={[styles.donationSection, donationType !== "one-time" && styles.hidden]}>
-            <View style={styles.oneTimeButtonContainer}>
-              <TouchableOpacity style={styles.stripePaymentButton}>
-                <Text style={styles.stripePaymentButtonText}>Donate with Stripe</Text>
-              </TouchableOpacity>
+          {stripeHtmlContent && (
+            <View style={styles.webViewContainer}>
+              <WebView
+                source={{ html: stripeHtmlContent }}
+                style={styles.webView}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                scalesPageToFit={true}
+                showsVerticalScrollIndicator={false}
+                startInLoadingState={true}
+                onError={(error) => {
+                  console.error('WebView error:', error);
+                }}
+                onHttpError={(error) => {
+                  console.error('WebView HTTP error:', error);
+                }}
+                postMessage={JSON.stringify({ type: 'changeDonationType', donationType: donationType })}
+              />
             </View>
-          </View>
-
-          <View style={[styles.donationSection, donationType !== "monthly" && styles.hidden]}>
-            <View style={styles.monthlyButtonContainer}>
-              <TouchableOpacity style={styles.stripePaymentButton}>
-                <Text style={styles.stripePaymentButtonText}>Subscribe with Stripe</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          )}
         </View>
       </View>
     );
@@ -456,7 +538,15 @@ const styles = StyleSheet.create({
     maxHeight: 250,
     aspectRatio: 1,
     backgroundColor: 'black'
-  }
+  },
+  webViewContainer: {
+    width: '100%',
+    height: '400',
+  },
+  webView: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
 });
 
 export default Donate;
