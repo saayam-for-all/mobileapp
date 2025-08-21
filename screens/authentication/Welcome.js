@@ -53,9 +53,9 @@ const Welcome = ({ navigation }) => {
       </View>
 
       <View style={styles.content}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam</Text>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam For All</Text>
         <Text style={{fontSize: 16, margin:'2%'}} >
-          Saayam is a software platform that brings requesters of help, volunteers,
+          Saayam For All is a software platform that brings requesters of help, volunteers,
           volunteer organizations, and donors together. Please find out more
           <Text
             style={styles.advertLinkText}
