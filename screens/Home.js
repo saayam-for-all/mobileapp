@@ -202,7 +202,7 @@ export default function Home({ signOut }) {
   useEffect(() => {  //Get user's role/group
     getGroup(); 
     getFirstTime();
-   //getData(); //uncomment this to test api url
+   getData(); //uncomment this to test api url
   }, []);
 
   const getData = async () => {
