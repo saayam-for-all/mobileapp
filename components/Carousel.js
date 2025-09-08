@@ -7,27 +7,27 @@ const { width: screenWidth } = Dimensions.get('window');
 const carouselData = [
     {
         title: 'Food and Essentials Support',
-        image: require('../assets/landingPageImages/carousel_one.jpg'),
+        image: require('../assets/landingPageImages/carousel_one.webp'),
     },
     {
         title: 'Clothing Support',
-        image: require('../assets/landingPageImages/carousel_two.jpg'),
+        image: require('../assets/landingPageImages/carousel_two.webp'),
     },
     {
         title: 'Education and Career Support',
-        image: require('../assets/landingPageImages/carousel_three.jpg'),
+        image: require('../assets/landingPageImages/carousel_three.webp'),
     },
     {
         title: 'Healthcare and Wellbeing Support',
-        image: require('../assets/landingPageImages/carousel_four.jpg'),
+        image: require('../assets/landingPageImages/carousel_four.webp'),
     },
     {
         title: 'Housing Support',
-        image: require('../assets/landingPageImages/carousel_five.jpg'),
+        image: require('../assets/landingPageImages/carousel_five.webp'),
     },
     {
         title: 'General Support',
-        image: require('../assets/landingPageImages/carousel_six.jpg'),
+        image: require('../assets/landingPageImages/carousel_six.webp'),
     },
 ];
 
