@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { Checkbox } from 'react-native-paper';
+
 
 export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }) {
   const [isScrollEnd, setIsScrollEnd] = useState(false);  // To track if user scrolled to the end
@@ -138,15 +140,16 @@ export default function TermsAndConditions({ isAcknowledged, setIsAcknowledged }
       </ScrollView>
 
       {/* Text-based Toggle for Agreement */}
-      <TouchableOpacity 
-        onPress={handleToggleCheck} 
-        style={styles.agreementContainer}
-      >
-        <View style={[styles.indicator, isAcknowledged ? styles.checked : styles.unchecked]} />
+      <View style={styles.agreementContainer}>
+          <Checkbox.Android
+            status={isAcknowledged ? 'checked' : 'unchecked'}
+            color='#34D399' 
+            onPress={handleToggleCheck}
+          />
         <Text style={[styles.label, !isScrollEnd && styles.disabledText]}>
           I have read and understood the document
         </Text>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 }
