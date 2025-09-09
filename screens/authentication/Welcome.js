@@ -9,6 +9,7 @@ import { BannerData } from '../../data/BannerData';
 import Banner from '../../components/Banner/Banner';
 import { useIsFocused } from '@react-navigation/native';
 import Spacer from '../../components/Spacer';
+import CarouselComponent from '../../components/Carousel';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,9 +49,7 @@ const Welcome = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.scrollImage}>
-        {useIsFocused() && <Banner data={BannerData} />}
-      </View>
+      <CarouselComponent />
 
       <View style={styles.content}>
         <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam For All</Text>
