@@ -90,7 +90,9 @@ export default function Profile({ signOut }) {
 
   const [profileData, setProfileData] = useState(null);
   useEffect(() => {
-    getUser();
+    return navigation.addListener("focus", () => {
+      getUser();
+    });
   }, []);
 
   useEffect(() => {
