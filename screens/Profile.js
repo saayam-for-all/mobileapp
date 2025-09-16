@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import Auth from "@aws-amplify/auth";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icons
 import api from "../components/api";
@@ -90,7 +90,9 @@ export default function Profile({ signOut }) {
 
   const [profileData, setProfileData] = useState(null);
   useEffect(() => {
-    getUser();
+    return navigation.addListener('focus', () => {
+      getUser();
+    });
   }, []);
 
   useEffect(() => {
@@ -126,13 +128,14 @@ export default function Profile({ signOut }) {
 
   const getUser = async () => {
       try {
-        const user = await Auth.currentAuthenticatedUser();
+        const userAttributes = await fetchUserAttributes();
+        console.log(userAttributes);
         setUserName(
-          user.attributes.given_name + " " + user.attributes.family_name
+          userAttributes.given_name + " " + userAttributes.family_name
         );
-        setEmail(user.attributes.email);
-        setPhone(user.attributes.phone_number);
-        setCountry(user.attributes["custom:Country"]);
+        setEmail(userAttributes.email);
+        setPhone(userAttributes.phone_number);
+        setCountry(userAttributes["custom:Country"]);
       } catch (err) {
         //signOut();  // If error getting user then signout
         Alert.alert( // show alert to signout

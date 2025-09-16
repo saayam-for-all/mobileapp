@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'; // Using vector icons
-import Auth from '@aws-amplify/auth';
+import { fetchUserAttributes, updatePassword } from 'aws-amplify/auth';
 
 export default function ChangePassword() {
   const [user, setUser] = useState(null);
@@ -18,7 +18,7 @@ export default function ChangePassword() {
 
   const getUser = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const user = await fetchUserAttributes();
       setUser(user);
     } catch (err) {
       //signOut();  // If error getting user then signout
@@ -79,12 +79,20 @@ export default function ChangePassword() {
       if (!user) {
         await getUser();
       }
-        const data = await Auth.changePassword(user, oldPassword, password)
-          .then(obj=>{console.log("Success: ",obj)})
-          .catch(err=> {
-            error = true;
-            errorMessage = String(err);
-          });
+      try {
+        await updatePassword({
+          oldPassword: oldPassword,
+          newPassword: password,
+        });
+
+        setOldPassword("");
+        setPassword("");
+        setConfirmPassword("");
+        console.log("Password updated successfully");
+      } catch (err) {
+        error = true;
+        errorMessage = String(err);
+      }
     }
     logError(error, errorMessage);
   }

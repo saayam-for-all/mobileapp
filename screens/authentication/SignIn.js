@@ -10,7 +10,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import Auth from "@aws-amplify/auth";
+import { signIn as amplifySignIn } from "aws-amplify/auth";
 import Button from "../../components/Button";
 import Spacer from "../../components/Spacer";
 import Input from "../../components/Input";
@@ -114,25 +114,17 @@ export default function SignIn({ navigation, signIn: signInCb }) {
 
   const signIn = async () => {
     if (email.length > 4 && password.length > 2) {
-      await Auth.signIn(email, password)
-        .then((user) => {
-          signInCb(user);
+      await amplifySignIn({ username: email, password })
+        .then((result) => {
+          if (!result?.isSignedIn) {
+            
+          } else {
+            signInCb(result);
+          }
         })
         .catch((err) => {
-          if (!err.message) {
-            console.log("Error when signing in: ", err);
-            Alert.alert("Error when signing in: ", err);
-          } else {
-            if (err.code === "UserNotConfirmedException") {
-              console.log("User not confirmed");
-              navigation.navigate("Confirmation", {
-                email,
-              });
-            }
-            if (err.message) {
-              setErrorMessage(err.message);
-            }
-          }
+          console.log("Error when signing in: ", err);
+          setErrorMessage("Provide a valid email and password");
         });
     } else {
       setErrorMessage("Provide a valid email and password");
@@ -221,7 +213,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       </View>
       <Spacer size={40} />
       <Text style={styles.signupText}>
-        Don’t have an account?{" "}
+        Don't have an account?{" "}
         <Text
           style={styles.signupLink}
           onPress={() => navigation.navigate("SignUp")}

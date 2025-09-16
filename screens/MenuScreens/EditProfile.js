@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { fetchUserAttributes, updateUserAttributes, getCurrentUser } from 'aws-amplify/auth';
 
 const EditProfile = () => {
   const [user, setUser] = useState(undefined);
@@ -17,28 +17,34 @@ const EditProfile = () => {
 
   const navigation = useNavigation();
 
-  useEffect(()=>{
-    Auth.currentAuthenticatedUser().then((user)=>{
-      setUser(user);
-      const attributes = user?.attributes;
-      const {email, family_name, given_name, phone_number} = attributes;
+  useEffect(() => {
+    fetchUserAttributes().then((attributes) => {
+      const { email, family_name, given_name, phone_number } = attributes;
       setFirstName(given_name);
       setLastName(family_name);
       setPrimaryEmail(email);
       setPrimaryPhoneNumber(phone_number);
+    }).catch((error) => {
+      console.log('Error getting current user:', error);
     });
     setNeedVerification(false);
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
-        email: user?.attributes?.email, 
-        isUpdate: true
+        email: user?.attributes?.email,
+        isUpdate: true, 
+        toUpdate: {
+          email: primaryEmail,
+          family_name: lastName,
+          given_name: firstName,
+          phone_number: primaryPhoneNumber
+        }
       });
       setNeedVerification(false);
     }
-  },[needVerification]);
+  }, [needVerification]);
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -76,43 +82,53 @@ const EditProfile = () => {
     return true;
   };
 
-  const removeFirstTime = async (user) => {
-    const username = user?.attributes?.email;
-    if(username) {
+  const removeFirstTime = async () => {
+    const user = await getCurrentUser();
+    const username = user?.userId;
+    if (username) {
       AsyncStorage.removeItem(username);
     }
   }
 
-  async function updateUser(user) {
+  async function updateUserProfile(attributes) {
     try {
-      const result = await Auth.updateUserAttributes(user, {
-        email: primaryEmail,
-        family_name: lastName, 
-        given_name: firstName,
-        phone_number: primaryPhoneNumber
-      });
-      // If Primary Email was changed, direct user to send confirmation code
-      // v5 doesn't return detailed response in updateUserAttributes, have to write the logic mannually
-      console.log("New Email: ",primaryEmail);
-      console.log("Original Email: ", user?.attributes?.email);
-      if (primaryEmail != user?.attributes?.email) {
-        console.log("Needs verification");
-        console.log(needVerification);
-        setNeedVerification(true); // Then users would be redirected to enter confirmation code
-        return;
+      const emailChanged = attributes?.email != primaryEmail;
+      // If Email not changed, directly update
+      if (!emailChanged) {
+        await updateUserAttributes({
+          userAttributes: {
+            email: primaryEmail,
+            family_name: lastName,
+            given_name: firstName,
+            phone_number: primaryPhoneNumber
+          }
+        });
+        Alert.alert('Success', 'Profile updated successfully.');
       }
-      Alert.alert('Success', 'Profile updated successfully.');
-      removeFirstTime(user);
+      // If Email changed, send verification, wait until user confirms, then update everythin
+      else {
+        console.log("Needs verification");
+        try {
+          await updateUserAttributes({ userAttributes: { email: primaryEmail } });
+          setNeedVerification(true); // Then users would be redirected to enter confirmation code
+        } catch (err) {
+          Alert.alert("Send Verification Email Error", err.message);
+          return;
+        }
+      }
+      removeFirstTime();
     } catch (err) {
       Alert.alert('User Update Error', err.message);
+      return;
     }
   }
+
   const handleUpdateProfile = async () => {
     if (validateForm()) {
-      const user = await Auth.currentAuthenticatedUser();
+      const attributes = await fetchUserAttributes();
       // Proceed with the profile update logic here
-      const updateResult = await updateUser(user);
-      removeFirstTime(user);
+      await updateUserProfile(attributes);
+      removeFirstTime();
     }
   };
 

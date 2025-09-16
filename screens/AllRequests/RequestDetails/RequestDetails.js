@@ -14,7 +14,7 @@ import {
   FlatList,
 } from "react-native";
 import Markdown from 'react-native-markdown-display';
-import Auth from "@aws-amplify/auth";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   AntDesign,
@@ -691,9 +691,9 @@ export default function RequestDetails({ signOut }) {
 
   const getUser = async () => {
     try {
-      const user = await Auth.currentUserInfo();
+      const userAttributes = await fetchUserAttributes();
       setUserName(
-        user.attributes.given_name + " " + user.attributes.family_name
+        userAttributes.given_name + " " + userAttributes.family_name
       );
     } catch (err) {
       //signOut();  // If error getting usern then signout

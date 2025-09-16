@@ -3,7 +3,6 @@ import {
   Text, View, StyleSheet, SafeAreaView, Linking,
 } from 'react-native';
 import Button from '../../components/Button';
-import Auth from '@aws-amplify/auth';
 import Header from '../../components/Header';
 import { BannerData } from '../../data/BannerData';
 import Banner from '../../components/Banner/Banner';

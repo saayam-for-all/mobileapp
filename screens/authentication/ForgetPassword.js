@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { resetPassword, confirmResetPassword } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Spacer from '../../components/Spacer';
@@ -31,8 +31,9 @@ function ForgetPassword({ navigation }) {
 
   const getConfirmationCode = async () => {
     if (email.length > 4) {
-      Auth.forgotPassword(email)
-        .then(() => {
+      resetPassword({ username: email })
+        .then((res) => {
+          console.log(res);
           setEditableInput(true);
           setConfirmationStep(true);
           setErrorMessage('');
@@ -48,7 +49,11 @@ function ForgetPassword({ navigation }) {
   };
 
   const postNewPassword = async () => {
-    Auth.forgotPasswordSubmit(email, code, newPassword)
+    confirmResetPassword({ 
+      username: email, 
+      confirmationCode: code, 
+      newPassword: newPassword 
+    })
       .then(() => {
         setErrorMessage('');
         navigation.navigate('SignIn');

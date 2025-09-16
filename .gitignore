@@ -34,4 +34,6 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# AWS Amplify
 aws-exports.js
+amplifyconfiguration*

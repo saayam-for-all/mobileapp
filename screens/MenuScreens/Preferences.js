@@ -1,13 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Checkbox } from 'react-native-paper';
-import Auth from '@aws-amplify/auth';
+import { fetchUserAttributes } from 'aws-amplify/auth';
 
 const Preferences = () => {
-    const [user, setUser] = useState(undefined);
+    const [attributes, setAttributes] = useState({});
     const defaultDefaultDashboardView = { 
         label: 'Default Dashboard View', 
         value: 'default' 
@@ -51,17 +51,19 @@ const Preferences = () => {
 
     const navigation = useNavigation();
 
-    useEffect(()=>{
-        Auth.currentAuthenticatedUser().then((user)=>{
-            setUser(user);
-            setPrimaryPhone(user.attributes.phone_number);
+    useEffect(() => {
+        fetchUserAttributes().then((attributes) => {
+            setAttributes(attributes);
+            setPrimaryPhone(attributes.phone_number);
             setSecondaryPhone('1111111111');
-            setPrimaryEmail(user.attributes.email);
+            setPrimaryEmail(attributes.email);
             setSecondaryEmail('secondary@email.com');
+        }).catch((error) => {
+            console.log('Error getting current user attributes:', error);
         });
-    },[]);
+    }, []);
 
-    async function updatePreferences(user) {
+    async function updatePreferences(attributes) {
         
     }
 

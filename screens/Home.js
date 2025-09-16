@@ -17,7 +17,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import Auth from "@aws-amplify/auth";
+import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import api from "../components/api";
 //import { Dimensions } from 'react-native';
 //const { width, height } = Dimensions.get("window");
@@ -155,27 +155,26 @@ export default function Home({ signOut }) {
 
   const getGroup = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
+      const session = await fetchAuthSession();
       const userGroup =
-        user.signInUserSession.accessToken.payload["cognito:groups"];
+        session.tokens?.accessToken?.payload["cognito:groups"];
       //console.log('user group', userGroup)
-      if (userGroup.includes(volunteer)) {
+      if (userGroup && userGroup.includes(volunteer)) {
         setVolunteer(true);
       } 
        //Refresh token 
-      const currentSession = await Auth.currentSession();
-      user.refreshSession(currentSession.refreshToken, (err, session) => {
-      //console.log('session', err, session);
-       const { idToken, refreshToken, accessToken } = session; });
+      const refreshedSession = await fetchAuthSession({ forceRefresh: true });
+      //console.log('session', refreshedSession);
+      const { idToken, refreshToken, accessToken } = refreshedSession.tokens || {};
        //console.log('group');
     } catch (error) {
       console.log("error getting group", error);
     }
   }
   const getFirstTime = async () => {
-    const user = await Auth.currentAuthenticatedUser();
+    const user = await getCurrentUser();
     //console.log(user.attributes.email)
-    const username = user?.attributes?.email;
+    const username = user?.userId;
     if(username) {
       AsyncStorage.getItem(username).then(item=>{
         const ft = JSON.parse(item);

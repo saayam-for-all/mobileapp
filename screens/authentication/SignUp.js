@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import {
   View, StyleSheet, Text, Alert
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { signUp } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Spacer from '../../components/Spacer';
 import Input from '../../components/Input';
@@ -61,7 +61,7 @@ export default function SignUp({ navigation }) {
     phone: 'Phone number must be valid numeric values.'
   }
 
-  const signUp = async () => {
+  const signUpUser = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
     let errorMessage = null;
     let hasError = false;
@@ -72,24 +72,25 @@ export default function SignUp({ navigation }) {
     console.log(allInputsFilled);
     if (validPassword && emailValid && isPhoneValid && allInputsFilled) {
       setInvalidMessage(null);
-      Auth.signUp({
+      signUp({
         username: email, 
         password,
-        attributes: {
-          email, // optional
-          given_name: name,
-          // country_code, // later added to db
-          "custom:Country": country_name,
-          phone_number: full_phone, // later changed into phone without country code
-          //zoneinfo,
-          family_name: lastName
-        },
-        validationData: [], // optional
+        options: {
+          userAttributes: {
+            email, // optional
+            given_name: name,
+            // country_code, // later added to db
+            "custom:Country": country_name,
+            phone_number: full_phone, // later changed into phone without country code
+            //zoneinfo,
+            family_name: lastName
+          }
+        }
       })
         .then((data) => {
-          console.log(data?.user?.username);
-          if(data?.user?.username){
-            AsyncStorage.setItem(data?.user?.username, JSON.stringify(true))
+          console.log(data?.userId);
+          if(data?.userId){
+            AsyncStorage.setItem(data?.userId, JSON.stringify(true))
           }
           console.log('navigation: ', navigation);
           navigation.navigate('Confirmation', { email });
@@ -274,7 +275,7 @@ export default function SignUp({ navigation }) {
       <Spacer size={40}/>
       <Button
         style={{width: '96%', marginHorizontal: '3%'}}
-        onPress={() => signUp()}
+        onPress={() => signUpUser()}
       >
         Sign Up
       </Button>

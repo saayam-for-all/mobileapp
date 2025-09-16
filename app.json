@@ -12,16 +12,26 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.john0329.SaayamMobileApp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.john0329.SaayamMobileApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5e2bffd6-d3bb-4dd2-a252-f5ef841b7765"
+      }
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }

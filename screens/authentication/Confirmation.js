@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
   View, StyleSheet, Text,
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { confirmSignUp, confirmUserAttribute, updateUserAttributes } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,15 +29,19 @@ const styles = StyleSheet.create({
 });
 
 
-const Confirmation = ({ route, navigation, isUpdate=false }) => {
+const Confirmation = () => {
   const [authCode, setAuthCode] = useState('');
   const [error, setError] = useState(' ');
+  const route = useRoute();
+  const navigation = useNavigation();
+  const isUpdate = route.params.isUpdate;
+  const toUpdate = route.params.toUpdate;
   const email = !isUpdate ? route.params.email : "";
   const nav = useNavigation();
 
-  const confirmSignUp = async () => {
+  const confirmSignUpPress = async () => {
     if (authCode.length > 0) {
-      await Auth.confirmSignUp(email, authCode)
+      await confirmSignUp({ username: email, confirmationCode: authCode })
         .then(() => {
           navigation.navigate('SignIn');
         })
@@ -52,24 +56,32 @@ const Confirmation = ({ route, navigation, isUpdate=false }) => {
       setError('You must enter confirmation code');
     }
   };
-  const confirmUpdate = async () => {
+  const confirmUpdatePress = async () => {
     if (authCode.length > 0) {
-      await Auth.verifyCurrentUserAttributeSubmit(
-        'email',
-        authCode
-      )
-        .then(() => {
-          nav.navigate('EditProfile');
-        })
-        .catch((err) => {
-          if (!err.message) {
-            setError('Something went wrong, please contact support!');
-          } else {
-            setError(err.message);
-          }
+      try {
+        await confirmUserAttribute({
+          userAttributeKey: 'email',
+          confirmationCode: authCode
         });
+        await updateUserAttributes({userAttributes: toUpdate});
+        navigation.navigate('Profile');
+      } catch (err) {
+        if (!err.message) {
+          setError('Something went wrong, please contact support!');
+        } else {
+          setError(err.message);
+        }
+      }
     } else {
       setError('You must enter confirmation code');
+    }
+  }
+
+  const confirm = async () => {
+    if (!isUpdate) {
+      await confirmSignUpPress();
+    } else {
+      await confirmUpdatePress();
     }
   }
 
@@ -81,7 +93,7 @@ const Confirmation = ({ route, navigation, isUpdate=false }) => {
         placeholder="123456"
         onChange={(text) => setAuthCode(text)}
       />
-      <Button style={{width:'94%', margin:'3%'}} onPress={() => confirmSignUp()}>{!isUpdate ? 'Confirm Sign Up' : 'Confirm Email'}</Button>
+      <Button style={{width:'94%', margin:'3%'}} onPress={() => confirm()}>{!isUpdate ? 'Confirm Sign Up' : 'Confirm Email'}</Button>
       <Text>{error}</Text>
     </View>
   );

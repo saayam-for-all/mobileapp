@@ -97,7 +97,7 @@ export default function App({ signOut }) {
       <AppStack.Screen name="Admin" component={AdminPanel} 
         options={{ title: 'Administration' }}/>
       <AppStack.Screen name="ConfirmUpdate" options={{ headerShown: false }}>
-        {() => <Confirmation isUpdate={true}/>}
+        {() => <Confirmation />}
       </AppStack.Screen>
     </AppStack.Navigator>
   );
