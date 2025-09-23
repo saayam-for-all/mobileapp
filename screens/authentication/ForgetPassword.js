@@ -4,6 +4,9 @@ import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Spacer from '../../components/Spacer';
+//import Ionicons from 'react-native-vector-icons/Ionicons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons'; 
+import { TouchableOpacity } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +30,9 @@ function ForgetPassword({ navigation }) {
   const [confirmationStep, setConfirmationStep] = useState(false);
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const getConfirmationCode = async () => {
     if (email.length > 4) {
@@ -48,6 +53,11 @@ function ForgetPassword({ navigation }) {
   };
 
   const postNewPassword = async () => {
+
+    if (newPassword !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
+      return;
+    }
     Auth.forgotPasswordSubmit(email, code, newPassword)
       .then(() => {
         setErrorMessage('');
@@ -94,13 +104,32 @@ function ForgetPassword({ navigation }) {
             <Text style={{marginHorizontal:'3%'}}>New Password</Text>
             <Spacer size={20} />
           </View>
+          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
           <Input
             value={newPassword}
             placeholder="password"
             onChange={(text) => setNewPassword(text)}
-            secureTextEntry
+            secureTextEntry={!showPassword}
             autoCompleteType="password"
+            style={{ flex: 1 }}
           />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+          </TouchableOpacity>
+          </View>
+          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
+          <Input
+            value={confirmPassword}
+            placeholder="password"
+            onChange={(text) => setConfirmPassword(text)}
+            secureTextEntry={!showPassword}
+            autoCompleteType="password"
+            style={{ flex: 1 }}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+          </TouchableOpacity>
+          </View>
           <Button
             style={{width: '94%', margin: '3%'}}
             onPress={() => postNewPassword()}
