@@ -10,6 +10,7 @@ import Banner from '../../components/Banner/Banner';
 import { useIsFocused } from '@react-navigation/native';
 import Spacer from '../../components/Spacer';
 import CarouselComponent from '../../components/Carousel';
+import config from '../../components/config';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,9 +46,9 @@ const styles = StyleSheet.create({
 });
 
 const Welcome = ({ navigation }) => {
-
+  const topOffset = Math.round(config.deviceHeight * 0.03);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container , { marginTop: topOffset }]}>
       <Header />
       <CarouselComponent />
 
