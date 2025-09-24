@@ -34,7 +34,13 @@ const EditProfile = () => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
         email: user?.attributes?.email, 
-        isUpdate: true
+        isUpdate: true, 
+        toUpdate: {
+          email: primaryEmail,
+          family_name: lastName,
+          given_name: firstName,
+          phone_number: primaryPhoneNumber
+        }
       });
       setNeedVerification(false);
     }
