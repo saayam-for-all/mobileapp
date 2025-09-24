@@ -37,3 +37,7 @@ yarn-error.*
 # AWS Amplify
 aws-exports.js
 amplifyconfiguration*
+
+# Expo Build
+android/
+ios/
