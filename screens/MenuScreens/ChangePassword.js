@@ -3,9 +3,9 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'; // Using vector icons
 import Auth from '@aws-amplify/auth';
+import useAuthUser from '../../hooks/useAuthUser';
 
 export default function ChangePassword() {
-  const [user, setUser] = useState(null);
   const [secureEntry, setSecureEntry] = useState([true,true,true]);
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
@@ -15,27 +15,8 @@ export default function ChangePassword() {
   const [logPasswordValid, setLogPasswordValid] = useState([false, false]);
 
   const navigation = useNavigation();
+  const user = useAuthUser(navigation);
 
-  const getUser = async () => {
-    try {
-      const user = await Auth.currentAuthenticatedUser();
-      setUser(user);
-    } catch (err) {
-      //signOut();  // If error getting user then signout
-      Alert.alert( // show alert to signout
-        "Alert", // Title
-        "Session timeout. Please sign in again", // Message
-        [            
-          {
-            text: "Logout",
-            onPress: () => signOut(),
-            style: "destructive", 
-          },
-        ],
-      );  
-      console.log("error from cognito : ", err);
-    }
-  };
   const toggleSecureEntry = (ind) => {
     setSecureEntry(
       secureEntry.map((ele,i)=>{
@@ -76,22 +57,15 @@ export default function ChangePassword() {
       error = true;
       errorMessage = "Please make sure all inputs satisfy the requirement";
     } else {
-      if (!user) {
-        await getUser();
-      }
-        const data = await Auth.changePassword(user, oldPassword, password)
-          .then(obj=>{console.log("Success: ",obj)})
-          .catch(err=> {
-            error = true;
-            errorMessage = String(err);
-          });
+      const data = await Auth.changePassword(user, oldPassword, password)
+        .then(obj=>{console.log("Success: ",obj)})
+        .catch(err=> {
+          error = true;
+          errorMessage = String(err);
+        });
     }
     logError(error, errorMessage);
   }
-
-  useEffect(()=>{
-    getUser();
-  }, [])
 
   return (
     <View style={styles.container}>
@@ -171,6 +145,7 @@ export default function ChangePassword() {
 
       <TouchableOpacity 
         style={styles.button}
+        disabled={!user}
         onPress={changePassword}
       >
         <Text style={styles.buttonText}>Change Password</Text>

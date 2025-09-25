@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import Auth from '@aws-amplify/auth';
+import useAuthUser from '../../hooks/useAuthUser';
 
 const EditProfile = () => {
-  const [user, setUser] = useState(undefined);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
@@ -16,25 +16,27 @@ const EditProfile = () => {
   const [needVerification, setNeedVerification] = useState(false);
 
   const navigation = useNavigation();
+  const user = useAuthUser(navigation, (user) => {
+    const attributes = user?.attributes;
+    const {email, family_name, given_name, phone_number} = attributes;
+    setFirstName(given_name);
+    setLastName(family_name);
+    setPrimaryEmail(email);
+    setPrimaryPhoneNumber(phone_number);
+  });
 
   useEffect(()=>{
-    Auth.currentAuthenticatedUser().then((user)=>{
-      setUser(user);
-      const attributes = user?.attributes;
-      const {email, family_name, given_name, phone_number} = attributes;
-      setFirstName(given_name);
-      setLastName(family_name);
-      setPrimaryEmail(email);
-      setPrimaryPhoneNumber(phone_number);
-    });
-    setNeedVerification(false);
-  },[]);
-
-  useEffect(()=>{
+    // Pass new info to confirmation page, change only if code correct
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
         email: user?.attributes?.email, 
-        isUpdate: true
+        isUpdate: true, 
+        toUpdate: {
+          email: primaryEmail,
+          family_name: lastName,
+          given_name: firstName,
+          phone_number: primaryPhoneNumber
+        }
       });
       setNeedVerification(false);
     }
@@ -85,21 +87,20 @@ const EditProfile = () => {
 
   async function updateUser(user) {
     try {
-      const result = await Auth.updateUserAttributes(user, {
-        email: primaryEmail,
-        family_name: lastName, 
-        given_name: firstName,
-        phone_number: primaryPhoneNumber
-      });
-      // If Primary Email was changed, direct user to send confirmation code
-      // v5 doesn't return detailed response in updateUserAttributes, have to write the logic mannually
-      console.log("New Email: ",primaryEmail);
-      console.log("Original Email: ", user?.attributes?.email);
+      // If Primary Email was changed, not change, direct user to enter confirmation code
       if (primaryEmail != user?.attributes?.email) {
         console.log("Needs verification");
-        console.log(needVerification);
         setNeedVerification(true); // Then users would be redirected to enter confirmation code
         return;
+      } 
+      // If Primary Email was not changed, update user attributes
+      else {
+        await Auth.updateUserAttributes(user, {
+          email: primaryEmail,
+          family_name: lastName, 
+          given_name: firstName,
+          phone_number: primaryPhoneNumber
+        });
       }
       Alert.alert('Success', 'Profile updated successfully.');
       removeFirstTime(user);
@@ -109,7 +110,6 @@ const EditProfile = () => {
   }
   const handleUpdateProfile = async () => {
     if (validateForm()) {
-      const user = await Auth.currentAuthenticatedUser();
       // Proceed with the profile update logic here
       const updateResult = await updateUser(user);
       removeFirstTime(user);

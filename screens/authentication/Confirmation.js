@@ -55,15 +55,21 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
   };
 
   const confirmUpdate = async () => {
-    if (code.length === CODE_LENGTH) {
+    if (authCode.length === CODE_LENGTH) {
       try {
+        const user = await Auth.currentAuthenticatedUser();
         await Auth.verifyCurrentUserAttributeSubmit('email', code);
-        nav.navigate('EditProfile');
+        await Auth.updateUserAttributes(user, toUpdate);
+        navigation.navigate('Profile');
       } catch (err) {
-        setError(err.message || 'Something went wrong, please contact support!');
+        if (!err.message) {
+          setError('Something went wrong, please contact support!');
+        } else {
+          setError(err.message);
+        }
       }
     } else {
-      setError(`Please enter all ${CODE_LENGTH} digits`);
+      setError('You must enter confirmation code');
     }
   };
 
