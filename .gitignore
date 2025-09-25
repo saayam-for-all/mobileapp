@@ -41,3 +41,4 @@ amplifyconfiguration*
 # Expo Build
 android/
 ios/
+build-*

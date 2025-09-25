@@ -102,8 +102,8 @@ const AllRequests = ({ data }) => {
         data={filteredData}
         renderItem={({ item }) => (
           <View style={styles.reqData}>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold" }}>
+            <View style={{ flexDirection: "row" }} >
+              <Text style={{ fontWeight: "bold" }} onPress={() => {navigation.navigate("RequestDetails", { item, reqTitle: item.id} )}}>
                 {" "}
                 Id : {item.id}{" "}
               </Text>
