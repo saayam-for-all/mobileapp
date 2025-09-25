@@ -22,6 +22,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
+   errorText: {
+    color: 'red',
+    marginTop: 12,
+    marginHorizontal: '3%',
+    width: '94%',
+  },
 });
 
 function ForgetPassword({ navigation }) {
@@ -138,7 +144,7 @@ function ForgetPassword({ navigation }) {
           </Button>
         </>
       )}
-      <Text>{errorMessage}</Text>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
   );
 }
