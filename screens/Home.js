@@ -27,6 +27,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import config from "../components/config";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAuthUser from "../hooks/useAuthUser";
 
 const styles = StyleSheet.create({
   container: {
@@ -152,10 +153,14 @@ export default function Home({ signOut }) {
   const Tab = createBottomTabNavigator();
   const [userVolunteer, setVolunteer] = useState(false);
   const volunteer = "Volunteers";
+  const user = useAuthUser(navigation, (user) => {
+    getGroup(user);
+    getFirstTime(user);
+    // getData(); //uncomment this to test api url
+  });
 
-  const getGroup = async () => {
+  const getGroup = async (user) => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
       const userGroup =
         user.signInUserSession.accessToken.payload["cognito:groups"];
       //console.log('user group', userGroup)
@@ -166,14 +171,14 @@ export default function Home({ signOut }) {
       const currentSession = await Auth.currentSession();
       user.refreshSession(currentSession.refreshToken, (err, session) => {
       //console.log('session', err, session);
-       const { idToken, refreshToken, accessToken } = session; });
+       const { idToken, refreshToken, accessToken } = session; 
+      });
        //console.log('group');
     } catch (error) {
       console.log("error getting group", error);
     }
   }
-  const getFirstTime = async () => {
-    const user = await Auth.currentAuthenticatedUser();
+  const getFirstTime = async (user) => {
     //console.log(user.attributes.email)
     const username = user?.attributes?.email;
     if(username) {
@@ -199,11 +204,6 @@ export default function Home({ signOut }) {
       
     }
   }
-  useEffect(() => {  //Get user's role/group
-    getGroup(); 
-    getFirstTime();
-   //getData(); //uncomment this to test api url
-  }, []);
 
   const getData = async () => {
     //test the deplyed api

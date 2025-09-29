@@ -15,6 +15,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icon
 import api from "../components/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useAuthUser from "../hooks/useAuthUser";
 
 const styles = StyleSheet.create({
   container: {
@@ -89,9 +90,14 @@ export default function Profile({ signOut }) {
   const [country, setCountry] = useState('');
 
   const [profileData, setProfileData] = useState(null);
-  useEffect(() => {
-    getUser();
-  }, []);
+  useAuthUser(navigation, (user) => {
+    setUserName(
+      user.attributes.given_name + " " + user.attributes.family_name
+    );
+    setEmail(user.attributes.email);
+    setPhone(user.attributes.phone_number);
+    setCountry(user.attributes["custom:Country"]);
+  })
 
   useEffect(() => {
     const getImage = async () => {      
@@ -123,32 +129,6 @@ export default function Profile({ signOut }) {
       { cancelable: true }
     );
   };
-
-  const getUser = async () => {
-      try {
-        const user = await Auth.currentAuthenticatedUser();
-        setUserName(
-          user.attributes.given_name + " " + user.attributes.family_name
-        );
-        setEmail(user.attributes.email);
-        setPhone(user.attributes.phone_number);
-        setCountry(user.attributes["custom:Country"]);
-      } catch (err) {
-        //signOut();  // If error getting user then signout
-        Alert.alert( // show alert to signout
-              "Alert", // Title
-              "Session timeout. Please sign in again", // Message
-              [            
-                {
-                  text: "Logout",
-                  onPress: () => signOut(),
-                  style: "destructive", 
-                },
-              ],
-            );  
-        console.log("error from cognito : ", err);
-      }
-    };
 
   return (
     <>
@@ -278,6 +258,14 @@ export default function Profile({ signOut }) {
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
         
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate("AccountDeletion")}
+        >
+          <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>Sign Off</Text>
+          <Ionicons name="chevron-forward" size={20} color="#777" />
+        </TouchableOpacity>
 
         <View style={styles.optionRow}>
           <FontAwesome name="bell" size={20} style={styles.optionIcon} />

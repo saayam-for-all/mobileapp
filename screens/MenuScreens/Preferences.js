@@ -1,10 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Checkbox } from 'react-native-paper';
-import Auth from '@aws-amplify/auth';
+
+import useAuthUser from '../../hooks/useAuthUser';
 
 const Preferences = () => {
     const [user, setUser] = useState(undefined);
@@ -50,16 +50,13 @@ const Preferences = () => {
     ];
 
     const navigation = useNavigation();
-
-    useEffect(()=>{
-        Auth.currentAuthenticatedUser().then((user)=>{
-            setUser(user);
-            setPrimaryPhone(user.attributes.phone_number);
-            setSecondaryPhone('1111111111');
-            setPrimaryEmail(user.attributes.email);
-            setSecondaryEmail('secondary@email.com');
-        });
-    },[]);
+    useAuthUser(navigation, (user) => {
+        setUser(user);
+        setPrimaryPhone(user.attributes.phone_number);
+        setSecondaryPhone('1111111111');
+        setPrimaryEmail(user.attributes.email);
+        setSecondaryEmail('secondary@email.com');
+    });
 
     async function updatePreferences(user) {
         

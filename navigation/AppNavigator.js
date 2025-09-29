@@ -25,6 +25,7 @@ import Confirmation from '../screens/authentication/Confirmation';
 import Skills from '../screens/MenuScreens/Skills';
 import Availability from '../screens/MenuScreens/Availability';
 import Preferences from '../screens/MenuScreens/Preferences';
+import AccountDeletion from '../screens/MenuScreens/AccountDeletion';
 import IdentityDocument from '../screens/MenuScreens/IdentityDocument';
 
 const AppStack = createStackNavigator();
@@ -76,6 +77,9 @@ export default function App({ signOut }) {
       </AppStack.Screen>
       <AppStack.Screen name="Preferences" options={{ title: 'Preferences' }}>
         {() => <Preferences signOut={signOut} />}
+      </AppStack.Screen>
+      <AppStack.Screen name="AccountDeletion" options={{ title: 'Sign Off' }}>
+        {() => <AccountDeletion signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="PrivacyPolicy" options={{ title: 'Privacy Policy' }}>
         {() => <PrivacyPolicy signOut={signOut} />}
