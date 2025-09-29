@@ -14,6 +14,8 @@ const EditProfile = () => {
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
   const [zone, setZone] = useState('');
   const [needVerification, setNeedVerification] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [backupProfile, setBackupProfile] = useState({});
 
   const navigation = useNavigation();
 
@@ -26,6 +28,16 @@ const EditProfile = () => {
       setLastName(family_name);
       setPrimaryEmail(email);
       setPrimaryPhoneNumber(phone_number);
+
+       setBackupProfile({
+        firstName: given_name,
+        lastName: family_name,
+        primaryEmail: email,
+        primaryPhoneNumber: phone_number,
+        secondaryEmail: '',
+        secondaryPhoneNumber: '',
+        zone: '',
+      });
     });
     setNeedVerification(false);
   },[]);
@@ -42,7 +54,7 @@ const EditProfile = () => {
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(firstName)) {
       Alert.alert('Invalid Input', 'First Name should contain only letters.');
       return false;
@@ -107,39 +119,68 @@ const EditProfile = () => {
       Alert.alert('User Update Error', err.message);
     }
   }
-  const handleUpdateProfile = async () => {
+
+  const handleSave = async () => {
     if (validateForm()) {
       const user = await Auth.currentAuthenticatedUser();
-      // Proceed with the profile update logic here
-      const updateResult = await updateUser(user);
-      removeFirstTime(user);
+      await updateUser(user);
+
+      // Update backup with new values
+      setBackupProfile({
+        firstName,
+        lastName,
+        primaryEmail,
+        secondaryEmail,
+        primaryPhoneNumber,
+        secondaryPhoneNumber,
+        zone,
+      });
+
+      setIsEditing(false);
     }
   };
 
-  return (
+  const handleCancel = () => {
+    // revert values
+    setFirstName(backupProfile.firstName);
+    setLastName(backupProfile.lastName);
+    setPrimaryEmail(backupProfile.primaryEmail);
+    setSecondaryEmail(backupProfile.secondaryEmail);
+    setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
+    setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
+    setZone(backupProfile.zone);
+
+    setIsEditing(false);
+  };
+
+
+   return (
     <View style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="First Name"
         value={firstName}
         onChangeText={setFirstName}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         value={lastName}
         onChangeText={setLastName}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Primary Email"
         keyboardType="email-address"
         value={primaryEmail}
         onChangeText={setPrimaryEmail}
+        editable={isEditing}
       />
 
       <TextInput
@@ -148,14 +189,16 @@ const EditProfile = () => {
         keyboardType="email-address"
         value={secondaryEmail}
         onChangeText={setSecondaryEmail}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Primary Phone Number"
         keyboardType="phone-pad"
         value={primaryPhoneNumber}
         onChangeText={setPrimaryPhoneNumber}
+        editable={isEditing}
       />
 
       <TextInput
@@ -164,18 +207,31 @@ const EditProfile = () => {
         keyboardType="phone-pad"
         value={secondaryPhoneNumber}
         onChangeText={setSecondaryPhoneNumber}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Zone"
         value={zone}
         onChangeText={setZone}
+        editable={isEditing}
       />
-      
-      <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
-        <Text style={styles.buttonText}>Update Profile</Text>
-      </TouchableOpacity>
+
+      {!isEditing ? (
+        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+          <Text style={styles.buttonText}>Edit</Text>
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -209,10 +265,23 @@ const styles = StyleSheet.create({
     height: 50,
   },
   button: {
-    backgroundColor: '#007BFF',
+    flex: 1,
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  editButton: {
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#3B82F6',
+    marginTop: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',
