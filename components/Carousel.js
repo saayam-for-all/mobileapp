@@ -1,11 +1,12 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
     interpolate,
 } from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
 import config from './config';
 
 const deviceWidth = config.deviceWidth;
@@ -41,11 +42,12 @@ const carouselData = [
 ];
 
 const CarouselComponent = () => {
-    const progress = useSharedValue(0);
+    const carouselRef = useRef(null);
 
     return (
         <View style={styles.carouselContainer}>
             <Carousel
+                ref={carouselRef}
                 width={deviceWidth}
                 height={carouselHeight}
                 autoPlay
@@ -54,9 +56,6 @@ const CarouselComponent = () => {
                 scrollAnimationDuration={800}
                 loop
                 mode="parallax"
-                onProgressChange={(_, absoluteProgress) => {
-                    progress.value = absoluteProgress;
-                }}
                 renderItem={({ item }) => (
                     <View style={styles.slide}>
                         <Image
@@ -71,38 +70,22 @@ const CarouselComponent = () => {
                 )}
             />
 
-            <View style={styles.pagination}>
-                {carouselData.map((_, i) => (
-                    <PaginationDot
-                        key={i}
-                        index={i}
-                        total={carouselData.length}
-                        progress={progress}
-                    />
-                ))}
+           <View style={styles.arrowsContainer}>
+                <TouchableOpacity
+                    onPress={() => carouselRef.current?.scrollTo({ count: -1, animated: true })}
+                >
+                    <Text style={styles.arrowText}>‹</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => carouselRef.current?.scrollTo({ count: 1, animated: true })}
+                >
+                    <Text style={styles.arrowText}>›</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
 };
-
-const PaginationDot = ({ index, total, progress }) => {
-  const animatedStyle = useAnimatedStyle(() => {
-    let current = progress.value;
-
-    let distance = Math.abs(index - (current % total));
-    if (distance > total / 2) {
-      distance = total - distance;
-    }
-
-    const scale = interpolate(distance, [0, 1], [1.1, 0.9], 'clamp');
-    const opacity = interpolate(distance, [0, 1], [1, 0.4], 'clamp');
-
-    return { transform: [{ scale }], opacity };
-  });
-
-  return <Animated.View style={[styles.dot, animatedStyle]} />;
-};
-
 
 const styles = StyleSheet.create({
     carouselContainer: {
@@ -139,18 +122,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
     },
-    pagination: {
+    arrowsContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 8,
+        alignItems: 'center',
+        marginTop: 10,
+        gap: 50,
     },
-    dot: {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        marginHorizontal: 6,
-        backgroundColor: '#342626ff',
+    arrowText: {
+        fontSize: 32,
+        color: '#4B5563',
+        fontWeight: '600',
     },
 });
 
