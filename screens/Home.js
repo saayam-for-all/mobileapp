@@ -208,7 +208,7 @@ export default function Home({ signOut }) {
   const getData = async () => {
     //test the deplyed api
     try {
-      const res = await api.get("/volunteers/v0.0.1/skills");
+      const res = await api.get("/requests/v0.0.1/mockCategoriesAPI");
       console.log("Data from Axios", res.data);
     } catch (error) {
       console.log("data error", error);
