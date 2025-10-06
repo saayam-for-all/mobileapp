@@ -1,6 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+import { getLocales } from "expo-localization";
 
 // Import all namespaced translations
 import enCommon from "./locales/en/common.json";
@@ -141,10 +141,13 @@ import viCommon from "./locales/vi/common.json";
 import viAuth from "./locales/vi/auth.json";
 import viCategories from "./locales/vi/categories.json";
 
+const deviceLanguage = getLocales()[0]?.languageCode || 'en';
+console.log("Device language: ", deviceLanguage);
+
 i18n
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    lng: deviceLanguage,
     fallbackLng: "en",
     // Set default namespace to load
     defaultNS: "common",
