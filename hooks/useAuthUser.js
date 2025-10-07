@@ -3,6 +3,8 @@ import { Alert } from "react-native";
 import { signOut } from "../navigation";
 import Auth from '@aws-amplify/auth';
 
+// TEMPORARY, swtich to redux or context later
+
 // Hook to get the authenticated user when component rerender
 // and run function f with the user as parameter once user is obtained
 
