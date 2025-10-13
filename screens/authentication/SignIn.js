@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   View,
@@ -9,13 +9,18 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import Auth from "@aws-amplify/auth";
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
 import Button from "../../components/Button";
 import Spacer from "../../components/Spacer";
 import Input from "../../components/Input";
 //import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FontAwesome } from '@expo/vector-icons'; 
+
+const CREDENTIALS_KEY = 'saayam_credentials';
 
 const styles = StyleSheet.create({
   container: {
@@ -114,12 +119,130 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const [password, onChangePassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+  const [biometricType, setBiometricType] = useState(null);
+  const [hasStoredCredentials, setHasStoredCredentials] = useState(false);
 
-  const signIn = async () => {
-    if (email.length > 4 && password.length > 2) {
-      await Auth.signIn(email, password)
+  useEffect(() => {
+    checkBiometricAvailability();
+    checkStoredCredentials();
+  }, []);
+
+  const checkBiometricAvailability = async () => {
+    if (Platform.OS === 'ios') {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      const enrolled = await LocalAuthentication.isEnrolledAsync();
+      
+      if (compatible && enrolled) {
+        const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
+        setBiometricAvailable(true);
+        
+        if (types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
+          setBiometricType('Face ID');
+        } else if (types.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
+          setBiometricType('Touch ID');
+        }
+      }
+    }
+  };
+
+  const checkStoredCredentials = async () => {
+    if (Platform.OS === 'ios') {
+      try {
+        const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
+        if (credentials) {
+          setHasStoredCredentials(true);
+        }
+      } catch (error) {
+        console.log('Error checking stored credentials:', error);
+      }
+    }
+  };
+
+  const saveCredentials = async (email, password) => {
+    if (Platform.OS === 'ios') {
+      try {
+        const credentials = JSON.stringify({ email, password });
+        await SecureStore.setItemAsync(CREDENTIALS_KEY, credentials, {
+          keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+        });
+        setHasStoredCredentials(true);
+        console.log('Credentials saved successfully');
+      } catch (error) {
+        console.log('Error saving credentials:', error);
+      }
+    }
+  };
+
+  const getStoredCredentials = async () => {
+    if (Platform.OS === 'ios') {
+      try {
+        const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
+        if (credentials) {
+          return JSON.parse(credentials);
+        }
+      } catch (error) {
+        console.log('Error retrieving credentials:', error);
+      }
+    }
+    return null;
+  };
+
+  const handleBiometricAuth = async () => {
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: `Sign in with ${biometricType}`,
+        fallbackLabel: 'Use passcode',
+        disableDeviceFallback: false,
+      });
+
+      if (result.success) {
+        const credentials = await getStoredCredentials();
+        if (credentials) {
+          // Auto-fill credentials and sign in
+          onChangeEmail(credentials.email);
+          onChangePassword(credentials.password);
+          
+          // Automatically sign in
+          await performSignIn(credentials.email, credentials.password, false);
+        }
+      } else {
+        setErrorMessage('Biometric authentication failed');
+      }
+    } catch (error) {
+      console.log('Biometric auth error:', error);
+      setErrorMessage('Biometric authentication error');
+    }
+  };
+
+  const performSignIn = async (emailToUse, passwordToUse, shouldPromptSave = true) => {
+    if (emailToUse.length > 4 && passwordToUse.length > 2) {
+      setErrorMessage("");
+      await Auth.signIn(emailToUse, passwordToUse)
         .then((user) => {
-          signInCb(user);
+          // On successful sign-in, offer to save credentials if not already saved
+          if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
+            Alert.alert(
+              'Save Password?',
+              `Securely store your password so it's filled automatically the next time you need it.`,
+              [
+                {
+                  text: 'Not Now',
+                  style: 'cancel',
+                  onPress: () => signInCb(user),
+                },
+                {
+                  text: 'Save Password',
+                  onPress: async () => {
+                    await saveCredentials(emailToUse, passwordToUse);
+                    signInCb(user);
+                  },
+                },
+              ]
+            );
+          } else {
+            signInCb(user);
+          }
         })
         .catch((err) => {
           if (!err.message) {
@@ -129,7 +252,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
             if (err.code === "UserNotConfirmedException") {
               console.log("User not confirmed");
               navigation.navigate("Confirmation", {
-                email,
+                email: emailToUse,
               });
             }
             if (err.message) {
@@ -140,6 +263,10 @@ export default function SignIn({ navigation, signIn: signInCb }) {
     } else {
       setErrorMessage("Provide a valid email and password");
     }
+  };
+
+  const signIn = async () => {
+    await performSignIn(email, password, true);
   };
 
   return (
@@ -160,7 +287,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         autoCompleteType="email"
         autoCapitalize="none"
         keyboardType="email-address"
-        autoFocus
+        autoFocus={!hasStoredCredentials}
       />
       <View style={styles.textDescriptionontainer}>
         <Text>Password</Text>
@@ -207,6 +334,14 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       <Button onPress={() => signIn()} style={{ width: '100%' }}>
         Log In
       </Button>
+      <Spacer size={10} />
+      {Platform.OS === 'ios' && biometricAvailable && hasStoredCredentials && (
+        <>
+          <Button onPress={() => handleBiometricAuth()} style={{ width: '100%' }}>
+            Sign in with {biometricType}
+          </Button>
+        </>
+      )}
       {errorMessage && (
         <Text
           style={styles.alertText}
