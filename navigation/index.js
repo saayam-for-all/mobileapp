@@ -7,6 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
 
+let globalSignOutRef = null;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -29,6 +31,7 @@ class AuthLoadingScreen extends React.Component {
 
   async componentDidMount() {
     await this.loadApp();
+    globalSignOutRef = this.signOut;
   }
 
   async loadApp() {
@@ -83,3 +86,4 @@ class AuthLoadingScreen extends React.Component {
 
 
 export default AuthLoadingScreen;
+export const signOut = () => globalSignOutRef?.();

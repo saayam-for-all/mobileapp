@@ -1,3 +1,4 @@
+import './i18n/i18n'
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import 'react-native-get-random-values';

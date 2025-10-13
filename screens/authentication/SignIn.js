@@ -293,14 +293,31 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         <Text>Password</Text>
         <Spacer size={20} />
       </View>
-      <TextInput
-        style={styles.input}
-        value={password}
-        placeholder="Password"
-        onChangeText={(text) => onChangePassword(text)}
-        secureTextEntry
-        autoCompleteType="password"
-      />
+      <View style={{ width: '100%', marginVertical: 10, position: 'relative' }}>
+        <TextInput
+          style={[styles.input, { paddingRight: 40 }]} // add padding to avoid overlap
+          value={password}
+          placeholder="Password"
+          onChangeText={onChangePassword}
+          secureTextEntry={!showPassword}
+          autoCompleteType="password"
+        />
+        <TouchableOpacity
+          onPress={() => setShowPassword(!showPassword)}
+          style={{
+            position: 'absolute',
+            right: 15,
+            top: 0,
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 5,
+          }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+        <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+        </TouchableOpacity>
+      </View>
       <Text
         style={[
           styles.forgotPassword,
@@ -314,7 +331,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity> */}
       <Spacer size={30} />
-      <Button onPress={() => signIn()} style={{width: '100%'}}>
+      <Button onPress={() => signIn()} style={{ width: '100%' }}>
         Log In
       </Button>
       <Spacer size={10} />
@@ -327,18 +344,18 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       )}
       {errorMessage && (
         <Text
-          style = {styles.alertText}
+          style={styles.alertText}
         >
           {errorMessage}
         </Text>
       )}
       <Spacer size={40} />
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <View style={{flex: 1, height: 1, backgroundColor: '#6B7280'}} />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: '#6B7280' }} />
         <View>
-          <Text style={{width: 50, textAlign: 'center', ...styles.orText}}>Or With</Text>
+          <Text style={{ width: 50, textAlign: 'center', ...styles.orText }}>Or With</Text>
         </View>
-        <View style={{flex: 1, height: 1, backgroundColor: '#6B7280'}} />
+        <View style={{ flex: 1, height: 1, backgroundColor: '#6B7280' }} />
       </View>
       {/* <Text style={styles.orText}>Or with</Text> */}
       <View style={styles.socialButtonsContainer}>

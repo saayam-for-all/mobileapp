@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Auth from '@aws-amplify/auth';
+import useAuthUser from '../../hooks/useAuthUser';
 
 const EditProfile = () => {
-  const [user, setUser] = useState(undefined);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
@@ -14,35 +14,66 @@ const EditProfile = () => {
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
   const [zone, setZone] = useState('');
   const [needVerification, setNeedVerification] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [backupProfile, setBackupProfile] = useState({});
 
   const navigation = useNavigation();
+  const user = useAuthUser(navigation, (user) => {
+    const attributes = user?.attributes;
+    const { email, family_name, given_name, phone_number } = attributes;
+    setFirstName(given_name);
+    setLastName(family_name);
+    setPrimaryEmail(email);
+    setPrimaryPhoneNumber(phone_number);
+  });
 
-  useEffect(()=>{
-    Auth.currentAuthenticatedUser().then((user)=>{
-      setUser(user);
-      const attributes = user?.attributes;
-      const {email, family_name, given_name, phone_number} = attributes;
-      setFirstName(given_name);
-      setLastName(family_name);
-      setPrimaryEmail(email);
-      setPrimaryPhoneNumber(phone_number);
-    });
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        const attributes = user?.attributes;
+        const { email, family_name, given_name, phone_number } = attributes;
+
+        const profileData = {
+          firstName: given_name || '',
+          lastName: family_name || '',
+          primaryEmail: email || '',
+          primaryPhoneNumber: phone_number || '',
+          secondaryEmail: '',
+          secondaryPhoneNumber: '',
+          zone: '',
+        };
+
+        setFirstName(profileData.firstName);
+        setLastName(profileData.lastName);
+        setPrimaryEmail(profileData.primaryEmail);
+        setPrimaryPhoneNumber(profileData.primaryPhoneNumber);
+        setBackupProfile(profileData);
+      })
+      .catch((err) => console.log('Error loading user:', err));
+
     setNeedVerification(false);
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+
+  useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
-        email: user?.attributes?.email, 
-        isUpdate: true
+        email: user?.attributes?.email,
+        isUpdate: true,
+        toUpdate: {
+          email: primaryEmail,
+          family_name: lastName,
+          given_name: firstName,
+          phone_number: primaryPhoneNumber
+        }
       });
       setNeedVerification(false);
     }
-  },[needVerification]);
+  }, [needVerification]);
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(firstName)) {
       Alert.alert('Invalid Input', 'First Name should contain only letters.');
       return false;
@@ -78,28 +109,27 @@ const EditProfile = () => {
 
   const removeFirstTime = async (user) => {
     const username = user?.attributes?.email;
-    if(username) {
+    if (username) {
       AsyncStorage.removeItem(username);
     }
   }
 
   async function updateUser(user) {
     try {
-      const result = await Auth.updateUserAttributes(user, {
-        email: primaryEmail,
-        family_name: lastName, 
-        given_name: firstName,
-        phone_number: primaryPhoneNumber
-      });
-      // If Primary Email was changed, direct user to send confirmation code
-      // v5 doesn't return detailed response in updateUserAttributes, have to write the logic mannually
-      console.log("New Email: ",primaryEmail);
-      console.log("Original Email: ", user?.attributes?.email);
+      // If Primary Email was changed, not change, direct user to enter confirmation code
       if (primaryEmail != user?.attributes?.email) {
         console.log("Needs verification");
-        console.log(needVerification);
         setNeedVerification(true); // Then users would be redirected to enter confirmation code
         return;
+      }
+      // If Primary Email was not changed, update user attributes
+      else {
+        await Auth.updateUserAttributes(user, {
+          email: primaryEmail,
+          family_name: lastName,
+          given_name: firstName,
+          phone_number: primaryPhoneNumber
+        });
       }
       Alert.alert('Success', 'Profile updated successfully.');
       removeFirstTime(user);
@@ -107,39 +137,69 @@ const EditProfile = () => {
       Alert.alert('User Update Error', err.message);
     }
   }
-  const handleUpdateProfile = async () => {
+
+  const handleSave = async () => {
     if (validateForm()) {
       const user = await Auth.currentAuthenticatedUser();
-      // Proceed with the profile update logic here
-      const updateResult = await updateUser(user);
-      removeFirstTime(user);
+      await updateUser(user);
+
+      // Update backup with new values
+      setBackupProfile({
+        firstName,
+        lastName,
+        primaryEmail,
+        secondaryEmail,
+        primaryPhoneNumber,
+        secondaryPhoneNumber,
+        zone,
+      });
+
+      setIsEditing(false);
     }
   };
+
+  const handleCancel = () => {
+    if (Object.keys(backupProfile).length > 0) {
+      setFirstName(backupProfile.firstName);
+      setLastName(backupProfile.lastName);
+      setPrimaryEmail(backupProfile.primaryEmail);
+      setSecondaryEmail(backupProfile.secondaryEmail);
+      setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
+      setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
+      setZone(backupProfile.zone);
+    }
+    setIsEditing(false);
+  };
+
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
-      
+
       <TextInput
         style={styles.input}
         placeholder="First Name"
         value={firstName}
         onChangeText={setFirstName}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         value={lastName}
         onChangeText={setLastName}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Primary Email"
         keyboardType="email-address"
         value={primaryEmail}
         onChangeText={setPrimaryEmail}
+        editable={isEditing}
       />
 
       <TextInput
@@ -148,14 +208,16 @@ const EditProfile = () => {
         keyboardType="email-address"
         value={secondaryEmail}
         onChangeText={setSecondaryEmail}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Primary Phone Number"
         keyboardType="phone-pad"
         value={primaryPhoneNumber}
         onChangeText={setPrimaryPhoneNumber}
+        editable={isEditing}
       />
 
       <TextInput
@@ -164,18 +226,31 @@ const EditProfile = () => {
         keyboardType="phone-pad"
         value={secondaryPhoneNumber}
         onChangeText={setSecondaryPhoneNumber}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Zone"
         value={zone}
         onChangeText={setZone}
+        editable={isEditing}
       />
-      
-      <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
-        <Text style={styles.buttonText}>Update Profile</Text>
-      </TouchableOpacity>
+
+      {!isEditing ? (
+        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+          <Text style={styles.buttonText}>Edit</Text>
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -209,10 +284,23 @@ const styles = StyleSheet.create({
     height: 50,
   },
   button: {
-    backgroundColor: '#007BFF',
+    flex: 1,
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  editButton: {
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    backgroundColor: '#3B82F6',
+    marginTop: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',
