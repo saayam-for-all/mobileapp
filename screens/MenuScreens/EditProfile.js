@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import useAuthUser from '../../hooks/useAuthUser';
 
@@ -20,41 +20,46 @@ const EditProfile = () => {
   const navigation = useNavigation();
   const user = useAuthUser(navigation, (user) => {
     const attributes = user?.attributes;
-    const {email, family_name, given_name, phone_number} = attributes;
+    const { email, family_name, given_name, phone_number } = attributes;
     setFirstName(given_name);
     setLastName(family_name);
     setPrimaryEmail(email);
     setPrimaryPhoneNumber(phone_number);
   });
 
-  useEffect(()=>{
-    Auth.currentAuthenticatedUser().then((user)=>{
-      setUser(user);
-      const attributes = user?.attributes;
-      const {email, family_name, given_name, phone_number} = attributes;
-      setFirstName(given_name);
-      setLastName(family_name);
-      setPrimaryEmail(email);
-      setPrimaryPhoneNumber(phone_number);
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        const attributes = user?.attributes;
+        const { email, family_name, given_name, phone_number } = attributes;
 
-       setBackupProfile({
-        firstName: given_name,
-        lastName: family_name,
-        primaryEmail: email,
-        primaryPhoneNumber: phone_number,
-        secondaryEmail: '',
-        secondaryPhoneNumber: '',
-        zone: '',
-      });
-    });
+        const profileData = {
+          firstName: given_name || '',
+          lastName: family_name || '',
+          primaryEmail: email || '',
+          primaryPhoneNumber: phone_number || '',
+          secondaryEmail: '',
+          secondaryPhoneNumber: '',
+          zone: '',
+        };
+
+        setFirstName(profileData.firstName);
+        setLastName(profileData.lastName);
+        setPrimaryEmail(profileData.primaryEmail);
+        setPrimaryPhoneNumber(profileData.primaryPhoneNumber);
+        setBackupProfile(profileData);
+      })
+      .catch((err) => console.log('Error loading user:', err));
+
     setNeedVerification(false);
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+
+  useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
-        email: user?.attributes?.email, 
-        isUpdate: true, 
+        email: user?.attributes?.email,
+        isUpdate: true,
         toUpdate: {
           email: primaryEmail,
           family_name: lastName,
@@ -64,7 +69,7 @@ const EditProfile = () => {
       });
       setNeedVerification(false);
     }
-  },[needVerification]);
+  }, [needVerification]);
 
   const validateForm = () => {
     // First Name and Last Name should contain text only (no numbers or special characters)
@@ -104,7 +109,7 @@ const EditProfile = () => {
 
   const removeFirstTime = async (user) => {
     const username = user?.attributes?.email;
-    if(username) {
+    if (username) {
       AsyncStorage.removeItem(username);
     }
   }
@@ -116,12 +121,12 @@ const EditProfile = () => {
         console.log("Needs verification");
         setNeedVerification(true); // Then users would be redirected to enter confirmation code
         return;
-      } 
+      }
       // If Primary Email was not changed, update user attributes
       else {
         await Auth.updateUserAttributes(user, {
           email: primaryEmail,
-          family_name: lastName, 
+          family_name: lastName,
           given_name: firstName,
           phone_number: primaryPhoneNumber
         });
@@ -154,20 +159,21 @@ const EditProfile = () => {
   };
 
   const handleCancel = () => {
-    // revert values
-    setFirstName(backupProfile.firstName);
-    setLastName(backupProfile.lastName);
-    setPrimaryEmail(backupProfile.primaryEmail);
-    setSecondaryEmail(backupProfile.secondaryEmail);
-    setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
-    setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
-    setZone(backupProfile.zone);
-
+    if (Object.keys(backupProfile).length > 0) {
+      setFirstName(backupProfile.firstName);
+      setLastName(backupProfile.lastName);
+      setPrimaryEmail(backupProfile.primaryEmail);
+      setSecondaryEmail(backupProfile.secondaryEmail);
+      setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
+      setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
+      setZone(backupProfile.zone);
+    }
     setIsEditing(false);
   };
 
 
-   return (
+
+  return (
     <View style={styles.container}>
       <Text style={styles.header}>Edit Profile</Text>
 
