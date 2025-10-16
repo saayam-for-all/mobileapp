@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -10,19 +10,85 @@ import {
   Modal,
 } from "react-native";
 
+// Filter from Backend (to be implemented later)
+// {
+//     "requestFor": {
+//         "0": "SELF",
+//         "1": "OTHER"
+//     },
+//     "requestPriority": {
+//         "0": "LOW",
+//         "1": "MEDIUM",
+//         "2": "HIGH",
+//         "3": "CRITICAL"
+//     },
+//     "requestStatus": {
+//         "0": "CREATED",
+//         "1": "MATCHING VOLUNTEER",
+//         "2": "MANAGED",
+//         "3": "CLOSED",
+//         "4": "CANCELLED",
+//         "5": "DELETED"
+//     },
+//     "requestType": {
+//         "0": "INPERSON",
+//         "1": "HYBRID"
+//     }
+// }
+
+// categories = {
+//   "catId": {catName: "Category Name", subCategories: [{catName: "SubCategoryName", catId: "catId"}, ...]},
+//   ...
+// }
+
+// mock data
+const filterData = {
+    "requestFor": {
+        "0": "Self",
+        "1": "Other"
+    },
+    "requestPriority": {
+        "0": "Low",
+        "1": "Medium",
+        "2": "High",
+    },
+    "requestStatus": {
+        "0": "Open",
+        "1": "Close",
+    },
+    "requestType": {
+        "0": "Personal",
+        "1": "Hybrid"
+    }
+}
+
 const ReqFilter = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { onGoBack } = route.params;
-  const [status, setStatus] = useState("");
+  const { currentFilters, onGoBack } = route.params;
+  const filtersRef = useRef({...currentFilters});
+  const [, updateStyle] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
   const [isSubCategoryModalVisible, setSubCategoryModalVisible] =
     useState(false); // Modal for subcategories
   const [currentCategory, setCurrentCategory] = useState(null); // Track the current category for subcategories
   const [selectedSubCategories, setSelectedSubCategories] = useState([]); // Track selected subcategories
 
-  const toggleStatus = (value) => {
-    setStatus(value);
+  const toggleStatus = (option) => {
+    if (option in filtersRef.current.requestStatus) {
+      delete filtersRef.current.requestStatus[option];
+    } else {
+      filtersRef.current.requestStatus[option] = filterData.requestStatus[option];
+    }
+    updateStyle((s) => s + 1); // Force re-render
+  };
+  const togglePriority = (option) => {
+    if (option in filtersRef.current.requestPriority) {
+      delete filtersRef.current.requestPriority[option];
+    } else {
+      filtersRef.current.requestPriority[option] = filterData.requestPriority[option];
+    }
+    updateStyle((s) => s + 1); // Force re-render
   };
 
   const toggleCategory = (category) => {
@@ -65,20 +131,19 @@ const ReqFilter = () => {
   };
 
   const resetFilter = () => {
-    setStatus("");
-    setSelectedCategories([]);
-    setSelectedSubCategories([]);
+    filtersRef.current = {requestStatus: {}, requestPriority: {}, selectedCategories: [], selectedSubCategories: []};
   };
 
   const applyFilter = () => {
     Alert.alert(
       "Filters Applied",
-      `Status: ${status}\nCategories: ${selectedCategories.join(
+      `Status: ${Object.values(filtersRef.current.requestStatus).join(", ")}\nCategories: ${selectedCategories.join(
         ", "
       )}\nSubCategories: ${selectedSubCategories.join(", ")}`
     );
-    const newFilters = {status, selectedCategories};
-    onGoBack(newFilters);
+    filtersRef.current.selectedCategories = selectedCategories;
+    filtersRef.current.selectedSubCategories = selectedSubCategories;
+    onGoBack(filtersRef.current);
     //cat(selectedCategories);
     navigation.goBack();
   };
@@ -186,27 +251,48 @@ const ReqFilter = () => {
 
       <Text style={styles.sectionTitle}>Status</Text>
       <View style={styles.optionsContainer}>
-        {["All", "Open", "Closed"].map((option) => (
+        {Object.keys(filterData.requestStatus).map((option) => (
           <TouchableOpacity
             key={option}
             style={[
               styles.optionButton,
-              status === option && styles.selectedOption,
+              (option in filtersRef.current.requestStatus) && styles.selectedOption,
             ]}
             onPress={() => toggleStatus(option)}
           >
             <Text
               style={[
                 styles.optionText,
-                status === option && styles.selectedOptionText,
+                (option in filtersRef.current.requestStatus) && styles.selectedOptionText,
               ]}
             >
-              {option}
+              {filterData.requestStatus[option]}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
-
+      <Text style={styles.sectionTitle}>Priority</Text>
+      <View style={styles.optionsContainer}>
+        {Object.keys(filterData.requestPriority).map((option) => (
+          <TouchableOpacity
+            key={option}
+            style={[
+              styles.optionButton,
+              (option in filtersRef.current.requestPriority) && styles.selectedOption,
+            ]}
+            onPress={() => togglePriority(option)}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                (option in filtersRef.current.requestPriority) && styles.selectedOptionText,
+              ]}
+            >
+              {filterData.requestPriority[option]}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
       <Text style={styles.sectionTitle}>Categories</Text>
       <FlatList
         data={categories}

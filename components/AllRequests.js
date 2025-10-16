@@ -22,7 +22,7 @@ const AllRequests = ({ data }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
   const [isDataBAck, setDataBack] = React.useState(false);
-  const [filters ,setFilters] = React.useState({status: '', selectedCategories: []})
+  const [filters ,setFilters] = React.useState({requestStatus: {}, requestPriority: {}, selectedCategories: [], selectedSubCategories: []});
 
  /* const showModalBasic = (id, status, category) => {
     toggleVisibility();
@@ -34,7 +34,7 @@ const AllRequests = ({ data }) => {
   const handleNavigate = () => {    
     navigation.navigate('ReqFilter', {currentFilters: filters,
       onGoBack:
-   (newFilters) => setFilters(newFilters),
+      (newFilters) => setFilters(newFilters),
     }
   );
   };
@@ -69,12 +69,16 @@ const AllRequests = ({ data }) => {
       )
     }
 
-    if (filters.status){
-      result= result.filter(item => item.status === filters.status);
+    if (Object.keys(filters.requestStatus).length > 0){
+      result= result.filter(item => Object.values(filters.requestStatus).includes(item.status));
+    }
+
+    if (Object.keys(filters.requestPriority).length > 0) {
+      result= result.filter(item => Object.values(filters.requestPriority).includes(item.priority));
     }
     
-    if (filters.selectedCategories.length > 0){      
-      result= result.filter(item =>  filters.selectedCategories.includes(item.category));
+    if (Object.keys(filters.selectedCategories).length > 0){      
+      result= result.filter(item => filters.selectedCategories.includes(item.category));
     }
     setFilteredData(result);
   }, [searchQuery, filters]

@@ -26,7 +26,7 @@ export default function useAuthUser(navigation, f = (user) => {}) {
                             [            
                                 {
                                     text: "OK",
-                                    onPress: () => {},
+                                    onPress: () => signOut(),
                                 },
                             ],
                         )

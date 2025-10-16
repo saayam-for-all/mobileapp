@@ -233,8 +233,8 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
             })}
             value={requestCategory}
             style={{
-                  inputIOS: pickerSelectStyles.inputIOS,
-                  inputAndroid: pickerSelectStyles.inputAndroid,
+              inputIOS: pickerSelectStyles.inputIOS,
+              inputAndroid: pickerSelectStyles.inputAndroid,
             }}
           />
         </View>
