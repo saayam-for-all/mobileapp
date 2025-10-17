@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   Linking,
   SafeAreaView,
-  Alert
+  Alert,
+  Pressable,
+  TouchableWithoutFeedback
 } from "react-native";
 import Button from "../components/Button";
 //import { Button } from '@react-native-material/core';
@@ -28,12 +30,14 @@ import config from "../components/config";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useAuthUser from "../hooks/useAuthUser";
+import Animated, { FadeInDown, FadeOutUp, Layout } from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
     width: "100%",
+    overflow: "visible",
   },
   topBar: {
     flexDirection: "row",
@@ -107,6 +111,30 @@ const styles = StyleSheet.create({
     //marginTop: 40,
     marginBottom: 10,
   },
+  backdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: " rgba(0,0,0,0.3)",
+    zIndex: 9998,
+  },
+
+  dropdownWrapper: {
+    position: "absolute",
+    top: 55, // appears just below the icon
+    right: 80,
+    zIndex: 9999,
+  },
+
+  dropdownMenu: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 8,
+    width: 220,
+    paddingVertical: 5,
+  },
   buttonView: {
     width: "45%",
     paddingVertical: 20,
@@ -152,6 +180,9 @@ export default function Home({ signOut }) {
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
   const [userVolunteer, setVolunteer] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
+  const [selectedDashboard, setSelectedDashboard] = useState("Volunteer Dashboard");
+
   const volunteer = "Volunteers";
   const user = useAuthUser(navigation, (user) => {
     getGroup(user);
@@ -166,14 +197,14 @@ export default function Home({ signOut }) {
       //console.log('user group', userGroup)
       if (userGroup.includes(volunteer)) {
         setVolunteer(true);
-      } 
-       //Refresh token 
+      }
+      //Refresh token 
       const currentSession = await Auth.currentSession();
       user.refreshSession(currentSession.refreshToken, (err, session) => {
-      //console.log('session', err, session);
-       const { idToken, refreshToken, accessToken } = session; 
+        //console.log('session', err, session);
+        const { idToken, refreshToken, accessToken } = session;
       });
-       //console.log('group');
+      //console.log('group');
     } catch (error) {
       console.log("error getting group", error);
     }
@@ -181,12 +212,12 @@ export default function Home({ signOut }) {
   const getFirstTime = async (user) => {
     //console.log(user.attributes.email)
     const username = user?.attributes?.email;
-    if(username) {
-      AsyncStorage.getItem(username).then(item=>{
+    if (username) {
+      AsyncStorage.getItem(username).then(item => {
         const ft = JSON.parse(item);
         //console.log(user.attributes.email);
         //console.log("FT", ft);
-        if(ft) {
+        if (ft) {
           Alert.alert('Dear User', 'Please fill your personal information for better experience', [
             {
               text: 'Cancel',
@@ -195,13 +226,15 @@ export default function Home({ signOut }) {
               },
               style: 'cancel',
             },
-            {text: 'OK', onPress: () => {
-              navigation.navigate('EditPersonal');
-            }},
+            {
+              text: 'OK', onPress: () => {
+                navigation.navigate('EditPersonal');
+              }
+            },
           ]);
-      }
+        }
       })
-      
+
     }
   }
 
@@ -215,8 +248,9 @@ export default function Home({ signOut }) {
     }
   };
   //getData();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { zIndex: 1 }]}>
       {/* Top Bar */}
       <View style={styles.topBar}>
         <Image
@@ -224,18 +258,16 @@ export default function Home({ signOut }) {
           style={styles.logo}
         />
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Administration");
-          }}
-        >
-          <Ionicons
-            name="build-outline"
-            size={33}
-            color="black"
-            style={styles.adminButton}
-          />
-        </TouchableOpacity>
+        <View style={{ position: "relative", zIndex: 9999 }}>
+          {/* Build icon */}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setShowPicker((prev) => !prev)}
+          >
+            <Ionicons name="build-outline" size={33} color="black" />
+          </TouchableOpacity>
+
+        </View>
 
         <TouchableOpacity
           onPress={() => {
@@ -257,33 +289,40 @@ export default function Home({ signOut }) {
 
       {/* Button Container */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.buttonView, styles.fullWidthButton]}
-          onPress={() => {
-            navigation.navigate("MyReqs");
-          }}
-        >
-          <Text style={styles.buttonText}>My Requests</Text>
-        </TouchableOpacity>
-        {userVolunteer && (
+        {selectedDashboard.trim() === "Volunteer Dashboard" ? (
+          // Volunteer: Managed Requests only
           <TouchableOpacity
             style={[styles.buttonView, styles.fullWidthButton]}
-            onPress={() => {
-              navigation.navigate("ManagedReqs");
-            }}
+            onPress={() => navigation.navigate("ManagedReqs")}
           >
             <Text style={styles.buttonText}>Managed Requests</Text>
           </TouchableOpacity>
-        )}
+        ) : selectedDashboard.trim() === "Beneficiary Dashboard" ? (
+          // Beneficiary: My Requests + Others Requests
+          <>
+            <TouchableOpacity
+              style={[styles.buttonView, styles.fullWidthButton]}
+              onPress={() => navigation.navigate("MyReqs")}
+            >
+              <Text style={styles.buttonText}>My Requests</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.buttonView, styles.fullWidthButton]}
-          onPress={() => {
-            navigation.navigate("OtherRequests");
-          }}
-        >
-          <Text style={styles.buttonText}>Others Requests</Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.buttonView, styles.fullWidthButton]}
+              onPress={() => navigation.navigate("OtherRequests")}
+            >
+              <Text style={styles.buttonText}>Others Requests</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          // All other dashboards: show All Requests
+          <TouchableOpacity
+            style={[styles.buttonView, styles.fullWidthButton]}
+            onPress={() => navigation.navigate("AllRequests")}
+          >
+            <Text style={styles.buttonText}>All Requests</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <View>
@@ -388,6 +427,53 @@ export default function Home({ signOut }) {
           <Tab.Screen name="Account" component={AccountScreen} />
         </Tab.Navigator>
       </View>
+
+
+      {showPicker && (
+        <TouchableWithoutFeedback onPress={() => setShowPicker(false)}>
+          <View style={styles.backdrop} accessible={false} />
+        </TouchableWithoutFeedback>
+      )}
+
+      {showPicker && (
+        <Animated.View style={styles.dropdownWrapper}>
+          <View style={styles.dropdownMenu}>
+            {[
+              "Super Admin Dashboard",
+              "Admin Dashboard",
+              "Steward Dashboard",
+              "Volunteer Dashboard",
+              "Beneficiary Dashboard",
+            ].map((option) => (
+              <TouchableOpacity
+                key={option}
+                onPress={() => {
+                  setShowPicker(false);
+                  setSelectedDashboard(option);
+                }}
+                style={{ flexDirection: "row", alignItems: "center", padding: 12 }}
+              >
+                <Feather
+                  name="check"
+                  size={25} // slightly larger for visibility
+                  color={selectedDashboard === option ? "#000000ff" : "transparent"}
+                  style={{ marginRight: 10 }}
+                />
+
+                <Text
+                  style={[
+                    styles.dropdownText,
+                    selectedDashboard === option && { fontWeight: "bold", color: "#000000ff" },
+                  ]}
+                >
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Animated.View>
+      )}
+
     </SafeAreaView>
   );
 }
