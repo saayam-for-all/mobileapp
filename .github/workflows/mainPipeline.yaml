@@ -12,52 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo
+      
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Set Node.js
+       
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 22
 
-      # 3️⃣ Cache node_modules
-      - name: Cache Node modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # 4️⃣ Install dependenciesname: Run React Native Tests
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-
-jobs:
-  test:
-    name: Test React Native App
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1️⃣ Checkout repo
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-
-      # 
+       
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
