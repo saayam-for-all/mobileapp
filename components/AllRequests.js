@@ -108,19 +108,19 @@ const AllRequests = ({ data }) => {
                 Id : {item.id}{" "}
               </Text>
              
-                <Text style={{ flex: 1, textAlign: "right" }}>
+                {/* <Text style={{ flex: 1, textAlign: "right" }}>
                   <Octicons
                     name="dot-fill"
                     size={15}
                     color={item.status === "Open" ? "orange" : "#aeb6bf"}
                   />
                   <Text> {item.status} </Text>
-                </Text>
+                </Text> */}
              
             </View>
-            <View>
+            {/* <View>
               <Text style={{ fontWeight: "350" }}> {item.category} </Text>
-            </View>
+            </View> */}
             <View style={{ flexDirection: "row" }}>
               <Text style={{ fontWeight: "400", fontSize: 17 }}>
                 {" "}
@@ -138,7 +138,7 @@ const AllRequests = ({ data }) => {
                 <AntDesign name="calendar" size={20} color="black" />{" "}
                 {item.creationDate}{" "}
               </Text>
-              <Text style={{ flex: 1, textAlign: "right" }}>
+              {/* <Text style={{ flex: 1, textAlign: "right" }}>
                 <TouchableOpacity
                   style={{
                     height: 20,
@@ -156,7 +156,7 @@ const AllRequests = ({ data }) => {
                     {item.priority}
                   </Text>
                 </TouchableOpacity>
-              </Text>
+              </Text> */}
             </View>
 
             <View
