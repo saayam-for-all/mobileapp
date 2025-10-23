@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,Alert, ScrollView} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
 
 const EditOrganization = () => {
   const [organizationName, setOrganizationName] = useState('');
@@ -13,122 +13,174 @@ const EditOrganization = () => {
   const [state, setState] = useState('');
   const [zipCode, setZipCode] = useState('');
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [backupProfile, setBackupProfile] = useState({});
 
   const validateForm = () => {
-    // Organization Name should contain text only (no numbers or special characters)
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(organizationName)) {
       Alert.alert('Invalid Input', 'Organization Name should contain only letters.');
       return false;
     }
 
-    // Email should contain @ and follow general email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Invalid Email', 'Please enter a valid email address.');
       return false;
     }
 
-    // Phone number should start with '+' and contain digits only
     const phoneRegex = /^\+[0-9]{1,15}$/;
     if (!phoneRegex.test(phoneNumber)) {
       Alert.alert('Invalid Phone Number', 'Phone number should start with "+" followed by digits.');
       return false;
     }
 
-    // If all validations pass
     return true;
   };
 
-  const handleUpdateProfile = () => {
+  const handleSave = () => {
     if (validateForm()) {
       Alert.alert('Success', 'Organization details updated successfully.');
-      // Proceed with the profile update logic here
+      setIsEditing(false);
     }
+  };
+
+  const handleEdit = () => {
+    setBackupProfile({
+      organizationName,
+      organizationType,
+      email,
+      phoneNumber,
+      URL,
+      streetAddress,
+      streetAddress2,
+      city,
+      state,
+      zipCode,
+    });
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setOrganizationName(backupProfile.organizationName || '');
+    setOrganizationType(backupProfile.organizationType || '');
+    setEmail(backupProfile.email || '');
+    setPhoneNumber(backupProfile.phoneNumber || '');
+    setURL(backupProfile.URL || '');
+    setStreetAddress(backupProfile.streetAddress || '');
+    setStreetAddress2(backupProfile.streetAddress2 || '');
+    setCity(backupProfile.city || '');
+    setState(backupProfile.state || '');
+    setZipCode(backupProfile.zipCode || '');
+    setIsEditing(false);
   };
 
   return (
     <ScrollView>
-        <View style={styles.container}>
-            <Text style={styles.header}>Edit Organization Details</Text>
-            
-            <TextInput
-                style={styles.input}
-                placeholder="Organization Name"
-                value={organizationName}
-                onChangeText={setOrganizationName}
-            />
-            
-            <TextInput
-                style={styles.input}
-                placeholder="Organization Type"
-                value={organizationType}
-                onChangeText={setOrganizationType}
-            />
-            
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                keyboardType="email-address"
-                value={email}
-                onChangeText={setEmail}
-            />
-            
-            <TextInput
-                style={styles.input}
-                placeholder="Phone Number"
-                keyboardType="phone-pad"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-            />
-            
-            <TextInput
-                style={styles.input}
-                placeholder="URL"
-                value={URL}
-                onChangeText={setURL}
-            />
-            
-            <TextInput
-                style={styles.input}
-                placeholder="Street Address"
-                value={streetAddress}
-                onChangeText={setStreetAddress}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Street Address 2"
-                value={streetAddress2}
-                onChangeText={setStreetAddress2}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="City"
-                value={city}
-                onChangeText={setCity}
-            />
-            <View style={styles.horizontalContainer}>
-                <TextInput
-                    style={{...styles.input,flexGrow:1}}
-                    placeholder="State"
-                    value={state}
-                    onChangeText={setState}
-                />
-                <TextInput
-                    style={{...styles.input,flexGrow:1}}
-                    placeholder="Zip Code"
-                    value={zipCode}
-                    onChangeText={setZipCode}
-                />
-            </View>
-            
-            
-            <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
-                <Text style={styles.buttonText}>Update Profile</Text>
-            </TouchableOpacity>
+      <View style={styles.container}>
+        <Text style={styles.header}>Organization Details</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Organization Name"
+          value={organizationName}
+          onChangeText={setOrganizationName}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Organization Type"
+          value={organizationType}
+          onChangeText={setOrganizationType}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Phone Number"
+          keyboardType="phone-pad"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="URL"
+          value={URL}
+          onChangeText={setURL}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Street Address"
+          value={streetAddress}
+          onChangeText={setStreetAddress}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Street Address 2"
+          value={streetAddress2}
+          onChangeText={setStreetAddress2}
+          editable={isEditing}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="City"
+          value={city}
+          onChangeText={setCity}
+          editable={isEditing}
+        />
+
+        <View style={styles.horizontalContainer}>
+          <TextInput
+            style={[styles.input, { flexGrow: 1 }]}
+            placeholder="State"
+            value={state}
+            onChangeText={setState}
+            editable={isEditing}
+          />
+          <TextInput
+            style={[styles.input, { flexGrow: 1 }]}
+            placeholder="Zip Code"
+            value={zipCode}
+            onChangeText={setZipCode}
+            editable={isEditing}
+          />
         </View>
+
+        <View style={styles.buttonRow}>
+          {isEditing ? (
+            <>
+              <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleEdit}>
+              <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
     </ScrollView>
-    
   );
 };
 
@@ -142,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#111827',
   },
   input: {
     height: 50,
@@ -150,33 +203,30 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 10,
     marginBottom: 15,
+    backgroundColor: '#f9fafb',
   },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 15,
+  horizontalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
   },
-  picker: {
-    height: 50,
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 15,
+    marginTop: 20,
   },
   button: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 15,
+    flex: 1,
+    paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: '600',
   },
-  horizontalContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    gap:10
-  }
 });
 
 export default EditOrganization;
