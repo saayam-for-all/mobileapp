@@ -29,7 +29,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import config from "../components/config";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import useAuthUser from "../hooks/useAuthUser";
 import Animated, { FadeInDown, FadeOutUp, Layout } from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
@@ -184,11 +183,6 @@ export default function Home({ signOut }) {
   const [selectedDashboard, setSelectedDashboard] = useState("Volunteer Dashboard");
 
   const volunteer = "Volunteers";
-  const user = useAuthUser(navigation, (user) => {
-    getGroup(user);
-    getFirstTime(user);
-    // getData(); //uncomment this to test api url
-  });
 
   const getGroup = async (user) => {
     try {

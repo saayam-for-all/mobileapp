@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import Constants from 'expo-constants';
 import { View, Text, Switch, Alert, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
@@ -276,11 +276,15 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
                 placeholder='Search'
                 onPress={(data, details = null) => {
                   // 'details' is provided when fetchDetails = true
-                  // console.log(data, details);
+                  console.log(data, details);
                   setLocation(details.description);
                 }}
+                onFail={(error) => {
+                  console.log('Google Place API Error:', error);
+                }}
                 query={{
-                  key: 'AIzaSyBkjtiVOYR9Ji0eubnUInEoNkg5etpirXQ',
+                  key: Constants.expoConfig.extra.googleApiKey,
+                  // key: process.env.GOOGLE_API_KEY,
                   language: 'en',
                 }}
                 styles={{
