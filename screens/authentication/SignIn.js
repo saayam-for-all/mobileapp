@@ -245,6 +245,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           }
         })
         .catch((err) => {
+          console.log(err);
           if (!err.message) {
             console.log("Error when signing in: ", err);
             Alert.alert("Error when signing in: ", err);

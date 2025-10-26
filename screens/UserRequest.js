@@ -276,11 +276,15 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
                 placeholder='Search'
                 onPress={(data, details = null) => {
                   // 'details' is provided when fetchDetails = true
-                  // console.log(data, details);
+                  console.log(data, details);
                   setLocation(details.description);
                 }}
+                onFail={(error) => {
+                  console.log('Google Place API Error:', error);
+                }}
                 query={{
-                  key: 'AIzaSyBkjtiVOYR9Ji0eubnUInEoNkg5etpirXQ',
+                  key: 'AIzaSyA2UEPpxw-_bkROBXOtEAEQzrpVr3rzoF8',
+                  // key: process.env.GOOGLE_API_KEY,
                   language: 'en',
                 }}
                 styles={{
