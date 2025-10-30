@@ -1,42 +1,62 @@
 //import * as React from 'react';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
-import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList} from 'react-native';
-import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons' 
+import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList } from 'react-native';
+import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons'
 
-import {TextInput, } from 'react-native-paper';
+import { TextInput, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 const AllRequests = ({ data }) => {
   const navigation = useNavigation();
   const [sortAscending, setSortAscending] = React.useState(true);
   const [page, setPage] = React.useState(0);
-  const [numberOfItemsPerPageList] = React.useState([4,5]);
+  const [numberOfItemsPerPageList] = React.useState([4, 5]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
-  const [isVisible,setVisible] = React.useState(false);
+  const [isVisible, setVisible] = React.useState(false);
   const toggleVisibility = () => setVisible(!isVisible);
   const [idBasic, setIdBasic] = React.useState();
   const [status, setStatus] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
   const [isDataBAck, setDataBack] = React.useState(false);
-  const [filters ,setFilters] = React.useState({requestStatus: {}, requestPriority: {}, selectedCategories: [], selectedSubCategories: []});
+  const [filters, setFilters] = React.useState({ requestStatus: {}, requestPriority: {}, selectedCategories: [], selectedSubCategories: [] });
+  const [selectedPriority, setSelectedPriority] = React.useState([]);
 
- /* const showModalBasic = (id, status, category) => {
-    toggleVisibility();
-    setIdBasic('' + id + '\nStatus: ' + status + '\nCategory: ' + category);
-  }*/
+  /* const showModalBasic = (id, status, category) => {
+     toggleVisibility();
+     setIdBasic('' + id + '\nStatus: ' + status + '\nCategory: ' + category);
+   }*/
 
   const [items] = React.useState(data);
 
-  const handleNavigate = () => {    
-    navigation.navigate('ReqFilter', {currentFilters: filters,
-      onGoBack:
-      (newFilters) => setFilters(newFilters),
+  const handleNavigate = () => {
+    navigation.navigate('ReqFilter', {
+      currentFilters: { ...filters, selectedPriority }, // pass array
+      onGoBack: (newFilters) => {
+        setFilters(newFilters);
+        setSelectedPriority(newFilters.selectedPriority || []);
+      },
+    });
+  };
+
+  const handlePriorityPress = (level) => {
+    if (level === "All") {
+      setSelectedPriority([]);
+      return;
     }
-  );
+
+    if (selectedPriority.includes(level)) {
+      setSelectedPriority(selectedPriority.filter((p) => p !== level));
+    } else {
+      if (selectedPriority.length < 2) {
+        setSelectedPriority([...selectedPriority, level]);
+      } else {
+        setSelectedPriority([]);
+      }
+    }
   };
 
   const sortedItems = items
@@ -54,35 +74,49 @@ const AllRequests = ({ data }) => {
     setSearchQuery(text);
   };
 
- /* React.useEffect(() => {
-    setPage(0);
-  }, [itemsPerPage]);*/
+  /* React.useEffect(() => {
+     setPage(0);
+   }, [itemsPerPage]);*/
 
-  useEffect(() =>{
+  useEffect(() => {
     let result = [...data];
 
-    if(searchQuery){
-      result= result.filter(item =>
+    // Search filter
+    if (searchQuery) {
+      result = result.filter(item =>
         item.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.id.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      );
     }
 
-    if (Object.keys(filters.requestStatus).length > 0){
-      result= result.filter(item => Object.values(filters.requestStatus).includes(item.status));
+    // Request Status filter
+    if (Object.keys(filters.requestStatus).length > 0) {
+      result = result.filter(item =>
+        Object.values(filters.requestStatus).includes(item.status)
+      );
     }
 
+    // Request Priority filter from ReqFilter.js
     if (Object.keys(filters.requestPriority).length > 0) {
-      result= result.filter(item => Object.values(filters.requestPriority).includes(item.priority));
+      result = result.filter(item =>
+        Object.values(filters.requestPriority).includes(item.priority)
+      );
     }
-    
-    if (Object.keys(filters.selectedCategories).length > 0){      
-      result= result.filter(item => filters.selectedCategories.includes(item.category));
+
+    if (selectedPriority.length > 0) {
+      result = result.filter((item) => selectedPriority.includes(item.priority));
     }
+
+    // Category filter
+    if (filters.selectedCategories.length > 0) {
+      result = result.filter(item =>
+        filters.selectedCategories.includes(item.category)
+      );
+    }
+
     setFilteredData(result);
-  }, [searchQuery, filters]
-);
+  }, [searchQuery, filters, selectedPriority]);
 
   return (
     <View style={styles.container}>
@@ -90,15 +124,48 @@ const AllRequests = ({ data }) => {
         <TextInput
           style={styles.input}
           placeholder="Search the request"
-          //size={28}
           outlined
-          left={<TextInput.Icon icon="magnify" size={28} style={{pointerEvents: 'none'}} />}
+          left={<TextInput.Icon icon="magnify" size={28} style={{ pointerEvents: 'none' }} />}
           onChangeText={handleSearch}
           value={searchQuery}
         />
-        <TouchableOpacity onPress={handleNavigate}>        
-        <Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
+      </View>
+      <View style={styles.filterRow}>
+        <TouchableOpacity
+          style={[styles.filterButton, styles.iconButton]}
+          onPress={handleNavigate}
+        >
+          <Ionicons name="options-outline" size={18} color="#4d4d4dff" />
         </TouchableOpacity>
+
+        <View style={styles.verticalDivider} />
+
+        {["All", "Low", "Medium", "High"].map((level) => (
+          <TouchableOpacity
+            key={level}
+            style={[
+              styles.filterButton,
+              (level === "All" && selectedPriority.length === 0) ||
+                selectedPriority.includes(level)
+                ? styles.selectedButton
+                : null,
+            ]}
+            onPress={() => handlePriorityPress(level)}
+          >
+            <Text
+              style={[
+                styles.filterText,
+                (level === "All" && selectedPriority.length === 0) ||
+                  selectedPriority.includes(level)
+                  ? styles.selectedText
+                  : null,
+              ]}
+            >
+              {level}
+            </Text>
+          </TouchableOpacity>
+        ))}
+
       </View>
       <FlatList
         keyExtractor={(item) => item.id}
@@ -111,8 +178,8 @@ const AllRequests = ({ data }) => {
                 {" "}
                 Id : {item.id}{" "}
               </Text>
-             
-                {/* <Text style={{ flex: 1, textAlign: "right" }}>
+
+              {/* <Text style={{ flex: 1, textAlign: "right" }}>
                   <Octicons
                     name="dot-fill"
                     size={15}
@@ -120,7 +187,7 @@ const AllRequests = ({ data }) => {
                   />
                   <Text> {item.status} </Text>
                 </Text> */}
-             
+
             </View>
             {/* <View>
               <Text style={{ fontWeight: "350" }}> {item.category} </Text>
@@ -132,7 +199,7 @@ const AllRequests = ({ data }) => {
               </Text>
               <Text style={{ flex: 1, textAlign: "right" }}>
                 {" "}
-                <AntDesign name="right" size={15} color="black" onPress={() => {navigation.navigate("RequestDetails", { item, reqTitle: item.id} )}} />
+                <AntDesign name="right" size={15} color="black" onPress={() => { navigation.navigate("RequestDetails", { item, reqTitle: item.id }) }} />
               </Text>
             </View>
 
@@ -175,104 +242,155 @@ const AllRequests = ({ data }) => {
         )}
       />
     </View>
-  ); 
+  );
 
-        
+
 };
 
-const styles = StyleSheet.create({ 
-  container: {     
+const styles = StyleSheet.create({
+  container: {
     //width: '100%',
     //alignContent:'center',
     //flex: 1,
     //justifyContent:'center'
-    marginLeft:5,
-    marginRight:5
+    marginLeft: 5,
+    marginRight: 5
   },
   tabText: {
-    marginLeft: 24,  
+    marginLeft: 24,
     fontSize: 18,
     //alignContent:'center',
     //justifyContent:'center'
   },
-  modalContainer:{
-    backgroundColor:"#ccc",
-    top:0,
-    left:0,
-    right:0,
-    bottom:0,
-    position:'absolute',
-},
-modalView:{
-    flex:1,
-    alignContent:'center',
-    justifyContent:'center'
-},
-alert:{
-    width:'100%',
-    maxWidth:300,
-    margin:48,
-    elevation:24,
-    borderRadius:2,
-    backgroundColor:'#fff'
-},
-alertTitle:{
-    margin:24,
-    fontWeight:"bold",
-    fontSize:24,
-    color:"#000"
-},
-alertMessage:{
-    marginLeft:24,
-    marginRight:24,
-    marginBottom:24,
-    fontSize:16,
-    color:"#000"
-},
-alertButtonGroup:{
-    marginTop:0,
-    marginRight:0,
-    marginBottom:8,
-    marginLeft:24,
-    padding:10,
-    display:"flex",
-    flexDirection:'row',
-    justifyContent:"flex-end"
-},
-alertButton:{
-    marginTop:12,
-    marginRight:8,
-    width:100
-},
-reqDataRow:{
-  //flex: .4,
-  flexDirection: 'row',
-  //columnGap: 50
-},
-reqData:{
-  width: '100%',
-  //height: 100,
-  marginBottom: 2,
-  borderRadius: 2,
-  backgroundColor: 'white'
-},
-priorityButton:{
-  marginTop:5,
-  marginleft:100,
-  
-},
-input: {
+  modalContainer: {
+    backgroundColor: "#ccc",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    position: 'absolute',
+  },
+  modalView: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center'
+  },
+  alert: {
+    width: '100%',
+    maxWidth: 300,
+    margin: 48,
+    elevation: 24,
+    borderRadius: 2,
+    backgroundColor: '#fff'
+  },
+  alertTitle: {
+    margin: 24,
+    fontWeight: "bold",
+    fontSize: 24,
+    color: "#000"
+  },
+  alertMessage: {
+    marginLeft: 24,
+    marginRight: 24,
+    marginBottom: 24,
+    fontSize: 16,
+    color: "#000"
+  },
+  alertButtonGroup: {
+    marginTop: 0,
+    marginRight: 0,
+    marginBottom: 8,
+    marginLeft: 24,
+    padding: 10,
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: "flex-end"
+  },
+  alertButton: {
+    marginTop: 12,
+    marginRight: 8,
+    width: 100
+  },
+  reqDataRow: {
+    //flex: .4,
+    flexDirection: 'row',
+    //columnGap: 50
+  },
+  reqData: {
+    width: '100%',
+    //height: 100,
+    marginBottom: 2,
+    borderRadius: 2,
+    backgroundColor: 'white'
+  },
+  priorityButton: {
+    marginTop: 5,
+    marginleft: 100,
+
+  },
+  input: {
     fontSize: 15,
     //marginLeft: 5,
-    width: "85%",
+    width: "98%",
     marginBottom: 20,
     //borderWidth: 1,
     //borderColor: 'lightgray',
     marginRight: 10,
-    height:28
+    height: 28
 
   },
 
+  filterRow: {
+    flexDirection: "row",
+    alignItems: "Left",
+    justifyContent: "flex-start",
+    marginBottom: 10,
+    marginTop: 5,
+  },
+
+  filterButton: {
+    marginHorizontal: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 18,
+    borderWidth: 1.5,
+    borderColor: "#4d4d4dff",
+    borderRadius: 25, // pill shape
+    backgroundColor: "white",
+    flexDirection: "row",
+    marginHorizontal: 6,
+    alignItems: "center", // vertical centering
+    justifyContent: "center",
+  },
+
+  iconButton: {
+    paddingHorizontal: 14,
+  },
+
+  verticalDivider: {
+    width: 1.2,
+    height: 40,
+    backgroundColor: "#626262ff",
+    marginHorizontal: 8,
+  },
+
+  selectedButton: {
+    backgroundColor: "#4d4d4dff",
+    borderColor: "#4d4d4dff",
+  },
+
+  filterText: {
+    color: "#4d4d4dff",
+    fontSize: 13,
+    fontWeight: "500",
+    textAlign: "center",
+    textAlignVertical: "center", // vertical centering (mainly for Android)
+    alignSelf: "center",         // ensure the text itself stays centered in the parent
+  },
+
+  selectedText: {
+    color: "white",
+    fontWeight: "600",
+  },
 });
 
 export default AllRequests;
