@@ -268,7 +268,11 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
                   inputAndroid: pickerSelectStyles.inputAndroid,
             }}
           />
-        {/* GOOGLE MAP API KEY TO BE ADDED TO ENV */}
+        {/* 
+          ═══════════════════════════════════════════════════════
+          NOT FUNCTIONING, WILL CHANGE INTO CHEAPER MAP ALTERNATIVES 
+          ═══════════════════════════════════════════════════════
+        */}
           {requestType === "In Person" && (
             <View className="mt-3">
               <Text style={styles.label}>Location</Text>
@@ -283,7 +287,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
                   console.log('Google Place API Error:', error);
                 }}
                 query={{
-                  key: Constants.expoConfig.extra.googleApiKey,
+                  key: '',
                   // key: process.env.GOOGLE_API_KEY,
                   language: 'en',
                 }}
