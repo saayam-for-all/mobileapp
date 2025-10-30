@@ -1,4 +1,4 @@
-export default {
+{
   "expo": {
     "name": "SaayamMobileApp",
     "slug": "SaayamMobileApp",
@@ -28,10 +28,6 @@ export default {
     },
     "plugins": [
       "expo-secure-store"
-    ],
-    // !!!!! DEVELOPMENT ONLY, UNSAFE FOR PRODUCTION !!!!!
-    "extra": {
-      "googleApiKey": process.env.GOOGLE_MAPS_API_KEY
-    }
+    ]
   }
 }
