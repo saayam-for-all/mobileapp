@@ -6,6 +6,7 @@ import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons'
 
 import { TextInput, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import ReqFilter from '../screens/AllRequests/ReqFilter';
 
 const AllRequests = ({ data }) => {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ const AllRequests = ({ data }) => {
   const [isDataBAck, setDataBack] = React.useState(false);
   const [filters, setFilters] = React.useState({ requestStatus: {}, requestPriority: {}, selectedCategories: [], selectedSubCategories: [] });
   const [selectedPriority, setSelectedPriority] = React.useState([]);
+  const [showFilter, setShowFilter] = React.useState(false);
 
   /* const showModalBasic = (id, status, category) => {
      toggleVisibility();
@@ -33,14 +35,15 @@ const AllRequests = ({ data }) => {
   const [items] = React.useState(data);
 
   const handleNavigate = () => {
-    navigation.navigate('ReqFilter', {
-      currentFilters: { ...filters, selectedPriority }, // pass array
-      onGoBack: (newFilters) => {
-        setFilters(newFilters);
-        setSelectedPriority(newFilters.selectedPriority || []);
-      },
-    });
+    setShowFilter(true);
+  }
+
+  const handleFilterDone = (newFilters) => {
+    setFilters(newFilters);
+    setSelectedPriority(newFilters.selectedPriority || []);
+    setShowFilter(false);
   };
+
 
   const handlePriorityPress = (level) => {
     if (level === "All") {
@@ -167,6 +170,17 @@ const AllRequests = ({ data }) => {
         ))}
 
       </View>
+      {showFilter && (
+        <Modal visible={showFilter} animationType="slide" transparent={true}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <ReqFilter
+              currentFilters={{ ...filters, selectedPriority }}
+              onGoBack={handleFilterDone}
+              onClose={() => setShowFilter(false)}
+            />
+          </View>
+        </Modal>
+      )}
       <FlatList
         keyExtractor={(item) => item.id}
         //data={data}

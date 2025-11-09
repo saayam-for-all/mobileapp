@@ -1,4 +1,3 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useRef, useState, useEffect } from "react";
 import {
   View,
@@ -65,10 +64,7 @@ const filterData = {
   },
 };
 
-const ReqFilter = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { currentFilters, onGoBack } = route.params;
+const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
   const filtersRef = useRef({ ...currentFilters });
   const [, updateStyle] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
@@ -174,7 +170,7 @@ const ReqFilter = () => {
     filtersRef.current.selectedSubCategories = selectedSubCategories;
     filtersRef.current.selectedPriority = selectedPriority;
     onGoBack(filtersRef.current);
-    navigation.goBack();
+    onClose && onClose();
   };
 
   const categories = [
@@ -346,7 +342,7 @@ const ReqFilter = () => {
   const ListFooter = () => (
     <View style={styles.footer}>
       <TouchableOpacity
-        onPress={() => navigation.goBack()}
+        onPress={onClose}
         style={styles.cancelButton}
       >
         <Text style={styles.cancelText}>Cancel</Text>
