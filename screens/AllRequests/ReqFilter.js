@@ -360,7 +360,7 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
       <TouchableOpacity
         style={styles.overlay}
         activeOpacity={1}
-        onPress={() => navigation.goBack()}
+        onPress={onClose}
       />
 
       {/* Drawer container */}
