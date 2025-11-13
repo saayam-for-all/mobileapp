@@ -9,18 +9,21 @@ Works with Expo go 52
 
 ### Important Notice
 
-Since amplify v6 doesn't support Expo Go, we need Expo Build for this branch.
+Since amplify v6 doesn't support Expo Go, we need Build for this branch.
 
-To configure Expo Build:
+To configure Build:
 
 ```
-npm install -g eas-cli
-
-eas build --platform android --profile development
-
-npm start
+# Android
+npx expo run:android
+# iOS
+npx expo run:ios
 ```
 
-If each of there step is successful, will be able to see options for Expo
+If everything is successful, will be able to see options for Expo.
+
+### Debugging
+
+Roll back `package.json` to remove updated/installed modules, then run `npm install`, and redo the build
 
 If it shows ```› Using Expo Go › Press s │ switch to development build```, press ```s``` to switch to Expo Build, then ```a``` to start android emulator.

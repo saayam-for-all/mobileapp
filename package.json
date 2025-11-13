@@ -6,7 +6,9 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:android": "npx expo run:android",
+    "build:ios": "npx expo run:ios"
   },
   "dependencies": {
     "@aws-amplify/auth": "^5.6.12",
