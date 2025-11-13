@@ -9,7 +9,7 @@ import Auth from '@aws-amplify/auth';
 // Hook to get the authenticated user when component rerender
 // and run function f with the user as parameter once user is obtained
 
-export default function useAuthUser(navigation, f = (user) => {}) {
+export default function useAuthUser(navigation, f = (user) => { }) {
     const [authUser, setAuthUser] = useState(undefined);
     useEffect(() => {
         return navigation.addListener("focus", async () => {
@@ -35,6 +35,7 @@ export default function useAuthUser(navigation, f = (user) => {}) {
                 cognitoUser.attributes = {
                     ...cognitoUser.attributes,
                     userId,
+                    //zone,
                     zoneinfo,
                     groups,
                     userDbId,
@@ -47,28 +48,28 @@ export default function useAuthUser(navigation, f = (user) => {}) {
                     Alert.alert(
                         "Alert", // Title
                         "Network Error. Please refresh later", // Message
-                        [            
+                        [
                             {
                                 text: "OK",
                                 onPress: () => signOut(),
                             },
                         ],
                     )
-                } 
+                }
                 // Handle not session timeout error
                 else {
                     // If error getting user then signout
                     Alert.alert( // show alert to signout
                         "Alert", // Title
                         "Session timeout. Please sign in again", // Message
-                        [            
+                        [
                             {
                                 text: "Logout",
                                 onPress: () => signOut(),
-                                style: "destructive", 
+                                style: "destructive",
                             },
                         ],
-                    );  
+                    );
                 }
             }
         });

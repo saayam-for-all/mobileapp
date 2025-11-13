@@ -12,7 +12,7 @@ const EditProfile = () => {
   const [secondaryEmail, setSecondaryEmail] = useState('');
   const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
   const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
-  const [zone, setZone] = useState('');
+  const [zoneinfo, setzoneinfo] = useState('');
   const [needVerification, setNeedVerification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [backupProfile, setBackupProfile] = useState({});
@@ -31,7 +31,7 @@ const EditProfile = () => {
     Auth.currentAuthenticatedUser()
       .then((user) => {
         const attributes = user?.attributes;
-        const { email, family_name, given_name, phone_number } = attributes;
+        const { email, family_name, given_name, phone_number, ["custom:Country"]: zoneinfoAttr } = attributes;
 
         const profileData = {
           firstName: given_name || '',
@@ -40,13 +40,14 @@ const EditProfile = () => {
           primaryPhoneNumber: phone_number || '',
           secondaryEmail: '',
           secondaryPhoneNumber: '',
-          zone: '',
+          zoneinfo: zoneinfoAttr || '',
         };
 
         setFirstName(profileData.firstName);
         setLastName(profileData.lastName);
         setPrimaryEmail(profileData.primaryEmail);
         setPrimaryPhoneNumber(profileData.primaryPhoneNumber);
+        setzoneinfo(profileData.zoneinfo);
         setBackupProfile(profileData);
       })
       .catch((err) => console.log('Error loading user:', err));
@@ -64,7 +65,8 @@ const EditProfile = () => {
           email: primaryEmail,
           family_name: lastName,
           given_name: firstName,
-          phone_number: primaryPhoneNumber
+          phone_number: primaryPhoneNumber,
+          "custom:Country": zoneinfoinfo
         }
       });
       setNeedVerification(false);
@@ -97,9 +99,9 @@ const EditProfile = () => {
       return false;
     }
 
-    // Time Zone should be in uppercase
-    if (zone !== zone.toUpperCase()) {
-      Alert.alert('Invalid Time Zone', 'Time Zone should be in uppercase.');
+    // Time zoneinfo should be in uppercase
+    if (zoneinfo !== zoneinfo.toUpperCase()) {
+      Alert.alert('Invalid Time zoneinfo', 'Time zoneinfo should be in uppercase.');
       return false;
     }
 
@@ -128,7 +130,8 @@ const EditProfile = () => {
           email: primaryEmail,
           family_name: lastName,
           given_name: firstName,
-          phone_number: primaryPhoneNumber
+          phone_number: primaryPhoneNumber,
+          "custom:Country": zoneinfo,
         });
       }
       Alert.alert('Success', 'Profile updated successfully.');
@@ -151,7 +154,7 @@ const EditProfile = () => {
         secondaryEmail,
         primaryPhoneNumber,
         secondaryPhoneNumber,
-        zone,
+        zoneinfo,
       });
 
       setIsEditing(false);
@@ -166,7 +169,7 @@ const EditProfile = () => {
       setSecondaryEmail(backupProfile.secondaryEmail);
       setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
       setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
-      setZone(backupProfile.zone);
+      setzoneinfo(backupProfile.zoneinfo);
     }
     setIsEditing(false);
   };
@@ -231,9 +234,9 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Zone"
-        value={zone}
-        onChangeText={setZone}
+        placeholder="zone"
+        value={zoneinfo}
+        onChangeText={setzoneinfo}
         editable={isEditing}
       />
 
