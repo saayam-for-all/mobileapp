@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Auth from '@aws-amplify/auth';
+import { countriesList } from '../../data/countries';
 import useAuthUser from '../../hooks/useAuthUser';
+import RNPickerSelect from "react-native-picker-select";
+
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
@@ -66,7 +69,7 @@ const EditProfile = () => {
           family_name: lastName,
           given_name: firstName,
           phone_number: primaryPhoneNumber,
-          "custom:Country": zoneinfoinfo
+          "custom:Country": zoneinfo
         }
       });
       setNeedVerification(false);
@@ -96,12 +99,6 @@ const EditProfile = () => {
     const phoneRegex = /^\+[0-9]{1,15}$/;
     if (!phoneRegex.test(primaryPhoneNumber)) {
       Alert.alert('Invalid Phone Number', 'Primary Phone number should start with "+" followed by digits.');
-      return false;
-    }
-
-    // Time zoneinfo should be in uppercase
-    if (zoneinfo !== zoneinfo.toUpperCase()) {
-      Alert.alert('Invalid Time zoneinfo', 'Time zoneinfo should be in uppercase.');
       return false;
     }
 
@@ -232,13 +229,44 @@ const EditProfile = () => {
         editable={isEditing}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="zone"
+      <RNPickerSelect
+        onValueChange={(value) => setzoneinfo(value)}
+        items={countriesList}
         value={zoneinfo}
-        onChangeText={setzoneinfo}
-        editable={isEditing}
+        disabled={!isEditing}
+        placeholder={{ label: "Select Country", value: null }}
+        useNativeAndroidPickerStyle={false}
+        style={{
+          inputIOS: {
+            ...styles.inputIOS,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 8,
+            backgroundColor: "#fff",
+            height: 50,
+            paddingHorizontal: 10,
+            paddingVertical: 12,
+            color: "#000",
+          },
+          inputAndroid: {
+            ...styles.inputAndroid,
+            borderColor: "#ccc",
+            borderWidth: 1,
+            borderRadius: 8,
+            backgroundColor: "#fff",
+            height: 50,
+            paddingHorizontal: 10,
+            paddingVertical: 6,
+            color: "#000",
+          },
+          placeholder: {
+            color: "#9CA3AF",
+          },
+        }}
       />
+
+
+
 
       {!isEditing ? (
         <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
