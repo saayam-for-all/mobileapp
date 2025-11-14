@@ -1,0 +1,40 @@
+diff --git a/node_modules/expo-localization/android/build.gradle b/node_modules/expo-localization/android/build.gradle
+index b97b2d7..eec8038 100644
+--- a/node_modules/expo-localization/android/build.gradle
++++ b/node_modules/expo-localization/android/build.gradle
+@@ -1,19 +1,30 @@
+-plugins {
+-  id 'com.android.library'
+-  id 'expo-module-gradle-plugin'
+-}
++apply plugin: 'com.android.library'
++apply plugin: 'kotlin-android'
++
++def expoModulesCorePlugin = new File(project(":expo-modules-core").projectDir.absolutePath, "ExpoModulesCorePlugin.gradle")
++apply from: expoModulesCorePlugin
+ 
+ group = 'host.exp.exponent'
+ version = '17.0.7'
+ 
++def safeExtGet(prop, fallback) {
++  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
++}
++
+ android {
++  compileSdkVersion safeExtGet("compileSdkVersion", 34)
++  
+   namespace "expo.modules.localization"
++  
+   defaultConfig {
++    minSdkVersion safeExtGet("minSdkVersion", 23)
++    targetSdkVersion safeExtGet("targetSdkVersion", 34)
+     versionCode 22
+     versionName "17.0.7"
+   }
+ }
+ 
+ dependencies {
++  implementation project(':expo-modules-core')
+   implementation "androidx.core:core-ktx:1.6.0"
+ }
+\ No newline at end of file
