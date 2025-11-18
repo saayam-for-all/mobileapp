@@ -4,6 +4,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { countriesList } from "../../data/countries";
 import { languagesList } from "../../data/languages";
+import useAuthUser from '../../hooks/useAuthUser';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     container: {
@@ -93,13 +95,11 @@ const SearchableDropdown = ({ data, setData, value, setValue, isOpen, setOpen, p
                 min={0}
                 max={3}
                 badgeDotColors={["#e76f51", "#00b4d8", "#e9c46a", "#e76f51", "#8ac926", "#00b4d8", "#e9c46a"]}
-
                 placeholder={placeholder}
                 searchable={true}
                 style={styles.inputIOS}
                 dropDownContainerStyle={styles.inputIOS}
                 searchContainerStyle={{ borderBottomColor: "#ccc" }}
-
                 disabled={disabled}
                 value={value}
                 items={data}
@@ -145,6 +145,14 @@ const EditPersonal = () => {
     const [languages, setLanguages] = useState(languagesList);
     const defaultCountries = [{ value: "English", label: "English" }];
     const defaultLanguages = [{ value: 'English', label: "English" }];
+    const navigation = useNavigation();
+    const user = useAuthUser(navigation);
+
+    useEffect(() => {
+        if (user?.attributes?.['custom:Country']) {
+            setCountry(user.attributes['custom:Country']);
+        }
+    }, [user]);
 
     AbortSignal.timeout ??= function timeout(ms) {
         const ctrl = new AbortController()
@@ -201,7 +209,7 @@ const EditPersonal = () => {
         // DOB should match the DD/MM/YY format
         const dobRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
         if (!dobRegex.test(dob)) {
-            Alert.alert('Invalid Date of Birth', 'DOB should be in the format DD/MM/YY.');
+            Alert.alert('Invalid Date of Birth', 'DOB should be in the format MM/DD/YYYY.');
             return false;
         }
     }
