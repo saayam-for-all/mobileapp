@@ -17,13 +17,13 @@ const api = axios.create(
         const session = ((await Auth.currentSession()));
         //let token = session.getIdToken().getJwtToken();
         //console.log ('token api', token)
-        idTokenExpire = session.getIdToken().getExpiration();
-        refreshToken = session.getRefreshToken();
-        currentTimeSeconds = Math.round(+new Date() / 1000);
+        const idTokenExpire = session.getIdToken().getExpiration();
+        const refreshToken = session.getRefreshToken();
+        const currentTimeSeconds = Math.round(+new Date() / 1000);
         if (idTokenExpire < currentTimeSeconds) {
           Auth.currentAuthenticatedUser()
-            .then((res) => {
-              res.refreshSession(refreshToken, (err, data) => {
+            .then((user) => {
+              user.refreshSession(refreshToken, (err, data) => {
                 if (err) {
                   Auth.signOut()
                 } else {
