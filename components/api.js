@@ -25,6 +25,7 @@ const api = axios.create(
             .then((user) => {
               user.refreshSession(refreshToken, (err, data) => {
                 if (err) {
+                  console.log('Error refreshing token', err);
                   Auth.signOut()
                 } else {
                   config.headers.Authorization = data.getIdToken().getJwtToken();
