@@ -52,3 +52,25 @@ export const getCategories = async () => {
   const response = await api.get(endpoints.GET_CATEGORIES);
   return response.data;
 };
+
+export const getEnums = async () => {
+  const response = await api.get(endpoints.GET_ENUMS);
+  return response.data;
+};
+
+export const uploadRequestFile = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post(
+    endpoints.UPLOAD_REQUEST_FILE, // <-- add this key to endpoints.json
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+
+  return response.data;
+};
