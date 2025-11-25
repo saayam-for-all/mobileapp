@@ -207,22 +207,22 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       return;
     }
 
-    if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
+    if(!formData.requestCategory || formData.requestCategory === '0.0.0.0.0'){
       const defaultCategories = ["Health", "Education", "Electronics", "General"];
       let suggestedCategories = await getSuggestedCategories();
       console.log("Suggested categories: ", suggestedCategories);
-      if (!suggestedCategories) suggestedCategories = defaultCategories;
+      if(!suggestedCategories) suggestedCategories = defaultCategories;
       suggestedCategories.push('General');
       const alertCategories = suggestedCategories.map((category) => {
         return {
-          text: category,
+          text: category, 
           onPress: async () => {
             setToSubmit(true);
           }
         }
       });
       Alert.alert(
-        'Dear User',
+        'Dear User', 
         'Please fill in categories or select one of the recommended categories',
         [...alertCategories]
       );
@@ -255,7 +255,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         const data = await getEnums();
         console.log("Enums API response:", data);
         setEnums(data);
-
+        
         // Set initial request_for value from enums
         if (data?.requestFor?.[0]) {
           updateFormData('request_for', data.requestFor[0]);
@@ -264,7 +264,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         console.error('Error fetching enums:', error);
       }
     };
-
+    
     fetchEnumsData();
   }, []);
 
@@ -276,14 +276,14 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   }, [formData.requestCategory]);
 
   useEffect(() => {
-    if (toSubmit) submit();
+    if(toSubmit) submit();
   }, [toSubmit]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>{isEdit ? 'Edit Help Request' : 'Create Help Request'}</Text>
-
+        
         <View style={styles.alertBox}>
           <Text style={styles.alertTextBold}>
             Note: We do not handle life-threatening emergency requests. Please call your local emergency service if you need urgent help.
@@ -297,13 +297,13 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             items={
               enums?.requestFor
                 ? Object.values(enums.requestFor).map((val) => ({
-                  label: t(`enums:requestFor.${val}`),
-                  value: val,
-                }))
+                    label: t(`enums:requestFor.${val}`),
+                    value: val,
+                  }))
                 : [
-                  { label: 'Self', value: '0' },
-                  { label: 'Other', value: '1' },
-                ]
+                    { label: 'Self', value: '0' },
+                    { label: 'Other', value: '1' },
+                  ]
             }
             value={formData.request_for}
             style={{
@@ -427,15 +427,15 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             items={
               enums?.requestPriority
                 ? Object.values(enums.requestPriority).map((val) => ({
-                  label: t(`enums:requestPriority.${val}`),
-                  value: val,
-                }))
+                    label: t(`enums:requestPriority.${val}`),
+                    value: val,
+                  }))
                 : [
-                  { label: 'LOW', value: '0' },
-                  { label: 'MEDIUM', value: '1' },
-                  { label: 'HIGH', value: '2' },
-                  { label: 'CRITICAL', value: '3' },
-                ]
+                    { label: 'LOW', value: '0' },
+                    { label: 'MEDIUM', value: '1' },
+                    { label: 'HIGH', value: '2' },
+                    { label: 'CRITICAL', value: '3' },
+                  ]
             }
             value={formData.priority}
             style={{
@@ -450,7 +450,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           <RNPickerSelect
             onValueChange={(value) => updateFormData('requestCategory', value)}
             items={Object.keys(categories).map((id) => {
-              return { label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id }
+              return {label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id}
             })}
             value={formData.requestCategory}
             style={{
@@ -466,7 +466,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             <RNPickerSelect
               onValueChange={(value) => updateFormData('requestSubCategory', value)}
               items={subCategories.map((subCat) => {
-                return { label: t(`categories:REQUEST_CATEGORIES.${categories[formData.requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId }
+                return {label: t(`categories:REQUEST_CATEGORIES.${categories[formData.requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId}
               })}
               value={formData.requestSubCategory}
               style={{
@@ -484,13 +484,13 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             items={
               enums?.requestType
                 ? Object.values(enums.requestType).map((val) => ({
-                  label: t(`enums:requestType.${val}`),
-                  value: val,
-                }))
+                    label: t(`enums:requestType.${val}`),
+                    value: val,
+                  }))
                 : [
-                  { label: 'In Person', value: '0' },
-                  { label: 'Remote', value: '1' },
-                ]
+                    { label: 'In Person', value: '0' },
+                    { label: 'Remote', value: '1' },
+                  ]
             }
             value={formData.request_type}
             style={{
@@ -538,6 +538,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             onChangeText={(text) => updateFormData('subject', text)}
           />
         </View>
+
         <View style={styles.field}>
           <Text style={styles.label}>
             Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)  <Icon
@@ -573,7 +574,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           </Button>
         </View>
       </View>
-    </ScrollView >
+    </ScrollView>
   );
 }
 
