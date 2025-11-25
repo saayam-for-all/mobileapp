@@ -538,7 +538,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             onChangeText={(text) => updateFormData('subject', text)}
           />
         </View>
-
         <View style={styles.field}>
           <Text style={styles.label}>
             Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)  <Icon
@@ -566,13 +565,13 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         </View>
 
         <View style={styles.buttonContainer}>
-        <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
-          Cancel
-        </Button>
-        <Button backgroundColor="blue" onPress={handleSubmit}>
-          Submit
-        </Button>
-      </View>
+          <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
+            Cancel
+          </Button>
+          <Button backgroundColor="blue" onPress={handleSubmit}>
+            Submit
+          </Button>
+        </View>
       </View>
     </ScrollView >
   );
