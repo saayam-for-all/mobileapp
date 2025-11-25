@@ -9,6 +9,8 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import api from '../components/api';
 import languagesData from '../i18n/languagesData';
+import * as DocumentPicker from 'expo-document-picker';
+import Icon from 'react-native-vector-icons/Feather'
 
 import { getCategories, getEnums } from '../services/requestServices';
 
@@ -27,7 +29,7 @@ const languageOptions = languagesData.map((lang) => ({
   label: lang.name,
 }));
 
-export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
+export default function UserRequest({ isEdit = false, onClose, requestItem = {} }) {
   const { t, i18n } = useTranslation(["common", "categories"]);
 
   // Consolidated form data
@@ -58,6 +60,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const [subCategories, setSubCategories] = useState([]);
   const [enums, setEnums] = useState(null);
   const [toSubmit, setToSubmit] = useState(false);
+  const [attachedFile, setAttachedFile] = useState(null);
   const navigation = useNavigation();
 
   // Helper to update form data
@@ -94,7 +97,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       } else {
         throw new Error('No categories found');
       }
-    } 
+    }
     catch (err) {
       console.error('Error getting categories: ', err);
     }
@@ -104,7 +107,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const checkProfanity = async () => {
     const res = await api.post(
       "/requests/v0.0.1/checkProfanity",
-      {subject: formData.subject, description: formData.description}
+      { subject: formData.subject, description: formData.description }
     );
     return res.data;
   }
@@ -112,17 +115,17 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const getSuggestedCategories = async () => {
     const res = await api.post(
       "/genai/v0.0.1/predict_categories",
-      {subject: formData.subject, description: formData.description}
+      { subject: formData.subject, description: formData.description }
     );
     return res.data;
   }
 
-  const submit = async (category='') => {
-    const submitData = { 
+  const submit = async (category = '') => {
+    const submitData = {
       ...formData,
       requestCategory: category || formData.requestCategory
     };
-    
+
     // Include other person info if not for self
     if (!isSelfRequest()) {
       submitData.otherPerson = otherPersonInfo;
@@ -134,17 +137,35 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       'Dear User',
       'Help Request Created Successfully.\nCategory: ' + submitData.requestCategory,
       [
-        {text: 'OK', onPress: () => {
-          if(isEdit) {
-            onClose();
+        {
+          text: 'OK', onPress: () => {
+            if (isEdit) {
+              onClose();
+            }
+            else {
+              navigation.navigate('Home');
+            }
           }
-          else {
-            navigation.navigate('Home');
-          }
-        }},
+        },
       ]
     );
   }
+
+  const handleFilePick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*", // allow all file types
+        copyToCacheDirectory: true,
+      });
+
+      if (result.type === "success") {
+        setAttachedFile(result);
+        Alert.alert("File Attached", result.name);
+      }
+    } catch (err) {
+      console.log("File picker error:", err);
+    }
+  };
 
   const handleSubmit = async () => {
     // Validate required fields
@@ -160,7 +181,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
         Alert.alert('Validation Error', 'First Name, Last Name, and Email are required for the person you are submitting for!');
         return;
       }
-      
+
       // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
@@ -170,15 +191,17 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
     }
 
     const profanityResponse = await checkProfanity();
-    if(profanityResponse.contains_profanity) {
+    if (profanityResponse.contains_profanity) {
       const profanity = profanityResponse.profanity;
       Alert.alert(
-        'Dear User', 
-        'The system detects profanity in your help request, please edit your request.\nTrigger words: ' + profanity, 
+        'Dear User',
+        'The system detects profanity in your help request, please edit your request.\nTrigger words: ' + profanity,
         [
-          {text: 'OK', onPress: () => {
-            console.log("OK pressed for check profanity");
-          }},
+          {
+            text: 'OK', onPress: () => {
+              console.log("OK pressed for check profanity");
+            }
+          },
         ]
       );
       return;
@@ -518,7 +541,13 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
 
         <View style={styles.field}>
           <Text style={styles.label}>
-            Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)
+            Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)  <Icon
+              name="paperclip"
+              size={18}
+              color="#374151"
+              style={{ marginLeft: 8 }}
+              onPress={handleFilePick}
+            />
           </Text>
           <Input
             style={[styles.textArea, { minHeight: 100 }]}
@@ -529,6 +558,11 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
             value={formData.description}
             onChangeText={(text) => updateFormData('description', text)}
           />
+          {attachedFile && (
+            <Text style={styles.attachedFileText}>
+              📎 {attachedFile.name}
+            </Text>
+          )}
         </View>
 
         <View style={styles.buttonContainer}>
