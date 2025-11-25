@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import api from '../components/api';
+import * as DocumentPicker from 'expo-document-picker';
+import Icon from 'react-native-vector-icons/Feather'
 
 import { getCategories } from '../services/requestServices';
 
@@ -16,22 +18,23 @@ const sampleDescription = "We need volunteers for our upcoming Community Clean-U
 up litter, sorting recyclables, and managing the registration table. \
 We also need donations of trash bags, gloves, and refreshments.";
 
-export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
+export default function UserRequest({ isEdit = false, onClose, requestItem = {} }) {
   const { t, i18n } = useTranslation(["common", "categories"]);
 
   const [forSelf, setForSelf] = useState('Yes');
   const [isCalamity, setIsCalamity] = useState(false);
-  const [priority, setPriority] = useState(isEdit&&requestItem?.priority ? requestItem.priority : 'Low');
+  const [priority, setPriority] = useState(isEdit && requestItem?.priority ? requestItem.priority : 'Low');
   // Default category to 'General' for new requests
   const [categories, setCategories] = useState({});
-  const [requestCategory, setRequestCategory] = useState(isEdit&&requestItem?.category ? requestItem.category : '0.0.0.0.0');
+  const [requestCategory, setRequestCategory] = useState(isEdit && requestItem?.category ? requestItem.category : '0.0.0.0.0');
   const [subCategories, setSubCategories] = useState([]);
   const [requestSubCategory, setRequestSubCategory] = useState('');
   const [requestType, setRequestType] = useState('Remote');
   const [location, setLocation] = useState('');
-  const [subject, setSubject] = useState((isEdit&&requestItem?.subject) ? requestItem.subject : ''); 
-  const [description, setDescription] = useState(isEdit&&requestItem?.description ? requestItem.description : '');
+  const [subject, setSubject] = useState((isEdit && requestItem?.subject) ? requestItem.subject : '');
+  const [description, setDescription] = useState(isEdit && requestItem?.description ? requestItem.description : '');
   const [toSubmit, setToSubmit] = useState(false);
+  const [attachedFile, setAttachedFile] = useState(null);
   const navigation = useNavigation();
 
   const fetchCategories = async () => {
@@ -53,7 +56,7 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       } else {
         throw new Error('No categories found');
       }
-    } 
+    }
     catch (err) {
       console.error('Error getting categories: ', err);
     }
@@ -63,19 +66,19 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
   const checkProfanity = async () => {
     const res = await api.post(
       "/requests/v0.0.1/checkProfanity",
-      {subject: subject, description: description}
+      { subject: subject, description: description }
     );
     return res.data;
   }
   const getSuggestedCategories = async () => {
     const res = await api.post(
       "/genai/v0.0.1/predict_categories",
-      {subject: subject, description: description}
+      { subject: subject, description: description }
     );
     return res.data;
   }
-  const submit = async (category='') => {
-    if(category != '') requestCategory = category;
+  const submit = async (category = '') => {
+    if (category != '') requestCategory = category;
     // Proceed with form submission
     console.log({
       forSelf,
@@ -89,19 +92,38 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
     });
 
     Alert.alert(
-      'Dear User','Help Request Created Successfully.\nCategory: '+requestCategory,
+      'Dear User', 'Help Request Created Successfully.\nCategory: ' + requestCategory,
       [
-        {text: 'OK', onPress: () => {
-          if(isEdit) {
-            onClose();
+        {
+          text: 'OK', onPress: () => {
+            if (isEdit) {
+              onClose();
+            }
+            else {
+              navigation.navigate('Home');
+            }
           }
-          else {
-            navigation.navigate('Home');
-          }
-        }},
+        },
       ]
     );
   }
+
+  const handleFilePick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*", // allow all file types
+        copyToCacheDirectory: true,
+      });
+
+      if (result.type === "success") {
+        setAttachedFile(result);
+        Alert.alert("File Attached", result.name);
+      }
+    } catch (err) {
+      console.log("File picker error:", err);
+    }
+  };
+
   const handleSubmit = async () => {
     // Validate required fields
     if (!subject || !description) {
@@ -109,26 +131,28 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
       return;
     }
     const profanityResponse = await checkProfanity();
-    if(profanityResponse.contains_profanity) {
+    if (profanityResponse.contains_profanity) {
       const profanity = profanityResponse.profanity;
       Alert.alert(
         'Dear User', 'The system detects profanity in your help request, please edit your request.\nTrigger words: '
-        +profanity, 
+      + profanity,
         [
-          {text: 'OK', onPress: () => {
-            console.log("OK pressed for check profanity");
-          }},
+          {
+            text: 'OK', onPress: () => {
+              console.log("OK pressed for check profanity");
+            }
+          },
         ]
       );
       return
     }
-    if(!requestCategory || requestCategory=='0.0.0.0.0'){
+    if (!requestCategory || requestCategory == '0.0.0.0.0') {
       const defaultCateogries = ["Health", "Education", "Electronics", "General"];
       let suggestedCateogries = await getSuggestedCategories();
       console.log("Suggested categories: ", suggestedCateogries);
-      if(!suggestedCateogries) suggestedCateogries = defaultCateogries;
+      if (!suggestedCateogries) suggestedCateogries = defaultCateogries;
       suggestedCateogries.push('General');
-      const alertCategories = suggestedCateogries.map((category)=>{
+      const alertCategories = suggestedCateogries.map((category) => {
         return {
           text: category, onPress: async () => {
             // setRequestCategory(category);
@@ -172,9 +196,9 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
     }
   }, [requestCategory])
 
-  useEffect(()=>{
-    if(toSubmit) submit();
-  },[toSubmit])
+  useEffect(() => {
+    if (toSubmit) submit();
+  }, [toSubmit])
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -195,8 +219,8 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
             ]}
             value={forSelf}
             style={{
-                  inputIOS: pickerSelectStyles.inputIOS,
-                  inputAndroid: pickerSelectStyles.inputAndroid,
+              inputIOS: pickerSelectStyles.inputIOS,
+              inputAndroid: pickerSelectStyles.inputAndroid,
             }}
           />
         </View>
@@ -219,8 +243,8 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
             ]}
             value={priority}
             style={{
-                  inputIOS: pickerSelectStyles.inputIOS,
-                  inputAndroid: pickerSelectStyles.inputAndroid,
+              inputIOS: pickerSelectStyles.inputIOS,
+              inputAndroid: pickerSelectStyles.inputAndroid,
             }}
           />
         </View>
@@ -228,8 +252,8 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
           <Text style={styles.label}>Request Category</Text>
           <RNPickerSelect
             onValueChange={(value) => setRequestCategory(value)}
-            items = {Object.keys(categories).map((id)=>{
-              return {label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id}
+            items={Object.keys(categories).map((id) => {
+              return { label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id }
             })}
             value={requestCategory}
             style={{
@@ -243,8 +267,8 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
             <Text style={styles.label}>Subcategory</Text>
             <RNPickerSelect
               onValueChange={(value) => setRequestSubCategory(value)}
-              items = {subCategories.map((subCat)=>{
-                return {label: t(`categories:REQUEST_CATEGORIES.${categories[requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId}
+              items={subCategories.map((subCat) => {
+                return { label: t(`categories:REQUEST_CATEGORIES.${categories[requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId }
               })}
               value={requestSubCategory}
               style={{
@@ -264,11 +288,11 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
             ]}
             value={requestType}
             style={{
-                  inputIOS: pickerSelectStyles.inputIOS,
-                  inputAndroid: pickerSelectStyles.inputAndroid,
+              inputIOS: pickerSelectStyles.inputIOS,
+              inputAndroid: pickerSelectStyles.inputAndroid,
             }}
           />
-        {/* 
+          {/* 
           ═══════════════════════════════════════════════════════
           NOT FUNCTIONING, WILL CHANGE INTO CHEAPER MAP ALTERNATIVES 
           ═══════════════════════════════════════════════════════
@@ -298,42 +322,53 @@ export default function UserRequest({isEdit = false, onClose, requestItem={}}) {
               />
             </View>
           )}
-        <View style={styles.field}>
-          <Text style={styles.label}>
-            Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
-          </Text>
-          <Input
-            style={styles.textArea}
-            maxLength={70}
-            placeholder="Enter subject..."
-            value={subject}
-            onChangeText={setSubject}
-          />
-        </View>
-        <View style={styles.field}>
-          <Text style={styles.label}>
-            Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)
-          </Text>
-          <Input
-            style={[styles.textArea, { minHeight: 100 }]}
-            multiline
-            numberOfLines={4}
-            maxLength={500}
-            placeholder="Describe your request..."
-            value={description}
-            onChangeText={setDescription}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
-            Cancel
-          </Button>
-          <Button backgroundColor="blue" onPress={handleSubmit}>
-            Submit
-          </Button>
+          <View style={styles.field}>
+            <Text style={styles.label}>
+              Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
+            </Text>
+            <Input
+              style={styles.textArea}
+              maxLength={70}
+              placeholder="Enter subject..."
+              value={subject}
+              onChangeText={setSubject}
+            />
+          </View>
+          <View style={styles.field}>
+            <Text style={styles.label}>
+              Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)  <Icon
+                name="paperclip"
+                size={18}
+                color="#374151"
+                style={{ marginLeft: 8 }}
+                onPress={handleFilePick}
+              />
+            </Text>
+            <Input
+              style={[styles.textArea, { minHeight: 100 }]}
+              multiline
+              numberOfLines={4}
+              maxLength={500}
+              placeholder="Describe your request..."
+              value={description}
+              onChangeText={setDescription}
+            />
+            {attachedFile && (
+              <Text style={styles.attachedFileText}>
+                📎 {attachedFile.name}
+              </Text>
+            )}
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
+              Cancel
+            </Button>
+            <Button backgroundColor="blue" onPress={handleSubmit}>
+              Submit
+            </Button>
+          </View>
         </View>
       </View>
-    </View>
     </ScrollView>
   );
 }
