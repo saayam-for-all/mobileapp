@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
 export default function BackgroundImage({ children }) {
   return (
-    <ImageBackground source={IMAGE} style={styles.image} blurRadius={5}>
+    <ImageBackground source={IMAGE} style={styles.image} blurRadius={5} testID={'mainComponent'} >
       {children}
     </ImageBackground>
   );

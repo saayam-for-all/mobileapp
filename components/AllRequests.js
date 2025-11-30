@@ -92,7 +92,7 @@ const AllRequests = ({ data }) => {
           onChangeText={handleSearch}
           value={searchQuery}
         />
-        <TouchableOpacity onPress={handleNavigate}>        
+        <TouchableOpacity onPress={handleNavigate} testID = {'navigateButton'}>        
         <Text style={{marginBottom:20}}><Ionicons name="filter" size={28} color="black" /></Text>
         </TouchableOpacity>
       </View>
@@ -128,7 +128,7 @@ const AllRequests = ({ data }) => {
               </Text>
               <Text style={{ flex: 1, textAlign: "right" }}>
                 {" "}
-                <AntDesign name="right" size={15} color="black" onPress={() => {navigation.navigate("RequestDetails", { item, reqTitle: item.id} )}} />
+                <AntDesign testID={'antDesign'} name="right" size={15} color="black" onPress={() => {navigation.navigate("RequestDetails", { item, reqTitle: item.id} )}} />
               </Text>
             </View>
 

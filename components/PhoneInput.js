@@ -79,17 +79,23 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
   };
 
   return (
-    <View style={{}}>
-        <View style={styles.row}>
+    <View style={{}}
+    testId='viewOne'>
+        <View style={styles.row}
+        testId='viewTwo'>
             <TouchableOpacity
                 onPress={() => setShow(!show)}
                 style={styles.countryCode}
+                testID="buttonOne"
             >
-                <Text style={{}}>
+                <Text style={{}}
+                testId = 'textOne'>
                     {country_name + " (" + countryCode + ")"}
+                    
                 </Text>
             </TouchableOpacity>
             <CountryPicker
+                testId = 'dropDownOne'
                 show={show}
                 style={{
                     modal:{
@@ -138,6 +144,7 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
                 value={phone}
                 placeholder="Enter Phone"
                 placeholderTextColor="#A0A0A0"
+                textId='textInputOne'
             />
         </View>
     </View>
