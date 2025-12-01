@@ -2,7 +2,7 @@ import React from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
 import IMAGE from '../assets/rn-logo.png';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'center',

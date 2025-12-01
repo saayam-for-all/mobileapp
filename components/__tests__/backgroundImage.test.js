@@ -1,5 +1,5 @@
 import { render, within } from "@testing-library/react-native";
-import BackgroundImage from "../BackgroundImage";
+import BackgroundImage, {styles} from "../BackgroundImage";
 import { ImageBackground,Text } from "react-native";
 
 describe('tests component',() =>{
@@ -34,9 +34,12 @@ describe('tests component',() =>{
         
         expect(TheChildText).toBeTruthy()
 
-        
+
+
         //we need to see where does the children renders we now make 
 })
+
+        
     
     
 

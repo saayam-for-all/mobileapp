@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   buttonStyle: {
     padding: 10,
     backgroundColor: '#2a6bcc',
@@ -17,13 +17,15 @@ const styles = StyleSheet.create({
 });
 
 const Button = ({ onPress, children, backgroundColor, style={}}) => {
-  const btnStyle = backgroundColor ? {...styles.buttonStyle, ...style, backgroundColor } : {...styles.buttonStyle,...style};
+ const btnStyle = backgroundColor ? {...styles.buttonStyle, ...style, backgroundColor } : {...styles.buttonStyle,...style};
   return (
     <TouchableHighlight
+    testID='buttonOne'
       onPress={onPress}
       style={btnStyle}
     >
-      <Text style={styles.textStyle}>
+      <Text testID='textOne'
+      style={styles.textStyle}>
         {children}
       </Text>
     </TouchableHighlight>

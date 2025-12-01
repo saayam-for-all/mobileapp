@@ -1,8 +1,9 @@
 import React from 'react'
 import {render,fireEvent} from '@testing-library/react-native'
-import Button from '../Button'
+import Button, {styles} from '../Button'
 import { Linking } from 'react-native'
 describe('test button ', () =>{
+
 
       it('calls onPress when pressed', () => {
     const mockPress = jest.fn();
@@ -17,7 +18,7 @@ describe('test button ', () =>{
 
    it('applies backgroundColor correctly', () => {
     const { UNSAFE_getByType } = render(
-      <Button backgroundColor="#2a6bcc">Donar</Button>
+      <Button backgroundColor="#2a6bcc">Donate</Button>
     );
 
     const touchable = UNSAFE_getByType(require('react-native').TouchableHighlight);
@@ -39,6 +40,15 @@ describe('test button ', () =>{
     expect(openURLMock).toHaveBeenCalledWith('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S')
     openURLMock.mockRestore();
 })
+  it('checks styles',() =>{
+    const {getByTestId} = render(<Button/>)
+    const firstButton = getByTestId('buttonOne')
+    const firstText = getByTestId('textOne')
+    expect(firstText.props.style).toBe(styles.textStyle)
+    expect(firstButton.props.style).toEqual(styles.buttonStyle); // the style interacts with the props, so further tests may be added
+
+
+  })
      
 
 })

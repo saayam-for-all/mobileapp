@@ -6,14 +6,14 @@ const { width, height } = Dimensions.get("window");
 
 const Slide = ({ item }) => {
   return (
-    <View style={styles.cardView}>
-      <Image style={styles.image} source={{ uri: item.url }} />
-      <View style={styles.textView}></View>
+    <View style={styles.cardView} testID="viewOne">
+      <Image style={styles.image} source={{ uri: item.url }} testID="imageOne" />
+      <View style={styles.textView} testID="viewTwo"></View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   cardView: {
     flex: 1,
     width: width - 20,
