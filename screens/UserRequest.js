@@ -10,7 +10,9 @@ import Input from '../components/Input';
 import api from '../components/api';
 import languagesData from '../i18n/languagesData';
 import * as DocumentPicker from 'expo-document-picker';
-import Icon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/Feather';
+import { TouchableOpacity } from 'react-native';
+import AudioRecorder from '../components/AudioRecorder';
 
 import { getCategories, getEnums } from '../services/requestServices';
 
@@ -62,6 +64,10 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const [toSubmit, setToSubmit] = useState(false);
   const [attachedFile, setAttachedFile] = useState(null);
   const navigation = useNavigation();
+
+  // State to toggle the floating audio recorder
+  const [isRecorderVisible, setIsRecorderVisible] = useState(false);
+  const [recordedAudioUri, setRecordedAudioUri] = useState(null);
 
   // Helper to update form data
   const updateFormData = (field, value) => {
@@ -207,22 +213,22 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       return;
     }
 
-    if(!formData.requestCategory || formData.requestCategory === '0.0.0.0.0'){
+    if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
       const defaultCategories = ["Health", "Education", "Electronics", "General"];
       let suggestedCategories = await getSuggestedCategories();
       console.log("Suggested categories: ", suggestedCategories);
-      if(!suggestedCategories) suggestedCategories = defaultCategories;
+      if (!suggestedCategories) suggestedCategories = defaultCategories;
       suggestedCategories.push('General');
       const alertCategories = suggestedCategories.map((category) => {
         return {
-          text: category, 
+          text: category,
           onPress: async () => {
             setToSubmit(true);
           }
         }
       });
       Alert.alert(
-        'Dear User', 
+        'Dear User',
         'Please fill in categories or select one of the recommended categories',
         [...alertCategories]
       );
@@ -255,7 +261,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         const data = await getEnums();
         console.log("Enums API response:", data);
         setEnums(data);
-        
+
         // Set initial request_for value from enums
         if (data?.requestFor?.[0]) {
           updateFormData('request_for', data.requestFor[0]);
@@ -264,7 +270,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         console.error('Error fetching enums:', error);
       }
     };
-    
+
     fetchEnumsData();
   }, []);
 
@@ -276,14 +282,14 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   }, [formData.requestCategory]);
 
   useEffect(() => {
-    if(toSubmit) submit();
+    if (toSubmit) submit();
   }, [toSubmit]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>{isEdit ? 'Edit Help Request' : 'Create Help Request'}</Text>
-        
+
         <View style={styles.alertBox}>
           <Text style={styles.alertTextBold}>
             Note: We do not handle life-threatening emergency requests. Please call your local emergency service if you need urgent help.
@@ -297,13 +303,13 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             items={
               enums?.requestFor
                 ? Object.values(enums.requestFor).map((val) => ({
-                    label: t(`enums:requestFor.${val}`),
-                    value: val,
-                  }))
+                  label: t(`enums:requestFor.${val}`),
+                  value: val,
+                }))
                 : [
-                    { label: 'Self', value: '0' },
-                    { label: 'Other', value: '1' },
-                  ]
+                  { label: 'Self', value: '0' },
+                  { label: 'Other', value: '1' },
+                ]
             }
             value={formData.request_for}
             style={{
@@ -427,15 +433,15 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             items={
               enums?.requestPriority
                 ? Object.values(enums.requestPriority).map((val) => ({
-                    label: t(`enums:requestPriority.${val}`),
-                    value: val,
-                  }))
+                  label: t(`enums:requestPriority.${val}`),
+                  value: val,
+                }))
                 : [
-                    { label: 'LOW', value: '0' },
-                    { label: 'MEDIUM', value: '1' },
-                    { label: 'HIGH', value: '2' },
-                    { label: 'CRITICAL', value: '3' },
-                  ]
+                  { label: 'LOW', value: '0' },
+                  { label: 'MEDIUM', value: '1' },
+                  { label: 'HIGH', value: '2' },
+                  { label: 'CRITICAL', value: '3' },
+                ]
             }
             value={formData.priority}
             style={{
@@ -450,7 +456,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           <RNPickerSelect
             onValueChange={(value) => updateFormData('requestCategory', value)}
             items={Object.keys(categories).map((id) => {
-              return {label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id}
+              return { label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id }
             })}
             value={formData.requestCategory}
             style={{
@@ -466,7 +472,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             <RNPickerSelect
               onValueChange={(value) => updateFormData('requestSubCategory', value)}
               items={subCategories.map((subCat) => {
-                return {label: t(`categories:REQUEST_CATEGORIES.${categories[formData.requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId}
+                return { label: t(`categories:REQUEST_CATEGORIES.${categories[formData.requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId }
               })}
               value={formData.requestSubCategory}
               style={{
@@ -484,13 +490,13 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             items={
               enums?.requestType
                 ? Object.values(enums.requestType).map((val) => ({
-                    label: t(`enums:requestType.${val}`),
-                    value: val,
-                  }))
+                  label: t(`enums:requestType.${val}`),
+                  value: val,
+                }))
                 : [
-                    { label: 'In Person', value: '0' },
-                    { label: 'Remote', value: '1' },
-                  ]
+                  { label: 'In Person', value: '0' },
+                  { label: 'Remote', value: '1' },
+                ]
             }
             value={formData.request_type}
             style={{
@@ -549,15 +555,41 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
               onPress={handleFilePick}
             />
           </Text>
-          <Input
-            style={[styles.textArea, { minHeight: 100 }]}
-            multiline
-            numberOfLines={4}
-            maxLength={500}
-            placeholder="Describe your request..."
-            value={formData.description}
-            onChangeText={(text) => updateFormData('description', text)}
-          />
+
+          {/* Wrap Input in relative container to position microphone inside */}
+          <View style={{ position: 'relative' }}>
+            <Input
+              style={[styles.textArea, { minHeight: 100, paddingRight: 40 }]}
+              multiline
+              numberOfLines={4}
+              maxLength={500}
+              placeholder="Describe your request..."
+              value={formData.description}
+              onChangeText={(text) => updateFormData('description', text)}
+            />
+              <AudioRecorder
+                visible={isRecorderVisible}
+                onStop={(uri) => {
+                  setRecordedAudioUri(uri); // store audio URI
+                  setIsRecorderVisible(false); // close recorder
+                }}
+                onClose={() => setIsRecorderVisible(false)}
+              />
+
+
+            {/* Microphone Icon to open Floating AudioRecorder */}
+            <TouchableOpacity
+              onPress={() => setIsRecorderVisible(true)}
+              style={{
+                position: 'absolute',
+                right: 10,
+                top: 16, // adjust to vertically center
+              }}
+            >
+            </TouchableOpacity>
+
+          </View>
+
           {attachedFile && (
             <Text style={styles.attachedFileText}>
               📎 {attachedFile.name}
