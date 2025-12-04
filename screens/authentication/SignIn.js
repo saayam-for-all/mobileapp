@@ -245,7 +245,6 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           }
         })
         .catch((err) => {
-          console.log(err);
           if (!err.message) {
             console.log("Error when signing in: ", err);
             Alert.alert("Error when signing in: ", err);
@@ -254,6 +253,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
               console.log("User not confirmed");
               navigation.navigate("Confirmation", {
                 email: emailToUse,
+                fromSignIn: true
               });
             }
             if (err.message) {

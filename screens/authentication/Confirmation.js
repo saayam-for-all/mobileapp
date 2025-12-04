@@ -14,11 +14,26 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
   const [timer, setTimer] = useState(59);
   const [canResend, setCanResend] = useState(false);
   const email = !isUpdate ? route.params?.email : "";
+  const fromSignIn = !isUpdate && (route.params?.fromSignIn || false);
   const nav = useNavigation();
-  
   const inputRef = useRef();
 
   useEffect(() => {
+    if (fromSignIn) {
+      resendCode();
+    }
+  },[]);
+
+
+  useEffect(() => {
+    if (isUpdate) {
+      setCanResend(false);
+      setTimer(undefined);
+      setError(
+        "Resend code not available for update email. \nIf not received, please try updating your email again from the profile page."
+      );
+      return;
+    }
     if (timer > 0) {
       const interval = setInterval(() => {
         setTimer(timer - 1);
@@ -74,19 +89,21 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
   };
 
   const resendCode = async () => {
-    if (canResend) {
-      try {
-        if (!isUpdate) {
-          await Auth.resendSignUp(email);
-        } else {
-          // Handle resend for update case
-        }
-        setTimer(59);
+    try {
+      if (!isUpdate) {
+        const res = await Auth.resendSignUp(email);
+        setTimer(60);
         setCanResend(false);
         setError('');
-      } catch (err) {
-        setError(err.message || 'Failed to resend code');
+      } else {
+        // Handle resend for update case
+        setError(
+          "Resend not available, please try updating your email again from the profile page."
+        );
+        return;
       }
+    } catch (err) {
+      setError(err.message || 'Failed to resend code');
     }
   };
 
@@ -107,8 +124,8 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
 
       <Text style={styles.codeLabel}>Enter Code</Text>
 
-      <TouchableOpacity 
-        style={styles.codeContainer} 
+      <TouchableOpacity
+        style={styles.codeContainer}
         onPress={handleContainerPress}
         activeOpacity={1}
       >
@@ -149,22 +166,29 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
       <View style={styles.resendContainer}>
         <Text style={styles.resendText}>
           Didn't Receive Code?{' '}
-          <TouchableOpacity onPress={resendCode} disabled={!canResend}>
+          <TouchableOpacity
+            onPress={() => {
+              if (canResend) {
+                resendCode();
+              }
+            }}
+            disabled={!canResend}
+          >
             <Text style={[styles.resendLink, !canResend && { color: '#ccc' }]}>
               Resend Code
             </Text>
           </TouchableOpacity>
         </Text>
         
-        {!canResend && (
+        {!canResend && timer && (
           <Text style={styles.timerText}>
             Resend code in {formatTimer(timer)}
           </Text>
         )}
       </View>
 
-      <TouchableOpacity 
-        style={styles.verifyButton} 
+      <TouchableOpacity
+        style={styles.verifyButton}
         onPress={isUpdate ? confirmUpdate : confirmSignUp}
       >
         <Text style={styles.verifyButtonText}>Verify Account</Text>
