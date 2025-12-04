@@ -40,15 +40,20 @@ function ForgetPassword({ navigation }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const getConfirmationCode = async () => {
     if (email.length > 4) {
+      setLoading(true);
       Auth.forgotPassword(email)
         .then(() => {
           setEditableInput(true);
           setConfirmationStep(true);
           setErrorMessage('');
+          setLoading(false);
         })
         .catch((err) => {
+          setLoading(false);
           if (err.message) {
             setErrorMessage(err.message);
           }
@@ -91,6 +96,7 @@ function ForgetPassword({ navigation }) {
       <Button
         style={{width: '94%', margin: '3%'}}
         onPress={() => getConfirmationCode()}
+        loading={loading}
       >
         Reset password
       </Button>

@@ -54,6 +54,8 @@ export default function SignUp({ navigation }) {
   const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [repeatPassword, onChangeRepeatPassword] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const [invalidMessage, setInvalidMessage] = useState(null);
   const errorMessages = {
     password: 'Password must be equal and have greater length than 8 with uppercase, digits and special characters.',
@@ -72,6 +74,7 @@ export default function SignUp({ navigation }) {
     console.log(allInputsFilled);
     if (validPassword && emailValid && isPhoneValid && allInputsFilled) {
       setInvalidMessage(null);
+      setLoading(true);
       Auth.signUp({
         username: email, 
         password,
@@ -87,6 +90,7 @@ export default function SignUp({ navigation }) {
         validationData: [], // optional
       })
         .then((data) => {
+          setLoading(false);
           console.log(data?.user?.username);
           if(data?.user?.username){
             AsyncStorage.setItem(data?.user?.username, JSON.stringify(true))
@@ -95,6 +99,7 @@ export default function SignUp({ navigation }) {
           navigation.navigate('Confirmation', { email });
         })
         .catch((err) => {
+          setLoading(false);
           if (err.message) {
             popError(err.message);
             setInvalidMessage(err.message);
@@ -275,6 +280,7 @@ export default function SignUp({ navigation }) {
       <Button
         style={{width: '96%', marginHorizontal: '3%'}}
         onPress={() => signUp()}
+        loading={loading}
       >
         Sign Up
       </Button>

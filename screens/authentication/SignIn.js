@@ -123,6 +123,8 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const [biometricType, setBiometricType] = useState(null);
   const [hasStoredCredentials, setHasStoredCredentials] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     checkBiometricAvailability();
     checkStoredCredentials();
@@ -218,8 +220,10 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const performSignIn = async (emailToUse, passwordToUse, shouldPromptSave = true) => {
     if (emailToUse.length > 4 && passwordToUse.length > 2) {
       setErrorMessage("");
+      setLoading(true);
       await Auth.signIn(emailToUse, passwordToUse)
         .then((user) => {
+          setLoading(false);
           // On successful sign-in, offer to save credentials if not already saved
           if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
             Alert.alert(
@@ -245,6 +249,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           }
         })
         .catch((err) => {
+          setLoading(false);
           if (!err.message) {
             console.log("Error when signing in: ", err);
             Alert.alert("Error when signing in: ", err);
@@ -332,7 +337,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity> */}
       <Spacer size={30} />
-      <Button onPress={() => signIn()} style={{ width: '100%' }}>
+      <Button onPress={() => signIn()} style={{ width: '100%' }} loading={loading}>
         Log In
       </Button>
       <Spacer size={10} />
