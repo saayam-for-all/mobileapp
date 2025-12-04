@@ -40,15 +40,21 @@ function ForgetPassword({ navigation }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const [codeLoading, setCodeLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
   const getConfirmationCode = async () => {
     if (email.length > 4) {
+      setCodeLoading(true);
       Auth.forgotPassword(email)
         .then(() => {
           setEditableInput(true);
           setConfirmationStep(true);
           setErrorMessage('');
+          setCodeLoading(false);
         })
         .catch((err) => {
+          setCodeLoading(false);
           if (err.message) {
             setErrorMessage(err.message);
           }
@@ -64,12 +70,15 @@ function ForgetPassword({ navigation }) {
       setErrorMessage('Passwords do not match');
       return;
     }
+    setConfirmLoading(true);
     Auth.forgotPasswordSubmit(email, code, newPassword)
       .then(() => {
+        setConfirmLoading(false);
         setErrorMessage('');
         navigation.navigate('SignIn');
       })
       .catch((err) => {
+        setConfirmLoading(false);
         if (err.message) {
           setErrorMessage(err.message);
         }
@@ -91,6 +100,7 @@ function ForgetPassword({ navigation }) {
       <Button
         style={{width: '94%', margin: '3%'}}
         onPress={() => getConfirmationCode()}
+        loading={codeLoading}
       >
         Reset password
       </Button>
@@ -139,6 +149,7 @@ function ForgetPassword({ navigation }) {
           <Button
             style={{width: '94%', margin: '3%'}}
             onPress={() => postNewPassword()}
+            loading={confirmLoading}
           >
             Submit new password
           </Button>

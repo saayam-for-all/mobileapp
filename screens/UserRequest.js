@@ -33,6 +33,7 @@ const languageOptions = languagesData.map((lang) => ({
 
 export default function UserRequest({ isEdit = false, onClose, requestItem = {} }) {
   const { t, i18n } = useTranslation(["common", "categories"]);
+  const [loading, setLoading] = useState(false);
 
   // Consolidated form data
   const [formData, setFormData] = useState({
@@ -195,46 +196,57 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         return;
       }
     }
+    setLoading(true);
+    try {
+      // Check profanity
+      const profanityResponse = await checkProfanity();
+      if (profanityResponse?.contains_profanity) {
+        const profanity = profanityResponse.profanity;
+        Alert.alert(
+          'Dear User',
+          'The system detects profanity in your help request, please edit your request.\nTrigger words: ' + profanity,
+          [
+            {
+              text: 'OK', onPress: () => {
+                console.log("OK pressed for check profanity");
+                setLoading(false);
+              }
+            },
+          ]
+        );
+        return;
+      }
 
-    const profanityResponse = await checkProfanity();
-    if (profanityResponse.contains_profanity) {
-      const profanity = profanityResponse.profanity;
-      Alert.alert(
-        'Dear User',
-        'The system detects profanity in your help request, please edit your request.\nTrigger words: ' + profanity,
-        [
-          {
-            text: 'OK', onPress: () => {
-              console.log("OK pressed for check profanity");
+      // Check if category is default/empty, then get suggested categories
+      if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
+        const defaultCategories = ["Health", "Education", "Electronics", "General"];
+        let suggestedCategories = await getSuggestedCategories();
+        console.log("Suggested categories: ", suggestedCategories);
+        if (!suggestedCategories) suggestedCategories = defaultCategories;
+        suggestedCategories.push('General');
+        const alertCategories = suggestedCategories.map((category) => {
+          return {
+            text: category,
+            onPress: async () => {
+              await submit(category=category);
+              setLoading(false);
             }
-          },
-        ]
-      );
-      return;
-    }
-
-    if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
-      const defaultCategories = ["Health", "Education", "Electronics", "General"];
-      let suggestedCategories = await getSuggestedCategories();
-      console.log("Suggested categories: ", suggestedCategories);
-      if (!suggestedCategories) suggestedCategories = defaultCategories;
-      suggestedCategories.push('General');
-      const alertCategories = suggestedCategories.map((category) => {
-        return {
-          text: category,
-          onPress: async () => {
-            setToSubmit(true);
           }
-        }
-      });
-      Alert.alert(
-        'Dear User',
-        'Please fill in categories or select one of the recommended categories',
-        [...alertCategories]
-      );
+        });
+        Alert.alert(
+          'Dear User',
+          'Please fill in categories or select one of the recommended categories',
+          [...alertCategories]
+        );
+      }
+      else {
+        await submit();
+        setLoading(false);
+      }
     }
-    else {
-      setToSubmit(true);
+    catch (error) {
+      setLoading(false);
+      console.error('Error during submit user request:', error);
     }
   };
 
@@ -280,10 +292,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       updateFormData('requestSubCategory', '');
     }
   }, [formData.requestCategory]);
-
-  useEffect(() => {
-    if (toSubmit) submit();
-  }, [toSubmit]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -601,7 +609,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
             Cancel
           </Button>
-          <Button backgroundColor="blue" onPress={handleSubmit}>
+          <Button backgroundColor="blue" onPress={handleSubmit} loading={loading}>
             Submit
           </Button>
         </View>
