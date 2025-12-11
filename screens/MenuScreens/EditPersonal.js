@@ -6,85 +6,10 @@ import { countriesList } from "../../data/countries";
 import { languagesList } from "../../data/languages";
 import useAuthUser from '../../hooks/useAuthUser';
 import { useNavigation } from '@react-navigation/native';
+import Button from "../../components/Button";
+import { ProfileFormStyles } from "./ProfileStyles";
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingLeft: 10,
-        marginBottom: 15,
-        backgroundColor: '#f9f9f9',
-    },
-    pickerContainer: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        marginBottom: 15,
-    },
-    picker: {
-        height: 50,
-    },
-    button: {
-        flex: 1,
-        paddingVertical: 15,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginHorizontal: 5,
-    },
-    editButton: {
-        paddingVertical: 15,
-        borderRadius: 8,
-        alignItems: 'center',
-        backgroundColor: '#3B82F6',
-        marginTop: 15,
-    },
-    buttonRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 15,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: '#d1d5db',
-        borderRadius: 8,
-        color: '#374151',
-        paddingRight: 30,
-        backgroundColor: '#f9fafb',
-        marginBottom: 16,
-
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        borderWidth: 1,
-        borderColor: '#d1d5db',
-        borderRadius: 8,
-        color: '#374151',
-        paddingRight: 30,
-        backgroundColor: '#f9fafb',
-        marginBottom: 16,
-    },
-});
+const styles = ProfileFormStyles;
 
 const SearchableDropdown = ({ data, setData, value, setValue, isOpen, setOpen, placeholder = 'Select an item', multiple = false, disabled = false, }) => {
     return (
@@ -97,8 +22,8 @@ const SearchableDropdown = ({ data, setData, value, setValue, isOpen, setOpen, p
                 badgeDotColors={["#e76f51", "#00b4d8", "#e9c46a", "#e76f51", "#8ac926", "#00b4d8", "#e9c46a"]}
                 placeholder={placeholder}
                 searchable={true}
-                style={styles.inputIOS}
-                dropDownContainerStyle={styles.inputIOS}
+                style={styles.input}
+                dropDownContainerStyle={styles.dropdownContainer}
                 searchContainerStyle={{ borderBottomColor: "#ccc" }}
                 disabled={disabled}
                 value={value}
@@ -117,8 +42,8 @@ const SearchableDropdown = ({ data, setData, value, setValue, isOpen, setOpen, p
                 value={value}
                 placeholder={{ label: "Fetching data...", value: null }}
                 style={{
-                    inputIOS: styles.inputIOS,
-                    inputAndroid: styles.inputAndroid,
+                    inputIOS: styles.input,
+                    inputAndroid: styles.input,
                 }}
             />
     )
@@ -132,7 +57,10 @@ const EditPersonal = () => {
     const [countryOpen, setCountryOpen] = useState(false);
     const [country, setCountry] = useState('');
     const [state, setState] = useState('');
+    const [city, setCity] = useState('');
     const [zipCode, setZipCode] = useState('');
+    const [secondaryEmail, setSecondaryEmail] = useState('');
+    const [secondaryPhone, setSecondaryPhone] = useState('');
     const [language, setLanguage] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [backupProfile, setBackupProfile] = useState({});
@@ -198,11 +126,11 @@ const EditPersonal = () => {
     }, [languages])
 
     useEffect(() => {
-    if (!isEditing) {
-        setLanguageOpen(false);  // ✅ auto-close language dropdown
-        setCountryOpen(false);   // ✅ optional: also close country dropdown
-    }
-}, [isEditing]);
+        if (!isEditing) {
+            setLanguageOpen(false);  // ✅ auto-close language dropdown
+            setCountryOpen(false);   // ✅ optional: also close country dropdown
+        }
+    }, [isEditing]);
 
     const validateForm = () => {
 
@@ -212,12 +140,8 @@ const EditPersonal = () => {
             Alert.alert('Invalid Date of Birth', 'DOB should be in the format MM/DD/YYYY.');
             return false;
         }
+        return true;
     }
-    const handleUpdateProfile = () => {
-        if (validateForm()) {
-            Alert.alert('Success', 'Profile updated successfully.');
-        }
-    };
 
     // ✨ Edit mode handlers
     const handleEdit = () => {
@@ -228,17 +152,35 @@ const EditPersonal = () => {
             streetAddress2,
             country,
             state,
+            city,
             zipCode,
+            secondaryEmail,
+            secondaryPhone,
             language
         });
         setIsEditing(true);
     };
 
     const handleSave = () => {
-        handleUpdateProfile();
-        setLanguageOpen(false);
-        setCountryOpen(false);
-        setIsEditing(false);
+        if (validateForm()) {
+            Alert.alert('Success', 'Profile updated successfully.');
+            setLanguageOpen(false);
+            setCountryOpen(false);
+            setBackupProfile({
+                dob,
+                gender,
+                streetAddress,
+                streetAddress2,
+                country,
+                state,
+                city,
+                zipCode,
+                secondaryEmail,
+                secondaryPhone,
+                language
+            });
+            setIsEditing(false);
+        }
     };
 
     const handleCancel = () => {
@@ -248,7 +190,10 @@ const EditPersonal = () => {
         setStreetAddress2(backupProfile.streetAddress2);
         setCountry(backupProfile.country);
         setState(backupProfile.state);
+        setCity(backupProfile.city);
         setZipCode(backupProfile.zipCode);
+        setSecondaryEmail(backupProfile.secondaryEmail);
+        setSecondaryPhone(backupProfile.secondaryPhone);
         setLanguage(backupProfile.language);
         setLanguageOpen(false);
         setCountryOpen(false);
@@ -257,7 +202,7 @@ const EditPersonal = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>Edit Personal Information</Text>
+            <Text style={styles.header}>Personal Information</Text>
             <TextInput
                 style={styles.input}
                 placeholder="DOB (MM/DD/YYYY)"
@@ -276,9 +221,10 @@ const EditPersonal = () => {
                 ]}
                 value={gender}
                 disabled={!isEditing}
+                useNativeAndroidPickerStyle={false} 
                 style={{
-                    inputIOS: styles.inputIOS,
-                    inputAndroid: styles.inputAndroid,
+                    inputIOS: styles.input,
+                    inputAndroid: styles.input,
                 }}
             />
             <SearchableDropdown
@@ -300,9 +246,9 @@ const EditPersonal = () => {
             />
             <TextInput
                 style={styles.input}
-                placeholder="Zip Code"
-                value={zipCode}
-                onChangeText={setZipCode}
+                placeholder="City"
+                value={city}
+                onChangeText={setCity}
                 editable={isEditing}
             />
             <TextInput
@@ -319,7 +265,28 @@ const EditPersonal = () => {
                 onChangeText={setStreetAddress2}
                 editable={isEditing}
             />
-            <SearchableDropdown
+            <TextInput
+                style={styles.input}
+                placeholder="Zip Code"
+                value={zipCode}
+                onChangeText={setZipCode}
+                editable={isEditing}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Secondary Email"
+                value={secondaryEmail}
+                onChangeText={setSecondaryEmail}
+                editable={isEditing}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Secondary Phone"
+                value={secondaryPhone}
+                onChangeText={setSecondaryPhone}
+                editable={isEditing}
+            />
+            {/* <SearchableDropdown
                 data={languages}
                 multiple={true}
                 setData={setLanguages}
@@ -329,19 +296,13 @@ const EditPersonal = () => {
                 setOpen={setLanguageOpen}
                 placeholder="Select Languages (Ordered by Preference)"
                 disabled={!isEditing}
-            />
+            /> */}
             {!isEditing ? (
-                <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-                    <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
+                <Button onPress={handleEdit} style={styles.editButton}>Edit</Button>
             ) : (
                 <View style={styles.buttonRow}>
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
-                        <Text style={styles.buttonText}>Save</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
+                    <Button onPress={handleSave} backgroundColor='#3B82F6' style={styles.button}>Save</Button>
+                    <Button onPress={handleCancel} backgroundColor='#6B7280' style={styles.button}>Cancel</Button>
                 </View>
             )}
         </View>

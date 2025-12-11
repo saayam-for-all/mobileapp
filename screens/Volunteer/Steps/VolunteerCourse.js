@@ -54,6 +54,7 @@ export default function VolunteerCourse() {
             { label: 'Dropbox', value: 'Dropbox' },
           ]}
           value={selectedSource}
+          useNativeAndroidPickerStyle={false}
           style={{
             inputIOS: pickerSelectStyles.inputIOS,
             inputAndroid: pickerSelectStyles.inputAndroid,

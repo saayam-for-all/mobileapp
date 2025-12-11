@@ -54,7 +54,7 @@ export default function App({ signOut }) {
         options={({ route }) => ({ title: 'Request Id : ' + route.params.reqTitle })}>
           {() => <RequestDetails signOut={signOut} />}</AppStack.Screen>
       <AppStack.Screen name="PromoteToVolunteer" component={PromoteToVolunteer} options={{ title: 'Promote To Volunteer' }}/>  
-      <AppStack.Screen name="EditProfile" options={{ title: 'Edit Profile' }}>
+      <AppStack.Screen name="EditProfile" options={{ title: 'Your Profile' }}>
         {() => <EditProfile signOut={signOut} />}
       </AppStack.Screen>
       <AppStack.Screen name="EditPersonal" options={{ title: 'Personal Information' }}>

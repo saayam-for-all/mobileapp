@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import Button from '../../components/Button';
+import { ProfileFormStyles } from './ProfileStyles';
 
 const EditOrganization = () => {
   const [organizationName, setOrganizationName] = useState('');
@@ -41,6 +43,18 @@ const EditOrganization = () => {
   const handleSave = () => {
     if (validateForm()) {
       Alert.alert('Success', 'Organization details updated successfully.');
+      setBackupProfile({
+        organizationName,
+        organizationType,
+        email,
+        phoneNumber,
+        URL,
+        streetAddress,
+        streetAddress2,
+        city,
+        state,
+        zipCode,
+      });
       setIsEditing(false);
     }
   };
@@ -163,70 +177,19 @@ const EditOrganization = () => {
           />
         </View>
 
-        <View style={styles.buttonRow}>
-          {isEditing ? (
-            <>
-              <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
-                <Text style={styles.buttonText}>Save</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
-                <Text style={styles.buttonText}>Cancel</Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleEdit}>
-              <Text style={styles.buttonText}>Edit</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        {!isEditing ? (
+          <Button onPress={handleEdit} style={styles.editButton}>Edit</Button>
+        ) : (
+          <View style={styles.buttonRow}>
+            <Button onPress={handleSave} backgroundColor='#3B82F6' style={styles.button}>Save</Button>
+            <Button onPress={handleCancel} backgroundColor='#6B7280' style={styles.button}>Cancel</Button>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#111827',
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 10,
-    marginBottom: 15,
-    backgroundColor: '#f9fafb',
-  },
-  horizontalContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 10,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 15,
-    marginTop: 20,
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
+const styles = ProfileFormStyles;
 
 export default EditOrganization;
