@@ -1,20 +1,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import { countriesList } from '../../data/countries';
+import Button from '../../components/Button';
 import useAuthUser from '../../hooks/useAuthUser';
 import RNPickerSelect from "react-native-picker-select";
+
+import { ProfileFormStyles } from './ProfileStyles';
 
 
 const EditProfile = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
-  const [secondaryEmail, setSecondaryEmail] = useState('');
   const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
   const [zoneinfo, setzoneinfo] = useState('');
   const [needVerification, setNeedVerification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -138,6 +139,18 @@ const EditProfile = () => {
     }
   }
 
+  // ✨ Edit mode handlers
+  const handleEdit = () => {
+    setBackupProfile({
+      firstName,
+      lastName,
+      primaryEmail,
+      primaryPhoneNumber,
+      zoneinfo,
+    });
+    setIsEditing(true);
+  };
+
   const handleSave = async () => {
     if (validateForm()) {
       const user = await Auth.currentAuthenticatedUser();
@@ -148,9 +161,7 @@ const EditProfile = () => {
         firstName,
         lastName,
         primaryEmail,
-        secondaryEmail,
         primaryPhoneNumber,
-        secondaryPhoneNumber,
         zoneinfo,
       });
 
@@ -163,9 +174,7 @@ const EditProfile = () => {
       setFirstName(backupProfile.firstName);
       setLastName(backupProfile.lastName);
       setPrimaryEmail(backupProfile.primaryEmail);
-      setSecondaryEmail(backupProfile.secondaryEmail);
       setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
-      setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
       setzoneinfo(backupProfile.zoneinfo);
     }
     setIsEditing(false);
@@ -175,7 +184,7 @@ const EditProfile = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Edit Profile</Text>
+      <Text style={styles.header}>Your Profile</Text>
 
       <TextInput
         style={styles.input}
@@ -204,28 +213,10 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Secondary Email"
-        keyboardType="email-address"
-        value={secondaryEmail}
-        onChangeText={setSecondaryEmail}
-        editable={isEditing}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Primary Phone Number"
+        placeholder="Phone Number"
         keyboardType="phone-pad"
         value={primaryPhoneNumber}
         onChangeText={setPrimaryPhoneNumber}
-        editable={isEditing}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Secondary Phone Number"
-        keyboardType="phone-pad"
-        value={secondaryPhoneNumber}
-        onChangeText={setSecondaryPhoneNumber}
         editable={isEditing}
       />
 
@@ -234,134 +225,29 @@ const EditProfile = () => {
         items={countriesList}
         value={zoneinfo}
         disabled={!isEditing}
-        placeholder={{ label: "Select Country", value: null }}
+        placeholder={{ label: "Country", value: null }}
         useNativeAndroidPickerStyle={false}
         style={{
-          inputIOS: {
-            ...styles.inputIOS,
-            borderColor: "#ccc",
-            borderWidth: 1,
-            borderRadius: 8,
-            backgroundColor: "#fff",
-            height: 50,
-            paddingHorizontal: 10,
-            paddingVertical: 12,
-            color: "#000",
-          },
-          inputAndroid: {
-            ...styles.inputAndroid,
-            borderColor: "#ccc",
-            borderWidth: 1,
-            borderRadius: 8,
-            backgroundColor: "#fff",
-            height: 50,
-            paddingHorizontal: 10,
-            paddingVertical: 6,
-            color: "#000",
-          },
+          inputIOS: styles.input,
+          inputAndroid: styles.input,
           placeholder: {
             color: "#9CA3AF",
           },
         }}
       />
 
-
-
-
       {!isEditing ? (
-        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-          <Text style={styles.buttonText}>Edit</Text>
-        </TouchableOpacity>
+        <Button onPress={handleEdit} style={styles.editButton}>Edit</Button>
       ) : (
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
+          <Button onPress={handleSave} backgroundColor='#3B82F6' style={styles.button}>Save</Button>
+          <Button onPress={handleCancel} backgroundColor='#6B7280' style={styles.button}>Cancel</Button>
         </View>
       )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 10,
-    marginBottom: 15,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 15,
-  },
-  picker: {
-    height: 50,
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  editButton: {
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    backgroundColor: '#3B82F6',
-    marginTop: 10,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    color: '#374151',
-    paddingRight: 30,
-    backgroundColor: '#f9fafb',
-    marginBottom: 16,
-
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    color: '#374151',
-    paddingRight: 30,
-    backgroundColor: '#f9fafb',
-    marginBottom: 16,
-  },
-});
+const styles = ProfileFormStyles;
 
 export default EditProfile;

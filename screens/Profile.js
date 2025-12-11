@@ -167,7 +167,7 @@ export default function Profile({ signOut }) {
             size={20}
             style={styles.optionIcon}
           />
-          <Text style={styles.optionText}>Edit Profile</Text>
+          <Text style={styles.optionText}>Your Profile</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -180,7 +180,7 @@ export default function Profile({ signOut }) {
             size={20}
             style={styles.optionIcon}
           />
-          <Text style={styles.optionText}>Personal Details</Text>
+          <Text style={styles.optionText}>Personal Information</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -267,14 +267,14 @@ export default function Profile({ signOut }) {
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
-        <View style={styles.optionRow}>
+        {/* <View style={styles.optionRow}>
           <FontAwesome name="bell" size={20} style={styles.optionIcon} />
           <Text style={styles.optionText}>Notifications</Text>
           <Switch
             value={isNotificationsEnabled}
             onValueChange={setNotificationsEnabled}
           />
-        </View>
+        </View> */}
         
         <TouchableOpacity
           style={styles.optionRow}

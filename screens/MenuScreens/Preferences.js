@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { Checkbox } from 'react-native-paper';
 
 import useAuthUser from '../../hooks/useAuthUser';
+import Button from '../../components/Button';
+import { ProfileFormStyles } from './ProfileStyles';
 
 const Preferences = () => {
     const [user, setUser] = useState(undefined);
@@ -192,101 +194,18 @@ const Preferences = () => {
             </View>
 
             {!isEditing ? (
-                <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-                    <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
+                <Button onPress={handleEdit} style={styles.editButton}>Edit</Button>
             ) : (
-                <View style={styles.rowButtons}>
-                    <TouchableOpacity style={[styles.saveButton, styles.actionButton]} onPress={handleSave}>
-                        <Text style={styles.buttonText}>Save</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.cancelButton, styles.actionButton]} onPress={handleCancel}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
+                <View style={styles.buttonRow}>
+                <Button onPress={handleSave} backgroundColor='#3B82F6' style={styles.button}>Save</Button>
+                <Button onPress={handleCancel} backgroundColor='#6B7280' style={styles.button}>Cancel</Button>
                 </View>
             )}
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    title: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginVertical: 10,
-        marginHorizontal: 5
-    },
-    input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingLeft: 10,
-        marginBottom: 15,
-    },
-    pickerContainer: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        marginBottom: 15,
-    },
-    picker: {
-        height: 50,
-    },
-    button: {
-        backgroundColor: '#007BFF',
-        paddingVertical: 15,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-    checkboxContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    notificationContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    notificationText: {
-        flex: 1,
-    },
-    editButton: {
-        backgroundColor: '#007BFF',
-        paddingVertical: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 15,
-    },
-    rowButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 15,
-    },
-    actionButton: {
-        flex: 1,
-        paddingVertical: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginHorizontal: 5,
-    },
-    saveButton: { backgroundColor: '#007BFF' },
-    cancelButton: { backgroundColor: '#6B7280' },
-});
+const styles = ProfileFormStyles;
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
