@@ -9,6 +9,69 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/Feather';
+import * as FileSystem from "expo-file-system";
+import api from './api';
+
+const RECORDING_OPTIONS = {
+    android: {
+        extension: ".wav",
+        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_PCM_16BIT,
+        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_PCM_16BIT,
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        bitRate: 256000,
+        isMeteringEnabled: true,
+    },
+    ios: {
+        extension: ".wav",
+        audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        linearPCMBitDepth: 16,
+        linearPCMIsBigEndian: false,
+        linearPCMIsFloat: false,
+        isMeteringEnabled: true,
+    },
+};
+
+
+const wavToPcmBase64 = async (uri) => {
+    const base64Wav = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+    });
+
+    // WAV header = 44 bytes ≈ 60 Base64 chars
+    return base64Wav.substring(60);
+};
+
+const uploadAudio = async (pcmBase64) => {
+    const payload = {
+        audioContent: pcmBase64,
+        audioConfig: {
+            encoding: "LINEAR16",
+            sample_rate_hertz: 16000,
+        },
+    };
+
+    console.log("Full API URL:", api.defaults.baseURL + "/requests/v0.0.1/upload-audio");
+
+    try {
+        const response = await api.post("/requests/v0.0.1/upload-audio", payload);
+        console.log("API response:", response.data);
+        return response.data;
+    } catch (err) {
+        if (err.response) {
+            console.error("API responded with error:", err.response.data);
+        } else if (err.request) {
+            console.error("No response received, request:", err.request);
+        } else {
+            console.error("Axios setup error:", err.message);
+        }
+    }
+
+    return null;
+};
+
 
 export default function AudioRecorder({ onStop }) {
     const [recording, setRecording] = useState(null);
@@ -75,16 +138,17 @@ export default function AudioRecorder({ onStop }) {
 
             const newRecording = new Audio.Recording();
             await newRecording.prepareToRecordAsync(
-                Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+                RECORDING_OPTIONS
             );
 
             newRecording.setProgressUpdateInterval(100);
             newRecording.setOnRecordingStatusUpdate((status) => {
-                if (status.metering !== undefined) {
+                if (typeof status.metering === "number") {
                     const level = Math.max(0, (status.metering + 160) / 160);
                     setAudioLevel(level);
                 }
             });
+
 
             await newRecording.startAsync();
             setRecording(newRecording);
@@ -102,18 +166,40 @@ export default function AudioRecorder({ onStop }) {
             await recording.stopAndUnloadAsync();
             const uri = recording.getURI();
 
+            // Reset recording state immediately
             setIsRecording(false);
             setRecording(null);
             setAudioLevel(0);
-
             rippleScale.setValue(1);
             rippleOpacity.setValue(0);
 
-            if (onStop) onStop(uri);
+            // Convert WAV → PCM Base64
+            const pcmBase64 = await wavToPcmBase64(uri);
+
+            // Upload audio safely
+            const response = await uploadAudio(pcmBase64);
+
+            if (!response) {
+                console.error("Upload failed, skipping transcription");
+                if (onStop) onStop({ uri, requestId: null, transcription: null });
+                return;
+            }
+
+            console.log("Request ID:", response.requestId);
+            console.log("Transcription:", response.transcription);
+
+            if (onStop) {
+                onStop({
+                    uri,
+                    requestId: response.requestId,
+                    transcription: response.transcription,
+                });
+            }
         } catch (err) {
-            console.error('Stop recording error:', err);
+            console.error("Stop recording error:", err);
         }
     };
+
 
     return (
         <>
@@ -190,8 +276,6 @@ const styles = StyleSheet.create({
         width: 40,       // smaller size
         height: 40,      // smaller size
         borderRadius: 20,
-
-        borderRadius: 35,
         backgroundColor: "#ff3b3044",
     },
 
