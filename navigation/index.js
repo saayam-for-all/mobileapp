@@ -86,4 +86,4 @@ class AuthLoadingScreen extends React.Component {
 
 
 export default AuthLoadingScreen;
-export const signOut = () => globalSignOutRef?.();
+export const signOut = () => globalSignOutRef();

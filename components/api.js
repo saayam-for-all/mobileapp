@@ -20,7 +20,9 @@ const api = axios.create(
         idTokenExpire = session.getIdToken().getExpiration();
         refreshToken = session.getRefreshToken();
         currentTimeSeconds = Math.round(+new Date() / 1000);
-        if (idTokenExpire < currentTimeSeconds) {
+
+        // DEV ONLY: refresh token everytime making a request
+        if (idTokenExpire) {
           Auth.currentAuthenticatedUser()
             .then((res) => {
               res.refreshSession(refreshToken, (err, data) => {
