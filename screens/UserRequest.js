@@ -88,9 +88,9 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const fetchCategories = async () => {
     try {
       const categoriesData = await getCategories();
-      if (categoriesData?.categories?.length) {
+      if (categoriesData?.length) {
         const filteredCategories = {}
-        for (const cat of categoriesData.categories) {
+        for (const cat of categoriesData) {
           if (cat.catName &&
             cat.catName !== "cat_name" &&
             cat.catId !== "cat_id" &&
