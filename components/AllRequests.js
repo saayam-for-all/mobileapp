@@ -186,7 +186,7 @@ const AllRequests = ({ data }) => {
         //data={data}
         data={filteredData}
         renderItem={({ item }) => (
-          <View style={styles.reqData}>
+          <TouchableOpacity style={styles.reqData} onPress={() => { navigation.navigate("RequestDetails", { item, reqTitle: item.id }) }}>
             <View style={{ flexDirection: "row" }}>
               <Text style={{ fontWeight: "bold" }}>
                 {" "}
@@ -213,7 +213,7 @@ const AllRequests = ({ data }) => {
               </Text>
               <Text style={{ flex: 1, textAlign: "right" }}>
                 {" "}
-                <AntDesign name="right" size={15} color="black" onPress={() => { navigation.navigate("RequestDetails", { item, reqTitle: item.id }) }} />
+                <AntDesign name="right" size={15} color="black" />
               </Text>
             </View>
 
@@ -252,7 +252,7 @@ const AllRequests = ({ data }) => {
                 marginBottom: 5,
               }}
             ></View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
