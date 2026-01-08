@@ -229,6 +229,9 @@ const EditProfile = () => {
         useNativeAndroidPickerStyle={false}
         style={{
           inputIOS: styles.input,
+          inputIOSContainer: {
+            zIndex:100,
+          },
           inputAndroid: styles.input,
           placeholder: {
             color: "#9CA3AF",

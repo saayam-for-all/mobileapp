@@ -42,6 +42,9 @@ const SearchableDropdown = ({ data, setData, value, setValue, isOpen, setOpen, p
                 value={value}
                 placeholder={{ label: "Fetching data...", value: null }}
                 style={{
+                    inputIOSContainer: {
+                        zIndex:100,
+                    },
                     inputIOS: styles.input,
                     inputAndroid: styles.input,
                 }}
@@ -223,6 +226,9 @@ const EditPersonal = () => {
                 disabled={!isEditing}
                 useNativeAndroidPickerStyle={false} 
                 style={{
+                    inputIOSContainer: {
+                        zIndex:100,
+                    },
                     inputIOS: styles.input,
                     inputAndroid: styles.input,
                 }}

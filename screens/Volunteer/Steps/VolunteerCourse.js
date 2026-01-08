@@ -57,6 +57,7 @@ export default function VolunteerCourse() {
           useNativeAndroidPickerStyle={false}
           style={{
             inputIOS: pickerSelectStyles.inputIOS,
+            inputIOSContainer: pickerSelectStyles.inputIOSContainer,
             inputAndroid: pickerSelectStyles.inputAndroid,
           }}
         />
@@ -191,5 +192,9 @@ const pickerSelectStyles = StyleSheet.create({
     color: '#111827',
     backgroundColor: '#F9FAFB',
     paddingRight: 30, // To ensure the text is never behind the icon
+  },
+  // https://github.com/lawnstarter/react-native-picker-select/issues/719#issuecomment-3549813072
+  inputIOSContainer: {
+      zIndex:100,
   },
 });

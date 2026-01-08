@@ -216,6 +216,10 @@ const pickerSelectStyles = StyleSheet.create({
         paddingLeft: 10,
         marginBottom: 15,
     },
+    // https://github.com/lawnstarter/react-native-picker-select/issues/719#issuecomment-3549813072
+    inputIOSContainer: {
+        zIndex:100,
+    },
     inputAndroid: {
         height: 50,
         borderColor: '#ccc',
