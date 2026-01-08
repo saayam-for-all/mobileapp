@@ -176,12 +176,17 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   };
 
   const handleSubmit = async () => {
-    // Validate required fields
-    if (!formData.subject || !formData.description) {
-      Alert.alert('Validation Error', 'Both Subject and Description are required!');
+    // Validate required fields (Description, subject, and request category)
+    if (!formData.subject) {
+      Alert.alert('Validation Error', 'Subject is required. Please fill out the Description tab.');
       return;
     }
 
+    if (!formData.description) {
+      Alert.alert('Validation Error', 'Description is required. Please fill out the Description tab.');
+      return;
+    }
+    
     // Validate other person info if not for self
     if (!isSelfRequest()) {
       const { firstName, lastName, email } = otherPersonInfo;

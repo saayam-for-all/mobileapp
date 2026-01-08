@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingRight: 16,
     marginRight: 8,
     borderBottomWidth: 2,
   },
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
   },
   tabText: {
-    fontSize: 14,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: '600',
   },
   activeText: {
     color: "#2563EB",
