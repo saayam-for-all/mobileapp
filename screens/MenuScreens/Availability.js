@@ -555,6 +555,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     overflow: 'hidden',
   },
+  // https://github.com/lawnstarter/react-native-picker-select/issues/719#issuecomment-3549813072
+  inputIOSContainer: {
+    zIndex:100,
+  },
   inputAndroid: {
     fontSize: 14,
     paddingHorizontal: 8,

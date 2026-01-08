@@ -319,6 +319,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 value={formData.requestCategory}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                   inputAndroid: pickerSelectStyles.inputAndroid,
                 }}
               />
@@ -335,6 +336,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                   value={formData.requestSubCategory}
                   style={{
                     inputIOS: pickerSelectStyles.inputIOS,
+                    inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                     inputAndroid: pickerSelectStyles.inputAndroid,
                   }}
                 />
@@ -428,6 +430,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 value={formData.request_for}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                   inputAndroid: pickerSelectStyles.inputAndroid,
                 }}
               />
@@ -511,6 +514,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                     value={otherPersonInfo.gender}
                     style={{
                       inputIOS: pickerSelectStyles.inputIOS,
+                      inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                       inputAndroid: pickerSelectStyles.inputAndroid,
                     }}
                   />
@@ -524,6 +528,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                     value={otherPersonInfo.preferredLanguage}
                     style={{
                       inputIOS: pickerSelectStyles.inputIOS,
+                      inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                       inputAndroid: pickerSelectStyles.inputAndroid,
                     }}
                   />
@@ -560,6 +565,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 value={formData.priority}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                   inputAndroid: pickerSelectStyles.inputAndroid,
                 }}
               />
@@ -583,6 +589,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 value={formData.request_type}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                   inputAndroid: pickerSelectStyles.inputAndroid,
                 }}
               />
@@ -746,6 +753,10 @@ const pickerSelectStyles = StyleSheet.create({
     color: '#374151',
     paddingRight: 30,
     backgroundColor: '#f9fafb',
+  },
+  // https://github.com/lawnstarter/react-native-picker-select/issues/719#issuecomment-3549813072
+  inputIOSContainer: {
+    zIndex:100,
   },
   inputAndroid: {
     fontSize: 16,
