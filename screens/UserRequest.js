@@ -14,6 +14,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native';
 import AudioRecorder from '../components/AudioRecorder';
 
+import useAuthUser from '../hooks/useAuthUser';
+
 import { getCategories, getEnums } from '../services/requestServices';
 import { Tab, Tabs } from '../components/Tabs';
 
@@ -35,18 +37,19 @@ const languageOptions = languagesData.map((lang) => ({
 export default function UserRequest({ isEdit = false, onClose, requestItem = {} }) {
   const { t, i18n } = useTranslation(["common", "categories"]);
   const [loading, setLoading] = useState(false);
+  const authUser = useAuthUser();
 
-  // Consolidated form data
+  // Form data now stores enum IDs directly (matching backend format)
   const [formData, setFormData] = useState({
-    request_for: 'SELF', // Will be set from enums
+    requestForId: 0, // Default to SELF (0)
     isCalamity: false,
-    priority: isEdit && requestItem?.priority ? requestItem.priority : 'MEDIUM',
+    requestPriorityId: 1, // Default to MEDIUM (1)
     requestCategory: isEdit && requestItem?.category ? requestItem.category : '0.0.0.0.0',
     requestSubCategory: '',
-    request_type: 'REMOTE',
+    requestTypeId: 1, // Default to REMOTE (1)
     location: '',
-    subject: isEdit && requestItem?.subject ? requestItem.subject : '',
-    description: isEdit && requestItem?.description ? requestItem.description : '',
+    requestSubject: isEdit && requestItem?.subject ? requestItem.subject : '',
+    requestDescription: isEdit && requestItem?.description ? requestItem.description : '',
   });
 
   // Separate state for other person's info
@@ -83,7 +86,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
   // Helper to check if request is for self
   const isSelfRequest = () => {
-    return formData.request_for === enums?.requestFor?.[0]; // First enum value is typically "SELF"
+    return formData.requestForId === 0; // 0 is SELF
   };
 
   const fetchCategories = async () => {
@@ -101,6 +104,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           )
             filteredCategories[cat.catId] = cat;
         }
+        console.log("Categories: ",filteredCategories);
         setCategories(filteredCategories);
       } else {
         throw new Error('No categories found');
@@ -115,7 +119,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const checkProfanity = async () => {
     const res = await api.post(
       "/requests/v0.0.1/checkProfanity",
-      { subject: formData.subject, description: formData.description }
+      { subject: formData.requestSubject, description: formData.requestDescription }
     );
     return res.data;
   }
@@ -123,63 +127,59 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const getSuggestedCategories = async () => {
     const res = await api.post(
       "/genai/v0.0.1/predict_categories",
-      { subject: formData.subject, description: formData.description }
+      { subject: formData.requestSubject, description: formData.requestDescription }
     );
     return res.data;
   }
 
   const submit = async (category = '') => {
-    const submitData = {
-      ...formData,
-      requestCategory: category || formData.requestCategory
+    if (!authUser?.attributes?.userDbId) {
+      Alert.alert('Error', 'User not authenticated properly. Please log in again.');
+      return;
+    }
+    const requestBody = {
+      requesterId: authUser?.attributes?.userDbId, // Get from auth user
+      requestSubject: formData.requestSubject,
+      requestDescription: formData.requestDescription,
+      isCalamity: formData.isCalamity,
+      isLeadVolunteer: 1,
+      
+      requestPriority: {
+        requestPriorityId: formData.requestPriorityId
+      },
+      requestType: {
+        requestTypeId: formData.requestTypeId
+      },
+      requestFor: {
+        requestForId: formData.requestForId
+      },
+      
+      helpCategory: { catId: formData.requestSubCategory || formData.requestCategory }
     };
 
     // Include other person info if not for self
     if (!isSelfRequest()) {
-      submitData.otherPerson = otherPersonInfo;
+      requestBody.otherPerson = otherPersonInfo;
     }
 
-    console.log('Submitting:', submitData);
+    // Include location if request type is IN_PERSON
+    if (formData.requestTypeId === 0 && formData.location) {
+      requestBody.location = formData.location;
+    }
 
-//     const sampleData = {
-//   "requesterId": "SID-00-000-000-102",
+    console.log('Submitting:', requestBody);
 
-//   "requestSubject": "Need urgent help with prescription pickup",
-//   "requestDescription": "Elderly person requires assistance to pick up prescribed medicines from the nearest pharmacy.",
- 
+    // Actual API call
+    const response = await api.post(
+      "/requests/v0.0.1/createRequest",
+      requestBody
+    );
 
-//   "isCalamity": false,
- 
-
-//   "isLeadVolunteer": 1,
-
-//   "requestPriority": {
-//     "requestPriorityId": 3
-//   },
-//   "requestType": {
-//     "requestTypeId": 1
-//   },
-//   "helpCategory": {
-//     "catId": "5.2"
-//   },
-//   "requestFor": {
-//     "requestForId": 0
-//   }
-  
-  
-// };
-//     // Call API to submit the request
-//     const response = await api.post(
-//       "/requests/v0.0.1/createRequest",
-//       sampleData
-//     );
-
-//     console.log('Sample response:', response.data);
-    console.log("Form data to submit:", submitData);
+    console.log('Response:', response.data);
 
     Alert.alert(
       'Dear User',
-      'Help Request Created Successfully.\nCategory: ' + submitData.requestCategory,
+      'Help Request Created Successfully.',
       [
         {
           text: 'OK', onPress: () => {
@@ -213,12 +213,12 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
   const handleSubmit = async () => {
     // Validate required fields (Description, subject, and request category)
-    if (!formData.subject) {
+    if (!formData.requestSubject) {
       Alert.alert('Validation Error', 'Subject is required. Please fill out the Description tab.');
       return;
     }
 
-    if (!formData.description) {
+    if (!formData.requestDescription) {
       Alert.alert('Validation Error', 'Description is required. Please fill out the Description tab.');
       return;
     }
@@ -315,11 +315,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         const data = await getEnums();
         console.log("Enums API response:", data);
         setEnums(data);
-
-        // Set initial request_for value from enums
-        if (data?.requestFor?.[0]) {
-          updateFormData('request_for', data.requestFor[0]);
-        }
       } catch (error) {
         console.error('Error fetching enums:', error);
       }
@@ -392,8 +387,8 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 style={styles.input}
                 maxLength={70}
                 placeholder="Enter subject..."
-                value={formData.subject}
-                onChangeText={(text) => updateFormData('subject', text)}
+                value={formData.requestSubject}
+                onChangeText={(text) => updateFormData('requestSubject', text)}
               />
             </View>
 
@@ -416,8 +411,8 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                   numberOfLines={4}
                   maxLength={500}
                   placeholder="Describe your request..."
-                  value={formData.description}
-                  onChangeText={(text) => updateFormData('description', text)}
+                  value={formData.requestDescription}
+                  onChangeText={(text) => updateFormData('requestDescription', text)}
                 />
                   <AudioRecorder
                     visible={isRecorderVisible}
@@ -456,19 +451,19 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             <View style={styles.field}>
               <Text style={styles.label}>For Self</Text>
               <RNPickerSelect
-                onValueChange={(value) => updateFormData('request_for', value)}
+                onValueChange={(value) => updateFormData('requestForId', parseInt(value))}
                 items={
                   enums?.requestFor
-                    ? Object.values(enums.requestFor).map((val) => ({
+                    ? Object.entries(enums.requestFor).map(([id, val]) => ({
                       label: t(`enums:requestFor.${val}`),
-                      value: val,
+                      value: id,
                     }))
                     : [
                       { label: 'Self', value: '0' },
                       { label: 'Other', value: '1' },
                     ]
                 }
-                value={formData.request_for}
+                value={String(formData.requestForId)}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
                   inputIOSContainer: pickerSelectStyles.inputIOSContainer,
@@ -589,12 +584,12 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             <View style={styles.field}>
               <Text style={styles.label}>Priority</Text>
               <RNPickerSelect
-                onValueChange={(value) => updateFormData('priority', value)}
+                onValueChange={(value) => updateFormData('requestPriorityId', parseInt(value))}
                 items={
                   enums?.requestPriority
-                    ? Object.values(enums.requestPriority).map((val) => ({
+                    ? Object.entries(enums.requestPriority).map(([id, val]) => ({
                       label: t(`enums:requestPriority.${val}`),
-                      value: val,
+                      value: id,
                     }))
                     : [
                       { label: 'LOW', value: '0' },
@@ -603,7 +598,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                       { label: 'CRITICAL', value: '3' },
                     ]
                 }
-                value={formData.priority}
+                value={String(formData.requestPriorityId)}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
                   inputIOSContainer: pickerSelectStyles.inputIOSContainer,
@@ -615,19 +610,19 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             <View style={styles.field}>
               <Text style={styles.label}>Request Type</Text>
               <RNPickerSelect
-                onValueChange={(value) => updateFormData('request_type', value)}
+                onValueChange={(value) => updateFormData('requestTypeId', parseInt(value))}
                 items={
                   enums?.requestType
-                    ? Object.values(enums.requestType).map((val) => ({
+                    ? Object.entries(enums.requestType).map(([id, val]) => ({
                       label: t(`enums:requestType.${val}`),
-                      value: val,
+                      value: id,
                     }))
                     : [
                       { label: 'In Person', value: '0' },
                       { label: 'Remote', value: '1' },
                     ]
                 }
-                value={formData.request_type}
+                value={String(formData.requestTypeId)}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
                   inputIOSContainer: pickerSelectStyles.inputIOSContainer,
@@ -637,7 +632,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             </View>
 
             {/* Location input for In Person requests */}
-            {formData.request_type === "INPERSON" && (
+            {formData.requestTypeId === 0 && (
               <View style={styles.field}>
                 <Text style={styles.label}>Location</Text>
                 <GooglePlacesAutocomplete
