@@ -141,6 +141,42 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
     console.log('Submitting:', submitData);
 
+//     const sampleData = {
+//   "requesterId": "SID-00-000-000-102",
+
+//   "requestSubject": "Need urgent help with prescription pickup",
+//   "requestDescription": "Elderly person requires assistance to pick up prescribed medicines from the nearest pharmacy.",
+ 
+
+//   "isCalamity": false,
+ 
+
+//   "isLeadVolunteer": 1,
+
+//   "requestPriority": {
+//     "requestPriorityId": 3
+//   },
+//   "requestType": {
+//     "requestTypeId": 1
+//   },
+//   "helpCategory": {
+//     "catId": "5.2"
+//   },
+//   "requestFor": {
+//     "requestForId": 0
+//   }
+  
+  
+// };
+//     // Call API to submit the request
+//     const response = await api.post(
+//       "/requests/v0.0.1/createRequest",
+//       sampleData
+//     );
+
+//     console.log('Sample response:', response.data);
+    console.log("Form data to submit:", submitData);
+
     Alert.alert(
       'Dear User',
       'Help Request Created Successfully.\nCategory: ' + submitData.requestCategory,

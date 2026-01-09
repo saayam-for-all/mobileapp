@@ -77,7 +77,7 @@ const EditPersonal = () => {
     const defaultCountries = [{ value: "English", label: "English" }];
     const defaultLanguages = [{ value: 'English', label: "English" }];
     const navigation = useNavigation();
-    const user = useAuthUser(navigation);
+    const user = useAuthUser();
 
     useEffect(() => {
         if (user?.attributes?.['custom:Country']) {
@@ -166,6 +166,7 @@ const EditPersonal = () => {
 
     const handleSave = () => {
         if (validateForm()) {
+            AsyncStorage.setItem('user_updated', 'false');
             Alert.alert('Success', 'Profile updated successfully.');
             setLanguageOpen(false);
             setCountryOpen(false);

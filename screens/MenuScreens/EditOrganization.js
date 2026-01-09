@@ -42,6 +42,7 @@ const EditOrganization = () => {
 
   const handleSave = () => {
     if (validateForm()) {
+      AsyncStorage.setItem('user_updated', 'false');
       Alert.alert('Success', 'Organization details updated successfully.');
       setBackupProfile({
         organizationName,

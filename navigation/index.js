@@ -6,6 +6,7 @@ import Auth from '@aws-amplify/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let globalSignOutRef = null;
 
@@ -48,6 +49,8 @@ class AuthLoadingScreen extends React.Component {
   }
 
   async signOut() {
+    console.log("Clear local storage");
+    await AsyncStorage.clear();
     await Auth.signOut()
       .catch((err) => {
         console.log('ERROR: ', err);

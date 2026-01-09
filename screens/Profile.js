@@ -90,14 +90,18 @@ export default function Profile({ signOut }) {
   const [country, setCountry] = useState('');
 
   const [profileData, setProfileData] = useState(null);
-  useAuthUser(navigation, (user) => {
-    setUserName(
-      user.attributes.given_name + " " + user.attributes.family_name
-    );
-    setEmail(user.attributes.email);
-    setPhone(user.attributes.phone_number);
-    setCountry(user.attributes["custom:Country"]);
-  })
+  const user = useAuthUser();
+
+  useEffect(() => {
+    if (user) {
+        setUserName(
+          user.attributes.given_name + " " + user.attributes.family_name
+        );
+        setEmail(user.attributes.email);
+        setPhone(user.attributes.phone_number);
+        setCountry(user.attributes["custom:Country"]);
+    }
+}, [user]);
 
   useEffect(() => {
     const getImage = async () => {      

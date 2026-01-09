@@ -54,13 +54,17 @@ const Preferences = () => {
     ];
 
     const navigation = useNavigation();
-    useAuthUser(navigation, (user) => {
-        setUser(user);
-        setPrimaryPhone(user.attributes.phone_number);
-        setSecondaryPhone('1111111111');
-        setPrimaryEmail(user.attributes.email);
-        setSecondaryEmail('secondary@email.com');
-    });
+    const authUser = useAuthUser();
+
+    useEffect(() => {
+        if (authUser) {
+            setUser(authUser);
+            setPrimaryPhone(authUser.attributes.phone_number);
+            setSecondaryPhone('1111111111');
+            setPrimaryEmail(authUser.attributes.email);
+            setSecondaryEmail('secondary@email.com');
+        }
+    }, [authUser]);
 
     const handleEdit = () => {
         setBackupProfile({
