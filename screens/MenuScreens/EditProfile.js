@@ -22,14 +22,18 @@ const EditProfile = () => {
   const [backupProfile, setBackupProfile] = useState({});
 
   const navigation = useNavigation();
-  const user = useAuthUser(navigation, (user) => {
-    const attributes = user?.attributes;
-    const { email, family_name, given_name, phone_number } = attributes;
-    setFirstName(given_name);
-    setLastName(family_name);
-    setPrimaryEmail(email);
-    setPrimaryPhoneNumber(phone_number);
-  });
+  const user = useAuthUser();
+
+  useEffect(() => {
+    if (user) {
+      const attributes = user?.attributes;
+      const { email, family_name, given_name, phone_number } = attributes;
+      setFirstName(given_name);
+      setLastName(family_name);
+      setPrimaryEmail(email);
+      setPrimaryPhoneNumber(phone_number);
+    }
+}, [user]);
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
@@ -115,6 +119,7 @@ const EditProfile = () => {
   }
 
   async function updateUser(user) {
+    AsyncStorage.setItem('user_updated', 'false');
     try {
       // If Primary Email was changed, not change, direct user to enter confirmation code
       if (primaryEmail != user?.attributes?.email) {
