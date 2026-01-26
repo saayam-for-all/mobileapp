@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Себя",
-    "OTHER": "Другой"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "Низкий",
-    "MEDIUM": "Средний",
-    "HIGH": "Высокий",
-    "CRITICAL": "Критический"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "Создано",
-    "MATCHING VOLUNTEER": "Поиск волонтёра",
-    "MANAGED": "Управляется",
-    "RESOLVED": "Решено",
-    "CANCELLED": "Отменено",
-    "DELETED": "Удалено"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "Лично",
-    "REMOTE": "Удалённо"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

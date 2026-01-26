@@ -1,0 +1,19 @@
+{
+  "UPLOAD_GOVERNMENT_ID": "政府 ID をアップロードする",
+  "SELECT_SOURCE": "ソースの選択",
+  "DEVICE": "デバイス",
+  "GOOGLE_DRIVE": "Googleドライブ",
+  "DROPBOX": "ドロップボックス",
+  "UPLOAD_FILE": "ファイルをアップロードする",
+  "FILE": "ファイル",
+  "FILE_PREVIEW": "プレビュー",
+  "UPLOAD": "アップロード",
+  "UPLOADING": "アップロード中...",
+  "REMOVE": "取り除く",
+  "FILE_SIZE_ERROR": "ファイルサイズは2MBを超えてはなりません",
+  "FILE_TYPE_ERROR": "JPEG、JPG、PNG、PDF ファイルのみが許可されます。検出されたファイルの種類: {{fileType}}、拡張子: {{extension}}",
+  "FILE_TYPE_REQUIREMENT": "JPEG、JPG、PNG、または PDF ファイルのみ。最大サイズ: 2MB。",
+  "UPLOAD_SUCCESS": "ファイルが正常にアップロードされました",
+  "UPLOAD_FAILED": "ファイルのアップロードに失敗しました",
+  "UPLOAD_ERROR": "ファイルのアップロード中にエラーが発生しました"
+}

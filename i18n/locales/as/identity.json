@@ -1,0 +1,19 @@
+{
+  "UPLOAD_GOVERNMENT_ID": "চৰকাৰী আইডি আপলোড কৰক",
+  "SELECT_SOURCE": "উৎস নিৰ্ব্বাচন কৰক",
+  "DEVICE": "ডিভাইচ",
+  "GOOGLE_DRIVE": "Google Drive",
+  "DROPBOX": "ড্ৰপবক্স",
+  "UPLOAD_FILE": "ফাইল আপল'ড কৰক",
+  "FILE": "ফাইল",
+  "FILE_PREVIEW": "পূৰ্বদৰ্শন",
+  "UPLOAD": "আপলোড কৰক",
+  "UPLOADING": "আপলোডিং...",
+  "REMOVE": "আঁতৰোৱা",
+  "FILE_SIZE_ERROR": "ফাইলৰ আকাৰ 2MB তকৈ অধিক হ'ব নালাগে",
+  "FILE_TYPE_ERROR": "কেৱল JPEG, JPG, PNG, আৰু PDF ফাইলৰ অনুমতি দিয়া হৈছে। ফাইলৰ ধৰণ ধৰা পৰিছে: __ph_0__, সম্প্ৰসাৰণ: __ph_1__",
+  "FILE_TYPE_REQUIREMENT": "কেৱল JPEG, JPG, PNG, বা PDF ফাইল। সৰ্বোচ্চ আকাৰ: 2MB.",
+  "UPLOAD_SUCCESS": "ফাইল সফলভাৱে আপলোড কৰা হৈছে",
+  "UPLOAD_FAILED": "ফাইল আপলোড ব্যৰ্থ",
+  "UPLOAD_ERROR": "ফাইল আপলোড কৰাৰ সময়ত এটা ভুল হৈছে"
+}

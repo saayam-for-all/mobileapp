@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "본인",
-    "OTHER": "타인"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "낮음",
-    "MEDIUM": "보통",
-    "HIGH": "높음",
-    "CRITICAL": "긴급"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "생성됨",
-    "MATCHING VOLUNTEER": "자원봉사자 매칭 중",
-    "MANAGED": "관리 중",
-    "RESOLVED": "해결됨",
-    "CANCELLED": "취소됨",
-    "DELETED": "삭제됨"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "대면",
-    "REMOTE": "원격"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

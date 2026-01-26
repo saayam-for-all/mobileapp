@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "نفسي",
-    "OTHER": "آخر"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "منخفض",
-    "MEDIUM": "متوسط",
-    "HIGH": "عالي",
-    "CRITICAL": "حرج"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "تم الإنشاء",
-    "MATCHING VOLUNTEER": "البحث عن متطوع",
-    "MANAGED": "تتم الإدارة",
-    "RESOLVED": "تم الحل",
-    "CANCELLED": "تم الإلغاء",
-    "DELETED": "تم الحذف"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "شخصياً",
-    "REMOTE": "عن بعد"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

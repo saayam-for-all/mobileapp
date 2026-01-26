@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import Auth from "@aws-amplify/auth";
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SignIn({ navigation, signIn: signInCb }) {
+  const { t } = useTranslation('auth');
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -223,16 +225,16 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           // On successful sign-in, offer to save credentials if not already saved
           if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
             Alert.alert(
-              'Save Password?',
-              `Securely store your password so it's filled automatically the next time you need it.`,
+              t('SAVE_PASSWORD'),
+              t('SAVE_PASSWORD_MESSAGE'),
               [
                 {
-                  text: 'Not Now',
+                  text: t('NOT_NOW'),
                   style: 'cancel',
                   onPress: () => signInCb(user),
                 },
                 {
-                  text: 'Save Password',
+                  text: t('SAVE_PASSWORD_BUTTON'),
                   onPress: async () => {
                     await saveCredentials(emailToUse, passwordToUse);
                     signInCb(user);
@@ -251,7 +253,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
             Alert.alert("Error when signing in: ", err);
           } else {
             if (err.code === "UserNotConfirmedException") {
-              console.log("User not confirmed");
+              console.log(t('USER_NOT_CONFIRMED'));
               navigation.navigate("Confirmation", {
                 email: emailToUse,
               });
@@ -262,7 +264,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           }
         });
     } else {
-      setErrorMessage("Provide a valid email and password");
+      setErrorMessage(t('ERROR_PROVIDE_EMAIL_PASSWORD'));
     }
   };
 
@@ -277,13 +279,13 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         style={styles.logo}
       />
       <View style={styles.textDescriptionontainer}>
-        <Text>Email Address</Text>
+        <Text>{t('EMAIL_ADDRESS')}</Text>
         <Spacer size={20} />
       </View>
       <TextInput
         style={styles.input}
         value={email}
-        placeholder="Your Email"
+        placeholder={t('EMAIL_ADDRESS')}
         onChangeText={(text) => onChangeEmail(text)}
         autoCompleteType="email"
         autoCapitalize="none"
@@ -291,14 +293,14 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         autoFocus={!hasStoredCredentials}
       />
       <View style={styles.textDescriptionontainer}>
-        <Text>Password</Text>
+        <Text>{t('PASSWORD')}</Text>
         <Spacer size={20} />
       </View>
       <View style={{ width: '100%', marginVertical: 10, position: 'relative' }}>
         <TextInput
           style={[styles.input, { paddingRight: 40 }]} // add padding to avoid overlap
           value={password}
-          placeholder="Password"
+          placeholder={t('PASSWORD')}
           onChangeText={onChangePassword}
           secureTextEntry={!showPassword}
           autoCompleteType="password"
@@ -326,20 +328,17 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         ]}
         onPress={() => navigation.navigate("ForgetPassword")}
       >
-        Forgot password?
+        {t('FORGOT_PASSWORD')}
       </Text>
-      {/* <TouchableOpacity style={styles.button} onPress={() => signIn()}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity> */}
       <Spacer size={30} />
       <Button onPress={() => signIn()} style={{ width: '100%' }}>
-        Log In
+        {t('SIGN_IN_BUTTON')}
       </Button>
       <Spacer size={10} />
       {Platform.OS === 'ios' && biometricAvailable && hasStoredCredentials && (
         <>
           <Button onPress={() => handleBiometricAuth()} style={{ width: '100%' }}>
-            Sign in with {biometricType}
+            {t('SIGN_IN_WITH_BIOMETRIC', { type: biometricType })}
           </Button>
         </>
       )}

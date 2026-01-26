@@ -1,0 +1,19 @@
+{
+  "UPLOAD_GOVERNMENT_ID": "सरकारी ID अपलोड करें .",
+  "SELECT_SOURCE": "स्रोत का चयन करें .",
+  "DEVICE": "उपकरणम्‌",
+  "GOOGLE_DRIVE": "गूगल ड्राइव .",
+  "DROPBOX": "ड्रॉपबॉक्स 1 .",
+  "UPLOAD_FILE": "सञ्चिकां अपलोड् कुर्वन्तु .",
+  "FILE": "संचिका",
+  "FILE_PREVIEW": "पूर्वावलोकनम् २.",
+  "UPLOAD": "अपलोड करें .",
+  "UPLOADING": "अपलोडिंग...",
+  "REMOVE": "अपाकरोति",
+  "FILE_SIZE_ERROR": "सञ्चिकायाः ​​आकारः 2MB अधिकं न भवेत् ।",
+  "FILE_TYPE_ERROR": "केवलं JPEG, JPG, PNG, PDF सञ्चिकाः च अनुमताः सन्ति । सञ्चिकाप्रकारः ज्ञातः: __PH_0_, विस्तारः __ph_1__",
+  "FILE_TYPE_REQUIREMENT": "केवलं JPEG, JPG, PNG, अथवा PDF सञ्चिकाः। अधिकतम आकार: 2MB।",
+  "UPLOAD_SUCCESS": "सञ्चिका सफलतया अपलोड् कृता ।",
+  "UPLOAD_FAILED": "सञ्चिका अपलोड् विफलं 2019।",
+  "UPLOAD_ERROR": "सञ्चिका अपलोड् समये त्रुटिः अभवत् ।"
+}

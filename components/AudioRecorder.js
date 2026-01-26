@@ -6,83 +6,61 @@ import {
     StyleSheet,
     Modal,
     Animated,
+    Alert,
+    Platform,
+    ActivityIndicator,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/Feather';
 import * as FileSystem from "expo-file-system";
 import api from './api';
+import { Buffer } from "buffer";
 
+function detectAudioFormat(base64) {
+    // Decode the full base64 then inspect the first bytes for reliable detection
+    const bytes = Buffer.from(base64, "base64").slice(0, 32);
+    if (bytes.slice(0, 4).toString() === "RIFF") return "WAV";
+    if (bytes.slice(4, 8).toString() === "ftyp") return "MP4 / M4A";
+    if (bytes[0] === 0xff && (bytes[1] & 0xe0) === 0xe0) return "MP3";
+    if (bytes.slice(0, 4).toString() === "OggS") return "OGG";
+    return "UNKNOWN";
+}
+
+/* ================= RECORDING OPTIONS ================= */
 const RECORDING_OPTIONS = {
     android: {
-        extension: ".wav",
-        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_PCM_16BIT,
-        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_PCM_16BIT,
+        extension: '.m4a',
+        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
         sampleRate: 16000,
-        numberOfChannels: 1,
-        bitRate: 256000,
-        isMeteringEnabled: true,
+        numberOfChannels: 1,        // ← mono is best
+        bitRate: 64000,
     },
     ios: {
-        extension: ".wav",
+        extension: '.m4a',          // or .caf if you prefer, but m4a works
         audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_HIGH,
         sampleRate: 16000,
         numberOfChannels: 1,
-        linearPCMBitDepth: 16,
-        linearPCMIsBigEndian: false,
-        linearPCMIsFloat: false,
-        isMeteringEnabled: true,
+        bitRate: 64000,
+        linearPCMBitDepth: 16,      // not used for AAC, but safegit 
     },
+
 };
 
-
-const wavToPcmBase64 = async (uri) => {
-    const base64Wav = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-    });
-
-    // WAV header = 44 bytes ≈ 60 Base64 chars
-    return base64Wav.substring(60);
-};
-
-const uploadAudio = async (pcmBase64) => {
-    const payload = {
-        audioContent: pcmBase64,
-        audioConfig: {
-            encoding: "LINEAR16",
-            sample_rate_hertz: 16000,
-        },
-    };
-
-    console.log("Full API URL:", api.defaults.baseURL + "/requests/v0.0.1/upload-audio");
-
-    try {
-        const response = await api.post("/requests/v0.0.1/upload-audio", payload);
-        console.log("API response:", response.data);
-        return response.data;
-    } catch (err) {
-        if (err.response) {
-            console.error("API responded with error:", err.response.data);
-        } else if (err.request) {
-            console.error("No response received, request:", err.request);
-        } else {
-            console.error("Axios setup error:", err.message);
-        }
-    }
-
-    return null;
-};
-
-
-export default function AudioRecorder({ onStop }) {
+/* ================= COMPONENT ================= */
+export default function AudioRecorderTester({ onStop }) {
     const [recording, setRecording] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
     const [audioLevel, setAudioLevel] = useState(0);
+    const [isSending, setIsSending] = useState(false);
+    const [recordedUri, setRecordedUri] = useState(null);
+    const [showPreview, setShowPreview] = useState(false);
+    const [sound, setSound] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [transcript, setTranscript] = useState(""); // New: Transcription text
 
-    // Ripple animation values
     const rippleScale = useRef(new Animated.Value(1)).current;
     const rippleOpacity = useRef(new Animated.Value(0)).current;
-
-    // DOT animation
     const [dotCount, setDotCount] = useState(0);
 
     useEffect(() => {
@@ -95,12 +73,9 @@ export default function AudioRecorder({ onStop }) {
 
     const renderDots = () => `Recording${".".repeat(dotCount)}`;
 
-    // AUDIO → RIPPLE ANIMATION
     useEffect(() => {
         if (!isRecording) return;
-
         const intensity = Math.min(1, audioLevel * 2);
-
         Animated.parallel([
             Animated.timing(rippleScale, {
                 toValue: 1 + intensity * 1.8,
@@ -115,12 +90,13 @@ export default function AudioRecorder({ onStop }) {
         ]).start();
     }, [audioLevel, isRecording]);
 
-    // START RECORDING
+    /* ================= START RECORDING ================= */
     const startRecording = async () => {
         try {
-            const { status } = await Audio.requestPermissionsAsync();
+            const perm = await Audio.requestPermissionsAsync();
+            const status = perm.status ?? (perm.granted ? 'granted' : 'denied');
             if (status !== 'granted') {
-                alert('Microphone permission is required!');
+                Alert.alert('Permission Required', 'Microphone permission is required!');
                 return;
             }
 
@@ -130,17 +106,11 @@ export default function AudioRecorder({ onStop }) {
             });
 
             if (recording) {
-                try {
-                    await recording.stopAndUnloadAsync();
-                } catch { }
-                setRecording(null);
+                try { await recording.stopAndUnloadAsync(); } catch { }
             }
 
             const newRecording = new Audio.Recording();
-            await newRecording.prepareToRecordAsync(
-                RECORDING_OPTIONS
-            );
-
+            await newRecording.prepareToRecordAsync(RECORDING_OPTIONS);
             newRecording.setProgressUpdateInterval(100);
             newRecording.setOnRecordingStatusUpdate((status) => {
                 if (typeof status.metering === "number") {
@@ -149,16 +119,16 @@ export default function AudioRecorder({ onStop }) {
                 }
             });
 
-
             await newRecording.startAsync();
             setRecording(newRecording);
             setIsRecording(true);
         } catch (err) {
             console.error('Failed to start recording', err);
+            Alert.alert('Error', err.message);
         }
     };
 
-    // STOP RECORDING
+    /* ================= STOP RECORDING ================= */
     const stopRecording = async () => {
         if (!recording) return;
 
@@ -166,69 +136,196 @@ export default function AudioRecorder({ onStop }) {
             await recording.stopAndUnloadAsync();
             const uri = recording.getURI();
 
-            // Reset recording state immediately
+            // Detect format
+            const base64Audio = await FileSystem.readAsStringAsync(uri, {
+                encoding: FileSystem.EncodingType.Base64,
+            });
+            const format = detectAudioFormat(base64Audio);
+            console.log("🎵 Recorded audio format:", format, "URI:", uri);
+
             setIsRecording(false);
             setRecording(null);
             setAudioLevel(0);
             rippleScale.setValue(1);
             rippleOpacity.setValue(0);
 
-            // Convert WAV → PCM Base64
-            const pcmBase64 = await wavToPcmBase64(uri);
-
-            // Upload audio safely
-            const response = await uploadAudio(pcmBase64);
-
-            if (!response) {
-                console.error("Upload failed, skipping transcription");
-                if (onStop) onStop({ uri, requestId: null, transcription: null });
-                return;
-            }
-
-            console.log("Request ID:", response.requestId);
-            console.log("Transcription:", response.transcription);
-
-            if (onStop) {
-                onStop({
-                    uri,
-                    requestId: response.requestId,
-                    transcription: response.transcription,
-                });
-            }
+            setRecordedUri(uri);
+            setShowPreview(true);  // Show the "Send Audio" modal
         } catch (err) {
             console.error("Stop recording error:", err);
         }
     };
 
 
+    /* ================= PLAY / PAUSE ================= */
+    const playPauseAudio = async () => {
+        try {
+            if (!sound) {
+                const { sound: newSound } = await Audio.Sound.createAsync(
+                    { uri: recordedUri },
+                    { shouldPlay: true }
+                );
+                setSound(newSound);
+                setIsPlaying(true);
+                newSound.setOnPlaybackStatusUpdate((status) => {
+                    if (status.didJustFinish) setIsPlaying(false);
+                });
+            } else {
+                const status = await sound.getStatusAsync();
+                if (status.isPlaying) {
+                    await sound.pauseAsync();
+                    setIsPlaying(false);
+                } else {
+                    if (status.positionMillis >= status.durationMillis) {
+                        await sound.setPositionAsync(0);
+                    }
+                    await sound.playAsync();
+                    setIsPlaying(true);
+                }
+            }
+        } catch (err) {
+            console.error("Playback error:", err);
+        }
+    };
+
+    const cleanupSound = async () => {
+        if (sound) {
+            await sound.unloadAsync();
+            setSound(null);
+        }
+        setIsPlaying(false);
+    };
+
+    /* ================= SEND AUDIO ================= */
+    const sendAudio = async () => {
+        if (!recordedUri) return;
+        try {
+            setShowPreview(false);
+            setIsSending(true);
+
+            // Read file as Base64
+            const base64Full = await FileSystem.readAsStringAsync(recordedUri, {
+                encoding: FileSystem.EncodingType.Base64,
+            });
+
+            console.log(base64Full);
+            const base64Audio = base64Full.replace(/^data:audio\/\w+;base64,/, "");
+
+            // Detect actual recorded format and set encoding/sampleRate accordingly
+            const format = detectAudioFormat(base64Audio);
+            console.log("🎵 Detected format before send:", format);
+
+            let encoding = "LINEAR16";
+            let sampleRate = 44100;
+            switch (format) {
+                case "WAV":
+                    encoding = "LINEAR16";
+                    sampleRate = 44100;
+                    break;
+                case "MP4 / M4A":
+                    encoding = "AAC";
+                    sampleRate = 44100;
+                    break;
+                case "MP3":
+                    encoding = "MP3";
+                    sampleRate = 44100;
+                    break;
+                case "OGG":
+                    encoding = "OGG_OPUS";
+                    sampleRate = 16000;
+                    break;
+                default:
+                    encoding = Platform.OS === "android" ? "OPUS_IN_WEBM" : "LINEAR16";
+                    sampleRate = Platform.OS === "android" ? 16000 : 44100;
+            }
+
+            const payload = {
+                audioContent: base64Audio,
+            };
+
+            // Call your backend
+            const response = await api.post("/requests/v0.0.1/speechDetectC2", payload);
+
+            console.log("📥 API response:", response.data);
+            setTranscript(response.data.result || "");
+
+            setIsSending(false);
+            cleanupSound();
+            Alert.alert("Success", "Audio sent and transcribed successfully!");
+            onStop?.({ uri: recordedUri, response: response.data });
+        } catch (err) {
+            setIsSending(false);
+            console.error("Send audio error:", err);
+            Alert.alert("Error", "Failed to send and transcribe audio.");
+        }
+    };
+
+
+    /* ================= UI ================= */
     return (
         <>
             <TouchableOpacity style={styles.startButton} onPress={startRecording}>
                 <Icon name="mic" size={30} color="#000" />
             </TouchableOpacity>
 
-            <Modal transparent={true} animationType="fade" visible={isRecording}>
+            {/* RECORDING MODAL */}
+            <Modal transparent animationType="fade" visible={isRecording}>
                 <View style={styles.overlay}>
                     <View style={styles.floatingTab}>
                         <Text style={styles.recordingText}>{renderDots()}</Text>
-
-                        {/* ------------------- RIPPLE + STOP BUTTON ------------------- */}
                         <View style={styles.rippleWrapper}>
                             <Animated.View
                                 style={[
                                     styles.rippleCircle,
-                                    {
-                                        transform: [{ scale: rippleScale }],
-                                        opacity: rippleOpacity,
-                                    },
+                                    { transform: [{ scale: rippleScale }], opacity: rippleOpacity },
                                 ]}
                             />
-
                             <TouchableOpacity style={styles.stopButton} onPress={stopRecording}>
                                 <View style={styles.squareInside} />
                             </TouchableOpacity>
                         </View>
+                    </View>
+                </View>
+            </Modal>
 
+            {/* PREVIEW MODAL */}
+            <Modal transparent animationType="fade" visible={showPreview}>
+                <View style={styles.overlay}>
+                    <View style={styles.previewTab}>
+                        <Text style={styles.previewTitle}>Preview Recording</Text>
+                        <TouchableOpacity style={styles.playButton} onPress={playPauseAudio}>
+                            <Icon name={isPlaying ? "pause" : "play"} size={32} color="#fff" />
+                        </TouchableOpacity>
+                        {transcript ? (
+                            <Text style={{ marginBottom: 15, fontStyle: 'italic' }}>{transcript}</Text>
+                        ) : null}
+                        <View style={styles.previewActions}>
+                            <TouchableOpacity
+                                style={styles.discardButton}
+                                onPress={() => {
+                                    cleanupSound();
+                                    setShowPreview(false);
+                                    setRecordedUri(null);
+                                    setTranscript("");
+                                }}
+                            >
+                                <Text style={styles.actionText}>Discard</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.sendButton} onPress={sendAudio}>
+                                <Text style={styles.actionText}>Send</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* SENDING MODAL */}
+            <Modal transparent animationType="fade" visible={isSending}>
+                <View style={styles.overlay}>
+                    <View style={styles.sendingTab}>
+                        <Icon name="upload-cloud" size={40} color="#3b82f6" />
+                        <Text style={styles.sendingText}>Processing audio...</Text>
+                        <ActivityIndicator size="small" color="#3b82f6" style={{ marginTop: 10 }} />
                     </View>
                 </View>
             </Modal>
@@ -236,71 +333,23 @@ export default function AudioRecorder({ onStop }) {
     );
 }
 
+/* ================= STYLES ================= */
 const styles = StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: "rgba(0,0,0,0.7)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    floatingTab: {
-        width: 300,
-        height: 200,
-        backgroundColor: "#fff",
-        borderRadius: 20,
-        padding: 25,
-        alignItems: "center",
-        justifyContent: "space-between",
-        elevation: 12,
-    },
-    recordingText: {
-        fontSize: 22,
-        fontWeight: "700",
-        color: "red",
-    },
-
-    /* ----------------- RIPPLE CENTERING FIX ----------------- */
-    rippleWrapper: {
-        width: 40,
-        height: 40,
-        justifyContent: "center",
-        alignItems: "center",
-        marginVertical: 25,
-    },
-    rippleCircle: {
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        width: 40,       // smaller size
-        height: 40,      // smaller size
-        borderRadius: 20,
-        backgroundColor: "#ff3b3044",
-    },
-
-    stopButton: {
-        width: 70,
-        height: 70,
-        borderRadius: 35,
-        backgroundColor: "red",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    squareInside: {
-        width: 26,
-        height: 26,
-        backgroundColor: "#fff",
-        borderRadius: 4,
-    },
-
-    startButton: {
-        position: "absolute",
-        bottom: 50,
-        right: 4,
-        width: 55,
-        height: 55,
-        justifyContent: "center",
-        alignItems: "center",
-    },
+    overlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.7)", justifyContent: "center", alignItems: "center" },
+    floatingTab: { width: 300, height: 200, backgroundColor: "#fff", borderRadius: 20, padding: 25, alignItems: "center", justifyContent: "space-between", elevation: 12 },
+    recordingText: { fontSize: 22, fontWeight: "700", color: "red" },
+    rippleWrapper: { width: 40, height: 40, justifyContent: "center", alignItems: "center", marginVertical: 25 },
+    rippleCircle: { position: "absolute", width: 40, height: 40, borderRadius: 20, backgroundColor: "#ff3b3044" },
+    stopButton: { width: 70, height: 70, borderRadius: 35, backgroundColor: "red", justifyContent: "center", alignItems: "center" },
+    squareInside: { width: 26, height: 26, backgroundColor: "#fff", borderRadius: 4 },
+    startButton: { position: "absolute", bottom: 50, right: 4, width: 55, height: 55, justifyContent: "center", alignItems: "center" },
+    previewTab: { width: 300, backgroundColor: "#fff", borderRadius: 20, padding: 25, alignItems: "center" },
+    previewTitle: { fontSize: 20, fontWeight: "700", marginBottom: 20 },
+    playButton: { width: 70, height: 70, borderRadius: 35, backgroundColor: "#3b82f6", justifyContent: "center", alignItems: "center", marginBottom: 25 },
+    previewActions: { flexDirection: "row", gap: 20 },
+    discardButton: { backgroundColor: "#ef4444", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10 },
+    sendButton: { backgroundColor: "#22c55e", paddingVertical: 10, paddingHorizontal: 20, borderRadius: 10 },
+    actionText: { color: "#fff", fontWeight: "600" },
+    sendingTab: { width: 250, height: 150, backgroundColor: "#fff", borderRadius: 20, padding: 25, alignItems: "center", justifyContent: "center", elevation: 12 },
+    sendingText: { fontSize: 18, fontWeight: "600", marginTop: 15 },
 });

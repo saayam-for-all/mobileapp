@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "सामान्यं",
-      "DESC": "निश्चितं न भवति चेत् प्रयुज्यतां; स्वीयां आवश्यकतां विस्तरेण वर्णयत।"
+      "LABEL": "General",
+      "DESC": "Use when you're unsure; describe your need in detail."
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "अन्नं च आवश्यकानि",
-      "DESC": "अन्नसहायतां, किराणासेवां, पाकसहायतां च प्राप्नुत।",
+      "LABEL": "Food & Essentials",
+      "DESC": "Access food support, grocery services, and cooking help.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "अन्नसहायता",
-          "DESC": "अन्नबैंकान्, पण्ट्रीः वा भोजनकार्यक्रमान् अन्वेषयत।"
+          "LABEL": "Food Assistance",
+          "DESC": "Find food banks, pantries, or meal programs."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "किराणाक्रयणं च वितरणं",
-          "DESC": "किराणाक्रयणे वितरणे च सहायतां याचयत।"
+          "LABEL": "Grocery Shopping & Delivery",
+          "DESC": "Request help shopping for and delivering groceries."
         },
         "COOKING_HELP": {
-          "LABEL": "पाकसहायता",
-          "DESC": "भोजनतैयार्यां पाके च मार्गदर्शनं प्राप्नुत।"
+          "LABEL": "Cooking Help",
+          "DESC": "Get guidance with meal prep and cooking."
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "वस्त्राणि च सहायता",
-      "DESC": "दानं कुरुत, ऋणं गृह्णीत, संस्कुरुत वा वस्त्रसहायतां याचयत।",
+      "LABEL": "Clothing Support",
+      "DESC": "Donate, borrow, repair, or request clothing assistance.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "वस्त्राणि दानं कुरुत",
-          "DESC": "आवश्यकतायां स्थितेभ्यः जनेभ्यः वस्त्राणि दत्त।"
+          "LABEL": "Donate Clothes",
+          "DESC": "Give clothing to those in need."
         },
         "BORROW_CLOTHES": {
-          "LABEL": "वस्त्राणि ऋणं गृह्णीत",
-          "DESC": "लघुप्रयुक्तानि वस्त्राणि ऋणं गृह्णीत।"
+          "LABEL": "Borrow Clothes",
+          "DESC": "Borrow gently used clothing."
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "आपातकालीन सहायता",
-          "DESC": "संकटकाले आपातकालीन वस्त्रावश्यकता।"
+          "LABEL": "Emergency Assistance",
+          "DESC": "Emergency clothing needs during crises."
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "ऋतुगत अभियान सूचना",
-          "DESC": "ऋतुगत वस्त्र अभियानाः दानानि च।"
+          "LABEL": "Seasonal Drive Notification",
+          "DESC": "Seasonal clothing drives and donations."
         },
         "TAILORING": {
-          "LABEL": "सिलाई",
-          "DESC": "वस्त्र मरम्मत परिवर्तन सेवाः।"
+          "LABEL": "Tailoring",
+          "DESC": "Clothing repair and alteration services."
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "आवाससहायता",
-      "DESC": "कक्षसहायाः, भाड़ामार्गदर्शनं, स्थानान्तरणं गृहस्थापनसहायता च।",
+      "LABEL": "Housing Support",
+      "DESC": "Roommates, renting guidance, moving and home setup support.",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "कक्षसहायान्वेषणं",
-          "DESC": "कक्षसहायान्वेषणे सहायतां प्राप्नुत।"
+          "LABEL": "Find a Roommate",
+          "DESC": "Get help finding a roommate."
         },
         "RENTING_SUPPORT": {
-          "LABEL": "भाड़ासहायता",
-          "DESC": "भाड़े पट्टे च मूलविषयेषु सहायता।"
+          "LABEL": "Renting Support",
+          "DESC": "Assistance with renting and lease basics."
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "गृहोपयोगिवस्तूनां विनिमयः",
-          "DESC": "गृहोपयोगिवस्तूनि क्रेतुं विक्रेतुं वा सहायता।"
+          "LABEL": "Household Item Exchange",
+          "DESC": "Help with buying or selling household items."
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "स्थानान्तरणसहायता",
-          "DESC": "स्थानान्तरणे पैकिंगे च सहायता।"
+          "LABEL": "Moving Assistance",
+          "DESC": "Support with moving and packing."
         },
         "CLEANING_HELP": {
-          "LABEL": "शुद्धिसहायता",
-          "DESC": "मूलशुद्धिकार्येषु सहायता।"
+          "LABEL": "Cleaning Help",
+          "DESC": "Assistance with basic cleaning tasks."
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "गृहमरम्मतसहायता",
-          "DESC": "लघुगृहमरम्मते सहायता।"
+          "LABEL": "Home Repair Support",
+          "DESC": "Support for minor home repairs."
         },
         "UTILITIES_SETUP": {
-          "LABEL": "उपयोगितासेटअपः",
-          "DESC": "उपयोगितासु सेवासु च सेटअपे सहायता।"
+          "LABEL": "Utilities Setup",
+          "DESC": "Help setting up utilities and services."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "शिक्षाकरियरसहायता",
-      "DESC": "महाविद्यालयाभ्यर्थनाः, SOPसमीक्षाः, शिक्षणं अध्ययनसहायता च।",
+      "LABEL": "Education & Career Support",
+      "DESC": "College apps, SOP reviews, tutoring, and study support.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "महाविद्यालयाभ्यर्थनसहायता",
-          "DESC": "अभ्यर्थनेषु फार्मेषु च सहायता।"
+          "LABEL": "College Application Help",
+          "DESC": "Help with applications and forms."
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOPनिबन्धसमीक्षा",
-          "DESC": "कथनेषु निबन्धेषु च प्रतिक्रिया।"
+          "LABEL": "SOP & Essay Review",
+          "DESC": "Feedback on statements and essays."
         },
         "TUTORING": {
-          "LABEL": "शिक्षणं",
-          "DESC": "विषयेषु शिक्षणं अध्ययनसहायता च।"
+          "LABEL": "Tutoring",
+          "DESC": "Subject tutoring and study support."
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "स्वास्थ्यसेवा च कल्याणं",
-      "DESC": "अक्लिनिकलस्वास्थ्यनेविगेशनं कल्याणसहायता च।",
+      "LABEL": "Healthcare & Well-being",
+      "DESC": "Non-clinical health navigation and wellness support.",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "चिकित्सानेविगेशनः",
-          "DESC": "मूलनेविगेशनं अक्लिनिकलमार्गदर्शनं च।"
+          "LABEL": "Medical Navigation",
+          "DESC": "Basic navigation and non-clinical guidance."
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "औषधवितरणं",
-          "DESC": "OTCऔषधानां पिकअपं वितरणं च।"
+          "LABEL": "Medicine Delivery",
+          "DESC": "Pickup and delivery of OTC medicines."
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "मानसिककल्याणसहायता",
-          "DESC": "सामान्यमानसिकस्वास्थ्यसंसाधनानाम् अभिगमः।"
+          "LABEL": "Mental Wellbeing Support",
+          "DESC": "Access general mental health resources."
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "औषधस्मारकाः",
-          "DESC": "अक्लिनिकल औषधस्मारकाः।"
+          "LABEL": "Medication Reminders",
+          "DESC": "Non-clinical medication reminders."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "स्वास्थ्यशिक्षामार्गदर्शनं",
-          "DESC": "कल्याणजागरूकता स्वास्थ्यशिक्षा च।"
+          "LABEL": "Health Education Guidance",
+          "DESC": "Wellness awareness and health education."
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "वृद्धसहायता",
-      "DESC": "वृद्धेभ्यः अचिकित्सासहायता समुदायसमर्थनं च।",
+      "LABEL": "Elderly Support",
+      "DESC": "Non-medical assistance for seniors and community support.",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "वृद्धवासस्थानान्तरणं",
-          "DESC": "वृद्धवासे स्थानान्तरणे च सहायता।"
+          "LABEL": "Senior Living Relocation",
+          "DESC": "Help with senior housing and moving."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "वृद्धेभ्यः डिजिटलसहायता",
-          "DESC": "उपकरणेषु ऐप्सु च सहायता।"
+          "LABEL": "Digital Support for Seniors",
+          "DESC": "Assistance with devices and apps."
         },
         "MEDICAL_HELP": {
-          "LABEL": "चिकित्सासहायता",
-          "DESC": "वृद्धेभ्यः अक्लिनिकल चिकित्सासहायता।"
+          "LABEL": "Medical Help",
+          "DESC": "Non-clinical medical assistance for seniors."
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "कार्याणि परिवहनं च",
-          "DESC": "कार्येषु परिवहने च सहायता।"
+          "LABEL": "Errands & Transportation",
+          "DESC": "Help with errands and transportation."
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "सामाजिकसंबंधः",
-          "DESC": "साहचर्यं सामाजिककार्यक्रमाः च।"
+          "LABEL": "Social Connection",
+          "DESC": "Companionship and social activities."
         },
         "MEAL_SUPPORT": {
-          "LABEL": "भोजनसहायता",
-          "DESC": "भोजनतैयार्यां पाके च सहायता।"
+          "LABEL": "Meal Support",
+          "DESC": "Help with meal preparation and cooking."
         }
       }
     }

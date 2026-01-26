@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   View, StyleSheet, Text, Alert
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Spacer from '../../components/Spacer';
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
 });
 
 export default function SignUp({ navigation }) {
+  const { t } = useTranslation('auth');
   const [name, onChangeName] = useState('');
   const [lastName, onChangeLastName] = useState('');
   const [email, onChangeEmail] = useState('');
@@ -56,9 +58,9 @@ export default function SignUp({ navigation }) {
 
   const [invalidMessage, setInvalidMessage] = useState(null);
   const errorMessages = {
-    password: 'Password must be equal and have greater length than 8 with uppercase, digits and special characters.',
-    email: 'Please enter a valid email address.',
-    phone: 'Phone number must be valid numeric values.'
+    password: t('ERROR_WEAK_PASSWORD'),
+    email: t('ERROR_INVALID_EMAIL'),
+    phone: t('ERROR_INVALID_PHONE')
   }
 
   const signUp = async () => {
@@ -112,14 +114,14 @@ export default function SignUp({ navigation }) {
         errorMessage = errorMessages.phone;
       }
       if (!allInputsFilled) {
-        errorMessage = 'Please fill all fields.';
+        errorMessage = t('ERROR_FILL_ALL_FIELDS');
       }
       setInvalidMessage(errorMessage);
       popError(errorMessage);
     }
   };
   const popError = (errorMessage) =>
-    Alert.alert('Submission Failed', errorMessage, [
+    Alert.alert(t('ERROR_SUBMISSION_FAILED'), errorMessage, [
       {text: 'OK', onPress: () => console.log('OK Pressed')},
   ]);
   return (
@@ -127,11 +129,11 @@ export default function SignUp({ navigation }) {
       <View style={{ flexDirection: "row", width: "100%",paddingHorizontal:'1.5%', marginBottom:'1.5%', alignItems: "stretch", alignContent: 'flex-start'}}>
         <View style={{width: '50%', padding: 0}}>
           <View style={styles.textDescriptionontainer}>
-            <Text>First Name</Text>
+            <Text>{t('FIRST_NAME')}</Text>
           </View>
           <Input
             value={name}
-            placeholder="First Name"
+            placeholder={t('FIRST_NAME')}
             onChange={(text) => onChangeName(text)} 
             autoFocus
           />
@@ -139,24 +141,22 @@ export default function SignUp({ navigation }) {
 
         <View style={{width: '50%', }}>
           <View style={styles.textDescriptionontainer}>
-            <Text>Last Name</Text>
+            <Text>{t('LAST_NAME')}</Text>
           </View>
           <Input
             value={lastName}
-            placeholder="Last Name"
+            placeholder={t('LAST_NAME')}
             onChange={(text) => onChangeLastName(text)}
-            //autoFocus
           />
         </View>
       </View>
       <View style={{width: '100%'}}>
         <View style={{...styles.textDescriptionontainer}}>
-          <Text>Email</Text>
+          <Text>{t('EMAIL_ADDRESS')}</Text>
         </View>
         <Input
           value={email}
           placeholder="email@example.com"
-          
           onChange={(text) => {
             onChangeEmail(text);
             const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -189,7 +189,7 @@ export default function SignUp({ navigation }) {
       /> */}
       <View style={{width: '100%'}}>
         <View style={{...styles.textDescriptionontainer}}>
-          <Text>Phone Number</Text>
+          <Text>{t('PHONE_NUMBER')}</Text>
         </View>
         <PhoneInput
           countryCode= {country_code}

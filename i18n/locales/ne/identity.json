@@ -1,0 +1,19 @@
+{
+  "UPLOAD_GOVERNMENT_ID": "सरकारी आईडी अपलोड गर्नुहोस्",
+  "SELECT_SOURCE": "स्रोत चयन गर्नुहोस्",
+  "DEVICE": "यन्त्र",
+  "GOOGLE_DRIVE": "गुगल ड्राइव",
+  "DROPBOX": "ड्रपबक्स",
+  "UPLOAD_FILE": "फाइल अपलोड गर्नुहोस्",
+  "FILE": "फाइल",
+  "FILE_PREVIEW": "पूर्वावलोकन",
+  "UPLOAD": "अपलोड गर्नुहोस्",
+  "UPLOADING": "अपलोड गर्दै...",
+  "REMOVE": "हटाउनुहोस्",
+  "FILE_SIZE_ERROR": "फाइल आकार 2MB भन्दा बढी हुनु हुँदैन",
+  "FILE_TYPE_ERROR": "JPEG, JPG, PNG, र PDF फाइलहरूलाई मात्र अनुमति छ। फाइल प्रकार पत्ता लाग्यो: {{fileType}}, विस्तार: {{extension}}",
+  "FILE_TYPE_REQUIREMENT": "JPEG, JPG, PNG, वा PDF फाइलहरू मात्र। अधिकतम आकार: 2MB।",
+  "UPLOAD_SUCCESS": "फाइल सफलतापूर्वक अपलोड गरियो",
+  "UPLOAD_FAILED": "फाइल अपलोड असफल भयो",
+  "UPLOAD_ERROR": "फाइल अपलोड गर्दा एउटा त्रुटि भयो"
+}

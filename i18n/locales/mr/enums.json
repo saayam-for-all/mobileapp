@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "स्वतः",
-    "OTHER": "इतर"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "कमी",
-    "MEDIUM": "मध्यम",
-    "HIGH": "उच्च",
-    "CRITICAL": "गंभीर"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "तयार केले",
-    "MATCHING VOLUNTEER": "स्वयंसेवक शोधत आहे",
-    "MANAGED": "व्यवस्थापित",
-    "RESOLVED": "निराकरण केले",
-    "CANCELLED": "रद्द केले",
-    "DELETED": "हटवले"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "वैयक्तिकरित्या",
-    "REMOTE": "दूरस्थ"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

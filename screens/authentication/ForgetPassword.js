@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Auth from '@aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
 });
 
 function ForgetPassword({ navigation }) {
+  const { t } = useTranslation('auth');
   const [email, onChangeEmail] = useState('');
   const [editableInput, setEditableInput] = useState(true);
   const [confirmationStep, setConfirmationStep] = useState(false);
@@ -54,14 +56,14 @@ function ForgetPassword({ navigation }) {
           }
         });
     } else {
-      setErrorMessage('Provide a valid email');
+      setErrorMessage(t('ERROR_PROVIDE_EMAIL_PASSWORD'));
     }
   };
 
   const postNewPassword = async () => {
 
     if (newPassword !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
+      setErrorMessage(t('ERROR_PASSWORD_MISMATCH'));
       return;
     }
     Auth.forgotPasswordSubmit(email, code, newPassword)
@@ -80,7 +82,7 @@ function ForgetPassword({ navigation }) {
     <View style={styles.container}>
       <Input
         value={email}
-        placeholder="email@example.com"
+        placeholder={t('EMAIL_ADDRESS')}
         onChange={(text) => onChangeEmail(text)}
         editable={editableInput}
         autoCompleteType="email"
@@ -92,13 +94,13 @@ function ForgetPassword({ navigation }) {
         style={{width: '94%', margin: '3%'}}
         onPress={() => getConfirmationCode()}
       >
-        Reset password
+        {t('GET_CONFIRMATION_CODE')}
       </Button>
       {confirmationStep && (
         <>
           <Spacer size={10} />
           <View style={styles.textDescriptionontainer}>
-            <Text style={{marginHorizontal:'3%'}}>Check your email for the confirmation code.</Text>
+            <Text style={{marginHorizontal:'3%'}}>{t('ENTER_CODE')}</Text>
             <Spacer size={20} />
           </View>
           <Input
@@ -107,13 +109,13 @@ function ForgetPassword({ navigation }) {
             onChange={(text) => setCode(text)}
           />
           <View style={styles.textDescriptionontainer}>
-            <Text style={{marginHorizontal:'3%'}}>New Password</Text>
+            <Text style={{marginHorizontal:'3%'}}>{t('NEW_PASSWORD')}</Text>
             <Spacer size={20} />
           </View>
           <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
           <Input
             value={newPassword}
-            placeholder="password"
+            placeholder={t('PASSWORD')}
             onChange={(text) => setNewPassword(text)}
             secureTextEntry={!showPassword}
             autoCompleteType="password"
@@ -140,7 +142,7 @@ function ForgetPassword({ navigation }) {
             style={{width: '94%', margin: '3%'}}
             onPress={() => postNewPassword()}
           >
-            Submit new password
+            {t('SUBMIT_NEW_PASSWORD')}
           </Button>
         </>
       )}

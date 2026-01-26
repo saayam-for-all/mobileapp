@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   View, StyleSheet, Text, TextInput, TouchableOpacity,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Auth from '@aws-amplify/auth';
 import { useNavigation } from '@react-navigation/native';
 
 const CODE_LENGTH = 6;
 
 const Confirmation = ({ route, navigation, isUpdate = false }) => {
+  const { t } = useTranslation('auth');
   const [code, setCode] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [error, setError] = useState('');
@@ -46,7 +48,7 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
       try {
         await Auth.confirmSignUp(email, code);
         navigation.navigate('SignIn');
-      } catch (err) {
+      } catch (err) {t('ERROR_SUBMISSION_FAILED')
         setError(err.message || 'Something went wrong, please contact support!');
       }
     } else {
@@ -98,14 +100,14 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Verify Account</Text>
+      <Text style={styles.title}>{t('VERIFY_ACCOUNT')}</Text>
       
       <Text style={styles.subtitle}>
-        Code has been sent to <Text style={styles.phoneNumber}>{email}</Text>.{'\n'}
-        Enter the code to verify your account.
+        {t('CODE_SENT_TO')} <Text style={styles.phoneNumber}>{email}</Text>.{'\n'}
+        {t('ENTER_VERIFICATION_CODE')}
       </Text>
 
-      <Text style={styles.codeLabel}>Enter Code</Text>
+      <Text style={styles.codeLabel}>{t('ENTER_CODE')}</Text>
 
       <TouchableOpacity 
         style={styles.codeContainer} 
@@ -148,17 +150,17 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
 
       <View style={styles.resendContainer}>
         <Text style={styles.resendText}>
-          Didn't Receive Code?{' '}
+          {t('DIDNT_RECEIVE_CODE')}{' '}
           <TouchableOpacity onPress={resendCode} disabled={!canResend}>
             <Text style={[styles.resendLink, !canResend && { color: '#ccc' }]}>
-              Resend Code
+              {t('RESEND_CODE')}
             </Text>
           </TouchableOpacity>
         </Text>
         
         {!canResend && (
           <Text style={styles.timerText}>
-            Resend code in {formatTimer(timer)}
+            {t('RESEND_CODE_IN')} {formatTimer(timer)}
           </Text>
         )}
       </View>
@@ -167,7 +169,7 @@ const Confirmation = ({ route, navigation, isUpdate = false }) => {
         style={styles.verifyButton} 
         onPress={isUpdate ? confirmUpdate : confirmSignUp}
       >
-        <Text style={styles.verifyButtonText}>Verify Account</Text>
+        <Text style={styles.verifyButtonText}>{t('VERIFY_ACCOUNT')}</Text>
       </TouchableOpacity>
 
       {error ? <Text style={styles.errorText}>{error}</Text> : null}

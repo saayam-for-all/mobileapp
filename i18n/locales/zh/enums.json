@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "自己",
-    "OTHER": "其他人"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "低",
-    "MEDIUM": "中",
-    "HIGH": "高",
-    "CRITICAL": "紧急"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "已创建",
-    "MATCHING VOLUNTEER": "匹配志愿者中",
-    "MANAGED": "已管理",
-    "RESOLVED": "已解决",
-    "CANCELLED": "已取消",
-    "DELETED": "已删除"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "亲自",
-    "REMOTE": "远程"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

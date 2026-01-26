@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "தானே",
-    "OTHER": "மற்றவர்"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "குறைவான",
-    "MEDIUM": "நடுத்தர",
-    "HIGH": "அதிக",
-    "CRITICAL": "முக்கியமான"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "உருவாக்கப்பட்டது",
-    "MATCHING VOLUNTEER": "தன்னார்வலரைத் தேடுகிறது",
-    "MANAGED": "நிர்வகிக்கப்படுகிறது",
-    "RESOLVED": "தீர்க்கப்பட்டது",
-    "CANCELLED": "ரத்து செய்யப்பட்டது",
-    "DELETED": "நீக்கப்பட்டது"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "நேரடியாக",
-    "REMOTE": "தொலைநிலை"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

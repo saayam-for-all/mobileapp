@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Sarili",
-    "OTHER": "Iba"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "Mababa",
-    "MEDIUM": "Katamtaman",
-    "HIGH": "Mataas",
-    "CRITICAL": "Kritikal"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "Nilikha",
-    "MATCHING VOLUNTEER": "Naghahanap ng Boluntaryo",
-    "MANAGED": "Pinamamahalaan",
-    "RESOLVED": "Nalutas",
-    "CANCELLED": "Kinansela",
-    "DELETED": "Tinanggal"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "Personal",
-    "REMOTE": "Malayuan"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

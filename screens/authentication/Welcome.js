@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Text, View, StyleSheet, SafeAreaView, Linking,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Button from '../../components/Button';
 import Auth from '@aws-amplify/auth';
 import Header from '../../components/Header';
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
 });
 
 const Welcome = ({ navigation }) => {
+  const { t } = useTranslation('auth');
   const topOffset = Math.round(config.deviceHeight * 0.03);
   return (
     <SafeAreaView style={[styles.container , { marginTop: topOffset }]}>
@@ -53,24 +55,23 @@ const Welcome = ({ navigation }) => {
       <CarouselComponent />
 
       <View style={styles.content}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam For All</Text>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>{t('WELCOME_TO_SAAYAM')}</Text>
         <Text style={{fontSize: 16, margin:'2%'}} >
-          Saayam For All is a software platform that brings requesters of help, volunteers,
-          volunteer organizations, and donors together. Please find out more
+          {t('WELCOME_DESCRIPTION')}
           <Text
             style={styles.advertLinkText}
             onPress={() => { Linking.openURL('https://saayam.netlify.app/'); }}
           >
-            {' here.'}
+            {' '}{t('WELCOME_LINK_TEXT')}
           </Text>
         </Text>
         <Spacer size='30'/>
         {/* Sign In and Sign Up buttons */}
         <Button onPress={() => navigation.navigate('SignIn')} style={{width:'100%', marginVertical:'3%'}}>
-          Sign In
+          {t('SIGN_IN_BUTTON')}
         </Button>
         <Button onPress={() => navigation.navigate('SignUp')} style={{width:'100%', marginVertical:'3%'}}>
-          Sign Up
+          {t('SIGN_UP_BUTTON')}
         </Button>
       </View>
     </SafeAreaView>

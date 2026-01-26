@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "अपन",
-    "OTHER": "आन"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "कम",
-    "MEDIUM": "मध्यम",
-    "HIGH": "उच्च",
-    "CRITICAL": "गंभीर"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "बनाओल गेल",
-    "MATCHING VOLUNTEER": "स्वयंसेवक खोजि रहल अछि",
-    "MANAGED": "प्रबंधित",
-    "RESOLVED": "हल कएल गेल",
-    "CANCELLED": "रद्द कएल गेल",
-    "DELETED": "मिटाओल गेल"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "व्यक्तिगत रूप सँ",
-    "REMOTE": "दूर सँ"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }

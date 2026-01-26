@@ -1,6 +1,6 @@
 {
-  "UPLOAD_GOVERNMENT_ID": "Carregar documento de identidade governamental",
-  "SELECT_SOURCE": "Selecionar fonte",
+  "UPLOAD_GOVERNMENT_ID": "Carregar ID governamental",
+  "SELECT_SOURCE": "Selecione a fonte",
   "DEVICE": "Dispositivo",
   "GOOGLE_DRIVE": "Google Drive",
   "DROPBOX": "Dropbox",
@@ -8,12 +8,12 @@
   "FILE": "Arquivo",
   "FILE_PREVIEW": "Visualização",
   "UPLOAD": "Carregar",
-  "UPLOADING": "Carregando...",
+  "UPLOADING": "Fazendo upload...",
   "REMOVE": "Remover",
-  "FILE_SIZE_ERROR": "O tamanho do arquivo não deve exceder 2MB",
-  "FILE_TYPE_ERROR": "Apenas arquivos JPEG, JPG, PNG e PDF são permitidos. Tipo de arquivo detectado: {{fileType}}, extensão: {{extension}}",
-  "FILE_TYPE_REQUIREMENT": "Apenas arquivos JPEG, JPG, PNG ou PDF. Tamanho máximo: 2MB.",
-  "UPLOAD_SUCCESS": "Arquivo carregado com sucesso",
-  "UPLOAD_FAILED": "Falha ao carregar arquivo",
-  "UPLOAD_ERROR": "Ocorreu um erro durante o carregamento do arquivo"
+  "FILE_SIZE_ERROR": "O tamanho do arquivo não deve exceder 2 MB",
+  "FILE_TYPE_ERROR": "Somente arquivos JPEG, JPG, PNG e PDF são permitidos. Tipo de arquivo detectado: {{fileType}}, extensão: {{extension}}",
+  "FILE_TYPE_REQUIREMENT": "Somente arquivos JPEG, JPG, PNG ou PDF. Tamanho máximo: 2 MB.",
+  "UPLOAD_SUCCESS": "Arquivo enviado com sucesso",
+  "UPLOAD_FAILED": "Falha no upload do arquivo",
+  "UPLOAD_ERROR": "Ocorreu um erro durante o upload do arquivo"
 }

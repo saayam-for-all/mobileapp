@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "خود",
-    "OTHER": "دوسرے"
+    "SELF": "Self",
+    "OTHER": "Other"
   },
   "requestPriority": {
-    "LOW": "کم",
-    "MEDIUM": "درمیانہ",
-    "HIGH": "زیادہ",
-    "CRITICAL": "نازک"
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
   },
   "requestStatus": {
-    "CREATED": "تخلیق کیا گیا",
-    "MATCHING VOLUNTEER": "رضاکار تلاش کر رہے ہیں",
-    "MANAGED": "منظم کیا گیا",
-    "RESOLVED": "حل کیا گیا",
-    "CANCELLED": "منسوخ کیا گیا",
-    "DELETED": "حذف کیا گیا"
+    "CREATED": "Created",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MANAGED": "Managed",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "DELETED": "Deleted"
   },
   "requestType": {
-    "INPERSON": "ذاتی طور پر",
-    "REMOTE": "دور سے"
+    "INPERSON": "In Person",
+    "REMOTE": "Remote"
   }
 }
