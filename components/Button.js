@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { Text, StyleSheet, ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
 const styles = StyleSheet.create({
   buttonStyle: {
@@ -8,26 +8,42 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderRadius: 10,
     borderWidth: 1,
-
+  },
+  contentStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   textStyle: {
     fontSize: 18,
     color: 'white',
-    marginHorizontal: 'auto'
   },
 });
 
-const Button = ({ onPress, children, backgroundColor = 'rgb(72, 140, 255)', style={}}) => {
+const Button = ({ 
+  onPress, 
+  children, 
+  backgroundColor = 'rgb(72, 140, 255)', 
+  style={}, 
+  loading = false 
+}) => {
   const btnStyle = backgroundColor ? {...styles.buttonStyle, ...style, backgroundColor } : {...styles.buttonStyle,...style};
+  
   return (
-    <TouchableHighlight
-      onPress={onPress}
+    <TouchableOpacity
+      onPress={loading ? null : onPress}
       style={btnStyle}
+      disabled={loading}
+      activeOpacity={0.7}
     >
-      <Text style={styles.textStyle}>
-        {children}
-      </Text>
-    </TouchableHighlight>
+      <View style={styles.contentStyle}>
+        <Text style={styles.textStyle}>
+          {children}
+        </Text>
+        {loading && <ActivityIndicator color="white" size="small" />}
+      </View>
+    </TouchableOpacity>
   );
 };
 

@@ -8,6 +8,8 @@ import { BannerData } from '../../data/BannerData';
 import Banner from '../../components/Banner/Banner';
 import { useIsFocused } from '@react-navigation/native';
 import Spacer from '../../components/Spacer';
+import CarouselComponent from '../../components/Carousel';
+import config from '../../components/config';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,18 +45,16 @@ const styles = StyleSheet.create({
 });
 
 const Welcome = ({ navigation }) => {
-
+  const topOffset = Math.round(config.deviceHeight * 0.03);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container , { marginTop: topOffset }]}>
       <Header />
-      <View style={styles.scrollImage}>
-        {useIsFocused() && <Banner data={BannerData} />}
-      </View>
+      <CarouselComponent />
 
       <View style={styles.content}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam</Text>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>Welcome to Saayam For All</Text>
         <Text style={{fontSize: 16, margin:'2%'}} >
-          Saayam is a software platform that brings requesters of help, volunteers,
+          Saayam For All is a software platform that brings requesters of help, volunteers,
           volunteer organizations, and donors together. Please find out more
           <Text
             style={styles.advertLinkText}

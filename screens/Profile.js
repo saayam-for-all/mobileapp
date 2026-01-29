@@ -15,6 +15,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icon
 import api from "../components/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useAuthUser from "../hooks/useAuthUser";
 
 const styles = StyleSheet.create({
   container: {
@@ -89,11 +90,18 @@ export default function Profile({ signOut }) {
   const [country, setCountry] = useState('');
 
   const [profileData, setProfileData] = useState(null);
+  const user = useAuthUser();
+
   useEffect(() => {
-    return navigation.addListener('focus', () => {
-      getUser();
-    });
-  }, []);
+    if (user) {
+        setUserName(
+          user.attributes.given_name + " " + user.attributes.family_name
+        );
+        setEmail(user.attributes.email);
+        setPhone(user.attributes.phone_number);
+        setCountry(user.attributes["custom:Country"]);
+    }
+}, [user]);
 
   useEffect(() => {
     const getImage = async () => {      
@@ -190,7 +198,7 @@ export default function Profile({ signOut }) {
             size={20}
             style={styles.optionIcon}
           />
-          <Text style={styles.optionText}>Edit Profile</Text>
+          <Text style={styles.optionText}>Your Profile</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -203,7 +211,7 @@ export default function Profile({ signOut }) {
             size={20}
             style={styles.optionIcon}
           />
-          <Text style={styles.optionText}>Personal Details</Text>
+          <Text style={styles.optionText}>Personal Information</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -281,15 +289,23 @@ export default function Profile({ signOut }) {
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
         
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate("AccountDeletion")}
+        >
+          <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>Sign Off</Text>
+          <Ionicons name="chevron-forward" size={20} color="#777" />
+        </TouchableOpacity>
 
-        <View style={styles.optionRow}>
+        {/* <View style={styles.optionRow}>
           <FontAwesome name="bell" size={20} style={styles.optionIcon} />
           <Text style={styles.optionText}>Notifications</Text>
           <Switch
             value={isNotificationsEnabled}
             onValueChange={setNotificationsEnabled}
           />
-        </View>
+        </View> */}
         
         <TouchableOpacity
           style={styles.optionRow}

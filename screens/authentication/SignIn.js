@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   View,
@@ -9,16 +9,22 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from "react-native";
-import { signIn as amplifySignIn } from "aws-amplify/auth";
+import { signIn as amplifySignIn } from 'aws-amplify/auth';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
 import Button from "../../components/Button";
 import Spacer from "../../components/Spacer";
 import Input from "../../components/Input";
+import { FontAwesome } from '@expo/vector-icons'; 
+
+const CREDENTIALS_KEY = 'saayam_credentials';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF", // White background
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 60,
@@ -33,15 +39,15 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     borderWidth: 1,
-    borderColor: "#E5E7EB", // Light gray border
+    borderColor: "#E5E7EB",
     borderRadius: 8,
     paddingHorizontal: 15,
     marginVertical: 10,
-    backgroundColor: "#F9FAFB", // Slight gray background
+    backgroundColor: "#F9FAFB",
     fontSize: 16,
   },
   button: {
-    backgroundColor: "#3B82F6", // Bright blue button
+    backgroundColor: "#3B82F6",
     width: "100%",
     height: 50,
     borderRadius: 8,
@@ -50,18 +56,18 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    color: "#FFFFFF", // White text
+    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
   },
   forgotPassword: {
-    color: "#6B7280", // Gray text
+    color: "#6B7280",
     fontSize: 14,
     marginTop: 10,
     textDecorationLine: "underline",
   },
   orText: {
-    color: "#6B7280", // Gray text
+    color: "#6B7280",
     fontSize: 14,
     marginVertical: 15,
   },
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
     width: "45%",
     height: 50,
     borderWidth: 1,
-    borderColor: "#E5E7EB", // Light gray border
+    borderColor: "#E5E7EB",
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
@@ -111,24 +117,163 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [biometricAvailable, setBiometricAvailable] = useState(false);
+  const [biometricType, setBiometricType] = useState(null);
+  const [hasStoredCredentials, setHasStoredCredentials] = useState(false);
 
-  const signIn = async () => {
-    if (email.length > 4 && password.length > 2) {
-      await amplifySignIn({ username: email, password })
-        .then((result) => {
-          if (!result?.isSignedIn) {
-            
-          } else {
-            signInCb(result);
-          }
-        })
-        .catch((err) => {
-          console.log("Error when signing in: ", err);
-          setErrorMessage("Provide a valid email and password");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    checkBiometricAvailability();
+    checkStoredCredentials();
+  }, []);
+
+  const checkBiometricAvailability = async () => {
+    if (Platform.OS === 'ios') {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      const enrolled = await LocalAuthentication.isEnrolledAsync();
+      
+      if (compatible && enrolled) {
+        const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
+        setBiometricAvailable(true);
+        
+        if (types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
+          setBiometricType('Face ID');
+        } else if (types.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
+          setBiometricType('Touch ID');
+        }
+      }
+    }
+  };
+
+  const checkStoredCredentials = async () => {
+    if (Platform.OS === 'ios') {
+      try {
+        const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
+        if (credentials) {
+          setHasStoredCredentials(true);
+        }
+      } catch (error) {
+        console.log('Error checking stored credentials:', error);
+      }
+    }
+  };
+
+  const saveCredentials = async (email, password) => {
+    if (Platform.OS === 'ios') {
+      try {
+        const credentials = JSON.stringify({ email, password });
+        await SecureStore.setItemAsync(CREDENTIALS_KEY, credentials, {
+          keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         });
+        setHasStoredCredentials(true);
+        console.log('Credentials saved successfully');
+      } catch (error) {
+        console.log('Error saving credentials:', error);
+      }
+    }
+  };
+
+  const getStoredCredentials = async () => {
+    if (Platform.OS === 'ios') {
+      try {
+        const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
+        if (credentials) {
+          return JSON.parse(credentials);
+        }
+      } catch (error) {
+        console.log('Error retrieving credentials:', error);
+      }
+    }
+    return null;
+  };
+
+  const handleBiometricAuth = async () => {
+    try {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: `Sign in with ${biometricType}`,
+        fallbackLabel: 'Use passcode',
+        disableDeviceFallback: false,
+      });
+
+      if (result.success) {
+        const credentials = await getStoredCredentials();
+        if (credentials) {
+          onChangeEmail(credentials.email);
+          onChangePassword(credentials.password);
+          
+          await performSignIn(credentials.email, credentials.password, false);
+        }
+      } else {
+        setErrorMessage('Biometric authentication failed');
+      }
+    } catch (error) {
+      console.log('Biometric auth error:', error);
+      setErrorMessage('Biometric authentication error');
+    }
+  };
+
+  const performSignIn = async (emailToUse, passwordToUse, shouldPromptSave = true) => {
+    if (emailToUse.length > 4 && passwordToUse.length > 2) {
+      setErrorMessage("");
+      setLoading(true);
+      try {
+        const { isSignedIn, nextStep } = await amplifySignIn({ 
+          username: emailToUse, 
+          password: passwordToUse 
+        });
+        
+        setLoading(false);
+        
+        // On successful sign-in, offer to save credentials if not already saved
+        if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
+          Alert.alert(
+            'Save Password?',
+            `Securely store your password so it's filled automatically the next time you need it.`,
+            [
+              {
+                text: 'Not Now',
+                style: 'cancel',
+                onPress: () => signInCb({ isSignedIn, nextStep }),
+              },
+              {
+                text: 'Save Password',
+                onPress: async () => {
+                  await saveCredentials(emailToUse, passwordToUse);
+                  signInCb({ isSignedIn, nextStep });
+                },
+              },
+            ]
+          );
+        } else {
+          signInCb({ isSignedIn, nextStep });
+        }
+      } catch (err) {
+        setLoading(false);
+        if (!err.message) {
+          console.log("Error when signing in: ", err);
+          Alert.alert("Error when signing in: ", err);
+        } else {
+          if (err.name === "UserNotConfirmedException") {
+            console.log("User not confirmed");
+            navigation.navigate("Confirmation", {
+              email: emailToUse,
+              fromSignIn: true
+            });
+          }
+          if (err.message) {
+            setErrorMessage(err.message);
+          }
+        }
+      }
     } else {
       setErrorMessage("Provide a valid email and password");
     }
+  };
+
+  const signIn = async () => {
+    await performSignIn(email, password, true);
   };
 
   return (
@@ -149,20 +294,37 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         autoCompleteType="email"
         autoCapitalize="none"
         keyboardType="email-address"
-        autoFocus
+        autoFocus={!hasStoredCredentials}
       />
       <View style={styles.textDescriptionontainer}>
         <Text>Password</Text>
         <Spacer size={20} />
       </View>
-      <TextInput
-        style={styles.input}
-        value={password}
-        placeholder="Password"
-        onChangeText={(text) => onChangePassword(text)}
-        secureTextEntry
-        autoCompleteType="password"
-      />
+      <View style={{ width: '100%', marginVertical: 10, position: 'relative' }}>
+        <TextInput
+          style={[styles.input, { paddingRight: 40 }]}
+          value={password}
+          placeholder="Password"
+          onChangeText={onChangePassword}
+          secureTextEntry={!showPassword}
+          autoCompleteType="password"
+        />
+        <TouchableOpacity
+          onPress={() => setShowPassword(!showPassword)}
+          style={{
+            position: 'absolute',
+            right: 15,
+            top: 0,
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 5,
+          }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+        </TouchableOpacity>
+      </View>
       <Text
         style={[
           styles.forgotPassword,
@@ -172,29 +334,31 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       >
         Forgot password?
       </Text>
-      {/* <TouchableOpacity style={styles.button} onPress={() => signIn()}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity> */}
       <Spacer size={30} />
-      <Button onPress={() => signIn()} style={{width: '100%'}}>
+      <Button onPress={() => signIn()} style={{ width: '100%' }} loading={loading}>
         Log In
       </Button>
+      <Spacer size={10} />
+      {Platform.OS === 'ios' && biometricAvailable && hasStoredCredentials && (
+        <>
+          <Button onPress={() => handleBiometricAuth()} style={{ width: '100%' }}>
+            Sign in with {biometricType}
+          </Button>
+        </>
+      )}
       {errorMessage && (
-        <Text
-          style = {styles.alertText}
-        >
+        <Text style={styles.alertText}>
           {errorMessage}
         </Text>
       )}
       <Spacer size={40} />
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <View style={{flex: 1, height: 1, backgroundColor: '#6B7280'}} />
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: '#6B7280' }} />
         <View>
-          <Text style={{width: 50, textAlign: 'center', ...styles.orText}}>Or With</Text>
+          <Text style={{ width: 50, textAlign: 'center', ...styles.orText }}>Or With</Text>
         </View>
-        <View style={{flex: 1, height: 1, backgroundColor: '#6B7280'}} />
+        <View style={{ flex: 1, height: 1, backgroundColor: '#6B7280' }} />
       </View>
-      {/* <Text style={styles.orText}>Or with</Text> */}
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>
           <Image

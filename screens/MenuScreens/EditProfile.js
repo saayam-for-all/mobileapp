@@ -1,45 +1,84 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { fetchUserAttributes, updateUserAttributes, getCurrentUser } from 'aws-amplify/auth';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { fetchAuthSession, fetchUserAttributes, updateUserAttribute } from 'aws-amplify/auth';
+import { countriesList } from '../../data/countries';
+import Button from '../../components/Button';
+import useAuthUser from '../../hooks/useAuthUser';
+import RNPickerSelect from "react-native-picker-select";
+
+import { ProfileFormStyles } from './ProfileStyles';
+
 
 const EditProfile = () => {
-  const [user, setUser] = useState(undefined);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
-  const [secondaryEmail, setSecondaryEmail] = useState('');
   const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
-  const [zone, setZone] = useState('');
+  const [zoneinfo, setzoneinfo] = useState('');
   const [needVerification, setNeedVerification] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [backupProfile, setBackupProfile] = useState({});
 
   const navigation = useNavigation();
+  const user = useAuthUser();
 
   useEffect(() => {
-    fetchUserAttributes().then((attributes) => {
+    if (user) {
+      const attributes = user?.attributes;
       const { email, family_name, given_name, phone_number } = attributes;
       setFirstName(given_name);
       setLastName(family_name);
       setPrimaryEmail(email);
       setPrimaryPhoneNumber(phone_number);
-    }).catch((error) => {
-      console.log('Error getting current user:', error);
-    });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const loadUserAttributes = async () => {
+      try {
+        const attributes = await fetchUserAttributes();
+        const { email, family_name, given_name, phone_number } = attributes;
+        const zoneinfoAttr = attributes['custom:Country'];
+
+        const profileData = {
+          firstName: given_name || '',
+          lastName: family_name || '',
+          primaryEmail: email || '',
+          primaryPhoneNumber: phone_number || '',
+          secondaryEmail: '',
+          secondaryPhoneNumber: '',
+          zoneinfo: zoneinfoAttr || '',
+        };
+
+        setFirstName(profileData.firstName);
+        setLastName(profileData.lastName);
+        setPrimaryEmail(profileData.primaryEmail);
+        setPrimaryPhoneNumber(profileData.primaryPhoneNumber);
+        setzoneinfo(profileData.zoneinfo);
+        setBackupProfile(profileData);
+      } catch (err) {
+        console.log('Error loading user:', err);
+      }
+    };
+
+    loadUserAttributes();
     setNeedVerification(false);
   }, []);
+
 
   useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
         email: user?.attributes?.email,
-        isUpdate: true, 
+        isUpdate: true,
         toUpdate: {
           email: primaryEmail,
           family_name: lastName,
           given_name: firstName,
-          phone_number: primaryPhoneNumber
+          phone_number: primaryPhoneNumber,
+          "custom:Country": zoneinfo
         }
       });
       setNeedVerification(false);
@@ -47,8 +86,7 @@ const EditProfile = () => {
   }, [needVerification]);
 
   const validateForm = () => {
-    // First Name and Last Name should contain text only (no numbers or special characters)
-    const nameRegex = /^[A-Za-z]+$/;
+    const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(firstName)) {
       Alert.alert('Invalid Input', 'First Name should contain only letters.');
       return false;
@@ -58,207 +96,161 @@ const EditProfile = () => {
       return false;
     }
 
-    // Email should contain @ and follow general email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(primaryEmail)) {
       Alert.alert('Invalid Email', 'Please enter a valid primary email address.');
       return false;
     }
 
-    // Phone number should start with '+' and contain digits only
     const phoneRegex = /^\+[0-9]{1,15}$/;
     if (!phoneRegex.test(primaryPhoneNumber)) {
       Alert.alert('Invalid Phone Number', 'Primary Phone number should start with "+" followed by digits.');
       return false;
     }
 
-    // Time Zone should be in uppercase
-    if (zone !== zone.toUpperCase()) {
-      Alert.alert('Invalid Time Zone', 'Time Zone should be in uppercase.');
-      return false;
-    }
-
-    // If all validations pass
     return true;
   };
 
-  const removeFirstTime = async () => {
-    const user = await getCurrentUser();
-    const username = user?.userId;
-    if (username) {
-      AsyncStorage.removeItem(username);
+  const removeFirstTime = async (userEmail) => {
+    if (userEmail) {
+      AsyncStorage.removeItem(userEmail);
     }
   }
 
-  async function updateUserProfile(attributes) {
+  async function updateUser() {
+    AsyncStorage.setItem('user_updated', 'false');
     try {
-      const emailChanged = attributes?.email != primaryEmail;
-      // If Email not changed, directly update
-      if (!emailChanged) {
-        await updateUserAttributes({
-          userAttributes: {
-            email: primaryEmail,
-            family_name: lastName,
-            given_name: firstName,
-            phone_number: primaryPhoneNumber
-          }
-        });
-        Alert.alert('Success', 'Profile updated successfully.');
-      }
-      // If Email changed, send verification, wait until user confirms, then update everythin
-      else {
+      const currentAttributes = await fetchUserAttributes();
+      
+      // If Primary Email was changed, redirect to verification
+      if (primaryEmail !== currentAttributes.email) {
         console.log("Needs verification");
-        try {
-          await updateUserAttributes({ userAttributes: { email: primaryEmail } });
-          setNeedVerification(true); // Then users would be redirected to enter confirmation code
-        } catch (err) {
-          Alert.alert("Send Verification Email Error", err.message);
-          return;
-        }
+        setNeedVerification(true);
+        return;
       }
-      removeFirstTime();
+      // If Primary Email was not changed, update user attributes
+      else {
+        await updateUserAttribute({ userAttribute: { attributeKey: 'family_name', value: lastName } });
+        await updateUserAttribute({ userAttribute: { attributeKey: 'given_name', value: firstName } });
+        await updateUserAttribute({ userAttribute: { attributeKey: 'phone_number', value: primaryPhoneNumber } });
+        await updateUserAttribute({ userAttribute: { attributeKey: 'custom:Country', value: zoneinfo } });
+      }
+      Alert.alert('Success', 'Profile updated successfully.');
+      removeFirstTime(currentAttributes.email);
     } catch (err) {
       Alert.alert('User Update Error', err.message);
-      return;
     }
   }
 
-  const handleUpdateProfile = async () => {
+  const handleEdit = () => {
+    setBackupProfile({
+      firstName,
+      lastName,
+      primaryEmail,
+      primaryPhoneNumber,
+      zoneinfo,
+    });
+    setIsEditing(true);
+  };
+
+  const handleSave = async () => {
     if (validateForm()) {
-      const attributes = await fetchUserAttributes();
-      // Proceed with the profile update logic here
-      await updateUserProfile(attributes);
-      removeFirstTime();
+      await updateUser();
+
+      setBackupProfile({
+        firstName,
+        lastName,
+        primaryEmail,
+        primaryPhoneNumber,
+        zoneinfo,
+      });
+
+      setIsEditing(false);
     }
   };
 
+  const handleCancel = () => {
+    if (Object.keys(backupProfile).length > 0) {
+      setFirstName(backupProfile.firstName);
+      setLastName(backupProfile.lastName);
+      setPrimaryEmail(backupProfile.primaryEmail);
+      setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
+      setzoneinfo(backupProfile.zoneinfo);
+    }
+    setIsEditing(false);
+  };
+
+
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Edit Profile</Text>
-      
+      <Text style={styles.header}>Your Profile</Text>
+
       <TextInput
         style={styles.input}
         placeholder="First Name"
         value={firstName}
         onChangeText={setFirstName}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         value={lastName}
         onChangeText={setLastName}
+        editable={isEditing}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Primary Email"
         keyboardType="email-address"
         value={primaryEmail}
         onChangeText={setPrimaryEmail}
+        editable={isEditing}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Secondary Email"
-        keyboardType="email-address"
-        value={secondaryEmail}
-        onChangeText={setSecondaryEmail}
-      />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Primary Phone Number"
+        placeholder="Phone Number"
         keyboardType="phone-pad"
         value={primaryPhoneNumber}
         onChangeText={setPrimaryPhoneNumber}
+        editable={isEditing}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Secondary Phone Number"
-        keyboardType="phone-pad"
-        value={secondaryPhoneNumber}
-        onChangeText={setSecondaryPhoneNumber}
+      <RNPickerSelect
+        onValueChange={(value) => setzoneinfo(value)}
+        items={countriesList}
+        value={zoneinfo}
+        disabled={!isEditing}
+        placeholder={{ label: "Country", value: null }}
+        useNativeAndroidPickerStyle={false}
+        style={{
+          inputIOS: styles.input,
+          inputIOSContainer: {
+            zIndex:100,
+          },
+          inputAndroid: styles.input,
+          placeholder: {
+            color: "#9CA3AF",
+          },
+        }}
       />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Zone"
-        value={zone}
-        onChangeText={setZone}
-      />
-      
-      <TouchableOpacity style={styles.button} onPress={handleUpdateProfile}>
-        <Text style={styles.buttonText}>Update Profile</Text>
-      </TouchableOpacity>
+
+      {!isEditing ? (
+        <Button onPress={handleEdit} style={styles.editButton}>Edit</Button>
+      ) : (
+        <View style={styles.buttonRow}>
+          <Button onPress={handleSave} backgroundColor='#3B82F6' style={styles.button}>Save</Button>
+          <Button onPress={handleCancel} backgroundColor='#6B7280' style={styles.button}>Cancel</Button>
+        </View>
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 10,
-    marginBottom: 15,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 15,
-  },
-  picker: {
-    height: 50,
-  },
-  button: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    color: '#374151',
-    paddingRight: 30,
-    backgroundColor: '#f9fafb',
-    marginBottom: 16,
-
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    color: '#374151',
-    paddingRight: 30,
-    backgroundColor: '#f9fafb',
-    marginBottom: 16,
-  },
-});
+const styles = ProfileFormStyles;
 
 export default EditProfile;

@@ -1,5 +1,4 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,54 +6,127 @@ import {
   StyleSheet,
   Alert,
   FlatList,
-  Modal,
+  Animated,
+  Dimensions,
 } from "react-native";
 
-const ReqFilter = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { onGoBack } = route.params;
-  const [status, setStatus] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
-  const [isSubCategoryModalVisible, setSubCategoryModalVisible] =
-    useState(false); // Modal for subcategories
-  const [currentCategory, setCurrentCategory] = useState(null); // Track the current category for subcategories
-  const [selectedSubCategories, setSelectedSubCategories] = useState([]); // Track selected subcategories
+const { width } = Dimensions.get("window");
 
-  const toggleStatus = (value) => {
-    setStatus(value);
+// Filter from Backend (to be implemented later)
+// {
+//     "requestFor": {
+//         "0": "SELF",
+//         "1": "OTHER"
+//     },
+//     "requestPriority": {
+//         "0": "LOW",
+//         "1": "MEDIUM",
+//         "2": "HIGH",
+//         "3": "CRITICAL"
+//     },
+//     "requestStatus": {
+//         "0": "CREATED",
+//         "1": "MATCHING VOLUNTEER",
+//         "2": "MANAGED",
+//         "3": "CLOSED",
+//         "4": "CANCELLED",
+//         "5": "DELETED"
+//     },
+//     "requestType": {
+//         "0": "INPERSON",
+//         "1": "HYBRID"
+//     }
+// }
+
+// categories = {
+//   "catId": {catName: "Category Name", subCategories: [{catName: "SubCategoryName", catId: "catId"}, ...]},
+//   ...
+// }
+
+// mock data
+const filterData = {
+  requestFor: {
+    "0": "Self",
+    "1": "Other",
+  },
+  requestPriority: {
+    "0": "Low",
+    "1": "Medium",
+    "2": "High",
+  },
+  requestStatus: {
+    "0": "Open",
+    "1": "Close",
+  },
+  requestType: {
+    "0": "Personal",
+    "1": "Hybrid",
+  },
+};
+
+const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
+  const filtersRef = useRef({ ...currentFilters });
+  const [, updateStyle] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]); // Track selected subcategories
+  const [expandedCategory, setExpandedCategory] = useState(null); // Track which category is expanded
+  const [selectedPriority, setSelectedPriority] = useState(
+    currentFilters.selectedPriority || [] // Sync on mount
+  );
+  const [isResetClicked, setIsResetClicked] = useState(false);
+
+  // Animation setup
+  const slideAnim = useRef(new Animated.Value(-width * 0.75)).current;
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  const toggleStatus = (option) => {
+    if (option in filtersRef.current.requestStatus) {
+      delete filtersRef.current.requestStatus[option];
+    } else {
+      filtersRef.current.requestStatus[option] =
+        filterData.requestStatus[option];
+    }
+    updateStyle((s) => s + 1); // Force re-render
+  };
+  const togglePriority = (option) => {
+    if (option === "All") {
+      setSelectedPriority([]);
+      return;
+    }
+
+    if (selectedPriority.includes(option)) {
+      setSelectedPriority(selectedPriority.filter((p) => p !== option));
+    } else {
+      if (selectedPriority.length < 2) {
+        setSelectedPriority([...selectedPriority, option]);
+      } else {
+        setSelectedPriority([]); // reset to All
+      }
+    }
   };
 
   const toggleCategory = (category) => {
-    if (category.subCategories) {
-      setCurrentCategory(category);
-      setSubCategoryModalVisible(true); // Open modal for subcategories
+    // Inline expansion instead of modal
+    if (expandedCategory === category.name) {
+      setExpandedCategory(null);
+    } else {
+      setExpandedCategory(category.name);
     }
-    
-    setSelectedCategories((prevState) =>
-      {
-        if (!prevState.includes(category.name)) {
-          return [...prevState, category.name];
-        }
-        return prevState;
-      }
-    );
-  };
 
-  // when exiting from a subcategory list, check if any of the subcategories selected
-  // if not, remove category from the list in order to properly update incasegu subcategories removed or none selected
-  const checkToRemoveCategory = (category) => {
-    for (const sub of category.subCategories) {
-        if (selectedSubCategories.includes(sub)) {
-          return;
-        }
-    }
-    setSelectedCategories((prevState) =>
-    {
-      return prevState.filter((item) => item !== category.name);
-    }
-    );
-  }
+    setSelectedCategories((prevState) => {
+      if (!prevState.includes(category.name)) {
+        return [...prevState, category.name];
+      }
+      return prevState;
+    });
+  };
 
   const toggleSubCategory = (subCategory) => {
     setSelectedSubCategories((prev) =>
@@ -65,22 +137,40 @@ const ReqFilter = () => {
   };
 
   const resetFilter = () => {
-    setStatus("");
+    filtersRef.current = {
+      requestStatus: {},
+      requestPriority: {},
+      selectedCategories: [],
+      selectedSubCategories: [],
+    };
     setSelectedCategories([]);
     setSelectedSubCategories([]);
+    setExpandedCategory(null);
+    setSelectedPriority([]);
+    setIsResetClicked(true);
+    updateStyle((s) => s + 1);
   };
 
   const applyFilter = () => {
-    Alert.alert(
-      "Filters Applied",
-      `Status: ${status}\nCategories: ${selectedCategories.join(
-        ", "
-      )}\nSubCategories: ${selectedSubCategories.join(", ")}`
-    );
-    const newFilters = {status, selectedCategories};
-    onGoBack(newFilters);
-    //cat(selectedCategories);
-    navigation.goBack();
+    if (isResetClicked) {
+      Alert.alert("Filters Reset", "Filters have been reset to default");
+      setIsResetClicked(false); // reset the flag
+    } else {
+      Alert.alert(
+        "Filters Applied",
+        `Status: ${Object.values(filtersRef.current.requestStatus).join(
+          ", "
+        )}\nCategories: ${selectedCategories.join(
+          ", "
+        )}\nSubCategories: ${selectedSubCategories.join(", ")}\nPriority: ${selectedPriority.length > 0 ? selectedPriority.join(", ") : "All"
+        }`
+      );
+    }
+    filtersRef.current.selectedCategories = selectedCategories;
+    filtersRef.current.selectedSubCategories = selectedSubCategories;
+    filtersRef.current.selectedPriority = selectedPriority;
+    onGoBack(filtersRef.current);
+    onClose && onClose();
   };
 
   const categories = [
@@ -153,52 +243,89 @@ const ReqFilter = () => {
   ];
 
   const renderCategory = ({ item }) => (
-    <TouchableOpacity
-      style={styles.categoryContainer}
-      onPress={() => toggleCategory(item)}
-    >
-      <Text style={styles.categoryText}>{item.name}</Text>
-      {item.subCategories ? (
-        <Text style={styles.arrow}>›</Text> // Arrow for categories with subcategories
-      ) : selectedCategories.includes(item.name) ? (
-        <Text style={styles.tick}>✓</Text> // Tick for selected categories
-      ) : null}
-    </TouchableOpacity>
-  );
+    <View>
+      <TouchableOpacity
+        style={styles.categoryContainer}
+        onPress={() => toggleCategory(item)}
+      >
+        <Text style={styles.categoryText}>{item.name}</Text>
+        <Text style={styles.arrow}>
+          {expandedCategory === item.name ? "⌃" : "›"}
+        </Text>
+      </TouchableOpacity>
 
-  const renderSubCategory = ({ item }) => (
-    <TouchableOpacity
-      style={styles.subCategoryContainer}
-      onPress={() => toggleSubCategory(item)}
-    >
-      <Text style={styles.subCategoryText}>{item}</Text>
-      {selectedSubCategories.includes(item) && (
-        <Text style={styles.tick}>✓</Text>
+      {expandedCategory === item.name && (
+        <View style={styles.subCategoryList}>
+          {item.subCategories.map((sub) => (
+            <TouchableOpacity
+              key={sub}
+              style={styles.subCategoryContainer}
+              onPress={() => toggleSubCategory(sub)}
+            >
+              <Text style={styles.subCategoryText}>{sub}</Text>
+              {selectedSubCategories.includes(sub) && (
+                <Text style={styles.tick}>✓</Text>
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
       )}
-    </TouchableOpacity>
+    </View>
   );
 
-  return (
-    <View style={styles.container}>
+  // Header content for FlatList
+  const ListHeader = () => (
+    <View>
       <TouchableOpacity onPress={resetFilter}>
         <Text style={styles.resetText}>Reset Filter</Text>
       </TouchableOpacity>
 
       <Text style={styles.sectionTitle}>Status</Text>
       <View style={styles.optionsContainer}>
-        {["All", "Open", "Closed"].map((option) => (
+        {Object.keys(filterData.requestStatus).map((option) => (
           <TouchableOpacity
             key={option}
             style={[
               styles.optionButton,
-              status === option && styles.selectedOption,
+              option in filtersRef.current.requestStatus &&
+              styles.selectedOption,
             ]}
             onPress={() => toggleStatus(option)}
           >
             <Text
               style={[
                 styles.optionText,
-                status === option && styles.selectedOptionText,
+                option in filtersRef.current.requestStatus &&
+                styles.selectedOptionText,
+              ]}
+            >
+              {filterData.requestStatus[option]}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <Text style={styles.sectionTitle}>Priority</Text>
+      <View style={styles.optionsContainer}>
+        {["All", ...Object.keys(filterData.requestPriority).map((k) => filterData.requestPriority[k])].map((option) => (
+          <TouchableOpacity
+            key={option}
+            style={[
+              styles.optionButton,
+              (option === "All" && selectedPriority.length === 0) ||
+                selectedPriority.includes(option)
+                ? styles.selectedOption
+                : null,
+            ]}
+            onPress={() => togglePriority(option)}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                (option === "All" && selectedPriority.length === 0) ||
+                  selectedPriority.includes(option)
+                  ? styles.selectedOptionText
+                  : null,
               ]}
             >
               {option}
@@ -208,54 +335,72 @@ const ReqFilter = () => {
       </View>
 
       <Text style={styles.sectionTitle}>Categories</Text>
-      <FlatList
-        data={categories}
-        keyExtractor={(item) => item.name}
-        renderItem={renderCategory}
+    </View>
+  );
+
+  // Footer content for FlatList
+  const ListFooter = () => (
+    <View style={styles.footer}>
+      <TouchableOpacity
+        onPress={onClose}
+        style={styles.cancelButton}
+      >
+        <Text style={styles.cancelText}>Cancel</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={applyFilter} style={styles.doneButton}>
+        <Text style={styles.doneText}>Done</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <View style={{ flex: 1 }}>
+      {/* Semi-transparent overlay */}
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={onClose}
       />
 
-      {/* Subcategory Modal */}
-      <Modal visible={isSubCategoryModalVisible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>{currentCategory?.name}</Text>
-          <FlatList
-            data={currentCategory?.subCategories}
-            keyExtractor={(item) => item}
-            renderItem={renderSubCategory}
-          />
-          <TouchableOpacity
-            onPress={() => {
-              setSubCategoryModalVisible(false);
-              checkToRemoveCategory(currentCategory);
-            }}
-            style={styles.doneButton}
-          >
-            <Text style={styles.doneText}>Done</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
-      <View style={styles.footer}>
-        <TouchableOpacity
-          onPress={() => Alert.alert("Canceled")}
-          style={styles.cancelButton}
-        >
-          <Text style={styles.cancelText}>Cancel</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={applyFilter} style={styles.doneButton}>
-          <Text style={styles.doneText}>Done</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Drawer container */}
+      <Animated.View
+        style={[
+          styles.drawerContainer,
+          { transform: [{ translateX: slideAnim }] },
+        ]}
+      >
+        <FlatList
+          data={categories}
+          keyExtractor={(item) => item.name}
+          renderItem={renderCategory}
+          ListHeaderComponent={ListHeader}
+          ListFooterComponent={ListFooter}
+        />
+      </Animated.View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.3)",
+  },
+  drawerContainer: {
+    width: width * 0.80,
+    height: "100%",
+    backgroundColor: "#FFF",
+    position: "absolute",
+    left: 0,
+    top: 0,
     padding: 20,
-    backgroundColor: "#F5F5F5",
+    borderTopRightRadius: 15,
+    borderBottomRightRadius: 15,
   },
   resetText: {
     color: "#007BFF",
@@ -273,6 +418,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    flexWrap: "wrap",
   },
   optionButton: {
     backgroundColor: "#E0E0E0",
@@ -280,6 +426,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginRight: 10,
+    marginBottom: 10,
   },
   optionText: {
     color: "#000",
@@ -301,8 +448,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginVertical: 5,
   },
-  categoryText: {
-    fontSize: 16,
+  subCategoryList: {
+    marginLeft: 12,
+    marginBottom: 10,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 8,
+  },
+  subCategoryContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  subCategoryText: {
+    fontSize: 15,
     color: "#333",
   },
   arrow: {
@@ -313,34 +472,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#007BFF",
   },
-  modalContainer: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#FFF",
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  subCategoryContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderColor: "#E0E0E0",
-  },
-  subCategoryText: {
-    fontSize: 16,
-    color: "#333",
-  },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 10,
     borderTopWidth: 1,
     borderColor: "#E0E0E0",
+    marginTop: 20,
   },
   cancelButton: {
     paddingVertical: 10,

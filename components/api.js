@@ -62,6 +62,7 @@ api.interceptors.response.use(
   (error) => {
     // Handle response errors
     return Promise.reject(error);
-  }
+  },
 );
+
 export default api;
