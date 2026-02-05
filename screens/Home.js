@@ -20,7 +20,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
-import api from "../components/api";
+import api from "../services/api";
 //import { Dimensions } from 'react-native';
 //const { width, height } = Dimensions.get("window");
 

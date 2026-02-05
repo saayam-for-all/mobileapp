@@ -12,7 +12,7 @@ import {
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icons
-import api from "../components/api";
+import api from "../services/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../hooks/useAuthUser";

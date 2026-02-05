@@ -7,7 +7,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { useTranslation } from 'react-i18next';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import api from '../components/api';
+import api from '../services/api';
 import languagesData from '../i18n/languagesData';
 import * as DocumentPicker from 'expo-document-picker';
 import Icon from 'react-native-vector-icons/Feather';

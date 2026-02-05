@@ -26,7 +26,7 @@ import {
 import { List, PaperProvider } from "react-native-paper";
 import Input from "../../../components/Input";
 import config from "../../../components/config";
-import api from "../../../components/api";
+import api from "../../../services/api";
 import { TextInput } from "react-native";
 import UserRequest from "../../UserRequest";
 import Button from '../../../components/Button';

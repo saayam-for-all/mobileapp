@@ -1,4 +1,4 @@
-import api from "../components/api";
+import api from "./api";
 import endpoints from "./endpoints.json";
 
 export const getVolunteerOrgsList = async () => {

@@ -8,7 +8,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Checkbox } from 'react-native-paper';
 import { Dimensions } from 'react-native';
-// import api from '../../components/api';
+// import api from '../../services/api';
 
 export default function Availability() {
   const [timeSlots, setTimeSlots] = useState([{ day: '', startTime: '', endTime: '' }]);

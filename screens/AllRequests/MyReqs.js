@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Linking, SafeAreaView } from 'react-native';
-import api from '../../components/api'
+import api from '../../services/api'
 import { useNavigation } from '@react-navigation/native';
 //import { MyReqData } from '../../data/MyReqData';
 import AllRequests from '../../components/AllRequests';

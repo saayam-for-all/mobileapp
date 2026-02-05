@@ -9,7 +9,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TimezonePicker from '../../components/TimeZonePicker';
-// import api from '../../components/api';
+// import api from '../../services/api';
 
 export default function Availability() {
   const [timeSlots, setTimeSlots] = useState([{ day: '', startTime: '', endTime: '' }]);
