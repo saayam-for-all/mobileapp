@@ -343,16 +343,3 @@ export default function Profile({ signOut }) {
     </>
   );
 }
-
-const fetchData = async () => {
-  try {
-    //console.log("API URL:  ", process.env.EXPO_PUBLIC_API_URL);
-    const res = await api.get("/requests/v0.0.1/profile"); // Get data axios instance
-    const resdata = res.data; // Axios data
-    //console.log("", resdata);
-    return resdata;
-  } catch (err) {
-    console.log("error from axios : ", err);
-    return {};
-  }
-};

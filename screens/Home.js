@@ -232,17 +232,6 @@ export default function Home({ signOut }) {
     }
   }
 
-  const getData = async () => {
-    //test the deplyed api
-    try {
-      const res = await api.get("/requests/v0.0.1/mockCategoriesAPI");
-      console.log("Data from Axios", res.data);
-    } catch (error) {
-      console.log("data error", error);
-    }
-  };
-  //getData();
-
   return (
     <SafeAreaView style={[styles.container, { zIndex: 1 }]}>
       {/* Top Bar */}
