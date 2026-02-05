@@ -16,7 +16,7 @@ import AudioRecorder from '../components/AudioRecorder';
 
 import useAuthUser from '../hooks/useAuthUser';
 
-import { getCategories, getEnums } from '../services/requestServices';
+import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../services/requestServices';
 import { Tab, Tabs } from '../components/Tabs';
 
 const genderOptions = [
@@ -115,23 +115,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     }
   }
 
-  // Integrate API for checking profanity
-  const checkProfanity = async () => {
-    const res = await api.post(
-      "/requests/v0.0.1/checkProfanity",
-      { subject: formData.requestSubject, description: formData.requestDescription }
-    );
-    return res.data;
-  }
-
-  const getSuggestedCategories = async () => {
-    const res = await api.post(
-      "/genai/v0.0.1/predict_categories",
-      { subject: formData.requestSubject, description: formData.requestDescription }
-    );
-    return res.data;
-  }
-
   const submit = async (category = '') => {
     if (!authUser?.attributes?.userDbId) {
       Alert.alert('Error', 'User not authenticated properly. Please log in again.');
@@ -170,10 +153,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     console.log('Submitting:', requestBody);
 
     // Actual API call
-    const response = await api.post(
-      "/requests/v0.0.1/createRequest",
-      requestBody
-    );
+    const response = await createRequest(requestBody);
 
     console.log('Response:', response.data);
 
@@ -241,7 +221,9 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     setLoading(true);
     try {
       // Check profanity
-      const profanityResponse = await checkProfanity();
+      const profanityResponse = await await checkProfanity(
+        { subject: formData.requestSubject, description: formData.requestDescription }
+      );
       if (profanityResponse?.contains_profanity) {
         const profanity = profanityResponse.profanity;
         Alert.alert(
@@ -262,7 +244,9 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       // Check if category is default/empty, then get suggested categories
       if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
         const defaultCategories = ["Health", "Education", "Electronics", "General"];
-        let suggestedCategories = await getSuggestedCategories();
+        let suggestedCategories = await predictCategories(
+          { subject: formData.requestSubject, description: formData.requestDescription }
+        );
         console.log("Suggested categories: ", suggestedCategories);
         if (!suggestedCategories) suggestedCategories = defaultCategories;
         suggestedCategories.push('General');

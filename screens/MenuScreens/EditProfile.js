@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { fetchAuthSession, fetchUserAttributes, updateUserAttribute } from 'aws-amplify/auth';
+import { fetchAuthSession, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth';
 import { countriesList } from '../../data/countries';
 import Button from '../../components/Button';
 import useAuthUser from '../../hooks/useAuthUser';
@@ -71,7 +71,7 @@ const EditProfile = () => {
   useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
-        email: user?.attributes?.email,
+        email: primaryEmail,
         isUpdate: true,
         toUpdate: {
           email: primaryEmail,
@@ -122,19 +122,29 @@ const EditProfile = () => {
     try {
       const currentAttributes = await fetchUserAttributes();
       
-      // If Primary Email was changed, redirect to verification
+      // Build attributes object
+      const attributesToUpdate = {
+        family_name: lastName,
+        given_name: firstName,
+        phone_number: primaryPhoneNumber,
+        'custom:Country': zoneinfo
+      };
+
+      // If email changed, include it in the update
+      if (primaryEmail !== currentAttributes.email) {
+        attributesToUpdate.email = primaryEmail;
+      }
+
+      // Update all attributes at once
+      await updateUserAttributes({ userAttributes: attributesToUpdate });
+
+      // If email was changed, trigger verification flow
       if (primaryEmail !== currentAttributes.email) {
         console.log("Needs verification");
         setNeedVerification(true);
         return;
       }
-      // If Primary Email was not changed, update user attributes
-      else {
-        await updateUserAttribute({ userAttribute: { attributeKey: 'family_name', value: lastName } });
-        await updateUserAttribute({ userAttribute: { attributeKey: 'given_name', value: firstName } });
-        await updateUserAttribute({ userAttribute: { attributeKey: 'phone_number', value: primaryPhoneNumber } });
-        await updateUserAttribute({ userAttribute: { attributeKey: 'custom:Country', value: zoneinfo } });
-      }
+
       Alert.alert('Success', 'Profile updated successfully.');
       removeFirstTime(currentAttributes.email);
     } catch (err) {
