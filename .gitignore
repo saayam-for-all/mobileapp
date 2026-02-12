@@ -38,7 +38,48 @@ yarn-error.*
 aws-exports.js
 amplifyconfiguration*
 
-# Expo Build
-android/
-ios/
-build-*
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Android
+android/app/build/
+android/build/
+android/.gradle/
+android/app/release/
+android/local.properties
+android/.cxx/
+android/app/.cxx/
+
+# iOS
+ios/Pods/
+ios/build/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcworkspace/xcshareddata/
+ios/Podfile.lock
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
