@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "الهاتف الثانوي",
   "required": "مطلوب",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "أنثى",
+    "MALE": "ذكر",
+    "NON_BINARY": "غير ثنائي",
+    "TRANSGENDER": "المتحولين جنسيا",
+    "INTERSEX": "ثنائيي الجنس",
+    "GENDER_NONCONFORMING": "عدم المطابقة بين الجنسين"
   },
   "CURRENT_PASSWORD": "كلمة المرور الحالية",
   "NEW_PASSWORD": "كلمة المرور الجديدة",

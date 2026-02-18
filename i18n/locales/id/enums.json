@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "Diri sendiri",
+    "OTHER": "Lainnya"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "Rendah",
+    "MEDIUM": "Sedang",
+    "HIGH": "Tinggi",
+    "CRITICAL": "Kritis"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "Dibuat",
+    "MATCHING VOLUNTEER": "Relawan yang Cocok",
+    "MANAGED": "Dikelola",
+    "RESOLVED": "Terselesaikan",
+    "CANCELLED": "Dibatalkan",
+    "DELETED": "Dihapus"
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "Secara langsung",
+    "REMOTE": "Terpencil"
   }
 }

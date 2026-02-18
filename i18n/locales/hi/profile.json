@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "द्वितीयक फ़ोन",
   "required": "आवश्यक",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "महिला",
+    "MALE": "पुरुष",
+    "NON_BINARY": "गैर-बाइनरी",
+    "TRANSGENDER": "ट्रांसजेंडर",
+    "INTERSEX": "इंटरसेक्स",
+    "GENDER_NONCONFORMING": "लिंग-अनुरूपता नहीं"
   },
   "CURRENT_PASSWORD": "वर्तमान पासवर्ड",
   "NEW_PASSWORD": "नया पासवर्ड",

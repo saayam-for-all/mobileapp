@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import Auth from '@aws-amplify/auth';
-import Button from '../../components/Button';
-import Input from '../../components/Input';
-import Spacer from '../../components/Spacer';
-//import Ionicons from 'react-native-vector-icons/Ionicons';
-import { FontAwesome, Ionicons } from '@expo/vector-icons'; 
-import { TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
+import Auth from "@aws-amplify/auth";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
+import Spacer from "../../components/Spacer";
+import { FontAwesome } from "@expo/vector-icons";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start",
     paddingTop: 100,
   },
   textDescriptionontainer: {
@@ -23,24 +21,30 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
-   errorText: {
-    color: 'red',
+  errorText: {
+    color: "red",
     marginTop: 12,
-    marginHorizontal: '3%',
-    width: '94%',
+    marginHorizontal: "3%",
+    width: "94%",
   },
 });
 
 function ForgetPassword({ navigation }) {
-  const { t } = useTranslation('auth');
-  const [email, onChangeEmail] = useState('');
+  const { t } = useTranslation("auth");
+
+  const [email, onChangeEmail] = useState("");
   const [editableInput, setEditableInput] = useState(true);
   const [confirmationStep, setConfirmationStep] = useState(false);
-  const [code, setCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+
+  const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // ✅ separate toggles for each input
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const getConfirmationCode = async () => {
     if (email.length > 4) {
@@ -48,33 +52,29 @@ function ForgetPassword({ navigation }) {
         .then(() => {
           setEditableInput(true);
           setConfirmationStep(true);
-          setErrorMessage('');
+          setErrorMessage("");
         })
         .catch((err) => {
-          if (err.message) {
-            setErrorMessage(err.message);
-          }
+          if (err?.message) setErrorMessage(err.message);
         });
     } else {
-      setErrorMessage(t('ERROR_PROVIDE_EMAIL_PASSWORD'));
+      setErrorMessage(t("EMAIL_REQUIRED"));
     }
   };
 
   const postNewPassword = async () => {
-
     if (newPassword !== confirmPassword) {
-      setErrorMessage(t('ERROR_PASSWORD_MISMATCH'));
+      setErrorMessage(t("PASSWORD_MISMATCH_ERROR"));
       return;
     }
+
     Auth.forgotPasswordSubmit(email, code, newPassword)
       .then(() => {
-        setErrorMessage('');
-        navigation.navigate('SignIn');
+        setErrorMessage("");
+        navigation.navigate("SignIn");
       })
       .catch((err) => {
-        if (err.message) {
-          setErrorMessage(err.message);
-        }
+        if (err?.message) setErrorMessage(err.message);
       });
   };
 
@@ -82,7 +82,7 @@ function ForgetPassword({ navigation }) {
     <View style={styles.container}>
       <Input
         value={email}
-        placeholder={t('EMAIL_ADDRESS')}
+        placeholder={t("EMAIL")}
         onChange={(text) => onChangeEmail(text)}
         editable={editableInput}
         autoCompleteType="email"
@@ -90,62 +90,72 @@ function ForgetPassword({ navigation }) {
         autoFocus
         keyboardType="email-address"
       />
-      <Button
-        style={{width: '94%', margin: '3%'}}
-        onPress={() => getConfirmationCode()}
-      >
-        {t('GET_CONFIRMATION_CODE')}
+
+      <Button style={{ width: "94%", margin: "3%" }} onPress={getConfirmationCode}>
+        {t("GET_CONFIRMATION_CODE")}
       </Button>
+
       {confirmationStep && (
         <>
           <Spacer size={10} />
+
           <View style={styles.textDescriptionontainer}>
-            <Text style={{marginHorizontal:'3%'}}>{t('ENTER_CODE')}</Text>
+            <Text style={{ marginHorizontal: "3%" }}>{t("ENTER_CODE")}</Text>
             <Spacer size={20} />
           </View>
-          <Input
-            value={code}
-            placeholder="123456"
-            onChange={(text) => setCode(text)}
-          />
+
+          <Input value={code} placeholder="123456" onChange={(text) => setCode(text)} />
+
           <View style={styles.textDescriptionontainer}>
-            <Text style={{marginHorizontal:'3%'}}>{t('NEW_PASSWORD')}</Text>
+            <Text style={{ marginHorizontal: "3%" }}>{t("NEW_PASSWORD")}</Text>
             <Spacer size={20} />
           </View>
-          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
-          <Input
-            value={newPassword}
-            placeholder={t('PASSWORD')}
-            onChange={(text) => setNewPassword(text)}
-            secureTextEntry={!showPassword}
-            autoCompleteType="password"
-            style={{ flex: 1 }}
-          />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
-          </TouchableOpacity>
+
+          {/* ✅ New password toggle */}
+          <View style={{ width: "94%", flexDirection: "row", alignItems: "center", margin: "3%" }}>
+            <Input
+              value={newPassword}
+              placeholder={t("PASSWORD")}
+              onChange={(text) => setNewPassword(text)}
+              secureTextEntry={!showNewPassword}
+              autoCompleteType="password"
+              style={{ flex: 1 }}
+            />
+            <TouchableOpacity onPress={() => setShowNewPassword((v) => !v)}>
+              <FontAwesome name={showNewPassword ? "eye-slash" : "eye"} size={20} color="#777" />
+            </TouchableOpacity>
           </View>
-          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
-          <Input
-            value={confirmPassword}
-            placeholder="password"
-            onChange={(text) => setConfirmPassword(text)}
-            secureTextEntry={!showPassword}
-            autoCompleteType="password"
-            style={{ flex: 1 }}
-          />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
-          </TouchableOpacity>
+
+          <View style={styles.textDescriptionontainer}>
+            <Text style={{ marginHorizontal: "3%" }}>{t("CONFIRM_PASSWORD")}</Text>
+            <Spacer size={20} />
           </View>
-          <Button
-            style={{width: '94%', margin: '3%'}}
-            onPress={() => postNewPassword()}
-          >
-            {t('SUBMIT_NEW_PASSWORD')}
+
+          {/* ✅ Confirm password toggle */}
+          <View style={{ width: "94%", flexDirection: "row", alignItems: "center", margin: "3%" }}>
+            <Input
+              value={confirmPassword}
+              placeholder={t("CONFIRM_PASSWORD")}
+              onChange={(text) => setConfirmPassword(text)}
+              secureTextEntry={!showConfirmPassword}
+              autoCompleteType="password"
+              style={{ flex: 1 }}
+            />
+            <TouchableOpacity onPress={() => setShowConfirmPassword((v) => !v)}>
+              <FontAwesome
+                name={showConfirmPassword ? "eye-slash" : "eye"}
+                size={20}
+                color="#777"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <Button style={{ width: "94%", margin: "3%" }} onPress={postNewPassword}>
+            {t("CHANGE_PASSWORD")}
           </Button>
         </>
       )}
+
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
   );

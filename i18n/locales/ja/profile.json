@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "補助電話",
   "required": "必須",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "女性",
+    "MALE": "男",
+    "NON_BINARY": "ノンバイナリ",
+    "TRANSGENDER": "トランスジェンダー",
+    "INTERSEX": "インターセックス",
+    "GENDER_NONCONFORMING": "ジェンダー不適合"
   },
   "CURRENT_PASSWORD": "現在のパスワード",
   "NEW_PASSWORD": "新しいパスワード",

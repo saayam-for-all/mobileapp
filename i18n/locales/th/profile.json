@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "โทรศัพท์รอง",
   "required": "ที่จำเป็น",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
+    "FEMALE": "หญิง",
+    "MALE": "ชาย",
+    "NON_BINARY": "ไม่ใช่ไบนารี",
+    "TRANSGENDER": "บุคคลข้ามเพศ",
     "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "GENDER_NONCONFORMING": "เพศไม่เป็นไปตามข้อกำหนด"
   },
   "CURRENT_PASSWORD": "รหัสผ่านปัจจุบัน",
   "NEW_PASSWORD": "รหัสผ่านใหม่",

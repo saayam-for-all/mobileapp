@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "Telefone Secundário",
   "required": "obrigatório",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "Fêmea",
+    "MALE": "Macho",
+    "NON_BINARY": "Não binário",
+    "TRANSGENDER": "Transgênero",
+    "INTERSEX": "Intersexo",
+    "GENDER_NONCONFORMING": "Não conforme de gênero"
   },
   "CURRENT_PASSWORD": "Senha atual",
   "NEW_PASSWORD": "Nova Senha",
@@ -81,7 +81,7 @@
   "PREFERENCES UPDATED SUCCESS": "Preferências atualizadas com sucesso!",
   "ACCOUNT_DELETION_WARNING_TITLE": "Exclusão de conta",
   "ACCOUNT_DELETION_WARNING_TEXT": "Esta ação excluirá permanentemente sua conta e todos os dados associados. Esta ação não pode ser desfeita. Certifique-se de ter feito backup de todas as informações importantes antes de continuar.",
-  "ACCOUNT_DELETION_CONFIRMATION_TEXT": "Ao marcar esta caixa, você reconhece que compreende as consequências da exclusão de sua conta.",
+  "ACCOUNT_DELETION_CONFIRMATION_TEXT": "Ao marcar esta caixa, você reconhece que entende as consequências da exclusão de sua conta.",
   "I_WANT_TO_DELETE_MY_ACCOUNT": "Quero excluir minha conta",
   "CONFIRM_ACCOUNT_DELETION": "Confirmar exclusão da conta",
   "CONFIRM_ACCOUNT_DELETION_TEXT": "Você tem certeza absoluta de que deseja excluir sua conta? Esta ação não pode ser desfeita e todos os seus dados serão removidos permanentemente.",

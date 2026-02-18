@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "پاڻ",
+    "OTHER": "ٻيو"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "گھٽ",
+    "MEDIUM": "وچولي",
+    "HIGH": "هاءِ",
+    "CRITICAL": "نازڪ"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "ٺاهيل",
+    "MATCHING VOLUNTEER": "ملندڙ رضاڪار",
+    "MANAGED": "منظم",
+    "RESOLVED": "حل ٿيل",
+    "CANCELLED": "منسوخ ٿيل",
+    "DELETED": "حذف ٿيل"
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "شخص ۾",
+    "REMOTE": "ريموٽ"
   }
 }

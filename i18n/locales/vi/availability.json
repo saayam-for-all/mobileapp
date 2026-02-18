@@ -18,7 +18,7 @@
   "USE_CURRENT_TIMEZONE": "Sử dụng múi giờ hiện tại",
   "CURRENT_DETECTED_TIMEZONE": "Múi giờ được phát hiện hiện tại",
   "VACATION_MODE": "Chế độ nghỉ phép",
-  "VACATION_MODE_DESCRIPTION": "Bật chế độ nghỉ phép để tạm thời vô hiệu hóa tính sẵn sàng cho các yêu cầu tình nguyện",
+  "VACATION_MODE_DESCRIPTION": "Bật chế độ nghỉ phép để tạm thời vô hiệu hóa tính khả dụng đối với các yêu cầu tình nguyện",
   "VACATION_START_DATE": "Ngày bắt đầu kỳ nghỉ",
   "VACATION_END_DATE": "Ngày kết thúc kỳ nghỉ",
   "YOUR_AVAILABLE_TIME_SLOTS": "Khoảng thời gian có sẵn của bạn",

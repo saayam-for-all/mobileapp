@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "स्वयं",
+    "OTHER": "इतर"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "न्यूनम्‌",
+    "MEDIUM": "मध्यम",
+    "HIGH": "उच्चैः",
+    "CRITICAL": "गंभीरः"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "सृष्टः २.",
+    "MATCHING VOLUNTEER": "मेलकर स्वयंसेवक 1 .",
+    "MANAGED": "प्रबन्धित 1 .",
+    "RESOLVED": "संकल्पित 1 .",
+    "CANCELLED": "रद्दं 1 .",
+    "DELETED": "विलोपित 1 ."
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "व्यक्तिगतरूपेण .",
+    "REMOTE": "दूरस्थ"
   }
 }

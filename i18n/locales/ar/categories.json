@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "General",
-      "DESC": "Use when you're unsure; describe your need in detail."
+      "LABEL": "عام",
+      "DESC": "استخدمه عندما تكون غير متأكد؛ وصف حاجتك بالتفصيل."
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "Food & Essentials",
-      "DESC": "Access food support, grocery services, and cooking help.",
+      "LABEL": "الغذاء والأساسيات",
+      "DESC": "يمكنك الوصول إلى الدعم الغذائي وخدمات البقالة والمساعدة في الطهي.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Food Assistance",
-          "DESC": "Find food banks, pantries, or meal programs."
+          "LABEL": "المساعدة الغذائية",
+          "DESC": "ابحث عن بنوك الطعام أو المخازن أو برامج الوجبات."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Grocery Shopping & Delivery",
-          "DESC": "Request help shopping for and delivering groceries."
+          "LABEL": "تسوق وتسليم البقالة",
+          "DESC": "اطلب المساعدة في التسوق وتوصيل البقالة."
         },
         "COOKING_HELP": {
-          "LABEL": "Cooking Help",
-          "DESC": "Get guidance with meal prep and cooking."
+          "LABEL": "مساعدة في الطبخ",
+          "DESC": "احصل على إرشادات بشأن إعداد الوجبات والطهي."
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "Clothing Support",
-      "DESC": "Donate, borrow, repair, or request clothing assistance.",
+      "LABEL": "دعم الملابس",
+      "DESC": "التبرع أو الاقتراض أو الإصلاح أو طلب المساعدة في الملابس.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Donate Clothes",
-          "DESC": "Give clothing to those in need."
+          "LABEL": "تبرع بالملابس",
+          "DESC": "إعطاء الملابس للمحتاجين."
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Borrow Clothes",
-          "DESC": "Borrow gently used clothing."
+          "LABEL": "استعارة الملابس",
+          "DESC": "استعارة الملابس المستعملة بلطف."
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Emergency Assistance",
-          "DESC": "Emergency clothing needs during crises."
+          "LABEL": "المساعدة في حالات الطوارئ",
+          "DESC": "احتياجات الطوارئ من الملابس أثناء الأزمات."
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Seasonal Drive Notification",
-          "DESC": "Seasonal clothing drives and donations."
+          "LABEL": "إشعار القيادة الموسمية",
+          "DESC": "حملات الملابس الموسمية والتبرعات."
         },
         "TAILORING": {
-          "LABEL": "Tailoring",
-          "DESC": "Clothing repair and alteration services."
+          "LABEL": "الخياطة",
+          "DESC": "خدمات إصلاح وتعديل الملابس."
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "Housing Support",
-      "DESC": "Roommates, renting guidance, moving and home setup support.",
+      "LABEL": "دعم الإسكان",
+      "DESC": "زملاء السكن، إرشادات الإيجار، دعم النقل وإعداد المنزل.",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "Find a Roommate",
-          "DESC": "Get help finding a roommate."
+          "LABEL": "العثور على الحجرة",
+          "DESC": "احصل على مساعدة في العثور على زميل في الغرفة."
         },
         "RENTING_SUPPORT": {
-          "LABEL": "Renting Support",
-          "DESC": "Assistance with renting and lease basics."
+          "LABEL": "دعم الإيجار",
+          "DESC": "المساعدة في أساسيات الاستئجار والتأجير."
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Household Item Exchange",
-          "DESC": "Help with buying or selling household items."
+          "LABEL": "تبادل العناصر المنزلية",
+          "DESC": "المساعدة في شراء أو بيع الأدوات المنزلية."
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "Moving Assistance",
-          "DESC": "Support with moving and packing."
+          "LABEL": "المساعدة المتحركة",
+          "DESC": "الدعم في النقل والتعبئة."
         },
         "CLEANING_HELP": {
-          "LABEL": "Cleaning Help",
-          "DESC": "Assistance with basic cleaning tasks."
+          "LABEL": "مساعدة التنظيف",
+          "DESC": "المساعدة في مهام التنظيف الأساسية."
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Home Repair Support",
-          "DESC": "Support for minor home repairs."
+          "LABEL": "دعم إصلاح المنزل",
+          "DESC": "دعم الإصلاحات المنزلية البسيطة."
         },
         "UTILITIES_SETUP": {
-          "LABEL": "Utilities Setup",
-          "DESC": "Help setting up utilities and services."
+          "LABEL": "إعداد المرافق",
+          "DESC": "مساعدة في إعداد المرافق والخدمات."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Education & Career Support",
-      "DESC": "College apps, SOP reviews, tutoring, and study support.",
+      "LABEL": "التعليم والدعم الوظيفي",
+      "DESC": "تطبيقات الكلية، ومراجعات SOP، والدروس الخصوصية، ودعم الدراسة.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "College Application Help",
-          "DESC": "Help with applications and forms."
+          "LABEL": "مساعدة في تطبيق الكلية",
+          "DESC": "المساعدة في التطبيقات والنماذج."
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP & Essay Review",
-          "DESC": "Feedback on statements and essays."
+          "LABEL": "SOP ومراجعة المقال",
+          "DESC": "ردود الفعل على البيانات والمقالات."
         },
         "TUTORING": {
-          "LABEL": "Tutoring",
-          "DESC": "Subject tutoring and study support."
+          "LABEL": "التدريس",
+          "DESC": "تدريس المواد ودعم الدراسة."
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Healthcare & Well-being",
-      "DESC": "Non-clinical health navigation and wellness support.",
+      "LABEL": "الرعاية الصحية والرفاهية",
+      "DESC": "الملاحة الصحية غير السريرية ودعم العافية.",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "Medical Navigation",
-          "DESC": "Basic navigation and non-clinical guidance."
+          "LABEL": "الملاحة الطبية",
+          "DESC": "الملاحة الأساسية والتوجيه غير السريري."
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "Medicine Delivery",
-          "DESC": "Pickup and delivery of OTC medicines."
+          "LABEL": "تسليم الدواء",
+          "DESC": "استلام وتسليم الأدوية التي لا تحتاج إلى وصفة طبية."
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Mental Wellbeing Support",
-          "DESC": "Access general mental health resources."
+          "LABEL": "دعم الصحة العقلية",
+          "DESC": "الوصول إلى موارد الصحة العقلية العامة."
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "Medication Reminders",
-          "DESC": "Non-clinical medication reminders."
+          "LABEL": "تذكيرات الدواء",
+          "DESC": "تذكيرات الأدوية غير السريرية."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Health Education Guidance",
-          "DESC": "Wellness awareness and health education."
+          "LABEL": "إرشادات التثقيف الصحي",
+          "DESC": "الوعي الصحي والتثقيف الصحي."
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "Elderly Support",
-      "DESC": "Non-medical assistance for seniors and community support.",
+      "LABEL": "دعم المسنين",
+      "DESC": "المساعدة غير الطبية لكبار السن ودعم المجتمع.",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Senior Living Relocation",
-          "DESC": "Help with senior housing and moving."
+          "LABEL": "نقل كبار المعيشة",
+          "DESC": "المساعدة في السكن والانتقال لكبار السن."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Digital Support for Seniors",
-          "DESC": "Assistance with devices and apps."
+          "LABEL": "الدعم الرقمي لكبار السن",
+          "DESC": "المساعدة في الأجهزة والتطبيقات."
         },
         "MEDICAL_HELP": {
-          "LABEL": "Medical Help",
-          "DESC": "Non-clinical medical assistance for seniors."
+          "LABEL": "مساعدة طبية",
+          "DESC": "المساعدة الطبية غير السريرية لكبار السن."
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Errands & Transportation",
-          "DESC": "Help with errands and transportation."
+          "LABEL": "المهمات والنقل",
+          "DESC": "المساعدة في المهمات والنقل."
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Social Connection",
-          "DESC": "Companionship and social activities."
+          "LABEL": "الاتصال الاجتماعي",
+          "DESC": "الرفقة والأنشطة الاجتماعية."
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Meal Support",
-          "DESC": "Help with meal preparation and cooking."
+          "LABEL": "دعم الوجبات",
+          "DESC": "المساعدة في إعداد الوجبات والطهي."
         }
       }
     }

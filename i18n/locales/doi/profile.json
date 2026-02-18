@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "सेकेंडरी फोन ऐ",
   "required": "लोड़चदा",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "जनाना",
+    "MALE": "मर्द",
+    "NON_BINARY": "गैर-बाइनरी",
+    "TRANSGENDER": "ट्रांसजेंडर ऐ",
+    "INTERSEX": "इंटरसेक्स ऐ",
+    "GENDER_NONCONFORMING": "लिंग-गैर-अनुरूप"
   },
   "CURRENT_PASSWORD": "वर्तमान पासवर्ड",
   "NEW_PASSWORD": "नया पासवर्ड",

@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import Button from '../components/Button';
 import config from '../components/config'
+import { useTranslation } from "react-i18next";
 
 const LogoImage = "https://saayamforall.org/wp-content/uploads/2023/03/saayamforall.jpeg";
 
 export default function Header() {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -23,7 +25,7 @@ export default function Header() {
         <Button
           // onPress={() => navigation.navigate('Donate')}>
           onPress={() => { Linking.openURL('https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S') }}>
-          Donate
+          {t('DONATE')}
         </Button>
       </View>
     </View>

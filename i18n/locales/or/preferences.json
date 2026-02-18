@@ -1,13 +1,13 @@
 {
   "title": "ପସନ୍ଦ",
   "labels": {
-    "timezone": "Time Zone",
-    "language": "Language",
-    "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "timezone": "ସମୟ ମଣ୍ଡଳ |",
+    "language": "ଭାଷା",
+    "notifications": "ବିଜ୍ଞପ୍ତିଗୁଡିକ",
+    "save": "ସଞ୍ଚୟ କରନ୍ତୁ |",
+    "cancel": "ବାତିଲ୍ କରନ୍ତୁ |"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "ପସନ୍ଦଗୁଡିକ ସଫଳତାର ସହିତ ସଞ୍ଚୟ ହେଲା |"
   }
 }

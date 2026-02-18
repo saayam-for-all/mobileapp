@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "Bản thân",
+    "OTHER": "Khác"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "Thấp",
+    "MEDIUM": "Trung bình",
+    "HIGH": "Cao",
+    "CRITICAL": "Phê bình"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "Tạo",
+    "MATCHING VOLUNTEER": "Tình nguyện viên phù hợp",
+    "MANAGED": "Được quản lý",
+    "RESOLVED": "Đã giải quyết",
+    "CANCELLED": "Đã hủy",
+    "DELETED": "Đã xóa"
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "Trực tiếp",
+    "REMOTE": "Xa"
   }
 }

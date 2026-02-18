@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "गौण फ़ोन 1 .",
   "required": "आवश्यकः",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "महिला",
+    "MALE": "पुरुषः",
+    "NON_BINARY": "अ-बिनारी 1 .",
+    "TRANSGENDER": "हिजड़ा 1 .",
+    "INTERSEX": "Intersex 1 .",
+    "GENDER_NONCONFORMING": "लिङ्ग-ननकॉर्मिंग 1 ."
   },
   "CURRENT_PASSWORD": "वर्तमान कूटशब्द 1 .",
   "NEW_PASSWORD": "नवीन कूटशब्द",

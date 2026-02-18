@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "Pangalawang Telepono",
   "required": "kinakailangan",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
+    "FEMALE": "Babae",
+    "MALE": "Lalaki",
+    "NON_BINARY": "Hindi binary",
     "TRANSGENDER": "Transgender",
     "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "GENDER_NONCONFORMING": "Hindi umaayon sa kasarian"
   },
   "CURRENT_PASSWORD": "Kasalukuyang Password",
   "NEW_PASSWORD": "Bagong Password",
@@ -50,7 +50,7 @@
   "NON_PROFIT": "Non-Profit",
   "FOR_PROFIT": "Para sa Kita",
   "URL": "URL",
-  "DEFAULT DASHBOARD VIEW": "Default na Dashboard View",
+  "DEFAULT DASHBOARD VIEW": "Default na View ng Dashboard",
   "SELECT DASHBOARD": "Piliin ang Dashboard",
   "SUPER_ADMIN_DASHBOARD": "Dashboard ng Super Admin",
   "ADMIN_DASHBOARD": "Admin Dashboard",

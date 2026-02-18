@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "自己",
+    "OTHER": "他の"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "低い",
+    "MEDIUM": "中くらい",
+    "HIGH": "高い",
+    "CRITICAL": "致命的"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "作成されました",
+    "MATCHING VOLUNTEER": "マッチングボランティア",
+    "MANAGED": "管理された",
+    "RESOLVED": "解決済み",
+    "CANCELLED": "キャンセル",
+    "DELETED": "削除されました"
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "直接",
+    "REMOTE": "リモート"
   }
 }

@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "General",
-      "DESC": "Use when you're unsure; describe your need in detail."
+      "LABEL": "Tổng quan",
+      "DESC": "Sử dụng khi bạn không chắc chắn; mô tả chi tiết nhu cầu của bạn."
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "Food & Essentials",
-      "DESC": "Access food support, grocery services, and cooking help.",
+      "LABEL": "Thực phẩm & nhu yếu phẩm",
+      "DESC": "Tiếp cận hỗ trợ thực phẩm, dịch vụ tạp hóa và trợ giúp nấu ăn.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Food Assistance",
-          "DESC": "Find food banks, pantries, or meal programs."
+          "LABEL": "Hỗ trợ thực phẩm",
+          "DESC": "Tìm ngân hàng thực phẩm, kho chứa thức ăn hoặc chương trình bữa ăn."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Grocery Shopping & Delivery",
-          "DESC": "Request help shopping for and delivering groceries."
+          "LABEL": "Mua sắm & Giao hàng tạp hóa",
+          "DESC": "Yêu cầu trợ giúp mua sắm và giao hàng tạp hóa."
         },
         "COOKING_HELP": {
-          "LABEL": "Cooking Help",
-          "DESC": "Get guidance with meal prep and cooking."
+          "LABEL": "Trợ giúp nấu ăn",
+          "DESC": "Nhận hướng dẫn chuẩn bị bữa ăn và nấu ăn."
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "Clothing Support",
-      "DESC": "Donate, borrow, repair, or request clothing assistance.",
+      "LABEL": "Hỗ trợ quần áo",
+      "DESC": "Tặng, mượn, sửa chữa hoặc yêu cầu hỗ trợ quần áo.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Donate Clothes",
-          "DESC": "Give clothing to those in need."
+          "LABEL": "Tặng quần áo",
+          "DESC": "Tặng quần áo cho người cần."
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Borrow Clothes",
-          "DESC": "Borrow gently used clothing."
+          "LABEL": "Mượn quần áo",
+          "DESC": "Mượn quần áo đã qua sử dụng nhẹ nhàng."
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Emergency Assistance",
-          "DESC": "Emergency clothing needs during crises."
+          "LABEL": "Hỗ trợ khẩn cấp",
+          "DESC": "Nhu cầu quần áo khẩn cấp trong thời kỳ khủng hoảng."
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Seasonal Drive Notification",
-          "DESC": "Seasonal clothing drives and donations."
+          "LABEL": "Thông báo Drive theo mùa",
+          "DESC": "Các đợt vận động và quyên góp quần áo theo mùa."
         },
         "TAILORING": {
-          "LABEL": "Tailoring",
-          "DESC": "Clothing repair and alteration services."
+          "LABEL": "May đo",
+          "DESC": "Dịch vụ sửa chữa, thay đổi quần áo."
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "Housing Support",
-      "DESC": "Roommates, renting guidance, moving and home setup support.",
+      "LABEL": "Hỗ trợ nhà ở",
+      "DESC": "Bạn cùng phòng, hướng dẫn thuê nhà, hỗ trợ chuyển nhà và sắp xếp nhà ở.",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "Find a Roommate",
-          "DESC": "Get help finding a roommate."
+          "LABEL": "Tìm bạn cùng phòng",
+          "DESC": "Nhận trợ giúp tìm bạn cùng phòng."
         },
         "RENTING_SUPPORT": {
-          "LABEL": "Renting Support",
-          "DESC": "Assistance with renting and lease basics."
+          "LABEL": "Hỗ trợ cho thuê",
+          "DESC": "Hỗ trợ các vấn đề cơ bản về thuê và cho thuê."
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Household Item Exchange",
-          "DESC": "Help with buying or selling household items."
+          "LABEL": "Trao đổi đồ gia dụng",
+          "DESC": "Hỗ trợ mua hoặc bán đồ gia dụng."
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "Moving Assistance",
-          "DESC": "Support with moving and packing."
+          "LABEL": "Hỗ trợ di chuyển",
+          "DESC": "Hỗ trợ di chuyển và đóng gói."
         },
         "CLEANING_HELP": {
-          "LABEL": "Cleaning Help",
-          "DESC": "Assistance with basic cleaning tasks."
+          "LABEL": "Trợ giúp dọn dẹp",
+          "DESC": "Hỗ trợ các công việc dọn dẹp cơ bản."
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Home Repair Support",
-          "DESC": "Support for minor home repairs."
+          "LABEL": "Hỗ trợ sửa chữa nhà",
+          "DESC": "Hỗ trợ sửa chữa nhỏ tại nhà."
         },
         "UTILITIES_SETUP": {
-          "LABEL": "Utilities Setup",
-          "DESC": "Help setting up utilities and services."
+          "LABEL": "Cài đặt tiện ích",
+          "DESC": "Giúp thiết lập các tiện ích và dịch vụ."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Education & Career Support",
-      "DESC": "College apps, SOP reviews, tutoring, and study support.",
+      "LABEL": "Hỗ trợ giáo dục & nghề nghiệp",
+      "DESC": "Ứng dụng đại học, đánh giá SOP, dạy kèm và hỗ trợ học tập.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "College Application Help",
-          "DESC": "Help with applications and forms."
+          "LABEL": "Trợ giúp nộp đơn vào đại học",
+          "DESC": "Trợ giúp với các ứng dụng và biểu mẫu."
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP & Essay Review",
-          "DESC": "Feedback on statements and essays."
+          "LABEL": "SOP & Đánh giá bài luận",
+          "DESC": "Phản hồi về các tuyên bố và bài tiểu luận."
         },
         "TUTORING": {
-          "LABEL": "Tutoring",
-          "DESC": "Subject tutoring and study support."
+          "LABEL": "Dạy kèm",
+          "DESC": "Dạy kèm môn học và hỗ trợ học tập."
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Healthcare & Well-being",
-      "DESC": "Non-clinical health navigation and wellness support.",
+      "LABEL": "Chăm sóc sức khỏe & Hạnh phúc",
+      "DESC": "Điều hướng sức khỏe phi lâm sàng và hỗ trợ chăm sóc sức khỏe.",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "Medical Navigation",
-          "DESC": "Basic navigation and non-clinical guidance."
+          "LABEL": "Điều hướng y tế",
+          "DESC": "Điều hướng cơ bản và hướng dẫn phi lâm sàng."
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "Medicine Delivery",
-          "DESC": "Pickup and delivery of OTC medicines."
+          "LABEL": "Giao thuốc",
+          "DESC": "Nhận và giao thuốc OTC."
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Mental Wellbeing Support",
-          "DESC": "Access general mental health resources."
+          "LABEL": "Hỗ trợ sức khỏe tinh thần",
+          "DESC": "Truy cập các nguồn tài nguyên sức khỏe tâm thần nói chung."
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "Medication Reminders",
-          "DESC": "Non-clinical medication reminders."
+          "LABEL": "Nhắc nhở về thuốc",
+          "DESC": "Nhắc nhở về thuốc phi lâm sàng."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Health Education Guidance",
-          "DESC": "Wellness awareness and health education."
+          "LABEL": "Hướng dẫn giáo dục sức khỏe",
+          "DESC": "Nhận thức về sức khỏe và giáo dục sức khỏe."
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "Elderly Support",
-      "DESC": "Non-medical assistance for seniors and community support.",
+      "LABEL": "Hỗ trợ người cao tuổi",
+      "DESC": "Hỗ trợ phi y tế cho người cao tuổi và hỗ trợ cộng đồng.",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Senior Living Relocation",
-          "DESC": "Help with senior housing and moving."
+          "LABEL": "Tái định cư cuộc sống cao cấp",
+          "DESC": "Trợ giúp về nhà ở và di chuyển cho người cao tuổi."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Digital Support for Seniors",
-          "DESC": "Assistance with devices and apps."
+          "LABEL": "Hỗ trợ kỹ thuật số cho người cao niên",
+          "DESC": "Hỗ trợ về thiết bị và ứng dụng."
         },
         "MEDICAL_HELP": {
-          "LABEL": "Medical Help",
-          "DESC": "Non-clinical medical assistance for seniors."
+          "LABEL": "Trợ giúp y tế",
+          "DESC": "Hỗ trợ y tế phi lâm sàng cho người cao tuổi."
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Errands & Transportation",
-          "DESC": "Help with errands and transportation."
+          "LABEL": "Việc vặt & Vận chuyển",
+          "DESC": "Giúp đỡ việc vặt và vận chuyển."
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Social Connection",
-          "DESC": "Companionship and social activities."
+          "LABEL": "Kết nối xã hội",
+          "DESC": "Đoàn kết và hoạt động xã hội."
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Meal Support",
-          "DESC": "Help with meal preparation and cooking."
+          "LABEL": "Hỗ trợ bữa ăn",
+          "DESC": "Hỗ trợ chuẩn bị bữa ăn và nấu nướng."
         }
       }
     }

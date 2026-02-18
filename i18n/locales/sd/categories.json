@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "General",
-      "DESC": "Use when you're unsure; describe your need in detail."
+      "LABEL": "جنرل",
+      "DESC": "استعمال ڪريو جڏهن توهان کي يقين نه آهي؛ تفصيل سان توهان جي ضرورت بيان ڪريو."
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "Food & Essentials",
-      "DESC": "Access food support, grocery services, and cooking help.",
+      "LABEL": "کاڌو ۽ ضروري شيون",
+      "DESC": "رسائي حاصل ڪريو کاڌي جي مدد، گروسري سروسز، ۽ پچائڻ جي مدد.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Food Assistance",
-          "DESC": "Find food banks, pantries, or meal programs."
+          "LABEL": "کاڌي جي مدد",
+          "DESC": "فوڊ بئنڪ، پينٽري، يا کاڌي جا پروگرام ڳوليو."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Grocery Shopping & Delivery",
-          "DESC": "Request help shopping for and delivering groceries."
+          "LABEL": "گروسري جي خريداري ۽ پهچائڻ",
+          "DESC": "خريداري ۽ سامان پهچائڻ ۾ مدد جي درخواست ڪريو."
         },
         "COOKING_HELP": {
-          "LABEL": "Cooking Help",
-          "DESC": "Get guidance with meal prep and cooking."
+          "LABEL": "پچائڻ جي مدد",
+          "DESC": "ھدايت حاصل ڪريو کاڌي جي تياري ۽ پچائڻ سان."
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "Clothing Support",
-      "DESC": "Donate, borrow, repair, or request clothing assistance.",
+      "LABEL": "لباس جي حمايت",
+      "DESC": "عطيو ڪريو، قرض وٺو، مرمت ڪريو، يا لباس جي مدد جي درخواست ڪريو.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Donate Clothes",
-          "DESC": "Give clothing to those in need."
+          "LABEL": "ڪپڙا عطيو ڪريو",
+          "DESC": "ضرورتمندن کي ڪپڙا ڏيو."
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Borrow Clothes",
-          "DESC": "Borrow gently used clothing."
+          "LABEL": "ڪپڙا قرض ڏيو",
+          "DESC": "آساني سان استعمال ٿيل ڪپڙا قرض وٺو."
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Emergency Assistance",
-          "DESC": "Emergency clothing needs during crises."
+          "LABEL": "هنگامي امداد",
+          "DESC": "بحران دوران هنگامي لباس جي ضرورت آهي."
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Seasonal Drive Notification",
+          "LABEL": "موسمي ڊرائيو نوٽيفڪيشن",
           "DESC": "Seasonal clothing drives and donations."
         },
         "TAILORING": {
-          "LABEL": "Tailoring",
-          "DESC": "Clothing repair and alteration services."
+          "LABEL": "درزي ڪرڻ",
+          "DESC": "ڪپڙن جي مرمت ۽ ڦيرڦار جون خدمتون."
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "Housing Support",
-      "DESC": "Roommates, renting guidance, moving and home setup support.",
+      "LABEL": "هائوسنگ سپورٽ",
+      "DESC": "ڪمرا ميٽ، ڪرائي تي ڏيڻ جي ھدايت، ھلڻ ۽ گھر جي سيٽ اپ سپورٽ.",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "Find a Roommate",
-          "DESC": "Get help finding a roommate."
+          "LABEL": "ھڪڙو ڪمرو ميٽ ڳولھيو",
+          "DESC": "مدد حاصل ڪريو ھڪڙو ڪمرو ميٽ ڳولڻ ۾."
         },
         "RENTING_SUPPORT": {
-          "LABEL": "Renting Support",
-          "DESC": "Assistance with renting and lease basics."
+          "LABEL": "ڪرائي تي ڏيڻ جي حمايت",
+          "DESC": "ڪرائي تي ڏيڻ ۽ ليز جي بنيادي ڳالهين سان مدد."
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Household Item Exchange",
-          "DESC": "Help with buying or selling household items."
+          "LABEL": "گھر جي شين جي مٽاسٽا",
+          "DESC": "گھريلو شيون خريد ڪرڻ يا وڪڻڻ ۾ مدد."
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "Moving Assistance",
-          "DESC": "Support with moving and packing."
+          "LABEL": "حرڪت واري مدد",
+          "DESC": "حرڪت ۽ پيڪنگ سان سپورٽ."
         },
         "CLEANING_HELP": {
-          "LABEL": "Cleaning Help",
-          "DESC": "Assistance with basic cleaning tasks."
+          "LABEL": "صفائي جي مدد",
+          "DESC": "بنيادي صفائي جي ڪمن سان مدد."
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Home Repair Support",
-          "DESC": "Support for minor home repairs."
+          "LABEL": "گھر جي مرمت جي حمايت",
+          "DESC": "گھر جي معمولي مرمت لاءِ سپورٽ."
         },
         "UTILITIES_SETUP": {
-          "LABEL": "Utilities Setup",
-          "DESC": "Help setting up utilities and services."
+          "LABEL": "يوٽيلٽيز سيٽ اپ",
+          "DESC": "افاديت ۽ خدمتن کي ترتيب ڏيڻ ۾ مدد ڪريو."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Education & Career Support",
-      "DESC": "College apps, SOP reviews, tutoring, and study support.",
+      "LABEL": "تعليم ۽ ڪيريئر سپورٽ",
+      "DESC": "ڪاليج ايپس، SOP جائزو، ٽيوشننگ، ۽ مطالعي جي حمايت.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "College Application Help",
-          "DESC": "Help with applications and forms."
+          "LABEL": "ڪاليج جي درخواست جي مدد",
+          "DESC": "ايپليڪيشنن ۽ فارمن سان مدد ڪريو."
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP & Essay Review",
-          "DESC": "Feedback on statements and essays."
+          "LABEL": "SOP ۽ مضمون جو جائزو",
+          "DESC": "بيانن ۽ مضمونن تي راءِ."
         },
         "TUTORING": {
-          "LABEL": "Tutoring",
-          "DESC": "Subject tutoring and study support."
+          "LABEL": "ٽيوشن ڏيڻ",
+          "DESC": "مضمون ٽيوشن ۽ مطالعي جي حمايت."
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Healthcare & Well-being",
-      "DESC": "Non-clinical health navigation and wellness support.",
+      "LABEL": "صحت جي سنڀال ۽ ڀلائي",
+      "DESC": "غير ڪلينڪل صحت نيويگيشن ۽ فلاح و بہبود جي مدد.",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "Medical Navigation",
-          "DESC": "Basic navigation and non-clinical guidance."
+          "LABEL": "ميڊيڪل نيويگيشن",
+          "DESC": "بنيادي نيويگيشن ۽ غير ڪلينڪل ھدايت."
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "Medicine Delivery",
-          "DESC": "Pickup and delivery of OTC medicines."
+          "LABEL": "دوائن جي پهچائڻ",
+          "DESC": "OTC دوائن جو کڻڻ ۽ پهچائڻ."
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Mental Wellbeing Support",
-          "DESC": "Access general mental health resources."
+          "LABEL": "ذهني صحت جي حمايت",
+          "DESC": "عام ذهني صحت جي وسيلن تائين رسائي."
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "Medication Reminders",
-          "DESC": "Non-clinical medication reminders."
+          "LABEL": "دوا جي ياد ڏياريندڙ",
+          "DESC": "غير ڪلينڪل دوا جي ياد ڏياريندڙ."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Health Education Guidance",
-          "DESC": "Wellness awareness and health education."
+          "LABEL": "صحت جي تعليم جي هدايت",
+          "DESC": "صحت جي آگاهي ۽ صحت جي تعليم."
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "Elderly Support",
-      "DESC": "Non-medical assistance for seniors and community support.",
+      "LABEL": "بزرگ جي حمايت",
+      "DESC": "بزرگن ۽ ڪميونٽي جي مدد لاءِ غير طبي امداد.",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Senior Living Relocation",
-          "DESC": "Help with senior housing and moving."
+          "LABEL": "سينيئر رهائشي منتقلي",
+          "DESC": "سينيئر هائوسنگ ۽ منتقل ڪرڻ ۾ مدد ڪريو."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Digital Support for Seniors",
-          "DESC": "Assistance with devices and apps."
+          "LABEL": "بزرگن لاءِ ڊجيٽل سپورٽ",
+          "DESC": "ڊوائيسز ۽ ايپس سان مدد."
         },
         "MEDICAL_HELP": {
-          "LABEL": "Medical Help",
-          "DESC": "Non-clinical medical assistance for seniors."
+          "LABEL": "طبي مدد",
+          "DESC": "بزرگن لاءِ غير ڪلينڪل طبي امداد."
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Errands & Transportation",
-          "DESC": "Help with errands and transportation."
+          "LABEL": "ڪم ۽ ٽرانسپورٽ",
+          "DESC": "ڪم ۽ ٽرانسپورٽ سان مدد ڪريو."
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Social Connection",
-          "DESC": "Companionship and social activities."
+          "LABEL": "سماجي ڪنيڪشن",
+          "DESC": "صحبت ۽ سماجي سرگرمين."
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Meal Support",
-          "DESC": "Help with meal preparation and cooking."
+          "LABEL": "کاڌي جي حمايت",
+          "DESC": "کاڌو تيار ڪرڻ ۽ تيار ڪرڻ ۾ مدد ڪريو."
         }
       }
     }

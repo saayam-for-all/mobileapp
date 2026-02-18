@@ -9,7 +9,7 @@
   "FRIDAY": "શુક્રવાર",
   "SATURDAY": "શનિવાર",
   "SUNDAY": "રવિવાર",
-  "AVAILABILITY_VALIDATION_ERROR": "કૃપા કરીને તમામ જરૂરી ફીલ્ડ્સ ભરો",
+  "AVAILABILITY_VALIDATION_ERROR": "કૃપા કરીને તમામ જરૂરી ફીલ્ડ ભરો",
   "START_END_TIMES_MUST_BE_DIFFERENT": "પ્રારંભ અને સમાપ્તિ સમય અલગ હોવા જોઈએ",
   "VACATION_START_BEFORE_END": "વેકેશનની શરૂઆતની તારીખ સમાપ્તિ તારીખ પહેલાની હોવી જોઈએ",
   "AVAILABILITY_UPDATED_SUCCESS": "ઉપલબ્ધતા સફળતાપૂર્વક અપડેટ થઈ!",

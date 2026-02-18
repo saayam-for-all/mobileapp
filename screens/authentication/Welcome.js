@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 });
 
 const Welcome = ({ navigation }) => {
-  const { t } = useTranslation('auth');
+  const { t } = useTranslation();
   const topOffset = Math.round(config.deviceHeight * 0.03);
   return (
     <SafeAreaView style={[styles.container , { marginTop: topOffset }]}>
@@ -55,23 +55,23 @@ const Welcome = ({ navigation }) => {
       <CarouselComponent />
 
       <View style={styles.content}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>{t('WELCOME_TO_SAAYAM')}</Text>
+        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>{t('WELCOME_TEXT')}</Text>
         <Text style={{fontSize: 16, margin:'2%'}} >
-          {t('WELCOME_DESCRIPTION')}
+          {t('WELCOME_INTRO')}
           <Text
             style={styles.advertLinkText}
             onPress={() => { Linking.openURL('https://saayam.netlify.app/'); }}
           >
-            {' '}{t('WELCOME_LINK_TEXT')}
+            {' '}{t('HERE')}
           </Text>
         </Text>
         <Spacer size='30'/>
         {/* Sign In and Sign Up buttons */}
         <Button onPress={() => navigation.navigate('SignIn')} style={{width:'100%', marginVertical:'3%'}}>
-          {t('SIGN_IN_BUTTON')}
+          {t('SIGN_IN')}
         </Button>
         <Button onPress={() => navigation.navigate('SignUp')} style={{width:'100%', marginVertical:'3%'}}>
-          {t('SIGN_UP_BUTTON')}
+          {t('SIGNUP')}
         </Button>
       </View>
     </SafeAreaView>

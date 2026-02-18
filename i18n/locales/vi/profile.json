@@ -14,7 +14,7 @@
   "FIRST_NAME": "Tên",
   "LAST_NAME": "Họ",
   "EMAIL": "E-mail",
-  "EMAIL_VERIFICATION_REQUIRED": "Sẽ cần phải xác minh email cho thay đổi này",
+  "EMAIL_VERIFICATION_REQUIRED": "Cần phải xác minh email cho thay đổi này",
   "PHONE_NUMBER": "Số điện thoại",
   "COUNTRY": "Quốc gia",
   "SELECT_COUNTRY": "Chọn quốc gia của bạn",
@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "Điện thoại phụ",
   "required": "yêu cầu",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "Nữ giới",
+    "MALE": "Nam giới",
+    "NON_BINARY": "phi nhị phân",
+    "TRANSGENDER": "chuyển giới",
+    "INTERSEX": "liên giới tính",
+    "GENDER_NONCONFORMING": "Không phù hợp giới tính"
   },
   "CURRENT_PASSWORD": "Mật khẩu hiện tại",
   "NEW_PASSWORD": "Mật khẩu mới",

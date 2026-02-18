@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "माध्यमिक फोन 2019।",
   "required": "आवश्यक",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "महिला",
+    "MALE": "पुरुष",
+    "NON_BINARY": "गैर-बाइनरी 10।",
+    "TRANSGENDER": "किन्नर 10।",
+    "INTERSEX": "इंटरसेक्स 2019।",
+    "GENDER_NONCONFORMING": "लिंग-गैर-अनुरूप"
   },
   "CURRENT_PASSWORD": "वर्तमान पासवर्ड 2019।",
   "NEW_PASSWORD": "नव पासवर्ड 2019।",

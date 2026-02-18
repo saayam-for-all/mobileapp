@@ -1,13 +1,13 @@
 {
   "title": "प्राथमिकता .",
   "labels": {
-    "timezone": "Time Zone",
-    "language": "Language",
-    "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "timezone": "समय क्षेत्र .",
+    "language": "भाषा",
+    "notifications": "सूचनाएँ 1 .",
+    "save": "रक्ष्",
+    "cancel": "निरसयतु"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "प्राधान्यानि सफलतया रक्षितानि।"
   }
 }

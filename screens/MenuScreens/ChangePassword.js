@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { FontAwesome } from '@expo/vector-icons';
-import Auth from '@aws-amplify/auth';
-import useAuthUser from '../../hooks/useAuthUser';
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
+import Auth from "@aws-amplify/auth";
+import useAuthUser from "../../hooks/useAuthUser";
+import { useTranslation } from "react-i18next";
 
 export default function ChangePassword() {
+  // ✅ Option 2: use multiple namespaces
+  const { t } = useTranslation(["auth", "common"]);
+
   const [secureEntry, setSecureEntry] = useState([true, true, true]);
-  const [oldPassword, setOldPassword] = useState('');
-  const [password, setPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordValid, setConfirmPasswordValid] = useState(false);
   const [logPasswordValid, setLogPasswordValid] = useState([false, false]);
 
@@ -18,30 +22,30 @@ export default function ChangePassword() {
   const user = useAuthUser(navigation);
 
   const toggleSecureEntry = (index) => {
-    setSecureEntry((prev) =>
-      prev.map((item, i) => (i === index ? !item : item))
-    );
+    setSecureEntry((prev) => prev.map((item, i) => (i === index ? !item : item)));
   };
 
   function logError(error, errorMessage) {
     if (error) {
-      Alert.alert("Error", errorMessage, [{ text: "OK" }]);
+      // No key exists for title "Error", leaving as-is (per your rule).
+      Alert.alert("Error", errorMessage, [{ text: t("OK", { ns: "common" }) }]);
     } else {
       Alert.alert(
-        "Password Updated Successfully",
+        t("PASSWORD_CHANGE_SUCCESS", { ns: "auth" }),
         "",
-        [{ text: 'OK', onPress: () => navigation.navigate('Profile') }]
+        [{ text: t("OK", { ns: "common" }), onPress: () => navigation.navigate("Profile") }]
       );
     }
   }
 
   async function changePassword() {
-    let errorMessage = '';
+    let errorMessage = "";
     let error = false;
 
     if (!passwordValid || !confirmPasswordValid) {
       error = true;
-      errorMessage = "Please make sure all inputs satisfy the requirements.";
+      // No exact key for the original sentence; using existing generic error
+      errorMessage = t("ERROR_GENERIC_SUPPORT", { ns: "auth" });
     } else {
       await Auth.changePassword(user, oldPassword, password)
         .then(() => console.log("Password updated successfully"))
@@ -50,13 +54,14 @@ export default function ChangePassword() {
           errorMessage = String(err);
         });
     }
+
     logError(error, errorMessage);
   }
 
   const handleCancel = () => {
-    setOldPassword('');
-    setPassword('');
-    setConfirmPassword('');
+    setOldPassword("");
+    setPassword("");
+    setConfirmPassword("");
     setPasswordValid(false);
     setConfirmPasswordValid(false);
     setLogPasswordValid([false, false]);
@@ -64,26 +69,26 @@ export default function ChangePassword() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Change Password</Text>
+      <Text style={styles.header}>{t("CHANGE_PASSWORD", { ns: "auth" })}</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Current Password"
+          placeholder={t("CURRENT_PASSWORD", { ns: "auth" })}
           secureTextEntry={secureEntry[0]}
           value={oldPassword}
           onChangeText={setOldPassword}
-          accessibilityLabel="Current Password Input"
+          accessibilityLabel={t("CURRENT_PASSWORD", { ns: "auth" })}
         />
         <TouchableOpacity onPress={() => toggleSecureEntry(0)}>
-          <FontAwesome name={secureEntry[0] ? 'eye-slash' : 'eye'} size={20} color="#777" />
+          <FontAwesome name={secureEntry[0] ? "eye-slash" : "eye"} size={20} color="#777" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="New Password"
+          placeholder={t("NEW_PASSWORD", { ns: "auth" })}
           secureTextEntry={secureEntry[1]}
           value={password}
           onChangeText={(text) => {
@@ -94,22 +99,21 @@ export default function ChangePassword() {
             setConfirmPasswordValid(text === confirmPassword);
             setPassword(text);
           }}
-          accessibilityLabel="New Password Input"
+          accessibilityLabel={t("NEW_PASSWORD", { ns: "auth" })}
         />
         <TouchableOpacity onPress={() => toggleSecureEntry(1)}>
-          <FontAwesome name={secureEntry[1] ? 'eye-slash' : 'eye'} size={20} color="#777" />
+          <FontAwesome name={secureEntry[1] ? "eye-slash" : "eye"} size={20} color="#777" />
         </TouchableOpacity>
       </View>
+
       {!passwordValid && logPasswordValid[0] && (
-        <Text style={styles.alertText}>
-          Password must have 8+ characters, including uppercase, lowercase, digit, and special character.
-        </Text>
+        <Text style={styles.alertText}>{t("PASSWORD_REQUIREMENTS_ERROR", { ns: "auth" })}</Text>
       )}
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Confirm Password"
+          placeholder={t("CONFIRM_PASSWORD", { ns: "auth" })}
           secureTextEntry={secureEntry[2]}
           value={confirmPassword}
           onChangeText={(text) => {
@@ -117,23 +121,24 @@ export default function ChangePassword() {
             setConfirmPasswordValid(text === password);
             setConfirmPassword(text);
           }}
-          accessibilityLabel="Confirm Password Input"
+          accessibilityLabel={t("CONFIRM_PASSWORD", { ns: "auth" })}
         />
         <TouchableOpacity onPress={() => toggleSecureEntry(2)}>
-          <FontAwesome name={secureEntry[2] ? 'eye-slash' : 'eye'} size={20} color="#777" />
+          <FontAwesome name={secureEntry[2] ? "eye-slash" : "eye"} size={20} color="#777" />
         </TouchableOpacity>
       </View>
+
       {!confirmPasswordValid && logPasswordValid[1] && (
-        <Text style={styles.alertText}>Confirm password must match the new password.</Text>
+        <Text style={styles.alertText}>{t("PASSWORD_MISMATCH_ERROR", { ns: "auth" })}</Text>
       )}
 
       <View style={styles.buttonRow}>
         <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={changePassword}>
-          <Text style={styles.buttonText}>Save</Text>
+          <Text style={styles.buttonText}>{t("SAVE", { ns: "common" })}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
-          <Text style={styles.buttonText}>Cancel</Text>
+          <Text style={styles.buttonText}>{t("CANCEL", { ns: "common" })}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -143,56 +148,56 @@ export default function ChangePassword() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
   },
   header: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 25,
-    textAlign: 'center',
+    textAlign: "center",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     paddingBottom: 5,
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   alertText: {
-    color: 'red',
-    marginHorizontal: '3%',
-    width: '94%',
+    color: "red",
+    marginHorizontal: "3%",
+    width: "94%",
     marginBottom: 10,
     marginLeft: 5,
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 25,
   },
   button: {
     flex: 1,
     paddingVertical: 15,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginHorizontal: 5,
   },
   saveButton: {
-    backgroundColor: '#3B82F6', 
+    backgroundColor: "#3B82F6",
   },
   cancelButton: {
-    backgroundColor: '#6B7280', 
+    backgroundColor: "#6B7280",
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });

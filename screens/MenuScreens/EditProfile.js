@@ -1,21 +1,23 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import Auth from '@aws-amplify/auth';
-import { countriesList } from '../../data/countries';
-import useAuthUser from '../../hooks/useAuthUser';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import Auth from "@aws-amplify/auth";
+import { countriesList } from "../../data/countries";
+import useAuthUser from "../../hooks/useAuthUser";
 import RNPickerSelect from "react-native-picker-select";
-
+import { useTranslation } from "react-i18next";
 
 const EditProfile = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [primaryEmail, setPrimaryEmail] = useState('');
-  const [secondaryEmail, setSecondaryEmail] = useState('');
-  const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
-  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState('');
-  const [zoneinfo, setzoneinfo] = useState('');
+  const { t } = useTranslation("profile");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [primaryEmail, setPrimaryEmail] = useState("");
+  const [secondaryEmail, setSecondaryEmail] = useState("");
+  const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState("");
+  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
+  const [zoneinfo, setzoneinfo] = useState("");
   const [needVerification, setNeedVerification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [backupProfile, setBackupProfile] = useState({});
@@ -34,16 +36,17 @@ const EditProfile = () => {
     Auth.currentAuthenticatedUser()
       .then((user) => {
         const attributes = user?.attributes;
-        const { email, family_name, given_name, phone_number, ["custom:Country"]: zoneinfoAttr } = attributes;
+        const { email, family_name, given_name, phone_number, ["custom:Country"]: zoneinfoAttr } =
+          attributes;
 
         const profileData = {
-          firstName: given_name || '',
-          lastName: family_name || '',
-          primaryEmail: email || '',
-          primaryPhoneNumber: phone_number || '',
-          secondaryEmail: '',
-          secondaryPhoneNumber: '',
-          zoneinfo: zoneinfoAttr || '',
+          firstName: given_name || "",
+          lastName: family_name || "",
+          primaryEmail: email || "",
+          primaryPhoneNumber: phone_number || "",
+          secondaryEmail: "",
+          secondaryPhoneNumber: "",
+          zoneinfo: zoneinfoAttr || "",
         };
 
         setFirstName(profileData.firstName);
@@ -53,11 +56,10 @@ const EditProfile = () => {
         setzoneinfo(profileData.zoneinfo);
         setBackupProfile(profileData);
       })
-      .catch((err) => console.log('Error loading user:', err));
+      .catch((err) => console.log("Error loading user:", err));
 
     setNeedVerification(false);
   }, []);
-
 
   useEffect(() => {
     if (needVerification) {
@@ -69,40 +71,41 @@ const EditProfile = () => {
           family_name: lastName,
           given_name: firstName,
           phone_number: primaryPhoneNumber,
-          "custom:Country": zoneinfo
-        }
+          "custom:Country": zoneinfo,
+        },
       });
       setNeedVerification(false);
     }
   }, [needVerification]);
 
   const validateForm = () => {
-    // First Name and Last Name should contain text only (no numbers or special characters)
+    // NOTE: No matching translation keys for these validation strings in your JSONs,
+    // so leaving them as-is (per your rule: only use existing keys).
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(firstName)) {
-      Alert.alert('Invalid Input', 'First Name should contain only letters.');
+      Alert.alert("Invalid Input", "First Name should contain only letters.");
       return false;
     }
     if (!nameRegex.test(lastName)) {
-      Alert.alert('Invalid Input', 'Last Name should contain only letters.');
+      Alert.alert("Invalid Input", "Last Name should contain only letters.");
       return false;
     }
 
-    // Email should contain @ and follow general email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(primaryEmail)) {
-      Alert.alert('Invalid Email', 'Please enter a valid primary email address.');
+      Alert.alert("Invalid Email", "Please enter a valid primary email address.");
       return false;
     }
 
-    // Phone number should start with '+' and contain digits only
     const phoneRegex = /^\+[0-9]{1,15}$/;
     if (!phoneRegex.test(primaryPhoneNumber)) {
-      Alert.alert('Invalid Phone Number', 'Primary Phone number should start with "+" followed by digits.');
+      Alert.alert(
+        "Invalid Phone Number",
+        'Primary Phone number should start with "+" followed by digits.'
+      );
       return false;
     }
 
-    // If all validations pass
     return true;
   };
 
@@ -111,18 +114,15 @@ const EditProfile = () => {
     if (username) {
       AsyncStorage.removeItem(username);
     }
-  }
+  };
 
   async function updateUser(user) {
     try {
-      // If Primary Email was changed, not change, direct user to enter confirmation code
-      if (primaryEmail != user?.attributes?.email) {
+      if (primaryEmail !== user?.attributes?.email) {
         console.log("Needs verification");
-        setNeedVerification(true); // Then users would be redirected to enter confirmation code
+        setNeedVerification(true);
         return;
-      }
-      // If Primary Email was not changed, update user attributes
-      else {
+      } else {
         await Auth.updateUserAttributes(user, {
           email: primaryEmail,
           family_name: lastName,
@@ -131,10 +131,10 @@ const EditProfile = () => {
           "custom:Country": zoneinfo,
         });
       }
-      Alert.alert('Success', 'Profile updated successfully.');
+      Alert.alert("Success", t("PROFILE_UPDATE_SUCCESS"));
       removeFirstTime(user);
     } catch (err) {
-      Alert.alert('User Update Error', err.message);
+      Alert.alert("User Update Error", err.message);
     }
   }
 
@@ -143,7 +143,6 @@ const EditProfile = () => {
       const user = await Auth.currentAuthenticatedUser();
       await updateUser(user);
 
-      // Update backup with new values
       setBackupProfile({
         firstName,
         lastName,
@@ -171,15 +170,15 @@ const EditProfile = () => {
     setIsEditing(false);
   };
 
-
-
   return (
     <View style={styles.container}>
+      {/* No "EDIT_PROFILE" key exists; using existing "EDIT" and "YOUR_PROFILE" isn't semantically perfect,
+          so leaving as-is per your rule OR you can change to t("YOUR_PROFILE") if you want. */}
       <Text style={styles.header}>Edit Profile</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="First Name"
+        placeholder={t("FIRST_NAME")}
         value={firstName}
         onChangeText={setFirstName}
         editable={isEditing}
@@ -187,7 +186,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Last Name"
+        placeholder={t("LAST_NAME")}
         value={lastName}
         onChangeText={setLastName}
         editable={isEditing}
@@ -195,7 +194,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Primary Email"
+        placeholder={t("PRIMARY_EMAIL")}
         keyboardType="email-address"
         value={primaryEmail}
         onChangeText={setPrimaryEmail}
@@ -204,7 +203,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Secondary Email"
+        placeholder={t("SECONDARY_EMAIL")}
         keyboardType="email-address"
         value={secondaryEmail}
         onChangeText={setSecondaryEmail}
@@ -213,7 +212,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Primary Phone Number"
+        placeholder={t("PHONE_NUMBER")}
         keyboardType="phone-pad"
         value={primaryPhoneNumber}
         onChangeText={setPrimaryPhoneNumber}
@@ -222,7 +221,8 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Secondary Phone Number"
+        // No "SECONDARY_PHONE_NUMBER" key; closest existing is "SECONDARY_PHONE"
+        placeholder={t("SECONDARY_PHONE")}
         keyboardType="phone-pad"
         value={secondaryPhoneNumber}
         onChangeText={setSecondaryPhoneNumber}
@@ -234,7 +234,7 @@ const EditProfile = () => {
         items={countriesList}
         value={zoneinfo}
         disabled={!isEditing}
-        placeholder={{ label: "Select Country", value: null }}
+        placeholder={{ label: t("SELECT_COUNTRY"), value: null }}
         useNativeAndroidPickerStyle={false}
         style={{
           inputIOS: {
@@ -265,20 +265,23 @@ const EditProfile = () => {
         }}
       />
 
-
-
-
       {!isEditing ? (
         <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
-          <Text style={styles.buttonText}>Edit</Text>
+          <Text style={styles.buttonText}>{t("EDIT")}</Text>
         </TouchableOpacity>
       ) : (
         <View style={styles.buttonRow}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#3B82F6' }]} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save</Text>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#3B82F6" }]}
+            onPress={handleSave}
+          >
+            <Text style={styles.buttonText}>{t("SAVE")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#6B7280' }]} onPress={handleCancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#6B7280" }]}
+            onPress={handleCancel}
+          >
+            <Text style={styles.buttonText}>{t("CANCEL")}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -290,16 +293,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     paddingLeft: 10,
@@ -307,7 +310,7 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     marginBottom: 15,
   },
@@ -318,23 +321,23 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginHorizontal: 5,
   },
   editButton: {
     paddingVertical: 15,
     borderRadius: 8,
-    alignItems: 'center',
-    backgroundColor: '#3B82F6',
+    alignItems: "center",
+    backgroundColor: "#3B82F6",
     marginTop: 10,
   },
   buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
   },
   inputIOS: {
@@ -342,24 +345,23 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: "#d1d5db",
     borderRadius: 8,
-    color: '#374151',
+    color: "#374151",
     paddingRight: 30,
-    backgroundColor: '#f9fafb',
+    backgroundColor: "#f9fafb",
     marginBottom: 16,
-
   },
   inputAndroid: {
     fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: "#d1d5db",
     borderRadius: 8,
-    color: '#374151',
+    color: "#374151",
     paddingRight: 30,
-    backgroundColor: '#f9fafb',
+    backgroundColor: "#f9fafb",
     marginBottom: 16,
   },
 });

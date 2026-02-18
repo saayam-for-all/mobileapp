@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "সেকেন্ডারি ফোন",
   "required": "প্রয়োজনীয়",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "মহিলা",
+    "MALE": "পুরুষ",
+    "NON_BINARY": "নন-বাইনারী",
+    "TRANSGENDER": "ট্রান্সজেন্ডার",
+    "INTERSEX": "ইন্টারসেক্স",
+    "GENDER_NONCONFORMING": "লিঙ্গ-অসঙ্গতিপূর্ণ"
   },
   "CURRENT_PASSWORD": "বর্তমান পাসওয়ার্ড",
   "NEW_PASSWORD": "নতুন পাসওয়ার্ড",

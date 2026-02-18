@@ -172,19 +172,30 @@ import urPreferences from "./locales/ur/preferences.json";
 import viCommon from "./locales/vi/common.json";
 import viAuth from "./locales/vi/auth.json";
 import viCategories from "./locales/vi/categories.json";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const deviceLanguage = getLocales()[0]?.languageCode || 'en';
+const deviceLanguage = getLocales()[0]?.languageCode || "en";
 console.log("Device language: ", deviceLanguage);
 
+const LANGUAGE_KEY = "appLanguage";
+
+const getInitialLanguage = async () => {
+  const saved = await AsyncStorage.getItem(LANGUAGE_KEY);
+  if (saved) return saved;
+
+  const deviceLanguage = getLocales()[0]?.languageCode || "en";
+  return deviceLanguage;
+};
 i18n
   .use(initReactI18next)
   .init({
-    lng: deviceLanguage,
+    lng: deviceLanguage, 
     fallbackLng: "en",
+    initImmediate: false,
     // Set default namespace to load
     defaultNS: "common",
     // Define all namespaces that will be used
-    ns: ["common", "auth", "categories", "availability"],
+    ns: ["common", "auth", "categories", "availability", "enums", "identity", "profile", "preferences"],
     resources: {
       en: {
         common: enCommon,
@@ -401,6 +412,16 @@ i18n
       caches: ["localStorage", "cookie"],
     },
     debug: true,
+  }).then(async () => {
+    // ✅ IMPORTANT: apply saved language AFTER init
+    const savedLang = await getInitialLanguage();
+    if (savedLang && i18n.language !== savedLang) {
+      console.log("✅ Applying saved language:", savedLang);
+      await i18n.changeLanguage(savedLang);
+    }
+  })
+  .catch((e) => {
+    console.log("❌ i18n init error:", e);
   });
 
 export default i18n;

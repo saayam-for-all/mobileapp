@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "Telepon Sekunder",
   "required": "diperlukan",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "Perempuan",
+    "MALE": "Pria",
+    "NON_BINARY": "Non-biner",
+    "TRANSGENDER": "transgender",
+    "INTERSEX": "Interseks",
+    "GENDER_NONCONFORMING": "Tidak sesuai gender"
   },
   "CURRENT_PASSWORD": "Kata Sandi Saat Ini",
   "NEW_PASSWORD": "Kata Sandi Baru",

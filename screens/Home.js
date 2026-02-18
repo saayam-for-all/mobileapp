@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,27 +9,21 @@ import {
   Linking,
   SafeAreaView,
   Alert,
-  Pressable,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 import Button from "../components/Button";
-//import { Button } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/Ionicons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import Auth from "@aws-amplify/auth";
 import api from "../components/api";
-//import { Dimensions } from 'react-native';
-//const { width, height } = Dimensions.get("window");
-
 import Ionicons from "@expo/vector-icons/Ionicons";
-
 import config from "../components/config";
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Animated, { FadeInDown, FadeOutUp, Layout } from 'react-native-reanimated';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Animated from "react-native-reanimated";
 
 const styles = StyleSheet.create({
   container: {
@@ -54,16 +48,14 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 25,
-    //marginRight: width/2,
     paddingLeft: 5,
-    //marginRight: width/2.2,
     marginRight: config.deviceWidth / 2,
   },
   menuItem: {
     marginHorizontal: 5,
     fontSize: 16,
     fontWeight: "bold",
-    color: "black", // Set the text color to black
+    color: "black",
   },
   profileIcon: {
     width: 40,
@@ -72,7 +64,6 @@ const styles = StyleSheet.create({
   },
   searchBarContainer: {
     marginTop: 10,
-    //marginTop: -50, // Adjust this margin to match the height of the top bar
     paddingHorizontal: 0,
   },
   searchBar: {
@@ -107,7 +98,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     marginTop: 10,
-    //marginTop: 40,
     marginBottom: 10,
   },
   backdrop: {
@@ -115,14 +105,12 @@ const styles = StyleSheet.create({
     backgroundColor: " rgba(0,0,0,0.3)",
     zIndex: 9998,
   },
-
   dropdownWrapper: {
     position: "absolute",
-    top: 55, // appears just below the icon
+    top: 55,
     right: 80,
     zIndex: 9999,
   },
-
   dropdownMenu: {
     backgroundColor: "white",
     borderRadius: 10,
@@ -144,7 +132,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   fullWidthButton: {
-    width: "100%", // Full width when only one button is in the row
+    width: "100%",
   },
   buttonText: {
     fontSize: 20,
@@ -175,65 +163,64 @@ const styles = StyleSheet.create({
 });
 
 export default function Home({ signOut }) {
-  const [userName, setUserName] = useState("");
+  const { t } = useTranslation("common"); // ✅ common.json
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
+
+  const [userName, setUserName] = useState("");
   const [userVolunteer, setVolunteer] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const [selectedDashboard, setSelectedDashboard] = useState("Volunteer Dashboard");
+
+  // ✅ store dashboard by key so it's language-independent
+  const [selectedDashboardKey, setSelectedDashboardKey] = useState("VOLUNTEER_DASHBOARD");
 
   const volunteer = "Volunteers";
 
+  const DASHBOARD_OPTIONS = [
+    "SUPER_ADMIN_DASHBOARD",
+    "ADMIN_DASHBOARD",
+    "STEWARD_DASHBOARD",
+    "VOLUNTEER_DASHBOARD",
+    "BENEFICIARY_DASHBOARD",
+  ];
+
   const getGroup = async (user) => {
     try {
-      const userGroup =
-        user.signInUserSession.accessToken.payload["cognito:groups"];
-      //console.log('user group', userGroup)
-      if (userGroup.includes(volunteer)) {
+      const userGroup = user.signInUserSession.accessToken.payload["cognito:groups"];
+      if (userGroup?.includes(volunteer)) {
         setVolunteer(true);
       }
-      //Refresh token 
+
       const currentSession = await Auth.currentSession();
-      user.refreshSession(currentSession.refreshToken, (err, session) => {
-        //console.log('session', err, session);
-        const { idToken, refreshToken, accessToken } = session;
-      });
-      //console.log('group');
+      user.refreshSession(currentSession.refreshToken, () => {});
     } catch (error) {
       console.log("error getting group", error);
     }
-  }
-  const getFirstTime = async (user) => {
-    //console.log(user.attributes.email)
-    const username = user?.attributes?.email;
-    if (username) {
-      AsyncStorage.getItem(username).then(item => {
-        const ft = JSON.parse(item);
-        //console.log(user.attributes.email);
-        //console.log("FT", ft);
-        if (ft) {
-          Alert.alert('Dear User', 'Please fill your personal information for better experience', [
-            {
-              text: 'Cancel',
-              onPress: () => {
-                AsyncStorage.setItem(username, JSON.stringify(false))
-              },
-              style: 'cancel',
-            },
-            {
-              text: 'OK', onPress: () => {
-                navigation.navigate('EditPersonal');
-              }
-            },
-          ]);
-        }
-      })
+  };
 
-    }
-  }
+  const getFirstTime = async (user) => {
+    const username = user?.attributes?.email;
+    if (!username) return;
+
+    AsyncStorage.getItem(username).then((item) => {
+      const ft = JSON.parse(item);
+      if (ft) {
+        Alert.alert(t("DEAR_USER"), t("FILL_PERSONAL_INFO_MESSAGE"), [
+          {
+            text: t("CANCEL"),
+            onPress: () => AsyncStorage.setItem(username, JSON.stringify(false)),
+            style: "cancel",
+          },
+          {
+            text: t("OK"),
+            onPress: () => navigation.navigate("EditPersonal"),
+          },
+        ]);
+      }
+    });
+  };
 
   const getData = async () => {
-    //test the deplyed api
     try {
       const res = await api.get("/requests/v0.0.1/mockCategoriesAPI");
       console.log("Data from Axios", res.data);
@@ -241,33 +228,20 @@ export default function Home({ signOut }) {
       console.log("data error", error);
     }
   };
-  //getData();
 
   return (
     <SafeAreaView style={[styles.container, { zIndex: 1 }]}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <Image
-          source={require("../assets/saayamforall.jpeg")}
-          style={styles.logo}
-        />
+        <Image source={require("../assets/saayamforall.jpeg")} style={styles.logo} />
 
         <View style={{ position: "relative", zIndex: 9999 }}>
-          {/* Build icon */}
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => setShowPicker((prev) => !prev)}
-          >
+          <TouchableOpacity activeOpacity={0.7} onPress={() => setShowPicker((prev) => !prev)}>
             <Ionicons name="build-outline" size={33} color="black" />
           </TouchableOpacity>
-
         </View>
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Profile");
-          }}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <Ionicons name="person-circle-outline" size={40} color="black" />
         </TouchableOpacity>
       </View>
@@ -276,45 +250,42 @@ export default function Home({ signOut }) {
       <View style={styles.searchBarContainer}>
         <TextInput
           style={styles.searchBar}
-          placeholder="Search categories or request..."
+          placeholder={t("SEARCH_PLACEHOLDER")}
           placeholderTextColor="#888"
         />
       </View>
 
       {/* Button Container */}
       <View style={styles.buttonContainer}>
-        {selectedDashboard.trim() === "Volunteer Dashboard" ? (
-          // Volunteer: Managed Requests only
+        {selectedDashboardKey === "VOLUNTEER_DASHBOARD" ? (
           <TouchableOpacity
             style={[styles.buttonView, styles.fullWidthButton]}
             onPress={() => navigation.navigate("ManagedReqs")}
           >
-            <Text style={styles.buttonText}>Managed Requests</Text>
+            <Text style={styles.buttonText}>{t("MANAGED_REQUESTS")}</Text>
           </TouchableOpacity>
-        ) : selectedDashboard.trim() === "Beneficiary Dashboard" ? (
-          // Beneficiary: My Requests + Others Requests
+        ) : selectedDashboardKey === "BENEFICIARY_DASHBOARD" ? (
           <>
             <TouchableOpacity
               style={[styles.buttonView, styles.fullWidthButton]}
               onPress={() => navigation.navigate("MyReqs")}
             >
-              <Text style={styles.buttonText}>My Requests</Text>
+              <Text style={styles.buttonText}>{t("MY_REQUESTS")}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.buttonView, styles.fullWidthButton]}
               onPress={() => navigation.navigate("OtherRequests")}
             >
-              <Text style={styles.buttonText}>Others Requests</Text>
+              <Text style={styles.buttonText}>{t("OTHERS_REQUESTS")}</Text>
             </TouchableOpacity>
           </>
         ) : (
-          // All other dashboards: show All Requests
           <TouchableOpacity
             style={[styles.buttonView, styles.fullWidthButton]}
             onPress={() => navigation.navigate("AllRequests")}
           >
-            <Text style={styles.buttonText}>All Requests</Text>
+            <Text style={styles.buttonText}>{t("ALL_REQUESTS")}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -327,7 +298,7 @@ export default function Home({ signOut }) {
             onPress={() => navigation.navigate("PromoteToVolunteer")}
           >
             <Icon name="heart-outline" size={20} color="#4f8ef7" />
-            <Text style={styles.actionButtonText}> Become A Volunteer</Text>
+            <Text style={styles.actionButtonText}> {t("BECOME_VOLUNTEER")}</Text>
           </TouchableOpacity>
         )}
 
@@ -338,17 +309,10 @@ export default function Home({ signOut }) {
           <Icon name="add-outline" size={20} color="#fff" />
           <Text style={[styles.actionButtonText, { color: "#fff" }]}>
             {" "}
-            Create A Request
+            {t("CREATE_A_REQUEST")}
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* <View style={styles.buttonRow}>
-        <Button onPress={() => signOut()}>Sign Out</Button>
-        <Button onPress={() => navigation.navigate('UserRequest')}>
-          Create a request
-        </Button>
-      </View> */}
 
       {/* Bottom Tab Bar */}
       <View style={styles.footer}>
@@ -360,7 +324,6 @@ export default function Home({ signOut }) {
               if (route.name === "Home1") {
                 iconName = focused ? "home" : "home-outline";
               } else if (route.name === "Donate") {
-                iconName = "hand-holding-heart";
                 return (
                   <FontAwesome5
                     name="hand-holding-heart"
@@ -388,20 +351,14 @@ export default function Home({ signOut }) {
             },
           })}
         >
-          <Tab.Screen
-            name="Home1"
-            options={{ title: "Home" }}
-            component={HomeTabScreen}
-          />
+          <Tab.Screen name="Home1" options={{ title: t("HOME") }} component={HomeTabScreen} />
           <Tab.Screen
             name="Donate"
             component={DonateScreen}
             options={{
+              title: t("DONATE"),
               tabBarButton: (props) => (
-                <TouchableOpacity
-                  {...props}
-                  onPress={() => navigation.navigate("Donation")}
-                />
+                <TouchableOpacity {...props} onPress={() => navigation.navigate("Donation")} />
               ),
             }}
           />
@@ -409,19 +366,19 @@ export default function Home({ signOut }) {
             name="Notification"
             component={NotificationScreen}
             options={{
+              title: t("NOTIFICATIONS"),
               tabBarButton: (props) => (
-                <TouchableOpacity
-                  {...props}
-                  onPress={() => navigation.navigate("Notification")}
-                />
+                <TouchableOpacity {...props} onPress={() => navigation.navigate("Notification")} />
               ),
             }}
           />
-
-          <Tab.Screen name="Account" component={AccountScreen} />
+          <Tab.Screen
+            name="Account"
+            component={AccountScreen}
+            options={{ title: t("PROFILE") }}
+          />
         </Tab.Navigator>
       </View>
-
 
       {showPicker && (
         <TouchableWithoutFeedback onPress={() => setShowPicker(false)}>
@@ -432,51 +389,31 @@ export default function Home({ signOut }) {
       {showPicker && (
         <Animated.View style={styles.dropdownWrapper}>
           <View style={styles.dropdownMenu}>
-            {[
-              "Super Admin Dashboard",
-              "Admin Dashboard",
-              "Steward Dashboard",
-              "Volunteer Dashboard",
-              "Beneficiary Dashboard",
-            ].map((option) => (
+            {DASHBOARD_OPTIONS.map((key) => (
               <TouchableOpacity
-                key={option}
+                key={key}
                 onPress={() => {
                   setShowPicker(false);
-                  setSelectedDashboard(option);
+                  setSelectedDashboardKey(key);
                 }}
                 style={{ flexDirection: "row", alignItems: "center", padding: 12 }}
               >
                 <Feather
                   name="check"
-                  size={25} // slightly larger for visibility
-                  color={selectedDashboard === option ? "#000000ff" : "transparent"}
+                  size={25}
+                  color={selectedDashboardKey === key ? "#000000ff" : "transparent"}
                   style={{ marginRight: 10 }}
                 />
-
-                <Text
-                  style={[
-                    styles.dropdownText,
-                    selectedDashboard === option && { fontWeight: "bold", color: "#000000ff" },
-                  ]}
-                >
-                  {option}
+                <Text style={selectedDashboardKey === key ? { fontWeight: "bold" } : null}>
+                  {t(key)}
                 </Text>
               </TouchableOpacity>
             ))}
           </View>
         </Animated.View>
       )}
-
     </SafeAreaView>
   );
-}
-
-function GoToScreen({ screenName }) {
-  const navigation = useNavigation();
-  // const navigation = NavigationContainer();
-
-  return navigation.navigate(screenName);
 }
 
 function HomeTabScreen() {
@@ -488,13 +425,6 @@ function HomeTabScreen() {
 }
 
 const Tab = createBottomTabNavigator();
-const openPayPal = () => {
-  const paypalUrl =
-    "https://www.paypal.com/donate/?hosted_button_id=4KLWNM5JWKJ4S";
-  Linking.openURL(paypalUrl).catch(() =>
-    Alert.alert("Error", "Failed to open PayPal link. Please try again later.")
-  );
-};
 
 function DonateScreen() {
   return (

@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "अपन व्यक्तित्व",
+    "OTHER": "दोसर"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "कम",
+    "MEDIUM": "माध्यम",
+    "HIGH": "ऊंच",
+    "CRITICAL": "आलोचनात्मक"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "निर्मित",
+    "MATCHING VOLUNTEER": "मिलान स्वयंसेवक",
+    "MANAGED": "प्रबंधित",
+    "RESOLVED": "संकल्पित",
+    "CANCELLED": "रद्द कएल गेल",
+    "DELETED": "मेटा देल गेल"
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "व्यक्तिगत रूप से",
+    "REMOTE": "दूर सँ"
   }
 }

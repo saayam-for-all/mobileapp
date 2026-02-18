@@ -31,18 +31,18 @@
   "SECONDARY_PHONE": "ಸೆಕೆಂಡರಿ ಫೋನ್",
   "required": "ಅಗತ್ಯವಿದೆ",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "ಹೆಣ್ಣು",
+    "MALE": "ಪುರುಷ",
+    "NON_BINARY": "ಬೈನರಿ ಅಲ್ಲದ",
+    "TRANSGENDER": "ಟ್ರಾನ್ಸ್ಜೆಂಡರ್",
+    "INTERSEX": "ಇಂಟರ್ಸೆಕ್ಸ್",
+    "GENDER_NONCONFORMING": "ಲಿಂಗ-ಅನುರೂಪ"
   },
   "CURRENT_PASSWORD": "ಪ್ರಸ್ತುತ ಪಾಸ್ವರ್ಡ್",
   "NEW_PASSWORD": "ಹೊಸ ಪಾಸ್ವರ್ಡ್",
   "CONFIRM_PASSWORD": "ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ದೃಢೀಕರಿಸಿ",
   "PASSWORD_REQUIREMENTS": "ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿರಬೇಕು.",
-  "PASSWORD_REQUIREMENTS_ERROR": "ಪಾಸ್ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳ ಉದ್ದವನ್ನು ಹೊಂದಿರಬೇಕು, 1 ದೊಡ್ಡಕ್ಷರ, 1 ಸಣ್ಣ ಅಕ್ಷರ, 1 ವಿಶೇಷ ಅಕ್ಷರ ಮತ್ತು 1 ಸಂಖ್ಯೆಯನ್ನು ಒಳಗೊಂಡಿರಬೇಕು.",
+  "PASSWORD_REQUIREMENTS_ERROR": "ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳ ಉದ್ದವಿರಬೇಕು, 1 ದೊಡ್ಡಕ್ಷರ, 1 ಸಣ್ಣ ಅಕ್ಷರ, 1 ವಿಶೇಷ ಅಕ್ಷರ ಮತ್ತು 1 ಸಂಖ್ಯೆಯನ್ನು ಒಳಗೊಂಡಿರಬೇಕು.",
   "PASSWORD_MISMATCH_ERROR": "ಪಾಸ್‌ವರ್ಡ್‌ಗಳು ಹೊಂದಿಕೆಯಾಗುತ್ತಿಲ್ಲ.",
   "PASSWORD_CHANGE_SUCCESS": "ಪಾಸ್ವರ್ಡ್ ಯಶಸ್ವಿಯಾಗಿ ಬದಲಾಗಿದೆ!",
   "ORGANIZATION_NAME": "ಸಂಸ್ಥೆಯ ಹೆಸರು",
@@ -91,6 +91,6 @@
   "EDIT": "ಸಂಪಾದಿಸು",
   "SAVE": "ಉಳಿಸಿ",
   "SAVING": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
-  "CANCEL": "ರದ್ದುಮಾಡಿ",
+  "CANCEL": "ರದ್ದುಮಾಡು",
   "SUBMIT": "ಸಲ್ಲಿಸಿ"
 }

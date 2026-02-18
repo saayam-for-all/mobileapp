@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "Дополнительный телефон",
   "required": "необходимый",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "Женский",
+    "MALE": "Мужской",
+    "NON_BINARY": "Недвоичный",
+    "TRANSGENDER": "Трансгендер",
+    "INTERSEX": "Интерсекс",
+    "GENDER_NONCONFORMING": "Гендерно-неконформный"
   },
   "CURRENT_PASSWORD": "Текущий пароль",
   "NEW_PASSWORD": "Новый пароль",
@@ -87,7 +87,7 @@
   "CONFIRM_ACCOUNT_DELETION_TEXT": "Вы абсолютно уверены, что хотите удалить свою учетную запись? Это действие невозможно отменить, и все ваши данные будут удалены без возможности восстановления.",
   "DELETE_ACCOUNT": "Удалить аккаунт",
   "DELETING": "Удаление...",
-  "ACCOUNT_DELETION_ERROR": "Произошла ошибка при удалении вашей учетной записи. Пожалуйста, попробуйте еще раз.",
+  "ACCOUNT_DELETION_ERROR": "При удалении вашей учетной записи произошла ошибка. Пожалуйста, попробуйте еще раз.",
   "EDIT": "Редактировать",
   "SAVE": "Сохранять",
   "SAVING": "Сохранение...",

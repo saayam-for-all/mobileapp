@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "General",
-      "DESC": "Use when you're unsure; describe your need in detail."
+      "LABEL": "Heneral",
+      "DESC": "Gamitin kapag hindi ka sigurado; ilarawan nang detalyado ang iyong pangangailangan."
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "Food & Essentials",
-      "DESC": "Access food support, grocery services, and cooking help.",
+      "LABEL": "Pagkain at Mahahalaga",
+      "DESC": "I-access ang suporta sa pagkain, mga serbisyo sa grocery, at tulong sa pagluluto.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Food Assistance",
-          "DESC": "Find food banks, pantries, or meal programs."
+          "LABEL": "Tulong sa Pagkain",
+          "DESC": "Maghanap ng mga bangko ng pagkain, pantry, o mga programa sa pagkain."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Grocery Shopping & Delivery",
-          "DESC": "Request help shopping for and delivering groceries."
+          "LABEL": "Pamimili at Paghahatid ng Grocery",
+          "DESC": "Humiling ng tulong sa pamimili at paghahatid ng mga pamilihan."
         },
         "COOKING_HELP": {
-          "LABEL": "Cooking Help",
-          "DESC": "Get guidance with meal prep and cooking."
+          "LABEL": "Tulong sa Pagluluto",
+          "DESC": "Kumuha ng gabay sa paghahanda ng pagkain at pagluluto."
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "Clothing Support",
-      "DESC": "Donate, borrow, repair, or request clothing assistance.",
+      "LABEL": "Suporta sa Damit",
+      "DESC": "Mag-donate, humiram, magkumpuni, o humiling ng tulong sa pananamit.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Donate Clothes",
-          "DESC": "Give clothing to those in need."
+          "LABEL": "Mag-donate ng mga Damit",
+          "DESC": "Bigyan ng damit ang mga nangangailangan."
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Borrow Clothes",
-          "DESC": "Borrow gently used clothing."
+          "LABEL": "Pahiram ng Damit",
+          "DESC": "Manghiram ng damit na ginamit nang malumanay."
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Emergency Assistance",
-          "DESC": "Emergency clothing needs during crises."
+          "LABEL": "Tulong sa Emergency",
+          "DESC": "Pang-emergency na damit na kailangan sa panahon ng krisis."
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Seasonal Drive Notification",
-          "DESC": "Seasonal clothing drives and donations."
+          "LABEL": "Pana-panahong Notification ng Drive",
+          "DESC": "Mga pana-panahong pananamit at mga donasyon."
         },
         "TAILORING": {
-          "LABEL": "Tailoring",
-          "DESC": "Clothing repair and alteration services."
+          "LABEL": "Pananahi",
+          "DESC": "Mga serbisyo sa pagkumpuni at pagpapalit ng damit."
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "Housing Support",
-      "DESC": "Roommates, renting guidance, moving and home setup support.",
+      "LABEL": "Suporta sa Pabahay",
+      "DESC": "Mga kasama sa silid, gabay sa pagrenta, paglipat at suporta sa pag-setup ng bahay.",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "Find a Roommate",
-          "DESC": "Get help finding a roommate."
+          "LABEL": "Maghanap ng Roommate",
+          "DESC": "Humingi ng tulong sa paghahanap ng kasama sa kuwarto."
         },
         "RENTING_SUPPORT": {
-          "LABEL": "Renting Support",
-          "DESC": "Assistance with renting and lease basics."
+          "LABEL": "Pag-upa ng Suporta",
+          "DESC": "Tulong sa mga pangunahing kaalaman sa pag-upa at pag-upa."
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Household Item Exchange",
-          "DESC": "Help with buying or selling household items."
+          "LABEL": "Pagpapalitan ng Item sa Bahay",
+          "DESC": "Tumulong sa pagbili o pagbebenta ng mga gamit sa bahay."
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "Moving Assistance",
-          "DESC": "Support with moving and packing."
+          "LABEL": "Tulong sa Paglipat",
+          "DESC": "Suporta sa paglipat at pag-iimpake."
         },
         "CLEANING_HELP": {
-          "LABEL": "Cleaning Help",
-          "DESC": "Assistance with basic cleaning tasks."
+          "LABEL": "Tulong sa Paglilinis",
+          "DESC": "Tulong sa mga pangunahing gawain sa paglilinis."
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Home Repair Support",
-          "DESC": "Support for minor home repairs."
+          "LABEL": "Suporta sa Pag-aayos ng Bahay",
+          "DESC": "Suporta para sa menor de edad na pag-aayos sa bahay."
         },
         "UTILITIES_SETUP": {
-          "LABEL": "Utilities Setup",
-          "DESC": "Help setting up utilities and services."
+          "LABEL": "Setup ng Mga Utility",
+          "DESC": "Tumulong sa pag-set up ng mga utility at serbisyo."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Education & Career Support",
-      "DESC": "College apps, SOP reviews, tutoring, and study support.",
+      "LABEL": "Suporta sa Edukasyon at Karera",
+      "DESC": "Mga app sa kolehiyo, pagsusuri sa SOP, pagtuturo, at suporta sa pag-aaral.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "College Application Help",
-          "DESC": "Help with applications and forms."
+          "LABEL": "Tulong sa Aplikasyon sa Kolehiyo",
+          "DESC": "Tulong sa mga aplikasyon at mga form."
         },
         "SOP_ESSAY_REVIEW": {
           "LABEL": "SOP & Essay Review",
-          "DESC": "Feedback on statements and essays."
+          "DESC": "Feedback sa mga pahayag at sanaysay."
         },
         "TUTORING": {
-          "LABEL": "Tutoring",
-          "DESC": "Subject tutoring and study support."
+          "LABEL": "Nagtuturo",
+          "DESC": "Pagtuturo ng paksa at suporta sa pag-aaral."
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Healthcare & Well-being",
-      "DESC": "Non-clinical health navigation and wellness support.",
+      "LABEL": "Pangangalaga sa Kalusugan at Kagalingan",
+      "DESC": "Non-clinical na pag-navigate sa kalusugan at suporta sa kalusugan.",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "Medical Navigation",
-          "DESC": "Basic navigation and non-clinical guidance."
+          "LABEL": "Medikal na Nabigasyon",
+          "DESC": "Basic navigation at non-clinical na gabay."
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "Medicine Delivery",
-          "DESC": "Pickup and delivery of OTC medicines."
+          "LABEL": "Paghahatid ng gamot",
+          "DESC": "Pagkuha at paghahatid ng mga OTC na gamot."
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Mental Wellbeing Support",
-          "DESC": "Access general mental health resources."
+          "LABEL": "Suporta sa Kagalingang Pangkaisipan",
+          "DESC": "I-access ang pangkalahatang mga mapagkukunan ng kalusugan ng isip."
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "Medication Reminders",
-          "DESC": "Non-clinical medication reminders."
+          "LABEL": "Mga Paalala sa Gamot",
+          "DESC": "Mga paalala ng di-klinikal na gamot."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Health Education Guidance",
-          "DESC": "Wellness awareness and health education."
+          "LABEL": "Gabay sa Edukasyong Pangkalusugan",
+          "DESC": "Kamalayan sa kalusugan at edukasyon sa kalusugan."
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "Elderly Support",
-      "DESC": "Non-medical assistance for seniors and community support.",
+      "LABEL": "Suporta sa Matatanda",
+      "DESC": "Tulong na hindi medikal para sa mga nakatatanda at suporta sa komunidad.",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Senior Living Relocation",
-          "DESC": "Help with senior housing and moving."
+          "LABEL": "Relokasyon ng Senior Living",
+          "DESC": "Tulong sa senior housing at paglipat."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Digital Support for Seniors",
-          "DESC": "Assistance with devices and apps."
+          "LABEL": "Digital na Suporta para sa Mga Nakatatanda",
+          "DESC": "Tulong sa mga device at app."
         },
         "MEDICAL_HELP": {
-          "LABEL": "Medical Help",
-          "DESC": "Non-clinical medical assistance for seniors."
+          "LABEL": "Tulong Medikal",
+          "DESC": "Non-clinical na tulong medikal para sa mga nakatatanda."
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Errands & Transportation",
-          "DESC": "Help with errands and transportation."
+          "LABEL": "Mga gawain at Transportasyon",
+          "DESC": "Tulong sa mga gawain at transportasyon."
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Social Connection",
-          "DESC": "Companionship and social activities."
+          "LABEL": "Koneksyong Panlipunan",
+          "DESC": "Pagsasama at mga aktibidad sa lipunan."
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Meal Support",
-          "DESC": "Help with meal preparation and cooking."
+          "LABEL": "Suporta sa Pagkain",
+          "DESC": "Tumulong sa paghahanda ng pagkain at pagluluto."
         }
       }
     }

@@ -2,12 +2,12 @@
   "title": "Mga Kagustuhan",
   "labels": {
     "timezone": "Time Zone",
-    "language": "Language",
-    "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "language": "Wika",
+    "notifications": "Mga abiso",
+    "save": "I-save",
+    "cancel": "Kanselahin"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "Matagumpay na na-save ang mga kagustuhan."
   }
 }

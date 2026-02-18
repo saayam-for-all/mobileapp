@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "ଦଳୀୟ ଫୋନ୍ |",
   "required": "ଆବଶ୍ୟକ",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "ମହିଳା",
+    "MALE": "ପୁରୁଷ",
+    "NON_BINARY": "ଅଣ-ବାଇନାରୀ |",
+    "TRANSGENDER": "ଟ୍ରାନ୍ସଜେଣ୍ଡର",
+    "INTERSEX": "ଇଣ୍ଟରସେକ୍ସ |",
+    "GENDER_NONCONFORMING": "ଲିଙ୍ଗ-ଅସଙ୍ଗତ |"
   },
   "CURRENT_PASSWORD": "ସାମ୍ପ୍ରତିକ ପାସୱାର୍ଡ |",
   "NEW_PASSWORD": "ନୂତନ ପାସୱାର୍ଡ |",

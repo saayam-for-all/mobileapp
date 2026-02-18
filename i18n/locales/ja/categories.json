@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "General",
-      "DESC": "Use when you're unsure; describe your need in detail."
+      "LABEL": "一般的な",
+      "DESC": "確信が持てない場合に使用してください。ニーズを詳しく説明してください。"
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "Food & Essentials",
-      "DESC": "Access food support, grocery services, and cooking help.",
+      "LABEL": "食品と必需品",
+      "DESC": "食事サポート、食料品サービス、調理補助を利用できます。",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Food Assistance",
-          "DESC": "Find food banks, pantries, or meal programs."
+          "LABEL": "食糧支援",
+          "DESC": "フードバンク、パントリー、食事プログラムを見つけてください。"
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Grocery Shopping & Delivery",
-          "DESC": "Request help shopping for and delivering groceries."
+          "LABEL": "食料品の買い物と配達",
+          "DESC": "食料品の買い物や配達のお手伝いを依頼してください。"
         },
         "COOKING_HELP": {
-          "LABEL": "Cooking Help",
-          "DESC": "Get guidance with meal prep and cooking."
+          "LABEL": "料理のお手伝い",
+          "DESC": "食事の準備や調理について指導を受けます。"
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "Clothing Support",
-      "DESC": "Donate, borrow, repair, or request clothing assistance.",
+      "LABEL": "衣類サポート",
+      "DESC": "衣類を寄付、借り、修理、またはリクエストしてください。",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Donate Clothes",
-          "DESC": "Give clothing to those in need."
+          "LABEL": "衣類を寄付する",
+          "DESC": "困っている人たちに衣服を与えましょう。"
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Borrow Clothes",
-          "DESC": "Borrow gently used clothing."
+          "LABEL": "服を借りる",
+          "DESC": "丁寧に古着を借りてみましょう。"
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Emergency Assistance",
-          "DESC": "Emergency clothing needs during crises."
+          "LABEL": "緊急援助",
+          "DESC": "危機時の緊急衣類のニーズ。"
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Seasonal Drive Notification",
-          "DESC": "Seasonal clothing drives and donations."
+          "LABEL": "季節限定ドライブの通知",
+          "DESC": "季節の衣類の運動と寄付。"
         },
         "TAILORING": {
-          "LABEL": "Tailoring",
-          "DESC": "Clothing repair and alteration services."
+          "LABEL": "仕立て",
+          "DESC": "衣類の修理・お直しサービス。"
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "Housing Support",
-      "DESC": "Roommates, renting guidance, moving and home setup support.",
+      "LABEL": "住宅支援",
+      "DESC": "ルームメイト、賃貸案内、引っ越し、住まいのセットアップのサポート。",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "Find a Roommate",
-          "DESC": "Get help finding a roommate."
+          "LABEL": "ルームメイトを探す",
+          "DESC": "ルームメイトを見つけるのを手伝ってください。"
         },
         "RENTING_SUPPORT": {
-          "LABEL": "Renting Support",
-          "DESC": "Assistance with renting and lease basics."
+          "LABEL": "レンタルサポート",
+          "DESC": "レンタルとリースの基本的なサポート。"
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Household Item Exchange",
-          "DESC": "Help with buying or selling household items."
+          "LABEL": "家庭用品交換",
+          "DESC": "家庭用品の売買をお手伝いします。"
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "Moving Assistance",
-          "DESC": "Support with moving and packing."
+          "LABEL": "移動支援",
+          "DESC": "引越しや荷造りなどをサポートします。"
         },
         "CLEANING_HELP": {
-          "LABEL": "Cleaning Help",
-          "DESC": "Assistance with basic cleaning tasks."
+          "LABEL": "掃除のお手伝い",
+          "DESC": "基本的な清掃業務のお手伝い。"
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Home Repair Support",
-          "DESC": "Support for minor home repairs."
+          "LABEL": "住宅修理サポート",
+          "DESC": "住宅のちょっとした修繕をサポートします。"
         },
         "UTILITIES_SETUP": {
-          "LABEL": "Utilities Setup",
-          "DESC": "Help setting up utilities and services."
+          "LABEL": "ユーティリティのセットアップ",
+          "DESC": "ユーティリティとサービスのセットアップを支援します。"
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Education & Career Support",
-      "DESC": "College apps, SOP reviews, tutoring, and study support.",
+      "LABEL": "教育とキャリアサポート",
+      "DESC": "大学アプリ、SOP レビュー、個別指導、学習サポート。",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "College Application Help",
-          "DESC": "Help with applications and forms."
+          "LABEL": "大学出願ヘルプ",
+          "DESC": "申請書やフォームの作成をお手伝いします。"
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP & Essay Review",
-          "DESC": "Feedback on statements and essays."
+          "LABEL": "SOP とエッセイのレビュー",
+          "DESC": "ステートメントやエッセイに対するフィードバック。"
         },
         "TUTORING": {
-          "LABEL": "Tutoring",
-          "DESC": "Subject tutoring and study support."
+          "LABEL": "家庭教師",
+          "DESC": "教科指導と学習サポート。"
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Healthcare & Well-being",
-      "DESC": "Non-clinical health navigation and wellness support.",
+      "LABEL": "ヘルスケアと福祉",
+      "DESC": "非臨床的な健康ナビゲーションと健康サポート。",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "Medical Navigation",
-          "DESC": "Basic navigation and non-clinical guidance."
+          "LABEL": "医療ナビゲーション",
+          "DESC": "基本的なナビゲーションと非臨床ガイダンス。"
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "Medicine Delivery",
-          "DESC": "Pickup and delivery of OTC medicines."
+          "LABEL": "薬の配達",
+          "DESC": "OTC医薬品の集荷・配達業務。"
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Mental Wellbeing Support",
-          "DESC": "Access general mental health resources."
+          "LABEL": "メンタルヘルスのサポート",
+          "DESC": "一般的なメンタルヘルス リソースにアクセスします。"
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "Medication Reminders",
-          "DESC": "Non-clinical medication reminders."
+          "LABEL": "服薬リマインダー",
+          "DESC": "非臨床薬のリマインダー。"
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Health Education Guidance",
-          "DESC": "Wellness awareness and health education."
+          "LABEL": "保健教育指導",
+          "DESC": "ウェルネス意識と健康教育。"
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "Elderly Support",
-      "DESC": "Non-medical assistance for seniors and community support.",
+      "LABEL": "高齢者支援",
+      "DESC": "高齢者に対する医療以外の支援と地域社会の支援。",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Senior Living Relocation",
-          "DESC": "Help with senior housing and moving."
+          "LABEL": "シニアの住み替え",
+          "DESC": "高齢者の住宅や引っ越しのお手伝いをします。"
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Digital Support for Seniors",
-          "DESC": "Assistance with devices and apps."
+          "LABEL": "シニア向けデジタルサポート",
+          "DESC": "デバイスとアプリのサポート。"
         },
         "MEDICAL_HELP": {
-          "LABEL": "Medical Help",
-          "DESC": "Non-clinical medical assistance for seniors."
+          "LABEL": "医療支援",
+          "DESC": "高齢者に対する非臨床医療支援。"
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Errands & Transportation",
-          "DESC": "Help with errands and transportation."
+          "LABEL": "用事と交通手段",
+          "DESC": "用事や移動の手伝いをします。"
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Social Connection",
-          "DESC": "Companionship and social activities."
+          "LABEL": "社会的なつながり",
+          "DESC": "仲間意識と社会活動。"
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Meal Support",
-          "DESC": "Help with meal preparation and cooking."
+          "LABEL": "食事サポート",
+          "DESC": "食事の準備や調理の手伝いをしていただきます。"
         }
       }
     }

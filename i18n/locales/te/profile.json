@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "సెకండరీ ఫోన్",
   "required": "అవసరం",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "స్త్రీ",
+    "MALE": "పురుషుడు",
+    "NON_BINARY": "నాన్-బైనరీ",
+    "TRANSGENDER": "ట్రాన్స్ జెండర్",
+    "INTERSEX": "ఇంటర్సెక్స్",
+    "GENDER_NONCONFORMING": "లింగం-అనుకూలమైనది"
   },
   "CURRENT_PASSWORD": "ప్రస్తుత పాస్వర్డ్",
   "NEW_PASSWORD": "కొత్త పాస్‌వర్డ్",
@@ -57,7 +57,7 @@
   "STEWARD_DASHBOARD": "స్టీవార్డ్ డాష్‌బోర్డ్",
   "VOLUNTEER_DASHBOARD": "వాలంటీర్ డాష్‌బోర్డ్",
   "BENEFICIARY_DASHBOARD": "లబ్ధిదారు డాష్‌బోర్డ్",
-  "FIRST_LANGUAGE_PREFERENCE": "ప్రథమ భాష ప్రాధాన్యత",
+  "FIRST_LANGUAGE_PREFERENCE": "మొదటి భాష ప్రాధాన్యత",
   "SECOND_LANGUAGE_PREFERENCE": "రెండవ భాష ప్రాధాన్యత",
   "THIRD_LANGUAGE_PREFERENCE": "మూడవ భాష ప్రాధాన్యత",
   "English": "ఇంగ్లీష్",

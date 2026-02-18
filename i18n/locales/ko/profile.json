@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "보조 전화",
   "required": "필수의",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "여성",
+    "MALE": "남성",
+    "NON_BINARY": "넌바이너리",
+    "TRANSGENDER": "트랜스젠더",
+    "INTERSEX": "인터섹스",
+    "GENDER_NONCONFORMING": "성별비순응자"
   },
   "CURRENT_PASSWORD": "현재 비밀번호",
   "NEW_PASSWORD": "새 비밀번호",

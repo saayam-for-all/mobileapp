@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "ตัวเอง",
+    "OTHER": "อื่น"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "ต่ำ",
+    "MEDIUM": "ปานกลาง",
+    "HIGH": "สูง",
+    "CRITICAL": "วิกฤต"
   },
   "requestStatus": {
-    "CREATED": "Created",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "CREATED": "สร้าง",
+    "MATCHING VOLUNTEER": "อาสาสมัครที่ตรงกัน",
+    "MANAGED": "จัดการ",
+    "RESOLVED": "แก้ไขแล้ว",
+    "CANCELLED": "ยกเลิก",
+    "DELETED": "ลบแล้ว"
   },
   "requestType": {
-    "INPERSON": "In Person",
-    "REMOTE": "Remote"
+    "INPERSON": "ในบุคคล",
+    "REMOTE": "ระยะไกล"
   }
 }

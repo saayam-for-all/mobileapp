@@ -11,7 +11,7 @@
   "UPLOADING": "અપલોડ કરી રહ્યું છે...",
   "REMOVE": "દૂર કરો",
   "FILE_SIZE_ERROR": "ફાઇલનું કદ 2MB થી વધુ ન હોવું જોઈએ",
-  "FILE_TYPE_ERROR": "ફક્ત JPEG, JPG, PNG અને PDF ફાઇલોને મંજૂરી છે. ફાઇલનો પ્રકાર મળ્યો: {{fileType}}, એક્સ્ટેંશન: {{extension}}",
+  "FILE_TYPE_ERROR": "ફક્ત JPEG, JPG, PNG અને PDF ફાઇલોને મંજૂરી છે. ફાઇલ પ્રકાર શોધાયો: {{fileType}}, એક્સ્ટેંશન: {{extension}}",
   "FILE_TYPE_REQUIREMENT": "ફક્ત JPEG, JPG, PNG અથવા PDF ફાઇલો. મહત્તમ કદ: 2MB.",
   "UPLOAD_SUCCESS": "ફાઇલ સફળતાપૂર્વક અપલોડ થઈ",
   "UPLOAD_FAILED": "ફાઇલ અપલોડ નિષ્ફળ",

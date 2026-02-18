@@ -16,7 +16,7 @@
   "SAVE_ERROR": "সংরক্ষণ করার সময় একটি ত্রুটি ঘটেছে৷ আবার চেষ্টা করুন.",
   "TIMEZONE": "টাইমজোন",
   "USE_CURRENT_TIMEZONE": "বর্তমান টাইমজোন ব্যবহার করুন",
-  "CURRENT_DETECTED_TIMEZONE": "বর্তমান শনাক্ত করা সময় অঞ্চল",
+  "CURRENT_DETECTED_TIMEZONE": "বর্তমান শনাক্ত করা টাইমজোন",
   "VACATION_MODE": "অবকাশ মোড",
   "VACATION_MODE_DESCRIPTION": "স্বেচ্ছাসেবক অনুরোধের জন্য অস্থায়ীভাবে উপলব্ধতা অক্ষম করতে অবকাশ মোড সক্ষম করুন৷",
   "VACATION_START_DATE": "ছুটি শুরুর তারিখ",

@@ -1,13 +1,13 @@
 {
   "title": "Préférences",
   "labels": {
-    "timezone": "Time Zone",
-    "language": "Language",
+    "timezone": "Fuseau horaire",
+    "language": "Langue",
     "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "save": "Sauvegarder",
+    "cancel": "Annuler"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "Préférences enregistrées avec succès."
   }
 }

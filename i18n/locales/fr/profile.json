@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "Téléphone secondaire",
   "required": "requis",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
-    "TRANSGENDER": "Transgender",
-    "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "FEMALE": "Femelle",
+    "MALE": "Mâle",
+    "NON_BINARY": "Non binaire",
+    "TRANSGENDER": "Transgenre",
+    "INTERSEX": "Intersexe",
+    "GENDER_NONCONFORMING": "Non conforme au genre"
   },
   "CURRENT_PASSWORD": "Mot de passe actuel",
   "NEW_PASSWORD": "Nouveau mot de passe",

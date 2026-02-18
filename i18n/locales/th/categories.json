@@ -1,158 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "General",
-      "DESC": "Use when you're unsure; describe your need in detail."
+      "LABEL": "ทั่วไป",
+      "DESC": "ใช้เมื่อคุณไม่แน่ใจ อธิบายความต้องการของคุณโดยละเอียด"
     },
     "FOOD_AND_ESSENTIALS_SUPPORT": {
-      "LABEL": "Food & Essentials",
-      "DESC": "Access food support, grocery services, and cooking help.",
+      "LABEL": "อาหารและสิ่งของจำเป็น",
+      "DESC": "เข้าถึงการสนับสนุนด้านอาหาร บริการซื้อของชำ และความช่วยเหลือในการทำอาหาร",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Food Assistance",
-          "DESC": "Find food banks, pantries, or meal programs."
+          "LABEL": "ความช่วยเหลือด้านอาหาร",
+          "DESC": "ค้นหาธนาคารอาหาร ห้องเก็บอาหาร หรือโปรแกรมมื้ออาหาร"
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Grocery Shopping & Delivery",
-          "DESC": "Request help shopping for and delivering groceries."
+          "LABEL": "การซื้อของชำและการจัดส่ง",
+          "DESC": "ขอความช่วยเหลือในการซื้อและจัดส่งของชำ"
         },
         "COOKING_HELP": {
-          "LABEL": "Cooking Help",
-          "DESC": "Get guidance with meal prep and cooking."
+          "LABEL": "ช่วยทำอาหาร",
+          "DESC": "รับคำแนะนำในการเตรียมอาหารและทำอาหาร"
         }
       }
     },
     "CLOTHING_SUPPORT": {
-      "LABEL": "Clothing Support",
-      "DESC": "Donate, borrow, repair, or request clothing assistance.",
+      "LABEL": "สนับสนุนเสื้อผ้า",
+      "DESC": "บริจาค ยืม ซ่อมแซม หรือขอความช่วยเหลือเกี่ยวกับเสื้อผ้า",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Donate Clothes",
-          "DESC": "Give clothing to those in need."
+          "LABEL": "บริจาคเสื้อผ้า",
+          "DESC": "มอบเสื้อผ้าให้กับผู้ที่ต้องการความช่วยเหลือ"
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Borrow Clothes",
-          "DESC": "Borrow gently used clothing."
+          "LABEL": "ยืมเสื้อผ้า",
+          "DESC": "ยืมเสื้อผ้าที่ใช้แล้วอย่างอ่อนโยน"
         },
         "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Emergency Assistance",
-          "DESC": "Emergency clothing needs during crises."
+          "LABEL": "ความช่วยเหลือฉุกเฉิน",
+          "DESC": "ความต้องการเสื้อผ้าฉุกเฉินในช่วงวิกฤต"
         },
         "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Seasonal Drive Notification",
-          "DESC": "Seasonal clothing drives and donations."
+          "LABEL": "การแจ้งเตือนไดรฟ์ตามฤดูกาล",
+          "DESC": "ขับเคลื่อนเสื้อผ้าตามฤดูกาลและการบริจาค"
         },
         "TAILORING": {
-          "LABEL": "Tailoring",
-          "DESC": "Clothing repair and alteration services."
+          "LABEL": "การตัดเย็บเสื้อผ้า",
+          "DESC": "บริการซ่อมแซมและดัดแปลงเสื้อผ้า"
         }
       }
     },
     "HOUSING_SUPPORT": {
-      "LABEL": "Housing Support",
-      "DESC": "Roommates, renting guidance, moving and home setup support.",
+      "LABEL": "การสนับสนุนที่อยู่อาศัย",
+      "DESC": "เพื่อนร่วมห้อง คำแนะนำการเช่า การสนับสนุนการย้ายและการตั้งค่าบ้าน",
       "SUBCATEGORIES": {
         "FIND_A_ROOMMATE": {
-          "LABEL": "Find a Roommate",
-          "DESC": "Get help finding a roommate."
+          "LABEL": "หาเพื่อนร่วมห้อง",
+          "DESC": "ขอความช่วยเหลือในการหาเพื่อนร่วมห้อง"
         },
         "RENTING_SUPPORT": {
-          "LABEL": "Renting Support",
-          "DESC": "Assistance with renting and lease basics."
+          "LABEL": "สนับสนุนการเช่า",
+          "DESC": "ความช่วยเหลือเกี่ยวกับการเช่าและการเช่าขั้นพื้นฐาน"
         },
         "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Household Item Exchange",
-          "DESC": "Help with buying or selling household items."
+          "LABEL": "การแลกเปลี่ยนสิ่งของในครัวเรือน",
+          "DESC": "ช่วยในการซื้อหรือขายของใช้ในครัวเรือน"
         },
         "MOVING_ASSISTANCE": {
-          "LABEL": "Moving Assistance",
-          "DESC": "Support with moving and packing."
+          "LABEL": "ความช่วยเหลือในการเคลื่อนย้าย",
+          "DESC": "รองรับการขนย้ายและบรรจุหีบห่อ"
         },
         "CLEANING_HELP": {
-          "LABEL": "Cleaning Help",
-          "DESC": "Assistance with basic cleaning tasks."
+          "LABEL": "ช่วยทำความสะอาด",
+          "DESC": "ช่วยเหลืองานทำความสะอาดขั้นพื้นฐาน"
         },
         "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Home Repair Support",
-          "DESC": "Support for minor home repairs."
+          "LABEL": "สนับสนุนการซ่อมแซมบ้าน",
+          "DESC": "สนับสนุนการซ่อมแซมบ้านเล็กๆ น้อยๆ"
         },
         "UTILITIES_SETUP": {
-          "LABEL": "Utilities Setup",
-          "DESC": "Help setting up utilities and services."
+          "LABEL": "การตั้งค่ายูทิลิตี้",
+          "DESC": "ช่วยตั้งค่าสาธารณูปโภคและบริการ"
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Education & Career Support",
-      "DESC": "College apps, SOP reviews, tutoring, and study support.",
+      "LABEL": "การสนับสนุนด้านการศึกษาและอาชีพ",
+      "DESC": "แอปวิทยาลัย การทบทวน SOP การสอน และการสนับสนุนด้านการศึกษา",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "College Application Help",
-          "DESC": "Help with applications and forms."
+          "LABEL": "ความช่วยเหลือในการสมัครวิทยาลัย",
+          "DESC": "ความช่วยเหลือเกี่ยวกับใบสมัครและแบบฟอร์ม"
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP & Essay Review",
-          "DESC": "Feedback on statements and essays."
+          "LABEL": "SOP และทบทวนเรียงความ",
+          "DESC": "ข้อเสนอแนะเกี่ยวกับแถลงการณ์และเรียงความ"
         },
         "TUTORING": {
-          "LABEL": "Tutoring",
-          "DESC": "Subject tutoring and study support."
+          "LABEL": "กวดวิชา",
+          "DESC": "การสอนวิชาและการสนับสนุนการศึกษา"
         }
       }
     },
     "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Healthcare & Well-being",
-      "DESC": "Non-clinical health navigation and wellness support.",
+      "LABEL": "การดูแลสุขภาพและความเป็นอยู่ที่ดี",
+      "DESC": "การนำทางด้านสุขภาพที่ไม่ใช่ทางคลินิกและการสนับสนุนด้านสุขภาพ",
       "SUBCATEGORIES": {
         "MEDICAL_NAVIGATION": {
-          "LABEL": "Medical Navigation",
-          "DESC": "Basic navigation and non-clinical guidance."
+          "LABEL": "การนำทางทางการแพทย์",
+          "DESC": "การนำทางขั้นพื้นฐานและคำแนะนำที่ไม่ใช่ทางคลินิก"
         },
         "MEDICINE_DELIVERY": {
-          "LABEL": "Medicine Delivery",
-          "DESC": "Pickup and delivery of OTC medicines."
+          "LABEL": "การจัดส่งยา",
+          "DESC": "การรับและจัดส่งยา OTC"
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Mental Wellbeing Support",
-          "DESC": "Access general mental health resources."
+          "LABEL": "การสนับสนุนสุขภาพจิต",
+          "DESC": "เข้าถึงแหล่งข้อมูลด้านสุขภาพจิตทั่วไป"
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "Medication Reminders",
-          "DESC": "Non-clinical medication reminders."
+          "LABEL": "การแจ้งเตือนการใช้ยา",
+          "DESC": "การแจ้งเตือนการใช้ยาที่ไม่ใช่ทางคลินิก"
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Health Education Guidance",
-          "DESC": "Wellness awareness and health education."
+          "LABEL": "แนะแนวสุขศึกษา",
+          "DESC": "ความตระหนักรู้ด้านสุขภาพและสุขศึกษา"
         }
       }
     },
     "ELDERLY_SUPPORT": {
-      "LABEL": "Elderly Support",
-      "DESC": "Non-medical assistance for seniors and community support.",
+      "LABEL": "การสนับสนุนผู้สูงอายุ",
+      "DESC": "ความช่วยเหลือที่ไม่ใช่ทางการแพทย์สำหรับผู้สูงอายุและการสนับสนุนจากชุมชน",
       "SUBCATEGORIES": {
         "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Senior Living Relocation",
-          "DESC": "Help with senior housing and moving."
+          "LABEL": "การย้ายที่อยู่อาศัยอาวุโส",
+          "DESC": "ช่วยเหลือเรื่องบ้านพักคนชราและการขนย้าย"
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Digital Support for Seniors",
-          "DESC": "Assistance with devices and apps."
+          "LABEL": "การสนับสนุนทางดิจิทัลสำหรับผู้สูงอายุ",
+          "DESC": "ความช่วยเหลือเกี่ยวกับอุปกรณ์และแอพ"
         },
         "MEDICAL_HELP": {
-          "LABEL": "Medical Help",
-          "DESC": "Non-clinical medical assistance for seniors."
+          "LABEL": "ความช่วยเหลือทางการแพทย์",
+          "DESC": "ความช่วยเหลือทางการแพทย์ที่ไม่ใช่ทางคลินิกสำหรับผู้สูงอายุ"
         },
         "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Errands & Transportation",
-          "DESC": "Help with errands and transportation."
+          "LABEL": "ธุระและการขนส่ง",
+          "DESC": "ช่วยเรื่องธุระและการขนส่ง"
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Social Connection",
-          "DESC": "Companionship and social activities."
+          "LABEL": "การเชื่อมต่อทางสังคม",
+          "DESC": "กิจกรรมมิตรภาพและกิจกรรมเพื่อสังคม"
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Meal Support",
-          "DESC": "Help with meal preparation and cooking."
+          "LABEL": "การสนับสนุนมื้ออาหาร",
+          "DESC": "ช่วยในการเตรียมอาหารและปรุงอาหาร"
         }
       }
     }

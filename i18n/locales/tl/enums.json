@@ -1,24 +1,24 @@
 {
   "requestFor": {
-    "SELF": "Self",
-    "OTHER": "Other"
+    "SELF": "Sarili",
+    "OTHER": "Iba pa"
   },
   "requestPriority": {
-    "LOW": "Low",
-    "MEDIUM": "Medium",
-    "HIGH": "High",
-    "CRITICAL": "Critical"
+    "LOW": "Mababa",
+    "MEDIUM": "Katamtaman",
+    "HIGH": "Mataas",
+    "CRITICAL": "Kritikal"
   },
   "requestStatus": {
-    "CREATED": "Created",
+    "CREATED": "Nilikha",
     "MATCHING VOLUNTEER": "Matching Volunteer",
-    "MANAGED": "Managed",
-    "RESOLVED": "Resolved",
-    "CANCELLED": "Cancelled",
-    "DELETED": "Deleted"
+    "MANAGED": "Pinamamahalaan",
+    "RESOLVED": "Nalutas",
+    "CANCELLED": "Kinansela",
+    "DELETED": "Tinanggal"
   },
   "requestType": {
-    "INPERSON": "In Person",
+    "INPERSON": "Sa Tao",
     "REMOTE": "Remote"
   }
 }

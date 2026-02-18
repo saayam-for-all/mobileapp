@@ -31,12 +31,12 @@
   "SECONDARY_PHONE": "ثانوي فون",
   "required": "گهربل",
   "GENDER_OPTIONS": {
-    "FEMALE": "Female",
-    "MALE": "Male",
-    "NON_BINARY": "Non-binary",
+    "FEMALE": "عورت",
+    "MALE": "نر",
+    "NON_BINARY": "غير بائنري",
     "TRANSGENDER": "Transgender",
     "INTERSEX": "Intersex",
-    "GENDER_NONCONFORMING": "Gender-nonconforming"
+    "GENDER_NONCONFORMING": "جنس جي غير مطابقت"
   },
   "CURRENT_PASSWORD": "موجوده پاس ورڊ",
   "NEW_PASSWORD": "نئون پاسورڊ",
@@ -80,7 +80,7 @@
   "RECEIVE EMERGENCY NOTIFICATIONS": "هنگامي نوٽيفڪيشن حاصل ڪريو",
   "PREFERENCES UPDATED SUCCESS": "ترجيحات کي ڪاميابي سان اپڊيٽ ڪيو ويو!",
   "ACCOUNT_DELETION_WARNING_TITLE": "اڪائونٽ ختم ڪرڻ",
-  "ACCOUNT_DELETION_WARNING_TEXT": "اهو عمل مستقل طور تي توهان جي اڪائونٽ ۽ سڀني لاڳاپيل ڊيٽا کي حذف ڪري ڇڏيندو. ھن عمل کي رد نٿو ڪري سگھجي. مهرباني ڪري پڪ ڪريو ته توهان اڳتي وڌڻ کان اڳ ڪنهن به اهم معلومات کي بيڪ اپ ڪيو آهي.",
+  "ACCOUNT_DELETION_WARNING_TEXT": "اهو عمل مستقل طور تي توهان جي اڪائونٽ ۽ سڀني لاڳاپيل ڊيٽا کي حذف ڪري ڇڏيندو. ھن عمل کي رد نٿو ڪري سگھجي. مهرباني ڪري پڪ ڪريو ته توهان اڳتي وڌڻ کان پهريان ڪنهن به اهم معلومات کي بيڪ اپ ڪيو آهي.",
   "ACCOUNT_DELETION_CONFIRMATION_TEXT": "ھن باڪس کي چيڪ ڪندي، توھان تسليم ڪيو ٿا ته توھان سمجھو ٿا توھان جي اڪائونٽ کي ختم ڪرڻ جا نتيجا.",
   "I_WANT_TO_DELETE_MY_ACCOUNT": "مان پنهنجو اڪائونٽ ختم ڪرڻ چاهيان ٿو",
   "CONFIRM_ACCOUNT_DELETION": "اڪائونٽ ختم ڪرڻ جي تصديق ڪريو",
@@ -92,5 +92,5 @@
   "SAVE": "بچايو",
   "SAVING": "محفوظ ڪري رهيو آهي...",
   "CANCEL": "منسوخ ڪريو",
-  "SUBMIT": "جمع ڪرائڻ"
+  "SUBMIT": "جمع ڪرايو"
 }

@@ -1,13 +1,13 @@
 {
   "title": "Предпочтения",
   "labels": {
-    "timezone": "Time Zone",
-    "language": "Language",
-    "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "timezone": "Часовой пояс",
+    "language": "Язык",
+    "notifications": "Уведомления",
+    "save": "Сохранять",
+    "cancel": "Отмена"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "Настройки успешно сохранены."
   }
 }
