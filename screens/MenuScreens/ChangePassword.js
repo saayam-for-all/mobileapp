@@ -19,7 +19,7 @@ export default function ChangePassword() {
   const [logPasswordValid, setLogPasswordValid] = useState([false, false]);
 
   const navigation = useNavigation();
-  const user = useAuthUser(navigation);
+  const user = useAuthUser();
 
   const toggleSecureEntry = (index) => {
     setSecureEntry((prev) => prev.map((item, i) => (i === index ? !item : item)));

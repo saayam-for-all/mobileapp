@@ -14,7 +14,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native';
 import AudioRecorder from '../components/AudioRecorder';
 
+import useAuthUser from '../hooks/useAuthUser';
+
 import { getCategories, getEnums } from '../services/requestServices';
+import { Tab, Tabs } from '../components/Tabs';
 
 const genderOptions = [
   { label: 'Select', value: 'Select' },
@@ -33,18 +36,20 @@ const languageOptions = languagesData.map((lang) => ({
 
 export default function UserRequest({ isEdit = false, onClose, requestItem = {} }) {
   const { t, i18n } = useTranslation(["common", "categories"]);
+  const [loading, setLoading] = useState(false);
+  const authUser = useAuthUser();
 
-  // Consolidated form data
+  // Form data now stores enum IDs directly (matching backend format)
   const [formData, setFormData] = useState({
-    request_for: 'SELF', // Will be set from enums
+    requestForId: 0, // Default to SELF (0)
     isCalamity: false,
-    priority: isEdit && requestItem?.priority ? requestItem.priority : 'MEDIUM',
+    requestPriorityId: 1, // Default to MEDIUM (1)
     requestCategory: isEdit && requestItem?.category ? requestItem.category : '0.0.0.0.0',
     requestSubCategory: '',
-    request_type: 'REMOTE',
+    requestTypeId: 1, // Default to REMOTE (1)
     location: '',
-    subject: isEdit && requestItem?.subject ? requestItem.subject : '',
-    description: isEdit && requestItem?.description ? requestItem.description : '',
+    requestSubject: isEdit && requestItem?.subject ? requestItem.subject : '',
+    requestDescription: isEdit && requestItem?.description ? requestItem.description : '',
   });
 
   // Separate state for other person's info
@@ -81,15 +86,15 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
   // Helper to check if request is for self
   const isSelfRequest = () => {
-    return formData.request_for === enums?.requestFor?.[0]; // First enum value is typically "SELF"
+    return formData.requestForId === 0; // 0 is SELF
   };
 
   const fetchCategories = async () => {
     try {
       const categoriesData = await getCategories();
-      if (categoriesData?.categories?.length) {
+      if (categoriesData?.length) {
         const filteredCategories = {}
-        for (const cat of categoriesData.categories) {
+        for (const cat of categoriesData) {
           if (cat.catName &&
             cat.catName !== "cat_name" &&
             cat.catId !== "cat_id" &&
@@ -99,6 +104,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           )
             filteredCategories[cat.catId] = cat;
         }
+        console.log("Categories: ",filteredCategories);
         setCategories(filteredCategories);
       } else {
         throw new Error('No categories found');
@@ -113,7 +119,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const checkProfanity = async () => {
     const res = await api.post(
       "/requests/v0.0.1/checkProfanity",
-      { subject: formData.subject, description: formData.description }
+      { subject: formData.requestSubject, description: formData.requestDescription }
     );
     return res.data;
   }
@@ -121,27 +127,59 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const getSuggestedCategories = async () => {
     const res = await api.post(
       "/genai/v0.0.1/predict_categories",
-      { subject: formData.subject, description: formData.description }
+      { subject: formData.requestSubject, description: formData.requestDescription }
     );
     return res.data;
   }
 
   const submit = async (category = '') => {
-    const submitData = {
-      ...formData,
-      requestCategory: category || formData.requestCategory
+    if (!authUser?.attributes?.userDbId) {
+      Alert.alert('Error', 'User not authenticated properly. Please log in again.');
+      return;
+    }
+    const requestBody = {
+      requesterId: authUser?.attributes?.userDbId, // Get from auth user
+      requestSubject: formData.requestSubject,
+      requestDescription: formData.requestDescription,
+      isCalamity: formData.isCalamity,
+      isLeadVolunteer: 1,
+      
+      requestPriority: {
+        requestPriorityId: formData.requestPriorityId
+      },
+      requestType: {
+        requestTypeId: formData.requestTypeId
+      },
+      requestFor: {
+        requestForId: formData.requestForId
+      },
+      
+      helpCategory: { catId: formData.requestSubCategory || formData.requestCategory }
     };
 
     // Include other person info if not for self
     if (!isSelfRequest()) {
-      submitData.otherPerson = otherPersonInfo;
+      requestBody.otherPerson = otherPersonInfo;
     }
 
-    console.log('Submitting:', submitData);
+    // Include location if request type is IN_PERSON
+    if (formData.requestTypeId === 0 && formData.location) {
+      requestBody.location = formData.location;
+    }
+
+    console.log('Submitting:', requestBody);
+
+    // Actual API call
+    const response = await api.post(
+      "/requests/v0.0.1/createRequest",
+      requestBody
+    );
+
+    console.log('Response:', response.data);
 
     Alert.alert(
       'Dear User',
-      'Help Request Created Successfully.\nCategory: ' + submitData.requestCategory,
+      'Help Request Created Successfully.',
       [
         {
           text: 'OK', onPress: () => {
@@ -174,12 +212,17 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   };
 
   const handleSubmit = async () => {
-    // Validate required fields
-    if (!formData.subject || !formData.description) {
-      Alert.alert('Validation Error', 'Both Subject and Description are required!');
+    // Validate required fields (Description, subject, and request category)
+    if (!formData.requestSubject) {
+      Alert.alert('Validation Error', 'Subject is required. Please fill out the Description tab.');
       return;
     }
 
+    if (!formData.requestDescription) {
+      Alert.alert('Validation Error', 'Description is required. Please fill out the Description tab.');
+      return;
+    }
+    
     // Validate other person info if not for self
     if (!isSelfRequest()) {
       const { firstName, lastName, email } = otherPersonInfo;
@@ -195,46 +238,57 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         return;
       }
     }
+    setLoading(true);
+    try {
+      // Check profanity
+      const profanityResponse = await checkProfanity();
+      if (profanityResponse?.contains_profanity) {
+        const profanity = profanityResponse.profanity;
+        Alert.alert(
+          'Dear User',
+          'The system detects profanity in your help request, please edit your request.\nTrigger words: ' + profanity,
+          [
+            {
+              text: 'OK', onPress: () => {
+                console.log("OK pressed for check profanity");
+                setLoading(false);
+              }
+            },
+          ]
+        );
+        return;
+      }
 
-    const profanityResponse = await checkProfanity();
-    if (profanityResponse.contains_profanity) {
-      const profanity = profanityResponse.profanity;
-      Alert.alert(
-        'Dear User',
-        'The system detects profanity in your help request, please edit your request.\nTrigger words: ' + profanity,
-        [
-          {
-            text: 'OK', onPress: () => {
-              console.log("OK pressed for check profanity");
+      // Check if category is default/empty, then get suggested categories
+      if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
+        const defaultCategories = ["Health", "Education", "Electronics", "General"];
+        let suggestedCategories = await getSuggestedCategories();
+        console.log("Suggested categories: ", suggestedCategories);
+        if (!suggestedCategories) suggestedCategories = defaultCategories;
+        suggestedCategories.push('General');
+        const alertCategories = suggestedCategories.map((category) => {
+          return {
+            text: category,
+            onPress: async () => {
+              await submit(category=category);
+              setLoading(false);
             }
-          },
-        ]
-      );
-      return;
-    }
-
-    if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
-      const defaultCategories = ["Health", "Education", "Electronics", "General"];
-      let suggestedCategories = await getSuggestedCategories();
-      console.log("Suggested categories: ", suggestedCategories);
-      if (!suggestedCategories) suggestedCategories = defaultCategories;
-      suggestedCategories.push('General');
-      const alertCategories = suggestedCategories.map((category) => {
-        return {
-          text: category,
-          onPress: async () => {
-            setToSubmit(true);
           }
-        }
-      });
-      Alert.alert(
-        'Dear User',
-        'Please fill in categories or select one of the recommended categories',
-        [...alertCategories]
-      );
+        });
+        Alert.alert(
+          'Dear User',
+          'Please fill in categories or select one of the recommended categories',
+          [...alertCategories]
+        );
+      }
+      else {
+        await submit();
+        setLoading(false);
+      }
     }
-    else {
-      setToSubmit(true);
+    catch (error) {
+      setLoading(false);
+      console.error('Error during submit user request:', error);
     }
   };
 
@@ -261,11 +315,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         const data = await getEnums();
         console.log("Enums API response:", data);
         setEnums(data);
-
-        // Set initial request_for value from enums
-        if (data?.requestFor?.[0]) {
-          updateFormData('request_for', data.requestFor[0]);
-        }
       } catch (error) {
         console.error('Error fetching enums:', error);
       }
@@ -281,10 +330,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     }
   }, [formData.requestCategory]);
 
-  useEffect(() => {
-    if (toSubmit) submit();
-  }, [toSubmit]);
-
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
@@ -296,312 +341,331 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           </Text>
         </View>
 
-        <View style={styles.field}>
-          <Text style={styles.label}>For Self</Text>
-          <RNPickerSelect
-            onValueChange={(value) => updateFormData('request_for', value)}
-            items={
-              enums?.requestFor
-                ? Object.values(enums.requestFor).map((val) => ({
-                  label: t(`enums:requestFor.${val}`),
-                  value: val,
-                }))
-                : [
-                  { label: 'Self', value: '0' },
-                  { label: 'Other', value: '1' },
-                ]
-            }
-            value={formData.request_for}
-            style={{
-              inputIOS: pickerSelectStyles.inputIOS,
-              inputAndroid: pickerSelectStyles.inputAndroid,
-            }}
-          />
-        </View>
-
-        {/* Conditional Person Info Section */}
-        {!isSelfRequest() && (
-          <View style={styles.personInfoSection}>
-            <Text style={styles.sectionTitle}>Person Details</Text>
-            <Text style={styles.sectionSubtitle}>
-              Please fill the details of the person you are submitting the request for.
-            </Text>
+        <Tabs>
+          <Tab label="Description">
+            {/* Mandatory Descriptions */}
 
             <View style={styles.field}>
-              <Text style={styles.label}>
-                First Name <Text style={{ color: 'red' }}>*</Text>
-              </Text>
-              <Input
-                style={styles.input}
-                placeholder="Enter first name..."
-                value={otherPersonInfo.firstName}
-                onChangeText={(text) => updatePersonInfo('firstName', text)}
-              />
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>
-                Last Name <Text style={{ color: 'red' }}>*</Text>
-              </Text>
-              <Input
-                style={styles.input}
-                placeholder="Enter last name..."
-                value={otherPersonInfo.lastName}
-                onChangeText={(text) => updatePersonInfo('lastName', text)}
-              />
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>
-                Email <Text style={{ color: 'red' }}>*</Text>
-              </Text>
-              <Input
-                style={styles.input}
-                placeholder="Enter email..."
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={otherPersonInfo.email}
-                onChangeText={(text) => updatePersonInfo('email', text)}
-              />
-            </View>
-
-            <View style={styles.rowFields}>
-              <View style={[styles.field, { flex: 0.6 }]}>
-                <Text style={styles.label}>Phone</Text>
-                <Input
-                  style={styles.input}
-                  placeholder="Phone number..."
-                  keyboardType="phone-pad"
-                  value={otherPersonInfo.phone}
-                  onChangeText={(text) => updatePersonInfo('phone', text)}
-                />
-              </View>
-
-              <View style={[styles.field, { flex: 0.4 }]}>
-                <Text style={styles.label}>Age</Text>
-                <Input
-                  style={styles.input}
-                  placeholder="Age..."
-                  keyboardType="number-pad"
-                  value={otherPersonInfo.age}
-                  onChangeText={(text) => updatePersonInfo('age', text)}
-                />
-              </View>
-            </View>
-
-            <View style={styles.field}>
-              <Text style={styles.label}>Gender</Text>
+              <Text style={styles.label}>Request Category</Text>
               <RNPickerSelect
-                onValueChange={(value) => updatePersonInfo('gender', value)}
-                items={genderOptions}
-                value={otherPersonInfo.gender}
+                onValueChange={(value) => updateFormData('requestCategory', value)}
+                items={Object.keys(categories).map((id) => {
+                  return { label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id }
+                })}
+                value={formData.requestCategory}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
+                  inputAndroid: pickerSelectStyles.inputAndroid,
+                }}
+              />
+            </View>
+
+            {subCategories.length > 0 && (
+              <View style={styles.field}>
+                <Text style={styles.label}>Subcategory</Text>
+                <RNPickerSelect
+                  onValueChange={(value) => updateFormData('requestSubCategory', value)}
+                  items={subCategories.map((subCat) => {
+                    return { label: t(`categories:REQUEST_CATEGORIES.${categories[formData.requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId }
+                  })}
+                  value={formData.requestSubCategory}
+                  style={{
+                    inputIOS: pickerSelectStyles.inputIOS,
+                    inputIOSContainer: pickerSelectStyles.inputIOSContainer,
+                    inputAndroid: pickerSelectStyles.inputAndroid,
+                  }}
+                />
+              </View>
+            )}
+
+            <View style={styles.field}>
+              <Text style={styles.label}>
+                Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
+              </Text>
+              <Input
+                style={styles.input}
+                maxLength={70}
+                placeholder="Enter subject..."
+                value={formData.requestSubject}
+                onChangeText={(text) => updateFormData('requestSubject', text)}
+              />
+            </View>
+
+            <View style={styles.field}>
+              <Text style={styles.label}>
+                Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)  <Icon
+                  name="paperclip"
+                  size={18}
+                  color="#374151"
+                  style={{ marginLeft: 8 }}
+                  onPress={handleFilePick}
+                />
+              </Text>
+
+              {/* Wrap Input in relative container to position microphone inside */}
+              <View style={{ position: 'relative' }}>
+                <Input
+                  style={[styles.textArea, { minHeight: 100, paddingRight: 40 }]}
+                  multiline
+                  numberOfLines={4}
+                  maxLength={500}
+                  placeholder="Describe your request..."
+                  value={formData.requestDescription}
+                  onChangeText={(text) => updateFormData('requestDescription', text)}
+                />
+                  <AudioRecorder
+                    visible={isRecorderVisible}
+                    onStop={(uri) => {
+                      setRecordedAudioUri(uri); // store audio URI
+                      setIsRecorderVisible(false); // close recorder
+                    }}
+                    onClose={() => setIsRecorderVisible(false)}
+                  />
+
+
+                {/* Microphone Icon to open Floating AudioRecorder */}
+                <TouchableOpacity
+                  onPress={() => setIsRecorderVisible(true)}
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 16, // adjust to vertically center
+                  }}
+                >
+                </TouchableOpacity>
+
+              </View>
+
+              {attachedFile && (
+                <Text style={styles.attachedFileText}>
+                  📎 {attachedFile.name}
+                </Text>
+              )}
+            </View>
+          </Tab>
+
+          <Tab label="Details">
+              {/* Details Field */}
+
+            <View style={styles.field}>
+              <Text style={styles.label}>For Self</Text>
+              <RNPickerSelect
+                onValueChange={(value) => updateFormData('requestForId', parseInt(value))}
+                items={
+                  enums?.requestFor
+                    ? Object.entries(enums.requestFor).map(([id, val]) => ({
+                      label: t(`enums:requestFor.${val}`),
+                      value: id,
+                    }))
+                    : [
+                      { label: 'Self', value: '0' },
+                      { label: 'Other', value: '1' },
+                    ]
+                }
+                value={String(formData.requestForId)}
+                style={{
+                  inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
+                  inputAndroid: pickerSelectStyles.inputAndroid,
+                }}
+              />
+            </View>
+
+            {/* Conditional Person Info Section */}
+            {!isSelfRequest() && (
+              <View style={styles.personInfoSection}>
+                <Text style={styles.sectionTitle}>Person Details</Text>
+                <Text style={styles.sectionSubtitle}>
+                  Please fill the details of the person you are submitting the request for.
+                </Text>
+
+                <View style={styles.field}>
+                  <Text style={styles.label}>
+                    First Name <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <Input
+                    style={styles.input}
+                    placeholder="Enter first name..."
+                    value={otherPersonInfo.firstName}
+                    onChangeText={(text) => updatePersonInfo('firstName', text)}
+                  />
+                </View>
+
+                <View style={styles.field}>
+                  <Text style={styles.label}>
+                    Last Name <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <Input
+                    style={styles.input}
+                    placeholder="Enter last name..."
+                    value={otherPersonInfo.lastName}
+                    onChangeText={(text) => updatePersonInfo('lastName', text)}
+                  />
+                </View>
+
+                <View style={styles.field}>
+                  <Text style={styles.label}>
+                    Email <Text style={{ color: 'red' }}>*</Text>
+                  </Text>
+                  <Input
+                    style={styles.input}
+                    placeholder="Enter email..."
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={otherPersonInfo.email}
+                    onChangeText={(text) => updatePersonInfo('email', text)}
+                  />
+                </View>
+
+                <View style={styles.rowFields}>
+                  <View style={[styles.field, { flex: 0.6 }]}>
+                    <Text style={styles.label}>Phone</Text>
+                    <Input
+                      style={styles.input}
+                      placeholder="Phone number..."
+                      keyboardType="phone-pad"
+                      value={otherPersonInfo.phone}
+                      onChangeText={(text) => updatePersonInfo('phone', text)}
+                    />
+                  </View>
+
+                  <View style={[styles.field, { flex: 0.4 }]}>
+                    <Text style={styles.label}>Age</Text>
+                    <Input
+                      style={styles.input}
+                      placeholder="Age..."
+                      keyboardType="number-pad"
+                      value={otherPersonInfo.age}
+                      onChangeText={(text) => updatePersonInfo('age', text)}
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.field}>
+                  <Text style={styles.label}>Gender</Text>
+                  <RNPickerSelect
+                    onValueChange={(value) => updatePersonInfo('gender', value)}
+                    items={genderOptions}
+                    value={otherPersonInfo.gender}
+                    style={{
+                      inputIOS: pickerSelectStyles.inputIOS,
+                      inputIOSContainer: pickerSelectStyles.inputIOSContainer,
+                      inputAndroid: pickerSelectStyles.inputAndroid,
+                    }}
+                  />
+                </View>
+
+                <View style={styles.field}>
+                  <Text style={styles.label}>Preferred Language</Text>
+                  <RNPickerSelect
+                    onValueChange={(value) => updatePersonInfo('preferredLanguage', value)}
+                    items={languageOptions}
+                    value={otherPersonInfo.preferredLanguage}
+                    style={{
+                      inputIOS: pickerSelectStyles.inputIOS,
+                      inputIOSContainer: pickerSelectStyles.inputIOSContainer,
+                      inputAndroid: pickerSelectStyles.inputAndroid,
+                    }}
+                  />
+                </View>
+              </View>
+            )}
+
+            <View style={styles.rowField}>
+              <Text style={styles.label}>Is Calamity?</Text>
+              <Switch
+                value={formData.isCalamity}
+                onValueChange={(value) => updateFormData('isCalamity', value)}
+                style={styles.switch}
+              />
+            </View>
+
+            <View style={styles.field}>
+              <Text style={styles.label}>Priority</Text>
+              <RNPickerSelect
+                onValueChange={(value) => updateFormData('requestPriorityId', parseInt(value))}
+                items={
+                  enums?.requestPriority
+                    ? Object.entries(enums.requestPriority).map(([id, val]) => ({
+                      label: t(`enums:requestPriority.${val}`),
+                      value: id,
+                    }))
+                    : [
+                      { label: 'LOW', value: '0' },
+                      { label: 'MEDIUM', value: '1' },
+                      { label: 'HIGH', value: '2' },
+                      { label: 'CRITICAL', value: '3' },
+                    ]
+                }
+                value={String(formData.requestPriorityId)}
+                style={{
+                  inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                   inputAndroid: pickerSelectStyles.inputAndroid,
                 }}
               />
             </View>
 
             <View style={styles.field}>
-              <Text style={styles.label}>Preferred Language</Text>
+              <Text style={styles.label}>Request Type</Text>
               <RNPickerSelect
-                onValueChange={(value) => updatePersonInfo('preferredLanguage', value)}
-                items={languageOptions}
-                value={otherPersonInfo.preferredLanguage}
+                onValueChange={(value) => updateFormData('requestTypeId', parseInt(value))}
+                items={
+                  enums?.requestType
+                    ? Object.entries(enums.requestType).map(([id, val]) => ({
+                      label: t(`enums:requestType.${val}`),
+                      value: id,
+                    }))
+                    : [
+                      { label: 'In Person', value: '0' },
+                      { label: 'Remote', value: '1' },
+                    ]
+                }
+                value={String(formData.requestTypeId)}
                 style={{
                   inputIOS: pickerSelectStyles.inputIOS,
+                  inputIOSContainer: pickerSelectStyles.inputIOSContainer,
                   inputAndroid: pickerSelectStyles.inputAndroid,
                 }}
               />
             </View>
-          </View>
-        )}
 
-        <View style={styles.rowField}>
-          <Text style={styles.label}>Is Calamity?</Text>
-          <Switch
-            value={formData.isCalamity}
-            onValueChange={(value) => updateFormData('isCalamity', value)}
-            style={styles.switch}
-          />
-        </View>
+            {/* Location input for In Person requests */}
+            {formData.requestTypeId === 0 && (
+              <View style={styles.field}>
+                <Text style={styles.label}>Location</Text>
+                <GooglePlacesAutocomplete
+                  placeholder='Search'
+                  onPress={(data, details = null) => {
+                    console.log(data, details);
+                    updateFormData('location', details?.description || data.description);
+                  }}
+                  onFail={(error) => {
+                    console.log('Google Place API Error:', error);
+                  }}
+                  query={{
+                    key: '',
+                    // key: process.env.GOOGLE_API_KEY,
+                    language: 'en',
+                  }}
+                  styles={{
+                    textInput: pickerSelectStyles.inputAndroid,
+                  }}
+                  disableScroll={true}
+                />
+              </View>
+            )}
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Priority</Text>
-          <RNPickerSelect
-            onValueChange={(value) => updateFormData('priority', value)}
-            items={
-              enums?.requestPriority
-                ? Object.values(enums.requestPriority).map((val) => ({
-                  label: t(`enums:requestPriority.${val}`),
-                  value: val,
-                }))
-                : [
-                  { label: 'LOW', value: '0' },
-                  { label: 'MEDIUM', value: '1' },
-                  { label: 'HIGH', value: '2' },
-                  { label: 'CRITICAL', value: '3' },
-                ]
-            }
-            value={formData.priority}
-            style={{
-              inputIOS: pickerSelectStyles.inputIOS,
-              inputAndroid: pickerSelectStyles.inputAndroid,
-            }}
-          />
-        </View>
+          </Tab>
+        </Tabs>
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Request Category</Text>
-          <RNPickerSelect
-            onValueChange={(value) => updateFormData('requestCategory', value)}
-            items={Object.keys(categories).map((id) => {
-              return { label: t(`categories:REQUEST_CATEGORIES.${categories[id].catName}.LABEL`), value: id }
-            })}
-            value={formData.requestCategory}
-            style={{
-              inputIOS: pickerSelectStyles.inputIOS,
-              inputAndroid: pickerSelectStyles.inputAndroid,
-            }}
-          />
-        </View>
-
-        {subCategories.length > 0 && (
-          <View style={styles.field}>
-            <Text style={styles.label}>Subcategory</Text>
-            <RNPickerSelect
-              onValueChange={(value) => updateFormData('requestSubCategory', value)}
-              items={subCategories.map((subCat) => {
-                return { label: t(`categories:REQUEST_CATEGORIES.${categories[formData.requestCategory].catName}.SUBCATEGORIES.${subCat.catName}.LABEL`), value: subCat.catId }
-              })}
-              value={formData.requestSubCategory}
-              style={{
-                inputIOS: pickerSelectStyles.inputIOS,
-                inputAndroid: pickerSelectStyles.inputAndroid,
-              }}
-            />
-          </View>
-        )}
-
-        <View style={styles.field}>
-          <Text style={styles.label}>Request Type</Text>
-          <RNPickerSelect
-            onValueChange={(value) => updateFormData('request_type', value)}
-            items={
-              enums?.requestType
-                ? Object.values(enums.requestType).map((val) => ({
-                  label: t(`enums:requestType.${val}`),
-                  value: val,
-                }))
-                : [
-                  { label: 'In Person', value: '0' },
-                  { label: 'Remote', value: '1' },
-                ]
-            }
-            value={formData.request_type}
-            style={{
-              inputIOS: pickerSelectStyles.inputIOS,
-              inputAndroid: pickerSelectStyles.inputAndroid,
-            }}
-          />
-        </View>
-
-        {/* Location input for In Person requests */}
-        {formData.request_type === "INPERSON" && (
-          <View style={styles.field}>
-            <Text style={styles.label}>Location</Text>
-            <GooglePlacesAutocomplete
-              placeholder='Search'
-              onPress={(data, details = null) => {
-                console.log(data, details);
-                updateFormData('location', details?.description || data.description);
-              }}
-              onFail={(error) => {
-                console.log('Google Place API Error:', error);
-              }}
-              query={{
-                key: '',
-                // key: process.env.GOOGLE_API_KEY,
-                language: 'en',
-              }}
-              styles={{
-                textInput: pickerSelectStyles.inputAndroid,
-              }}
-              disableScroll={true}
-            />
-          </View>
-        )}
-
-        <View style={styles.field}>
-          <Text style={styles.label}>
-            Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
-          </Text>
-          <Input
-            style={styles.input}
-            maxLength={70}
-            placeholder="Enter subject..."
-            value={formData.subject}
-            onChangeText={(text) => updateFormData('subject', text)}
-          />
-        </View>
-
-        <View style={styles.field}>
-          <Text style={styles.label}>
-            Description <Text style={{ color: 'red' }}>*</Text> (Max 500 characters)  <Icon
-              name="paperclip"
-              size={18}
-              color="#374151"
-              style={{ marginLeft: 8 }}
-              onPress={handleFilePick}
-            />
-          </Text>
-
-          {/* Wrap Input in relative container to position microphone inside */}
-          <View style={{ position: 'relative' }}>
-            <Input
-              style={[styles.textArea, { minHeight: 100, paddingRight: 40 }]}
-              multiline
-              numberOfLines={4}
-              maxLength={500}
-              placeholder="Describe your request..."
-              value={formData.description}
-              onChangeText={(text) => updateFormData('description', text)}
-            />
-              <AudioRecorder
-                visible={isRecorderVisible}
-                onStop={(uri) => {
-                  setRecordedAudioUri(uri); // store audio URI
-                  setIsRecorderVisible(false); // close recorder
-                }}
-                onClose={() => setIsRecorderVisible(false)}
-              />
-
-
-            {/* Microphone Icon to open Floating AudioRecorder */}
-            <TouchableOpacity
-              onPress={() => setIsRecorderVisible(true)}
-              style={{
-                position: 'absolute',
-                right: 10,
-                top: 16, // adjust to vertically center
-              }}
-            >
-            </TouchableOpacity>
-
-          </View>
-
-          {attachedFile && (
-            <Text style={styles.attachedFileText}>
-              📎 {attachedFile.name}
-            </Text>
-          )}
-        </View>
-
+        
         <View style={styles.buttonContainer}>
           <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
             Cancel
           </Button>
-          <Button backgroundColor="blue" onPress={handleSubmit}>
+          <Button backgroundColor="blue" onPress={handleSubmit} loading={loading}>
             Submit
           </Button>
         </View>
@@ -725,6 +789,10 @@ const pickerSelectStyles = StyleSheet.create({
     color: '#374151',
     paddingRight: 30,
     backgroundColor: '#f9fafb',
+  },
+  // https://github.com/lawnstarter/react-native-picker-select/issues/719#issuecomment-3549813072
+  inputIOSContainer: {
+    zIndex:100,
   },
   inputAndroid: {
     fontSize: 16,

@@ -9,7 +9,7 @@
       "DESC": "Acesse apoio alimentar, serviços de mercearia e ajuda para cozinhar.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Assistência Alimentar",
+          "LABEL": "Assistência alimentar",
           "DESC": "Encontre bancos de alimentos, despensas ou programas de refeições."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
@@ -104,9 +104,9 @@
       "LABEL": "Saúde e bem-estar",
       "DESC": "Navegação não clínica em saúde e suporte ao bem-estar.",
       "SUBCATEGORIES": {
-        "MEDICAL_NAVIGATION": {
-          "LABEL": "Navegação Médica",
-          "DESC": "Navegação básica e orientação não clínica."
+        "MEDICAL_CONSULTATION": {
+          "LABEL": "Consulta médica",
+          "DESC": "Ajuda para coordenar teleconsultas ou informações básicas."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "Entrega de medicamentos",
@@ -135,7 +135,7 @@
           "DESC": "Ajuda com moradia e mudança para idosos."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Suporte Digital para Idosos",
+          "LABEL": "Ajuda digital para idosos",
           "DESC": "Assistência com dispositivos e aplicativos."
         },
         "MEDICAL_HELP": {

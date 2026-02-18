@@ -42,6 +42,7 @@
   "NEW_PASSWORD": "Bagong Password",
   "CONFIRM_PASSWORD": "Kumpirmahin ang Password",
   "PASSWORD_REQUIREMENTS": "Dapat maglaman ng hindi bababa sa 8 character.",
+<<<<<<< HEAD
   "PASSWORD_REQUIREMENTS_ERROR": "Dapat na hindi bababa sa 8 character ang haba ng password, may kasamang 1 malaking titik, 1 maliit na titik, 1 espesyal na character, at 1 numero.",
   "PASSWORD_MISMATCH_ERROR": "Hindi tugma ang mga password.",
   "PASSWORD_CHANGE_SUCCESS": "Matagumpay na nabago ang password!",

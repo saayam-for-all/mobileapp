@@ -25,6 +25,7 @@
     "CLOTHING_SUPPORT": {
       "LABEL": "Soporte de ropa",
       "DESC": "Done, pida prestado, repare o solicite asistencia para ropa.",
+
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
           "LABEL": "donar ropa",
@@ -104,9 +105,9 @@
       "LABEL": "Salud y bienestar",
       "DESC": "Navegación de salud no clínica y soporte de bienestar.",
       "SUBCATEGORIES": {
-        "MEDICAL_NAVIGATION": {
-          "LABEL": "Navegación médica",
-          "DESC": "Navegación básica y orientación no clínica."
+        "MEDICAL_CONSULTATION": {
+          "LABEL": "Consulta médica",
+          "DESC": "Ayuda para coordinar teleconsultas o información básica."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "Entrega de medicamentos",

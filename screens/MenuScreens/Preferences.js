@@ -15,7 +15,6 @@ const Preferences = () => {
   const navigation = useNavigation();
 
   const [user, setUser] = useState(undefined);
-
   const defaultDefaultDashboardView = {
     label: t("DEFAULT DASHBOARD VIEW"),
     value: "default",
@@ -270,7 +269,6 @@ const Preferences = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

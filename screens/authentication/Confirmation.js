@@ -18,6 +18,21 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   const inputRef = useRef(null);
 
   useEffect(() => {
+    if (fromSignIn) {
+      resendCode();
+    }
+  },[]);
+
+
+  useEffect(() => {
+    if (isUpdate) {
+      setCanResend(false);
+      setTimer(undefined);
+      setError(
+        "Resend code not available for update email. \nIf not received, please try updating your email again from the profile page."
+      );
+      return;
+    }
     if (timer > 0) {
       const interval = setInterval(() => {
         setTimer((prev) => prev - 1);

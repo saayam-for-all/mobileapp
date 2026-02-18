@@ -27,7 +27,7 @@
   "HELP_REQUEST_BUTTON": "Demande d'aide",
   "NEW_MATCH_REQUEST": "Nouvelle demande de correspondance",
   "ACCEPT": "Accepter",
-  "DENY": "Refuser",
+  "ACCEPT_COOKIES": "Accepter les cookies",
   "ACCEPT_SUCCESS_MESSAGE": "Vous avez accepté cette demande.",
   "DENY_SUCCESS_MESSAGE": "Vous avez refusé cette demande.",
   "OUR_MISSION": "Notre mission",
@@ -149,6 +149,7 @@
   "INTRODUCTION_CONTENT": "Cet accord de bénévolat (« Accord ») est conclu entre Saayam for All (« Organisation ») et le bénévole (« Volontaire ») dès son acceptation. En signant ou en acceptant électroniquement, le bénévole reconnaît avoir compris et accepté les conditions des présentes, qui régissent sa participation à toute activité bénévole au sein de l'Organisation.",
   "VOLUNTEER_ROLE": "Rôle et responsabilités du bénévole",
   "VOLUNTEER_ROLE_CONTENT": "Le volontaire s'engage à remplir les rôles et responsabilités assignés par l'Organisation, qui peuvent inclure, sans s'y limiter, l'assistance dans diverses tâches selon les besoins des individus ou des communautés demandant de l'aide. Le bénévole s'engage à : <1/> - S'engager dans les activités assignées par l'Organisation de manière diligente, responsable et professionnelle. <1/> - Communiquer rapidement avec l'organisation concernant la disponibilité, les progrès et les défis. <1/> - Effectuer les tâches assignées rapidement et au mieux de leurs capacités, en respectant les délais spécifiés.",
+
   "CONDUCT_CODE": "Code de conduite",
   "CONDUCT_CODE_CONTENT": "Le bénévole s'engage à maintenir les normes de comportement éthique les plus élevées tout en représentant l'Organisation. Cela inclut : <1/> - Traiter tous les individus avec respect et dignité, quels que soient leur race, leur religion, leur sexe, leur orientation sexuelle, leur âge ou leur handicap. <1/> - S'abstenir de toute forme de discrimination, de harcèlement ou de comportement non professionnel. <1/> - Éviter les conflits d'intérêts et s'assurer que les intérêts personnels n'interfèrent pas avec leurs fonctions bénévoles.",
   "CONFIDENTIALITY_AGREEMENT": "Accord de confidentialité",

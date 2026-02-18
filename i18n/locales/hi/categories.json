@@ -48,7 +48,7 @@
         }
       }
     },
-    "HOUSING_SUPPORT": {
+    "HOUSING_ASSISTANCE": {
       "LABEL": "आवास सहायता",
       "DESC": "रूममेट, किराये का मार्गदर्शन, स्थानांतरण और घर की व्यवस्था में सहायता।",
       "SUBCATEGORIES": {

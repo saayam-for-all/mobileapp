@@ -56,6 +56,8 @@ export default function SignUp({ navigation }) {
   const [emailValid, setEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
 
+  const [loading, setLoading] = useState(false);
+
   const [invalidMessage, setInvalidMessage] = useState(null);
 
   // ✅ Independent show/hide toggles

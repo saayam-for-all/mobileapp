@@ -23,14 +23,18 @@ const EditProfile = () => {
   const [backupProfile, setBackupProfile] = useState({});
 
   const navigation = useNavigation();
-  const user = useAuthUser(navigation, (user) => {
-    const attributes = user?.attributes;
-    const { email, family_name, given_name, phone_number } = attributes;
-    setFirstName(given_name);
-    setLastName(family_name);
-    setPrimaryEmail(email);
-    setPrimaryPhoneNumber(phone_number);
-  });
+  const user = useAuthUser();
+
+  useEffect(() => {
+    if (user) {
+      const attributes = user?.attributes;
+      const { email, family_name, given_name, phone_number } = attributes;
+      setFirstName(given_name);
+      setLastName(family_name);
+      setPrimaryEmail(email);
+      setPrimaryPhoneNumber(phone_number);
+    }
+}, [user]);
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
@@ -117,6 +121,7 @@ const EditProfile = () => {
   };
 
   async function updateUser(user) {
+    AsyncStorage.setItem('user_updated', 'false');
     try {
       if (primaryEmail !== user?.attributes?.email) {
         console.log("Needs verification");
@@ -138,6 +143,18 @@ const EditProfile = () => {
     }
   }
 
+  // ✨ Edit mode handlers
+  const handleEdit = () => {
+    setBackupProfile({
+      firstName,
+      lastName,
+      primaryEmail,
+      primaryPhoneNumber,
+      zoneinfo,
+    });
+    setIsEditing(true);
+  };
+
   const handleSave = async () => {
     if (validateForm()) {
       const user = await Auth.currentAuthenticatedUser();
@@ -147,9 +164,7 @@ const EditProfile = () => {
         firstName,
         lastName,
         primaryEmail,
-        secondaryEmail,
         primaryPhoneNumber,
-        secondaryPhoneNumber,
         zoneinfo,
       });
 
@@ -162,9 +177,7 @@ const EditProfile = () => {
       setFirstName(backupProfile.firstName);
       setLastName(backupProfile.lastName);
       setPrimaryEmail(backupProfile.primaryEmail);
-      setSecondaryEmail(backupProfile.secondaryEmail);
       setPrimaryPhoneNumber(backupProfile.primaryPhoneNumber);
-      setSecondaryPhoneNumber(backupProfile.secondaryPhoneNumber);
       setzoneinfo(backupProfile.zoneinfo);
     }
     setIsEditing(false);
@@ -237,28 +250,11 @@ const EditProfile = () => {
         placeholder={{ label: t("SELECT_COUNTRY"), value: null }}
         useNativeAndroidPickerStyle={false}
         style={{
-          inputIOS: {
-            ...styles.inputIOS,
-            borderColor: "#ccc",
-            borderWidth: 1,
-            borderRadius: 8,
-            backgroundColor: "#fff",
-            height: 50,
-            paddingHorizontal: 10,
-            paddingVertical: 12,
-            color: "#000",
+          inputIOS: styles.input,
+          inputIOSContainer: {
+            zIndex:100,
           },
-          inputAndroid: {
-            ...styles.inputAndroid,
-            borderColor: "#ccc",
-            borderWidth: 1,
-            borderRadius: 8,
-            backgroundColor: "#fff",
-            height: 50,
-            paddingHorizontal: 10,
-            paddingVertical: 6,
-            color: "#000",
-          },
+          inputAndroid: styles.input,
           placeholder: {
             color: "#9CA3AF",
           },
@@ -288,7 +284,6 @@ const EditProfile = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

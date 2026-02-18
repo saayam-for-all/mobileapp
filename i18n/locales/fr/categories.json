@@ -52,7 +52,27 @@
       "LABEL": "Aide au logement",
       "DESC": "Colocataires, conseils en location, aide au déménagement et à l'installation du logement.",
       "SUBCATEGORIES": {
-        "FIND_A_ROOMMATE": {
+        "LEASE_SUPPORT": {
+          "LABEL": "Soutien aux baux",
+          "DESC": "Aide pour comprendre les clauses et exigences du bail."
+        },
+        "TENANT_RENT_SUPPORT": {
+          "LABEL": "Aide au paiement du loyer",
+          "DESC": "Conseils lorsque vous avez des difficultés à payer le loyer."
+        },
+        "REPAIR_MAINTENANCE_SUPPORT": {
+          "LABEL": "Soutien réparations et maintenance",
+          "DESC": "Assistance pour organiser des réparations domestiques de base."
+        },
+        "UTILITIES_SETUP_SUPPORT": {
+          "LABEL": "Installation des services essentiels",
+          "DESC": "Aide pour activer internet, électricité ou autres services."
+        },
+        "LOOKING_FOR_RENTAL": {
+          "LABEL": "Recherche de logement à louer",
+          "DESC": "Soutien pour trouver un appartement ou une chambre."
+        },
+        "FIND_ROOMATE": {
           "LABEL": "Trouver un colocataire",
           "DESC": "Obtenez de l'aide pour trouver un colocataire."
         },
@@ -118,7 +138,7 @@
         },
         "MEDICATION_REMINDERS": {
           "LABEL": "Rappels de médicaments",
-          "DESC": "Rappels de médicaments non cliniques."
+          "DESC": "Rappels non cliniques pour la prise de médicaments."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
           "LABEL": "Orientation en matière d'éducation sanitaire",
@@ -138,9 +158,9 @@
           "LABEL": "Accompagnement numérique pour les seniors",
           "DESC": "Assistance avec les appareils et les applications."
         },
-        "MEDICAL_HELP": {
-          "LABEL": "Aide médicale",
-          "DESC": "Assistance médicale non clinique pour les personnes âgées."
+        "MEDICATION_MANAGEMENT": {
+          "LABEL": "Gestion des médicaments",
+          "DESC": "Suivi des horaires, rappels et stockage des traitements."
         },
         "ERRANDS_TRANSPORTATION": {
           "LABEL": "Courses et transport",

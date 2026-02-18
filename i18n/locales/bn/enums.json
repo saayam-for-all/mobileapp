@@ -11,6 +11,7 @@
   },
   "requestStatus": {
     "CREATED": "তৈরি হয়েছে",
+<<<<<<< HEAD
     "MATCHING VOLUNTEER": "ম্যাচিং স্বেচ্ছাসেবক",
     "MANAGED": "পরিচালিত",
     "RESOLVED": "সমাধান করা হয়েছে",
@@ -19,6 +20,18 @@
   },
   "requestType": {
     "INPERSON": "ব্যক্তিগতভাবে",
+=======
+    "MATCHING_VOLUNTEER": "স্বেচ্ছাসেবক খোঁজা হচ্ছে",
+    "MANAGED": "পরিচালিত",
+    "RESOLVED": "সমাধান হয়েছে",
+    "CANCELLED": "বাতিল করা হয়েছে",
+    "DELETED": "মুছে ফেলা হয়েছে",
+    "RATED_BY_REQUESTER": "অনুরোধকারী দ্বারা মূল্যায়িত",
+    "RATED_BY_VOLUNTEER": "স্বেচ্ছাসেবক দ্বারা মূল্যায়িত"
+  },
+  "requestType": {
+    "IN_PERSON": "সরাসরি",
+>>>>>>> 01813da1e51a900a0c6d88480f4d001c19392aae
     "REMOTE": "দূরবর্তী"
   }
 }

@@ -10,7 +10,7 @@
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
           "LABEL": "食品援助",
-          "DESC": "查找食品银行、食品储藏室或膳食计划。"
+          "DESC": "寻找食物银行、救助站或供餐项目。"
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
           "LABEL": "杂货购物和送货",
@@ -52,7 +52,27 @@
       "LABEL": "住房支持",
       "DESC": "室友、租赁指导、搬家和家居设置支持。",
       "SUBCATEGORIES": {
-        "FIND_A_ROOMMATE": {
+        "LEASE_SUPPORT": {
+          "LABEL": "租约支持",
+          "DESC": "帮助理解租约条款与要求。"
+        },
+        "TENANT_RENT_SUPPORT": {
+          "LABEL": "租金协助",
+          "DESC": "当支付房租有困难时提供指导。"
+        },
+        "REPAIR_MAINTENANCE_SUPPORT": {
+          "LABEL": "维修与维护支持",
+          "DESC": "协助安排基本的家庭维修。"
+        },
+        "UTILITIES_SETUP_SUPPORT": {
+          "LABEL": "公共服务开通",
+          "DESC": "帮助开通网络、电力等基本服务。"
+        },
+        "LOOKING_FOR_RENTAL": {
+          "LABEL": "寻找租住房",
+          "DESC": "协助寻找公寓或合租房间。"
+        },
+        "FIND_ROOMATE": {
           "LABEL": "寻找室友",
           "DESC": "寻求帮助寻找室友。"
         },
@@ -68,9 +88,9 @@
           "LABEL": "搬家协助",
           "DESC": "支持搬家和包装。"
         },
-        "CLEANING_HELP": {
-          "LABEL": "清洁帮助",
-          "DESC": "协助完成基本清洁任务。"
+        "BOOKING_PACKERS_MOVERS_SUPPORT": {
+          "LABEL": "预订搬家公司支持",
+          "DESC": "指导你预订可靠的搬家服务。"
         },
         "HOME_REPAIR_SUPPORT": {
           "LABEL": "上门维修支持",
@@ -114,7 +134,7 @@
         },
         "MENTAL_WELLBEING_SUPPORT": {
           "LABEL": "心理健康支持",
-          "DESC": "获取一般心理健康资源。"
+          "DESC": "获取通用的心理健康资源。"
         },
         "MEDICATION_REMINDERS": {
           "LABEL": "用药提醒",

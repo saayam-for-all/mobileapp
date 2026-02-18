@@ -15,7 +15,9 @@
     "MANAGED": "Удалось",
     "RESOLVED": "Решено",
     "CANCELLED": "Отменено",
-    "DELETED": "Удалено"
+    "DELETED": "Удалено",
+    "RATED_BY_REQUESTER": "Оценено запросившим",
+    "RATED_BY_VOLUNTEER": "Оценено волонтёром"
   },
   "requestType": {
     "INPERSON": "Лично",

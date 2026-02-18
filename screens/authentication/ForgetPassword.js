@@ -46,8 +46,12 @@ function ForgetPassword({ navigation }) {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const [codeLoading, setCodeLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
   const getConfirmationCode = async () => {
     if (email.length > 4) {
+      setCodeLoading(true);
       Auth.forgotPassword(email)
         .then(() => {
           setEditableInput(true);

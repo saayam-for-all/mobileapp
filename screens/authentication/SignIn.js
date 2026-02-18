@@ -111,6 +111,8 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const [biometricType, setBiometricType] = useState(null);
   const [hasStoredCredentials, setHasStoredCredentials] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     checkBiometricAvailability();
     checkStoredCredentials();
@@ -310,7 +312,6 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       </Text>
 
       <Spacer size={30} />
-
       <Button onPress={signIn} style={{ width: "100%" }}>
         {t("SIGN_IN")}
       </Button>

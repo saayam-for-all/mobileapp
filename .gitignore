@@ -37,4 +37,4 @@ yarn-error.*
 aws-exports.js
 amplifyconfiguration*
 android/
-ios/env.local
+ios
