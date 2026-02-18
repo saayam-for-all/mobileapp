@@ -7,6 +7,7 @@ import i18n from "../../i18n/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../../hooks/useAuthUser";
 import { useTranslation } from "react-i18next";
+import * as Localization from "expo-localization";
 
 const LANGUAGE_KEY = "appLanguage";
 
@@ -53,6 +54,7 @@ const Preferences = () => {
   const [backupProfile, setBackupProfile] = useState({});
 
   const languageOptions = [
+    { value: "default", label: "Default (Device Language)" },
     { value: "bn", label: t("Bengali") },
     { value: "de", label: t("German") },
     { value: "en", label: t("English") },
@@ -78,16 +80,29 @@ const Preferences = () => {
     (async () => {
       try {
         const saved = await AsyncStorage.getItem(LANGUAGE_KEY);
+
         if (saved) {
           setFirstLanguage(saved);
+
+          if (saved === "default") {
+            const deviceLang = Localization.locale.split("-")[0];
+            await i18n.changeLanguage(deviceLang);
+          } else {
+            await i18n.changeLanguage(saved);
+          }
         } else {
-          setFirstLanguage("te");
+          // First time app opens → set to default
+          setFirstLanguage("default");
+
+          const deviceLang = Localization.locale.split("-")[0];
+          await i18n.changeLanguage(deviceLang);
         }
       } catch (e) {
         console.log("Error loading saved language:", e);
       }
     })();
   }, []);
+
 
   const handleEdit = () => {
     setBackupProfile({
@@ -114,26 +129,33 @@ const Preferences = () => {
   };
 
   const handleSave = async () => {
-    const langToApply = firstLanguage || "te";
-
     try {
-      console.log("Changing language to:", langToApply);
+      let langToApply;
 
-      await AsyncStorage.setItem(LANGUAGE_KEY, langToApply);
+      if (firstLanguage === "default") {
+        // Detect device language
+        langToApply = Localization.locale.split("-")[0];
+      } else {
+        langToApply = firstLanguage;
+      }
+
+      console.log("Saving language preference:", firstLanguage);
+      console.log("Applying language:", langToApply);
+
+      // Save preference (not actual language, but preference)
+      await AsyncStorage.setItem(LANGUAGE_KEY, firstLanguage);
+
+      // Apply actual language
       await i18n.changeLanguage(langToApply);
 
       Alert.alert(
         t("PREFERENCES UPDATED SUCCESS"),
-        // No existing key for "Your preferences have been saved successfully."
-        // Closest is preferences.messages.saved, but that lives in preferences.json (not in your profile/common keys list here).
-        // So we use the existing success key only.
         t("PREFERENCES UPDATED SUCCESS")
       );
 
       setIsEditing(false);
     } catch (e) {
       console.log("Error saving/applying language:", e);
-      // No existing key for this error message; leaving as-is per your rule
       Alert.alert("Error", "Failed to apply language. Please try again.");
     }
   };
@@ -197,9 +219,9 @@ const Preferences = () => {
           color="#007BFF"
           onPress={() => setEmailPreference(true)}
         />
-        {/* No key for "Primary Email:" as a combined label; using existing PRIMARY_EMAIL */}
+        {/* No key for "Primary Email:" as a combined label; using existing PRIMARY EMAIL */}
         <Text style={styles.label}>
-          {t("PRIMARY_EMAIL")}: {primaryEmail}
+          {t("PRIMARY EMAIL")}: {primaryEmail}
         </Text>
       </View>
 
@@ -225,7 +247,7 @@ const Preferences = () => {
           onPress={() => setPhonePreference(true)}
         />
         <Text style={styles.label}>
-          {t("PRIMARY_PHONE")}: {primaryPhone}
+          {t("PRIMARY PHONE")}: {primaryPhone}
         </Text>
       </View>
 

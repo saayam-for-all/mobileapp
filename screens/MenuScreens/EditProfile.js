@@ -207,7 +207,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder={t("PRIMARY_EMAIL")}
+        placeholder={t("PRIMARY EMAIL")}
         keyboardType="email-address"
         value={primaryEmail}
         onChangeText={setPrimaryEmail}

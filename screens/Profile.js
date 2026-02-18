@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 const DEFAULT_PROFILE_ICON = require("../assets/rn-logo.png");
 
 export default function Profile({ signOut }) {
-  const { t } = useTranslation("profile");
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -270,10 +270,7 @@ export default function Profile({ signOut }) {
 
         <TouchableOpacity style={styles.optionRow} onPress={confirmSignOut}>
           <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-          {/* common.json has LOGOUT, but we're using profile namespace here; profile.json also has SIGN_OFF.
-              Your UI label is "Log Out" so we can use common.LOGOUT if you prefer.
-              Sticking to profile namespace rule: using SIGN_OFF would change meaning, so leaving "Log Out" as-is. */}
-          <Text style={styles.optionText}>Log Out</Text>
+          <Text style={styles.optionText}>{t("LOGOUT")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
       </ScrollView>
