@@ -12,6 +12,9 @@ import { useIsFocused } from '@react-navigation/native';
 import Spacer from '../../components/Spacer';
 import CarouselComponent from '../../components/Carousel';
 import config from '../../components/config';
+import i18n from '../../i18n/i18n';
+import * as Localization from 'expo-localization';
+import { useEffect } from 'react';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,16 +50,34 @@ const styles = StyleSheet.create({
 });
 
 const Welcome = ({ navigation }) => {
+
   const { t } = useTranslation();
+  const isFocused = useIsFocused();
   const topOffset = Math.round(config.deviceHeight * 0.03);
+
+  useEffect(() => {
+    if (isFocused) {
+      const deviceLang = Localization.locale.split('-')[0];
+
+      console.log("Welcome Screen Device Language:", deviceLang);
+
+      if (i18n.language !== deviceLang) {
+        i18n.changeLanguage(deviceLang);
+      }
+    }
+  }, [isFocused]);
+
   return (
-    <SafeAreaView style={[styles.container , { marginTop: topOffset }]}>
+    <SafeAreaView style={[styles.container, { marginTop: topOffset }]}>
       <Header />
       <CarouselComponent />
 
       <View style={styles.content}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', margin:'2%'}}>{t('WELCOME_TEXT')}</Text>
-        <Text style={{fontSize: 16, margin:'2%'}} >
+        <Text style={{ fontSize: 18, fontWeight: 'bold', margin: '2%' }}>
+          {t('WELCOME_TEXT')}
+        </Text>
+
+        <Text style={{ fontSize: 16, margin: '2%' }} >
           {t('WELCOME_INTRO')}
           <Text
             style={styles.advertLinkText}
@@ -65,12 +86,14 @@ const Welcome = ({ navigation }) => {
             {' '}{t('HERE')}
           </Text>
         </Text>
-        <Spacer size='30'/>
-        {/* Sign In and Sign Up buttons */}
-        <Button onPress={() => navigation.navigate('SignIn')} style={{width:'100%', marginVertical:'3%'}}>
+
+        <Spacer size='30' />
+
+        <Button onPress={() => navigation.navigate('SignIn')} style={{ width: '100%', marginVertical: '3%' }}>
           {t('SIGN_IN')}
         </Button>
-        <Button onPress={() => navigation.navigate('SignUp')} style={{width:'100%', marginVertical:'3%'}}>
+
+        <Button onPress={() => navigation.navigate('SignUp')} style={{ width: '100%', marginVertical: '3%' }}>
           {t('SIGNUP')}
         </Button>
       </View>
