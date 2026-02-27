@@ -10,7 +10,7 @@ import useAuthUser from '../hooks/useAuthUser';
 const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
 
 function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePhoto }) {
-    const [file, setFile] = useState(profilePhoto);
+    const [file, setFile] = useState({});
     const [error, setError] = useState(null);
     const [photoLoading, setPhotoLoading] = useState(false);
     const pendingFileRef = useRef(null);
@@ -19,26 +19,9 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
     const userDbId = user?.attributes?.userDbId;
 
     useEffect(() => {
-        const getImage = async () => {
-            if (userDbId) {
-                try {
-                    const blob = await fetchProfileImage(userDbId);
-                    if (blob) {
-                        const url = URL.createObjectURL(blob);
-                        setFile({ uri: url });
-                        await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: url }));
-                    }
-                } catch {
-                    const value = await AsyncStorage.getItem('profilePhoto');
-                    if (value) setFile(JSON.parse(value));
-                }
-            } else {
-                const value = await AsyncStorage.getItem('profilePhoto');
-                if (value) setFile(JSON.parse(value));
-            }
-        };
-        if (!file?.uri) getImage();
-    }, [userDbId]);
+        if (!isModalOpen) return;
+        setFile(profilePhoto);
+    }, [isModalOpen]);
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -139,10 +122,10 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
                             <Text>Upload</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{marginHorizontal:10}} onPress={handleDeleteClick} disabled={photoLoading}>
+                    <TouchableOpacity style={{marginHorizontal:10}} onPress={handleCancelClick} disabled={photoLoading}>
                         <View style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                            <FontAwesome name="trash" size={24} color="black" />
-                            <Text>Delete</Text>
+                            <FontAwesome name="times" size={24} color="black" />
+                            <Text>Cancel</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -154,10 +137,10 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
                             <Text style={{marginHorizontal:5,...styles.buttonText}}>Save</Text>
                         </View>
                     </Button>
-                    <Button style={{width:"45%"}} onPress={handleCancelClick} disabled={photoLoading}>
+                    <Button style={{width:"45%"}} onPress={handleDeleteClick} disabled={photoLoading}>
                         <View style={{...styles.rowContainer, width:"100%"}}>
-                            <FontAwesome style={{marginHorizontal:5}} name="times" size={24} color="white" />
-                            <Text style={{marginHorizontal:5,...styles.buttonText}}>Cancel</Text>
+                            <FontAwesome style={{marginHorizontal:5}} name="trash" size={24} color="white" />
+                            <Text style={{marginHorizontal:5,...styles.buttonText}}>Delete</Text>
                         </View>
                     </Button>
                 </View>

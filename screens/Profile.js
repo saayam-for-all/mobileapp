@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -16,6 +17,7 @@ import api from "../services/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../hooks/useAuthUser";
+import { fetchProfileImage } from "../services/volunteerServices";
 
 const styles = StyleSheet.create({
   container: {
@@ -91,6 +93,32 @@ export default function Profile({ signOut }) {
 
   const [profileData, setProfileData] = useState(null);
   const user = useAuthUser();
+  const userDbId = user?.attributes?.userDbId;
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused) return;
+    const getImage = async () => {
+      if (userDbId) {
+        try {
+          const blob = await fetchProfileImage(userDbId);
+          console.log("Fetched profile image blob:", blob);
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            setProfilePhoto({ uri: url });
+            await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: url }));
+          }
+        } catch {
+          const value = await AsyncStorage.getItem('profilePhoto');
+          if (value) setProfilePhoto(JSON.parse(value));
+        }
+      } else {
+        const value = await AsyncStorage.getItem('profilePhoto');
+        if (value) setProfilePhoto(JSON.parse(value));
+      }
+    };
+    getImage();
+  }, [isFocused, userDbId]);
 
   useEffect(() => {
     if (user) {
