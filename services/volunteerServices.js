@@ -51,12 +51,11 @@ export const uploadProfileImage = async (userId, file) => {
   if (!userId) throw new Error("User ID is required");
   const base64 = await fileToBase64(file);
   const contentType = file.type === "image/png" ? "image/png" : "image/jpeg";
-  const res = await api.post(endpoints.UPLOAD_PROFILE_IMAGE, {
+  await api.post(endpoints.UPLOAD_PROFILE_IMAGE, {
     userId,
     contentType,
     base64,
   });
-  console.log("Upload response:", res.data);
 };
 
 /**

@@ -18,6 +18,7 @@ import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../hooks/useAuthUser";
 import { fetchProfileImage } from "../services/volunteerServices";
+import { blobToBase64 } from "../utils/blobToBase64";
 
 const styles = StyleSheet.create({
   container: {
@@ -102,13 +103,13 @@ export default function Profile({ signOut }) {
       if (userDbId) {
         try {
           const blob = await fetchProfileImage(userDbId);
-          console.log("Fetched profile image blob:", blob);
           if (blob) {
-            const url = URL.createObjectURL(blob);
-            setProfilePhoto({ uri: url });
-            await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: url }));
+            const base64 = await blobToBase64(blob);
+            setProfilePhoto({ uri: base64 });
+            await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: base64 }));
           }
-        } catch {
+        } catch (err) {
+          console.log("Error fetching profile image:", err);
           const value = await AsyncStorage.getItem('profilePhoto');
           if (value) setProfilePhoto(JSON.parse(value));
         }

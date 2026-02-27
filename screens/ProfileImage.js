@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { uploadProfileImage, deleteProfileImage, fetchProfileImage } from '../services/volunteerServices';
 import useAuthUser from '../hooks/useAuthUser';
+import { blobToBase64 } from '../utils/blobToBase64';
 
 const DEFAULT_PROFILE_ICON = require('../assets/rn-logo.png');
 
@@ -49,10 +50,10 @@ function ProfileImage({ isModalOpen, setIsModalOpen, profilePhoto, setProfilePho
                 await uploadProfileImage(userDbId, pendingFileRef.current);
                 const blob = await fetchProfileImage(userDbId);
                 if (blob) {
-                    const url = URL.createObjectURL(blob);
-                    setFile({ uri: url });
-                    setProfilePhoto({ uri: url });
-                    await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: url }));
+                    const base64 = await blobToBase64(blob);
+                    setFile({ uri: base64 });
+                    setProfilePhoto({ uri: base64 });
+                    await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: base64 }));
                 }
             } catch (err) {
                 setError(err?.message || 'Failed to upload profile photo.');
