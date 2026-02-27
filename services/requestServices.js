@@ -1,18 +1,22 @@
 import api from "./api";
+// import axios from "axios";
 import endpoints from "./endpoints.json";
 
 export const getMyRequests = async () => {
   const response = await api.get(endpoints.GET_MY_REQUESTS);
   return response.data;
 };
+
 export const getOthersRequests = async () => {
   const response = await api.get(endpoints.GET_OTHERS_REQUESTS);
   return response.data;
 };
+
 export const getManagedRequests = async () => {
   const response = await api.get(endpoints.GET_MANAGED_REQUESTS);
   return response.data;
 };
+
 export const getComments = async () => {
   const response = await api.get(endpoints.GET_REQUEST_COMMENTS);
   return response.data;
@@ -24,13 +28,17 @@ export const checkProfanity = async (content) => {
 };
 
 export const createRequest = async (request) => {
-  console.log("Creating request:", request);
   const response = await api.post(endpoints.CREATE_HELP_REQUEST, request);
   return response.data;
 };
 
-export const getEmergencyContactInfo = async () => {
-  const response = await api.get(endpoints.GET_EMERGENCY_CONTACT);
+export const getEmergencyContactInfo = async ({ lat, lng } = {}) => {
+  const response = await api.get(endpoints.GET_EMERGENCY_CONTACT, {
+    params:
+      typeof lat === "number" && typeof lng === "number"
+        ? { lat, lng }
+        : undefined,
+  });
   return response.data;
 };
 
@@ -59,6 +67,16 @@ export const getEnums = async () => {
   return response.data;
 };
 
+export const getMetadata = async () => {
+  const response = await api.get(endpoints.GET_METADATA);
+  return response.data;
+};
+
+export const getEnvironment = async () => {
+  const response = await api.get(endpoints.GET_ENVIRONMENT);
+  return response.data;
+};
+
 export const uploadRequestFile = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
@@ -73,5 +91,12 @@ export const uploadRequestFile = async (file) => {
     },
   );
 
+  return response.data;
+};
+
+export const speechDetectV2 = async (audioContent) => {
+  const response = await api.post(endpoints.SPEECH_DETECT_V2, {
+    audioContent,
+  });
   return response.data;
 };

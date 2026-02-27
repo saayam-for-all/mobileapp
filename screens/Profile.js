@@ -103,16 +103,6 @@ export default function Profile({ signOut }) {
     }
 }, [user]);
 
-  useEffect(() => {
-    const getImage = async () => {      
-      const value = await AsyncStorage.getItem("profilePhoto");
-      console.log(profilePhoto);
-      if (value)
-        setProfilePhoto(JSON.parse(value))        
-    };
-    getImage();
-  }, []);
-
   // Function to trigger the sign-out confirmation
   const confirmSignOut = () => {
     Alert.alert(
