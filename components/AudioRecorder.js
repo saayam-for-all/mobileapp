@@ -13,7 +13,7 @@ import {
 import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/Feather';
 import * as FileSystem from "expo-file-system";
-import api from './api';
+import api from '../services/api'
 import { Buffer } from "buffer";
 
 function detectAudioFormat(base64) {
