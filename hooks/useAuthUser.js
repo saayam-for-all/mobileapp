@@ -2,9 +2,9 @@ import { useState, useCallback } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { signOut } from "../navigation";
+import AuthHandler from "../global/authHandler";
 import { getUserId } from "../services/volunteerServices";
-import Auth from '@aws-amplify/auth';
+import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
 
 const USER_KEY = 'user';
 const USER_UPDATED_KEY = 'user_updated';
@@ -29,19 +29,19 @@ export default function useAuthUser() {
 
                     // Get latest data
                     console.log("Fetching updated user data");
-                    const cognitoUser = await Auth.currentAuthenticatedUser();
+                    const attributes = await fetchUserAttributes();
                     if (cancelled) return;
                     
                     const {
                         email,
                         sub: userId,
-                        ["custom:Country"]: zoneinfo,
-                    } = cognitoUser?.attributes;
+                    } = attributes;
+                    const zoneinfo = attributes['custom:Country'];
                     
-                    const userSession = await Auth.currentSession();
+                    const session = await fetchAuthSession();
                     if (cancelled) return;
                     
-                    const groups = userSession.accessToken.payload["cognito:groups"];
+                    const groups = session.tokens?.accessToken?.payload["cognito:groups"] || [];
                     
                     let userDbId = null;
                     try {
@@ -54,9 +54,8 @@ export default function useAuthUser() {
                     if (cancelled) return;
                     
                     const userData = {
-                        ...cognitoUser,
                         attributes: {
-                            ...cognitoUser.attributes,
+                            ...attributes,
                             userId,
                             zoneinfo,
                             groups,
@@ -74,10 +73,10 @@ export default function useAuthUser() {
                     
                     if (!error?.message?.toLowerCase().includes("auth")) {
                         Alert.alert("Alert", "Network Error. Please refresh later",
-                            [{ text: "OK", onPress: () => signOut() }]);
+                            [{ text: "OK", onPress: () => AuthHandler.signOut() }]);
                     } else {
                         Alert.alert("Alert", "Session timeout. Please sign in again",
-                            [{ text: "Logout", onPress: () => signOut(), style: "destructive" }]);
+                            [{ text: "Logout", onPress: () => AuthHandler.signOut(), style: "destructive" }]);
                     }
                 }
             }

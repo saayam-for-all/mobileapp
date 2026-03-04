@@ -7,8 +7,6 @@ import PersonalInfo from './Steps/PersonalInfo';   // Placeholder
 import Availability from './Steps/Availability';   // Placeholder
 import Complete from './Steps/Complete';
 
-
-
 export default function PromoteToVolunteer({ navigation }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isAcknowledged, setIsAcknowledged] = useState(false);

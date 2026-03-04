@@ -6,33 +6,32 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.saayam.mobileapp",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to the microphone to record audio messages.",
         "NSFaceIDUsageDescription": "We use Face ID to securely sign you in to your account."
       }
     },
-
     "android": {
-      "permissions": ["RECORD_AUDIO"],
+      "permissions": [
+        "RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.saayam.mobileapp"
     },
-
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
     "plugins": [
       "expo-secure-store",
       [
@@ -40,7 +39,11 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
-      ]
+      ],
+      "expo-localization",
+      "expo-asset",
+      "expo-font",
+      "expo-audio"
     ]
   }
 }

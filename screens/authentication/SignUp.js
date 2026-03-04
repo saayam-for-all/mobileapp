@@ -1,14 +1,14 @@
-/* eslint-disable no-console */
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Alert, TouchableOpacity } from "react-native";
-import { useTranslation } from "react-i18next";
-import Auth from "@aws-amplify/auth";
+
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
 import { FontAwesome } from "@expo/vector-icons";
-import Button from "../../components/Button";
-import Spacer from "../../components/Spacer";
-import Input from "../../components/Input";
-import PhoneInput from "../../components/PhoneInput";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { signUp } from 'aws-amplify/auth';
+import { useTranslation } from "react-i18next";
+import Button from '../../components/Button';
+import Spacer from '../../components/Spacer';
+import Input from '../../components/Input';
+import PhoneInput from '../../components/PhoneInput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -82,7 +82,10 @@ export default function SignUp({ navigation }) {
     return valid.test(value);
   };
 
-  const signUp = async () => {
+  const signUpUser = async () => {
+    const validPassword = password.length > 5 && (password === repeatPassword);
+    let errorMessage = null;
+    let hasError = false;
     const allFields = [name, lastName, email, phone_number, password, repeatPassword];
     const isNotEmpty = (v) => typeof v === "string" && v.trim() !== "";
     const allInputsFilled = allFields.every(isNotEmpty);
@@ -128,29 +131,42 @@ export default function SignUp({ navigation }) {
 
     setInvalidMessage(null);
 
-    try {
-      const data = await Auth.signUp({
-        username: email,
+    console.log(allInputsFilled);
+    if (validPassword && emailValid && isPhoneValid && allInputsFilled) {
+      setInvalidMessage(null);
+      setLoading(true);
+      signUp({
+        username: email, 
         password,
-        attributes: {
-          email,
-          given_name: name,
-          family_name: lastName,
-          phone_number: full_phone,
-          "custom:Country": country_name,
-        },
-        validationData: [],
-      });
-
-      if (data?.user?.username) {
-        await AsyncStorage.setItem(data.user.username, JSON.stringify(true));
-      }
-
-      navigation.navigate("Confirmation", { email });
-    } catch (err) {
-      const msg = err?.message || "Sign up failed.";
-      setInvalidMessage(msg);
-      popError(msg);
+        options: {
+          userAttributes: {
+            email, // optional
+            given_name: name,
+            // country_code, // later added to db
+            "custom:Country": country_name,
+            phone_number: full_phone, // later changed into phone without country code
+            //zoneinfo,
+            family_name: lastName
+          }
+        }
+      })
+        .then((data) => {
+          setLoading(false);
+          console.log(data?.user?.username);
+          if(data?.user?.username){
+            AsyncStorage.setItem(data?.user?.username, JSON.stringify(true))
+          }
+          console.log('navigation: ', navigation);
+          navigation.navigate('Confirmation', { email });
+        })
+        .catch((err) => {
+          setLoading(false);
+          if (err.message) {
+            popError(err.message);
+            setInvalidMessage(err.message);
+          }
+          console.log(err);
+        });
     }
   };
 
@@ -263,43 +279,12 @@ export default function SignUp({ navigation }) {
           <Text style={styles.alertText}>{t("PASSWORD_REQUIREMENTS_ERROR")}</Text>
         )}
       </View>
-
-      {/* Confirm Password (with eye icon) */}
-      <View style={{ width: "100%" }}>
-        <View style={styles.textDescriptionontainer}>
-          <Text>{t("CONFIRM_PASSWORD")}</Text>
-        </View>
-
-        <View
-          style={{
-            width: "94%",
-            marginHorizontal: "3%",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Input
-            value={repeatPassword}
-            placeholder={t("CONFIRM_PASSWORD")}
-            onChange={onChangeRepeatPassword}
-            secureTextEntry={!showRepeatPassword}
-            autoCompleteType="password"
-            style={{ flex: 1 }}
-          />
-
-          <TouchableOpacity onPress={() => setShowRepeatPassword((v) => !v)}>
-            <FontAwesome
-              name={showRepeatPassword ? "eye-slash" : "eye"}
-              size={20}
-              color="#777"
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Spacer size={30} />
-
-      <Button style={{ width: "96%", marginHorizontal: "3%" }} onPress={signUp}>
+      <Spacer size={40}/>
+      <Button
+        style={{width: '96%', marginHorizontal: '3%'}}
+        onPress={() => signUpUser()}
+        loading={loading}
+      >
         {t("SIGNUP")}
       </Button>
 

@@ -1,4 +1,4 @@
-import api from "../components/api";
+import api from "./api";
 import endpoints from "./endpoints.json";
 
 export const getMyRequests = async () => {
@@ -24,6 +24,7 @@ export const checkProfanity = async (content) => {
 };
 
 export const createRequest = async (request) => {
+  console.log("Creating request:", request);
   const response = await api.post(endpoints.CREATE_HELP_REQUEST, request);
   return response.data;
 };

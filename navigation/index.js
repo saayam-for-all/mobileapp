@@ -2,13 +2,12 @@ import React from 'react';
 import {
   StyleSheet, View, ActivityIndicator,
 } from 'react-native';
-import Auth from '@aws-amplify/auth';
+import { getCurrentUser, signOut, fetchAuthSession } from 'aws-amplify/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-let globalSignOutRef = null;
+import { registerSignOut } from '../global/authHandler';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,13 +31,13 @@ class AuthLoadingScreen extends React.Component {
 
   async componentDidMount() {
     await this.loadApp();
-    globalSignOutRef = this.signOut;
+    registerSignOut(this.signOut);
   }
 
   async loadApp() {
-    await Auth.currentAuthenticatedUser()
-      .then((user) => {
-        this.signIn(user);
+    await getCurrentUser()
+      .then(async (user) => {
+        await this.signIn(user);
       })
       .catch(() => {
         console.log('err signing in');
@@ -51,7 +50,7 @@ class AuthLoadingScreen extends React.Component {
   async signOut() {
     console.log("Clear local storage");
     await AsyncStorage.clear();
-    await Auth.signOut()
+    await signOut()
       .catch((err) => {
         console.log('ERROR: ', err);
       });
@@ -59,8 +58,9 @@ class AuthLoadingScreen extends React.Component {
   }
 
   async signIn(user) {
+    const session = await fetchAuthSession();
     this.setState({
-      userToken: user.signInUserSession.accessToken.jwtToken,
+      userToken: session.tokens?.accessToken?.toString(),
     });
   }
 
@@ -89,4 +89,3 @@ class AuthLoadingScreen extends React.Component {
 
 
 export default AuthLoadingScreen;
-export const signOut = () => globalSignOutRef();

@@ -11,13 +11,14 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { useTranslation } from "react-i18next";
-import Auth from "@aws-amplify/auth";
-import * as LocalAuthentication from "expo-local-authentication";
-import * as SecureStore from "expo-secure-store";
+import { signIn as amplifySignIn } from 'aws-amplify/auth';
+import * as LocalAuthentication from 'expo-local-authentication';
+import * as SecureStore from 'expo-secure-store';
 import Button from "../../components/Button";
 import Spacer from "../../components/Spacer";
-import { FontAwesome } from "@expo/vector-icons";
+import Input from "../../components/Input";
+import { FontAwesome } from '@expo/vector-icons';
+import { useTranslation } from "react-i18next";
 
 const CREDENTIALS_KEY = "saayam_credentials";
 
@@ -45,6 +46,20 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: "#F9FAFB",
     fontSize: 16,
+  },
+  button: {
+    backgroundColor: "#3B82F6",
+    width: "100%",
+    height: 50,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
   },
   forgotPassword: {
     color: "#6B7280",
@@ -200,12 +215,17 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const performSignIn = async (emailToUse, passwordToUse, shouldPromptSave = true) => {
     if (emailToUse.length > 4 && passwordToUse.length > 2) {
       setErrorMessage("");
-
+      setLoading(true);
       try {
-        const user = await Auth.signIn(emailToUse, passwordToUse);
+        const { isSignedIn, nextStep } = await amplifySignIn({
+          username: emailToUse,
+          password: passwordToUse
+        });
 
-        // Offer to save credentials if not already saved
-        if (shouldPromptSave && Platform.OS === "ios" && biometricAvailable && !hasStoredCredentials) {
+        setLoading(false);
+
+        // On successful sign-in, offer to save credentials if not already saved
+        if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
           Alert.alert(
             tCommon("SAVE_PASSWORD") || "Save Password?",
             tCommon("SAVE_PASSWORD_MESSAGE") ||
@@ -214,32 +234,36 @@ export default function SignIn({ navigation, signIn: signInCb }) {
               {
                 text: tCommon("NOT_NOW") || "Not Now",
                 style: "cancel",
-                onPress: () => signInCb(user),
+                onPress: () => signInCb({ isSignedIn, nextStep }),
               },
               {
                 text: tCommon("SAVE_PASSWORD_BUTTON") || "Save Password",
                 onPress: async () => {
                   await saveCredentials(emailToUse, passwordToUse);
-                  signInCb(user);
+                  signInCb({ isSignedIn, nextStep });
                 },
               },
             ]
           );
         } else {
-          signInCb(user);
+          signInCb({ isSignedIn, nextStep });
         }
       } catch (err) {
-        console.log(err);
-
-        if (err?.code === "UserNotConfirmedException") {
-          navigation.navigate("Confirmation", { email: emailToUse });
-          return;
-        }
-
-        if (err?.message) {
-          setErrorMessage(err.message);
+        setLoading(false);
+        if (!err.message) {
+          console.log("Error when signing in: ", err);
+          Alert.alert("Error when signing in: ", err);
         } else {
-          Alert.alert("Error", "Error when signing in.");
+          if (err.name === "UserNotConfirmedException") {
+            console.log("User not confirmed");
+            navigation.navigate("Confirmation", {
+              email: emailToUse,
+              fromSignIn: true
+            });
+          }
+          if (err.message) {
+            setErrorMessage(err.message);
+          }
         }
       }
     } else {
@@ -300,9 +324,9 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color="#777" />
-        </TouchableOpacity>
-      </View>
+          <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+        </TouchableOpacity >
+      </View >
 
       <Text
         style={[styles.forgotPassword, { textAlign: "left", alignSelf: "flex-start" }]}
@@ -310,21 +334,27 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       >
         {t("FORGOT_PASSWORD")}
       </Text>
-
       <Spacer size={30} />
       <Button onPress={signIn} style={{ width: "100%" }}>
         {t("SIGN_IN")}
       </Button>
 
       <Spacer size={10} />
-
-      {Platform.OS === "ios" && biometricAvailable && hasStoredCredentials && (
-        <Button onPress={handleBiometricAuth} style={{ width: "100%" }}>
-          {tCommon("SIGN_IN_WITH_BIOMETRIC", { type: biometricType || "" })}
-        </Button>
+      {Platform.OS === 'ios' && biometricAvailable && hasStoredCredentials && (
+        <>
+          <Button onPress={() => handleBiometricAuth()} style={{ width: '100%' }}>
+            {tCommon("SIGN_IN_WITH_BIOMETRIC", { type: biometricType || "" })}
+          </Button>
+        </>
       )}
+      {errorMessage && (
+        <Text style={styles.alertText}>
+          {errorMessage}
+        </Text>
+    )
+  }
 
-      {!!errorMessage && <Text style={styles.alertText}>{errorMessage}</Text>}
+  { !!errorMessage && <Text style={styles.alertText}>{errorMessage}</Text> }
 
       <Spacer size={40} />
 
@@ -337,7 +367,6 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         </View>
         <View style={{ flex: 1, height: 1, backgroundColor: "#6B7280" }} />
       </View>
-
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>
           <Image
@@ -359,12 +388,15 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       <Spacer size={40} />
 
       <Text style={styles.signupText}>
-        {t("NONE_ACCOUNT")}{" "}
-        <Text style={styles.signupLink} onPress={() => navigation.navigate("SignUp")}>
-          {t("SIGNUP")}
-        </Text>
-      </Text>
-    </View>
+        { t("NONE_ACCOUNT") }{" "}
+    <Text
+      style={styles.signupLink}
+      onPress={() => navigation.navigate("SignUp")}
+    >
+      {t("SIGNUP")}
+    </Text>
+  </Text>
+    </View >
   );
 }
 

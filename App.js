@@ -4,13 +4,13 @@ import React, { useEffect } from 'react';
 import 'react-native-get-random-values';
 import { StyleSheet, Text, View } from 'react-native';
 import AppNavigation from './navigation';
-import config from './aws-exports';
-import Amplify from '@aws-amplify/core';
+import amplifyConfig from './amplifyconfiguration';
+import {Amplify} from 'aws-amplify';
 import 'react-native-get-random-values' //Added for warning about insecure random no generator
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from './i18n/i18n';
 
-Amplify.configure(config);
+Amplify.configure(amplifyConfig)
 
 const LANGUAGE_KEY = "appLanguage";
 

@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Button from '../../components/Button';
-import Auth from '@aws-amplify/auth';
 import Header from '../../components/Header';
 import { BannerData } from '../../data/BannerData';
 import Banner from '../../components/Banner/Banner';

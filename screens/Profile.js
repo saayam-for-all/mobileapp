@@ -9,10 +9,10 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import Auth from "@aws-amplify/auth";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import api from "../components/api";
+import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icons
+import api from "../services/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../hooks/useAuthUser";
@@ -131,6 +131,33 @@ export default function Profile({ signOut }) {
       { cancelable: true }
     );
   };
+
+  const getUser = async () => {
+      try {
+        const userAttributes = await fetchUserAttributes();
+        console.log(userAttributes);
+        setUserName(
+          userAttributes.given_name + " " + userAttributes.family_name
+        );
+        setEmail(userAttributes.email);
+        setPhone(userAttributes.phone_number);
+        setCountry(userAttributes["custom:Country"]);
+      } catch (err) {
+        //signOut();  // If error getting user then signout
+        Alert.alert( // show alert to signout
+              "Alert", // Title
+              "Session timeout. Please sign in again", // Message
+              [            
+                {
+                  text: "Logout",
+                  onPress: () => signOut(),
+                  style: "destructive", 
+                },
+              ],
+            );  
+        console.log("error from cognito : ", err);
+      }
+    };
 
   return (
     <>
@@ -277,14 +304,3 @@ export default function Profile({ signOut }) {
     </>
   );
 }
-
-const fetchData = async () => {
-  try {
-    const res = await api.get("/requests/v0.0.1/profile");
-    const resdata = res.data;
-    return resdata;
-  } catch (err) {
-    console.log("error from axios : ", err);
-    return {};
-  }
-};

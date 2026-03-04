@@ -1,7 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View, StyleSheet, Text, TextInput, TouchableOpacity,
+} from 'react-native';
+import { confirmSignUp, resendSignUpCode, confirmUserAttribute, updateUserAttribute, fetchAuthSession } from 'aws-amplify/auth';
+import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from "react-i18next";
-import Auth from "@aws-amplify/auth";
 
 const CODE_LENGTH = 6;
 
@@ -23,7 +26,6 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
     }
   },[]);
 
-
   useEffect(() => {
     if (isUpdate) {
       setCanResend(false);
@@ -43,7 +45,7 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   }, [timer]);
 
   const handleCodeChange = (text) => {
-    const numericText = text.replace(/\D/g, "").slice(0, CODE_LENGTH);
+    const numericText = text.replace(/\D/g, '').slice(0, CODE_LENGTH);
     setCode(numericText);
     setError("");
   };
@@ -52,37 +54,29 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
     inputRef.current?.focus();
   };
 
-  const confirmSignUp = async () => {
-    if (code.length !== CODE_LENGTH) {
+  const confirmSignUpHandler = async () => {
+    if (code.length === CODE_LENGTH) {
+      try {
+        await confirmSignUp({ username: email, confirmationCode: code });
+        navigation.navigate('SignIn');
+      } catch (err) {
+        setError(err?.message || t("ERROR_GENERIC_SUPPORT"));
+      }
+    } else {
       setError(t("ERROR_ENTER_ALL_DIGITS", { count: CODE_LENGTH }));
-      return;
-    }
-
-    try {
-      await Auth.confirmSignUp(email, code);
-      navigation.navigate("SignIn");
-    } catch (err) {
-      setError(err?.message || t("ERROR_GENERIC_SUPPORT"));
     }
   };
 
   const confirmUpdate = async () => {
-    if (code.length !== CODE_LENGTH) {
-      setError(t("ERROR_ENTER_CONFIRMATION_CODE"));
-      return;
-    }
 
-    try {
-      const user = await Auth.currentAuthenticatedUser();
-      await Auth.verifyCurrentUserAttributeSubmit("email", code);
-
-      if (toUpdate) {
-        await Auth.updateUserAttributes(user, toUpdate);
+    if (code.length === CODE_LENGTH) {
+      try {
+        await confirmUserAttribute({ userAttributeKey: 'email', confirmationCode: code });
+        // If you need to update other attributes, use updateUserAttribute
+        navigation.navigate('Profile');
+      } catch (err) {
+        setError(err.message || 'Something went wrong, please contact support!');
       }
-
-      navigation.navigate("Profile");
-    } catch (err) {
-      setError(err?.message || t("ERROR_GENERIC_SUPPORT"));
     }
   };
 
@@ -91,10 +85,14 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
 
     try {
       if (!isUpdate) {
-        await Auth.resendSignUp(email);
+        await resendSignUpCode({ username: email });
+        setTimer(60);
+        setCanResend(false);
+        setError('');
       } else {
-        // If you later support resend for update-email flows, implement here
-        // e.g., await Auth.verifyCurrentUserAttribute("email");
+        setError(
+          "Resend not available, please try updating your email again from the profile page."
+        );
       }
 
       setTimer(59);
@@ -142,7 +140,6 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
           autoCapitalize="none"
           contextMenuHidden
         />
-
         {Array.from({ length: CODE_LENGTH }, (_, index) => (
           <View
             key={index}
@@ -177,7 +174,7 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
 
       <TouchableOpacity
         style={styles.verifyButton}
-        onPress={isUpdate ? confirmUpdate : confirmSignUp}
+        onPress={isUpdate ? confirmUpdate : confirmSignUpHandler}
       >
         <Text style={styles.verifyButtonText}>{t("VERIFY_ACCOUNT")}</Text>
       </TouchableOpacity>

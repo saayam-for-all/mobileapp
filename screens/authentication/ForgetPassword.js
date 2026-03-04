@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React, { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import { resetPassword, confirmResetPassword } from 'aws-amplify/auth';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import Spacer from '../../components/Spacer';
+import { FontAwesome, Ionicons } from '@expo/vector-icons'; 
+import { TouchableOpacity } from 'react-native';
 import { useTranslation } from "react-i18next";
-import Auth from "@aws-amplify/auth";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
-import Spacer from "../../components/Spacer";
-import { FontAwesome } from "@expo/vector-icons";
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   errorText: {
-    color: "red",
+    color: 'red',
     marginTop: 12,
     marginHorizontal: "3%",
     width: "94%",
@@ -52,15 +53,18 @@ function ForgetPassword({ navigation }) {
   const getConfirmationCode = async () => {
     if (email.length > 4) {
       setCodeLoading(true);
-      Auth.forgotPassword(email)
-        .then(() => {
-          setEditableInput(true);
-          setConfirmationStep(true);
-          setErrorMessage("");
-        })
-        .catch((err) => {
-          if (err?.message) setErrorMessage(err.message);
-        });
+      try {
+        await resetPassword({ username: email });
+        setEditableInput(true);
+        setConfirmationStep(true);
+        setErrorMessage('');
+        setCodeLoading(false);
+      } catch (err) {
+        setCodeLoading(false);
+        if (err.message) {
+          setErrorMessage(err.message);
+        }
+      }
     } else {
       setErrorMessage(t("EMAIL_REQUIRED"));
     }
@@ -71,15 +75,22 @@ function ForgetPassword({ navigation }) {
       setErrorMessage(t("PASSWORD_MISMATCH_ERROR"));
       return;
     }
-
-    Auth.forgotPasswordSubmit(email, code, newPassword)
-      .then(() => {
-        setErrorMessage("");
-        navigation.navigate("SignIn");
-      })
-      .catch((err) => {
-        if (err?.message) setErrorMessage(err.message);
+    setConfirmLoading(true);
+    try {
+      await confirmResetPassword({
+        username: email,
+        confirmationCode: code,
+        newPassword: newPassword,
       });
+      setConfirmLoading(false);
+      setErrorMessage('');
+      navigation.navigate('SignIn');
+    } catch (err) {
+      setConfirmLoading(false);
+      if (err.message) {
+        setErrorMessage(err.message);
+      }
+    }
   };
 
   return (
@@ -114,25 +125,31 @@ function ForgetPassword({ navigation }) {
             <Text style={{ marginHorizontal: "3%" }}>{t("NEW_PASSWORD")}</Text>
             <Spacer size={20} />
           </View>
-
-          {/* ✅ New password toggle */}
-          <View style={{ width: "94%", flexDirection: "row", alignItems: "center", margin: "3%" }}>
+          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
             <Input
               value={newPassword}
-              placeholder={t("PASSWORD")}
+              placeholder="password"
               onChange={(text) => setNewPassword(text)}
-              secureTextEntry={!showNewPassword}
+              secureTextEntry={!showPassword}
               autoCompleteType="password"
               style={{ flex: 1 }}
             />
-            <TouchableOpacity onPress={() => setShowNewPassword((v) => !v)}>
-              <FontAwesome name={showNewPassword ? "eye-slash" : "eye"} size={20} color="#777" />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
             </TouchableOpacity>
           </View>
-
-          <View style={styles.textDescriptionontainer}>
-            <Text style={{ marginHorizontal: "3%" }}>{t("CONFIRM_PASSWORD")}</Text>
-            <Spacer size={20} />
+          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
+            <Input
+              value={confirmPassword}
+              placeholder="password"
+              onChange={(text) => setConfirmPassword(text)}
+              secureTextEntry={!showPassword}
+              autoCompleteType="password"
+              style={{ flex: 1 }}
+            />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+            </TouchableOpacity>
           </View>
 
           {/* ✅ Confirm password toggle */}

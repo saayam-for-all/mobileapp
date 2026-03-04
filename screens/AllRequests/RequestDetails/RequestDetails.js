@@ -14,7 +14,7 @@ import {
   FlatList,
 } from "react-native";
 import Markdown from 'react-native-markdown-display';
-import Auth from "@aws-amplify/auth";
+import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   AntDesign,
@@ -26,19 +26,22 @@ import {
 import { List, PaperProvider } from "react-native-paper";
 import Input from "../../../components/Input";
 import config from "../../../components/config";
-import api from "../../../components/api";
+import api from "../../../services/api";
 import { TextInput } from "react-native";
 import UserRequest from "../../UserRequest";
 import Button from '../../../components/Button';
+import { getVolunteerOrgsList } from "../../../services/volunteerServices";
+import { moreInformation } from "../../../services/requestServices";
+import useAuthUser from "../../../hooks/useAuthUser";
 
 const ButtonsView = () => {
   const [infoOpen, setInfoOpen] = useState(false);
   const [info, setInfo] = useState('');
   const route = useRoute();
   const req = route.params?.item;
+  // CURRENTLY NOT WORKING - FIX AFTER RECEIVING CORRECT USER DATA
   const generateAnswer = async () => {
-    const res = await api.post(
-      "/genai/v0.0.1/generate_answer",
+    const res = await moreInformation(
       {category: req?.category, subject:req?.subject, description: req?.description}
     );
     setInfo(res.data);
@@ -178,11 +181,8 @@ const Comments = ({title="Comments"}) => {
     const fetchComments = async () => {
         try {
           const res = await fetch(url); //not needed now //temp reverting back to fetch
-          //const res = await api.get('rmb2020/database/comments') //Get data axios instance
           const resdata = await res.json(); //not needed now
-          // const resdata = res.data;//Axios data
           setData(resdata);
-          // console.log(resdata)
           setLoading(false);
         } catch (err) {
           console.log("error from axios : ", err);
@@ -432,8 +432,7 @@ const Volunteer = ({title="Volunteer"}) => {
 
     const handleRequestVolunteers = async () => {
         try {
-          const data = await fetchOrgData();
-          //console.log("data", data);
+          const data = await getVolunteerOrgsList();
           if (data.body && data.body.length > 0) {
             setVolunteerData(data.body);
             setShowVolunteers(true);
@@ -452,17 +451,7 @@ const Volunteer = ({title="Volunteer"}) => {
           console.error("Error requesting volunteers:", error);
         }
     };
-    const fetchOrgData = async () => {
-        try {
-            const res = await api.get("/volunteer-orgs/v0.0.1/organizations-list"); //get data axios instance
-            const resdata = res.data; //axios data
-            // console.log("resdata", resdata);
-            return resdata;
-        } catch (error) {
-            console.log("error from axios:", error);
-            return null;
-        }
-    };
+
     const updateRowHeight = (rowIndex, height) => {
         setRowHeights((prevHeights) => ({
           ...prevHeights,
@@ -492,8 +481,8 @@ const Volunteer = ({title="Volunteer"}) => {
             <TouchableOpacity
                 style={styles.requestButton}
                 onPress={() => {
-                setVolunteerCount(inputValue);
-                handleRequestVolunteers();
+                  setVolunteerCount(inputValue);
+                  handleRequestVolunteers();
                 }}
             >
                 <FontAwesome5 name="user-plus" size={16} color="white" />
@@ -511,7 +500,7 @@ const Volunteer = ({title="Volunteer"}) => {
     )
 }
 
-const Attributes = ({title="Details", userName, setUserName}) => {
+const Attributes = ({title="Details", userName}) => {
   const [showName, setShowName] = useState(false);
   const [showVolunteerName, setVolunteerName] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -681,36 +670,17 @@ const TabsToggle = ({children}) => {
 
 export default function RequestDetails({ signOut }) {
   //const navigation = useNavigation();
-  const [userName, setUserName] = useState("");
+  const user = useAuthUser();
+  
   const route = useRoute();
+  console.log(route.params);
   const req = route.params?.item;
+
+  const userName = user?.attributes?.given_name + " " + user?.attributes?.family_name;
   
   useEffect(() => {
-    getUser();
+    
   }, []);
-
-  const getUser = async () => {
-    try {
-      const user = await Auth.currentUserInfo();
-      setUserName(
-        user.attributes.given_name + " " + user.attributes.family_name
-      );
-    } catch (err) {
-      //signOut();  // If error getting usern then signout
-      Alert.alert( // show alert to signout
-        "Alert", // Title
-        "Session timeout. Please sign in again", // Message
-        [            
-          {
-            text: "Logout",
-            onPress: () => signOut(),
-            style: "destructive", 
-          },
-        ],
-      );  
-      console.log("error from cognito : ", err);
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -720,7 +690,7 @@ export default function RequestDetails({ signOut }) {
         <TabsToggle>
           <Comments title="Comments"/>
           <Volunteer title="Volunteer"/>
-          <Attributes title="Details" userName = {userName} setUserName = {setUserName}/>
+          <Attributes title="Details" userName = {userName} />
         </TabsToggle>
       </View>
     </SafeAreaView>
@@ -885,7 +855,7 @@ const styles = StyleSheet.create({
   },
 
   volunteerTableContainer: {
-    height:"500",
+    height:500,
     marginTop: 10,
     paddingHorizontal: 10,
     borderColor: "#DDD",

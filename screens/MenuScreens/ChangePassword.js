@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-import Auth from "@aws-amplify/auth";
+import { fetchUserAttributes, updatePassword } from 'aws-amplify/auth';
 import useAuthUser from "../../hooks/useAuthUser";
 import { useTranslation } from "react-i18next";
+
 
 export default function ChangePassword() {
   // ✅ Option 2: use multiple namespaces
@@ -19,10 +20,33 @@ export default function ChangePassword() {
   const [logPasswordValid, setLogPasswordValid] = useState([false, false]);
 
   const navigation = useNavigation();
-  const user = useAuthUser();
 
-  const toggleSecureEntry = (index) => {
-    setSecureEntry((prev) => prev.map((item, i) => (i === index ? !item : item)));
+  const getUser = async () => {
+    try {
+      const user = await fetchUserAttributes();
+      setUser(user);
+    } catch (err) {
+      //signOut();  // If error getting user then signout
+      Alert.alert( // show alert to signout
+        "Alert", // Title
+        "Session timeout. Please sign in again", // Message
+        [            
+          {
+            text: "Logout",
+            onPress: () => signOut(),
+            style: "destructive", 
+          },
+        ],
+      );  
+      console.log("error from cognito : ", err);
+    }
+  };
+  const toggleSecureEntry = (ind) => {
+    setSecureEntry(
+      secureEntry.map((ele,i)=>{
+        return ind == i ? !ele : ele;
+      })
+    );
   };
 
   function logError(error, errorMessage) {
@@ -47,12 +71,23 @@ export default function ChangePassword() {
       // No exact key for the original sentence; using existing generic error
       errorMessage = t("ERROR_GENERIC_SUPPORT", { ns: "auth" });
     } else {
-      await Auth.changePassword(user, oldPassword, password)
-        .then(() => console.log("Password updated successfully"))
-        .catch((err) => {
-          error = true;
-          errorMessage = String(err);
+      if (!user) {
+        await getUser();
+      }
+      try {
+        await updatePassword({
+          oldPassword: oldPassword,
+          newPassword: password,
         });
+
+        setOldPassword("");
+        setPassword("");
+        setConfirmPassword("");
+        console.log("Password updated successfully");
+      } catch (err) {
+        error = true;
+        errorMessage = String(err);
+      }
     }
 
     logError(error, errorMessage);
@@ -198,6 +233,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "500",
   },
+  alertText: {
+    color: 'red',
+    marginHorizontal: '3%',
+    width: '94%',
+    marginBottom: 20,
+    marginLeft: 5,
+  }
 });

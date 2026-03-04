@@ -17,9 +17,11 @@ import Icon from "@expo/vector-icons/Ionicons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
-import Auth from "@aws-amplify/auth";
-import api from "../components/api";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
+import api from "../services/api";
+//import { Dimensions } from 'react-native';
+//const { width, height } = Dimensions.get("window");
 import Ionicons from "@expo/vector-icons/Ionicons";
 import config from "../components/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -186,18 +188,22 @@ export default function Home({ signOut }) {
 
   const getGroup = async (user) => {
     try {
-      const userGroup = user.signInUserSession.accessToken.payload["cognito:groups"];
-      if (userGroup?.includes(volunteer)) {
+      const session = await fetchAuthSession();
+      const userGroup =
+        session.tokens?.accessToken?.payload["cognito:groups"];
+      //console.log('user group', userGroup)
+      if (userGroup && userGroup.includes(volunteer)) {
         setVolunteer(true);
-      }
-
-      const currentSession = await Auth.currentSession();
-      user.refreshSession(currentSession.refreshToken, () => {});
+      } 
+       //Refresh token 
+      const refreshedSession = await fetchAuthSession({ forceRefresh: true });
+      //console.log('session', refreshedSession);
+      const { idToken, refreshToken, accessToken } = refreshedSession.tokens || {};
+       //console.log('group');
     } catch (error) {
       console.log("error getting group", error);
     }
-  };
-
+  }
   const getFirstTime = async (user) => {
     const username = user?.attributes?.email;
     if (!username) return;
@@ -218,15 +224,6 @@ export default function Home({ signOut }) {
         ]);
       }
     });
-  };
-
-  const getData = async () => {
-    try {
-      const res = await api.get("/requests/v0.0.1/mockCategoriesAPI");
-      console.log("Data from Axios", res.data);
-    } catch (error) {
-      console.log("data error", error);
-    }
   };
 
   return (

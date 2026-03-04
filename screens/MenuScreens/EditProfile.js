@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import Auth from "@aws-amplify/auth";
+import { fetchAuthSession, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth';
 import { countriesList } from "../../data/countries";
 import useAuthUser from "../../hooks/useAuthUser";
 import RNPickerSelect from "react-native-picker-select";
@@ -34,14 +34,14 @@ const EditProfile = () => {
       setPrimaryEmail(email);
       setPrimaryPhoneNumber(phone_number);
     }
-}, [user]);
+  }, [user]);
 
   useEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then((user) => {
-        const attributes = user?.attributes;
-        const { email, family_name, given_name, phone_number, ["custom:Country"]: zoneinfoAttr } =
-          attributes;
+    const loadUserAttributes = async () => {
+      try {
+        const attributes = await fetchUserAttributes();
+        const { email, family_name, given_name, phone_number } = attributes;
+        const zoneinfoAttr = attributes['custom:Country'];
 
         const profileData = {
           firstName: given_name || "",
@@ -59,16 +59,19 @@ const EditProfile = () => {
         setPrimaryPhoneNumber(profileData.primaryPhoneNumber);
         setzoneinfo(profileData.zoneinfo);
         setBackupProfile(profileData);
-      })
-      .catch((err) => console.log("Error loading user:", err));
+      } catch (err) {
+        console.log('Error loading user:', err);
+      }
+    };
 
+    loadUserAttributes();
     setNeedVerification(false);
   }, []);
 
   useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
-        email: user?.attributes?.email,
+        email: primaryEmail,
         isUpdate: true,
         toUpdate: {
           email: primaryEmail,
@@ -83,8 +86,6 @@ const EditProfile = () => {
   }, [needVerification]);
 
   const validateForm = () => {
-    // NOTE: No matching translation keys for these validation strings in your JSONs,
-    // so leaving them as-is (per your rule: only use existing keys).
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(firstName)) {
       Alert.alert("Invalid Input", "First Name should contain only letters.");
@@ -113,37 +114,47 @@ const EditProfile = () => {
     return true;
   };
 
-  const removeFirstTime = async (user) => {
-    const username = user?.attributes?.email;
-    if (username) {
-      AsyncStorage.removeItem(username);
+  const removeFirstTime = async (userEmail) => {
+    if (userEmail) {
+      AsyncStorage.removeItem(userEmail);
     }
   };
 
-  async function updateUser(user) {
+  async function updateUser() {
     AsyncStorage.setItem('user_updated', 'false');
     try {
-      if (primaryEmail !== user?.attributes?.email) {
+      const currentAttributes = await fetchUserAttributes();
+      
+      // Build attributes object
+      const attributesToUpdate = {
+        family_name: lastName,
+        given_name: firstName,
+        phone_number: primaryPhoneNumber,
+        'custom:Country': zoneinfo
+      };
+
+      // If email changed, include it in the update
+      if (primaryEmail !== currentAttributes.email) {
+        attributesToUpdate.email = primaryEmail;
+      }
+
+      // Update all attributes at once
+      await updateUserAttributes({ userAttributes: attributesToUpdate });
+
+      // If email was changed, trigger verification flow
+      if (primaryEmail !== currentAttributes.email) {
         console.log("Needs verification");
         setNeedVerification(true);
         return;
-      } else {
-        await Auth.updateUserAttributes(user, {
-          email: primaryEmail,
-          family_name: lastName,
-          given_name: firstName,
-          phone_number: primaryPhoneNumber,
-          "custom:Country": zoneinfo,
-        });
       }
-      Alert.alert("Success", t("PROFILE_UPDATE_SUCCESS"));
-      removeFirstTime(user);
+
+      Alert.alert('Success', t("PROFILE_UPDATE_SUCCESS"));
+      removeFirstTime(currentAttributes.email);
     } catch (err) {
       Alert.alert("User Update Error", err.message);
     }
   }
 
-  // ✨ Edit mode handlers
   const handleEdit = () => {
     setBackupProfile({
       firstName,
@@ -157,8 +168,7 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     if (validateForm()) {
-      const user = await Auth.currentAuthenticatedUser();
-      await updateUser(user);
+      await updateUser();
 
       setBackupProfile({
         firstName,
