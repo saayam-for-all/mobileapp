@@ -172,19 +172,63 @@ import urPreferences from "./locales/ur/preferences.json";
 import viCommon from "./locales/vi/common.json";
 import viAuth from "./locales/vi/auth.json";
 import viCategories from "./locales/vi/categories.json";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const deviceLanguage = getLocales()[0]?.languageCode || 'en';
-console.log("Device language: ", deviceLanguage);
+const LANGUAGE_KEY = "appLanguage";
 
+// List only the languages your app actually supports
+const SUPPORTED_LANGUAGES = [
+  "en",
+  "bn",
+  "de",
+  "es",
+  "fr",
+  "hi",
+  "pt",
+  "ru",
+  "te",
+  "zh",
+];
+
+const getDeviceLanguage = () => {
+  const deviceLang = getLocales()[0]?.languageCode || "en";
+
+  // Fallback to English if device language not supported
+  return SUPPORTED_LANGUAGES.includes(deviceLang)
+    ? deviceLang
+    : "en";
+};
+
+export const getInitialLanguage = async () => {
+  try {
+    const saved = await AsyncStorage.getItem(LANGUAGE_KEY);
+
+    // If user selected "default" OR nothing saved
+    if (!saved || saved === "default") {
+      return getDeviceLanguage();
+    }
+
+    // If saved language is supported
+    if (SUPPORTED_LANGUAGES.includes(saved)) {
+      return saved;
+    }
+
+    // Safety fallback
+    return "en";
+  } catch (error) {
+    console.log("Error loading language:", error);
+    return "en";
+  }
+};
 i18n
   .use(initReactI18next)
   .init({
-    lng: deviceLanguage,
     fallbackLng: "en",
+    initImmediate: false,
     // Set default namespace to load
     defaultNS: "common",
     // Define all namespaces that will be used
-    ns: ["common", "auth", "categories", "availability"],
+    ns: ["common", "auth", "categories", "availability", "enums", "identity", "profile", "preferences"],
     resources: {
       en: {
         common: enCommon,
@@ -401,6 +445,22 @@ i18n
       caches: ["localStorage", "cookie"],
     },
     debug: true,
+  }).then(async () => {
+    try {
+      const savedLang = await getInitialLanguage();
+
+      console.log("Initial language resolved:", savedLang);
+
+      if (savedLang) {
+        await i18n.changeLanguage(savedLang);
+      }
+    } catch (error) {
+      console.log("Language load error:", error);
+      await i18n.changeLanguage("en");
+    }
+  })
+  .catch((e) => {
+    console.log("❌ i18n init error:", e);
   });
 
 export default i18n;

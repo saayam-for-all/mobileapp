@@ -17,9 +17,10 @@ import * as SecureStore from 'expo-secure-store';
 import Button from "../../components/Button";
 import Spacer from "../../components/Spacer";
 import Input from "../../components/Input";
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
+import { useTranslation } from "react-i18next";
 
-const CREDENTIALS_KEY = 'saayam_credentials';
+const CREDENTIALS_KEY = "saayam_credentials";
 
 const styles = StyleSheet.create({
   container: {
@@ -105,15 +106,18 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   alertText: {
-    color: 'red',
-    marginHorizontal: '3%',
-    width: '94%',
+    color: "red",
+    marginHorizontal: "3%",
+    width: "94%",
     marginBottom: 20,
     marginLeft: 5,
-  }
+  },
 });
 
 export default function SignIn({ navigation, signIn: signInCb }) {
+  const { t } = useTranslation("auth");
+  const { t: tCommon } = useTranslation("common");
+
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -130,60 +134,55 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   }, []);
 
   const checkBiometricAvailability = async () => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       const compatible = await LocalAuthentication.hasHardwareAsync();
       const enrolled = await LocalAuthentication.isEnrolledAsync();
-      
+
       if (compatible && enrolled) {
         const types = await LocalAuthentication.supportedAuthenticationTypesAsync();
         setBiometricAvailable(true);
-        
+
         if (types.includes(LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION)) {
-          setBiometricType('Face ID');
+          setBiometricType("Face ID");
         } else if (types.includes(LocalAuthentication.AuthenticationType.FINGERPRINT)) {
-          setBiometricType('Touch ID');
+          setBiometricType("Touch ID");
         }
       }
     }
   };
 
   const checkStoredCredentials = async () => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       try {
         const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
-        if (credentials) {
-          setHasStoredCredentials(true);
-        }
+        if (credentials) setHasStoredCredentials(true);
       } catch (error) {
-        console.log('Error checking stored credentials:', error);
+        console.log("Error checking stored credentials:", error);
       }
     }
   };
 
-  const saveCredentials = async (email, password) => {
-    if (Platform.OS === 'ios') {
+  const saveCredentials = async (emailToSave, passwordToSave) => {
+    if (Platform.OS === "ios") {
       try {
-        const credentials = JSON.stringify({ email, password });
+        const credentials = JSON.stringify({ email: emailToSave, password: passwordToSave });
         await SecureStore.setItemAsync(CREDENTIALS_KEY, credentials, {
           keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         });
         setHasStoredCredentials(true);
-        console.log('Credentials saved successfully');
       } catch (error) {
-        console.log('Error saving credentials:', error);
+        console.log("Error saving credentials:", error);
       }
     }
   };
 
   const getStoredCredentials = async () => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       try {
         const credentials = await SecureStore.getItemAsync(CREDENTIALS_KEY);
-        if (credentials) {
-          return JSON.parse(credentials);
-        }
+        if (credentials) return JSON.parse(credentials);
       } catch (error) {
-        console.log('Error retrieving credentials:', error);
+        console.log("Error retrieving credentials:", error);
       }
     }
     return null;
@@ -192,8 +191,8 @@ export default function SignIn({ navigation, signIn: signInCb }) {
   const handleBiometricAuth = async () => {
     try {
       const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: `Sign in with ${biometricType}`,
-        fallbackLabel: 'Use passcode',
+        promptMessage: tCommon("SIGN_IN_WITH_BIOMETRIC", { type: biometricType || "" }),
+        fallbackLabel: "Use passcode",
         disableDeviceFallback: false,
       });
 
@@ -202,15 +201,14 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         if (credentials) {
           onChangeEmail(credentials.email);
           onChangePassword(credentials.password);
-          
           await performSignIn(credentials.email, credentials.password, false);
         }
       } else {
-        setErrorMessage('Biometric authentication failed');
+        setErrorMessage("Biometric authentication failed");
       }
     } catch (error) {
-      console.log('Biometric auth error:', error);
-      setErrorMessage('Biometric authentication error');
+      console.log("Biometric auth error:", error);
+      setErrorMessage("Biometric authentication error");
     }
   };
 
@@ -219,26 +217,27 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       setErrorMessage("");
       setLoading(true);
       try {
-        const { isSignedIn, nextStep } = await amplifySignIn({ 
-          username: emailToUse, 
-          password: passwordToUse 
+        const { isSignedIn, nextStep } = await amplifySignIn({
+          username: emailToUse,
+          password: passwordToUse
         });
-        
+
         setLoading(false);
-        
+
         // On successful sign-in, offer to save credentials if not already saved
         if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
           Alert.alert(
-            'Save Password?',
-            `Securely store your password so it's filled automatically the next time you need it.`,
+            tCommon("SAVE_PASSWORD") || "Save Password?",
+            tCommon("SAVE_PASSWORD_MESSAGE") ||
+              "Securely store your password so it's filled automatically the next time you need it.",
             [
               {
-                text: 'Not Now',
-                style: 'cancel',
+                text: tCommon("NOT_NOW") || "Not Now",
+                style: "cancel",
                 onPress: () => signInCb({ isSignedIn, nextStep }),
               },
               {
-                text: 'Save Password',
+                text: tCommon("SAVE_PASSWORD_BUTTON") || "Save Password",
                 onPress: async () => {
                   await saveCredentials(emailToUse, passwordToUse);
                   signInCb({ isSignedIn, nextStep });
@@ -268,7 +267,8 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         }
       }
     } else {
-      setErrorMessage("Provide a valid email and password");
+      // auth.json doesn’t have ERROR_PROVIDE_EMAIL_PASSWORD, so use existing keys:
+      setErrorMessage(`${t("EMAIL_REQUIRED")} / ${t("PASSWORD_REQUIRED")}`);
     }
   };
 
@@ -278,71 +278,72 @@ export default function SignIn({ navigation, signIn: signInCb }) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../assets/saayamforall.jpeg")}
-        style={styles.logo}
-      />
+      <Image source={require("../../assets/saayamforall.jpeg")} style={styles.logo} />
+
       <View style={styles.textDescriptionontainer}>
-        <Text>Email Address</Text>
+        <Text>{t("EMAIL")}</Text>
         <Spacer size={20} />
       </View>
+
       <TextInput
         style={styles.input}
         value={email}
-        placeholder="Your Email"
-        onChangeText={(text) => onChangeEmail(text)}
-        autoCompleteType="email"
+        placeholder={t("EMAIL")}
+        onChangeText={onChangeEmail}
+        autoComplete="email"
         autoCapitalize="none"
         keyboardType="email-address"
         autoFocus={!hasStoredCredentials}
       />
+
       <View style={styles.textDescriptionontainer}>
-        <Text>Password</Text>
+        <Text>{t("PASSWORD")}</Text>
         <Spacer size={20} />
       </View>
-      <View style={{ width: '100%', marginVertical: 10, position: 'relative' }}>
+
+      <View style={{ width: "100%", marginVertical: 10, position: "relative" }}>
         <TextInput
           style={[styles.input, { paddingRight: 40 }]}
           value={password}
-          placeholder="Password"
+          placeholder={t("PASSWORD")}
           onChangeText={onChangePassword}
           secureTextEntry={!showPassword}
-          autoCompleteType="password"
+          autoComplete="password"
         />
+
         <TouchableOpacity
           onPress={() => setShowPassword(!showPassword)}
           style={{
-            position: 'absolute',
+            position: "absolute",
             right: 15,
             top: 0,
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
             padding: 5,
           }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
-        </TouchableOpacity>
-      </View>
+        </TouchableOpacity >
+      </View >
+
       <Text
-        style={[
-          styles.forgotPassword,
-          { textAlign: "left", alignSelf: "flex-start" },
-        ]}
+        style={[styles.forgotPassword, { textAlign: "left", alignSelf: "flex-start" }]}
         onPress={() => navigation.navigate("ForgetPassword")}
       >
-        Forgot password?
+        {t("FORGOT_PASSWORD")}
       </Text>
       <Spacer size={30} />
-      <Button onPress={() => signIn()} style={{ width: '100%' }} loading={loading}>
-        Log In
+      <Button onPress={signIn} style={{ width: "100%" }}>
+        {t("SIGN_IN")}
       </Button>
+
       <Spacer size={10} />
       {Platform.OS === 'ios' && biometricAvailable && hasStoredCredentials && (
         <>
           <Button onPress={() => handleBiometricAuth()} style={{ width: '100%' }}>
-            Sign in with {biometricType}
+            {tCommon("SIGN_IN_WITH_BIOMETRIC", { type: biometricType || "" })}
           </Button>
         </>
       )}
@@ -350,14 +351,21 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         <Text style={styles.alertText}>
           {errorMessage}
         </Text>
-      )}
+    )
+  }
+
+  { !!errorMessage && <Text style={styles.alertText}>{errorMessage}</Text> }
+
       <Spacer size={40} />
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <View style={{ flex: 1, height: 1, backgroundColor: '#6B7280' }} />
+
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: "#6B7280" }} />
         <View>
-          <Text style={{ width: 50, textAlign: 'center', ...styles.orText }}>Or With</Text>
+          <Text style={{ width: 70, textAlign: "center", ...styles.orText }}>
+            {tCommon("OR_WITH")}
+          </Text>
         </View>
-        <View style={{ flex: 1, height: 1, backgroundColor: '#6B7280' }} />
+        <View style={{ flex: 1, height: 1, backgroundColor: "#6B7280" }} />
       </View>
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>
@@ -365,26 +373,34 @@ export default function SignIn({ navigation, signIn: signInCb }) {
             source={require("../../assets/facebook_logo.png")}
             style={[styles.socialIcon, { width: 24, height: 24 }]}
           />
-          <Text>Facebook</Text>
+          <Text>{tCommon("FACEBOOK")}</Text>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.socialButton}>
           <Image
             source={require("../../assets/google_logo.png")}
             style={[styles.socialIcon, { width: 24, height: 24 }]}
           />
-          <Text>Google</Text>
+          <Text>{tCommon("GOOGLE")}</Text>
         </TouchableOpacity>
       </View>
+
       <Spacer size={40} />
+
       <Text style={styles.signupText}>
-        Don't have an account?{" "}
-        <Text
-          style={styles.signupLink}
-          onPress={() => navigation.navigate("SignUp")}
-        >
-          Sign up
-        </Text>
-      </Text>
-    </View>
+        { t("NONE_ACCOUNT") }{" "}
+    <Text
+      style={styles.signupLink}
+      onPress={() => navigation.navigate("SignUp")}
+    >
+      {t("SIGNUP")}
+    </Text>
+  </Text>
+    </View >
   );
 }
+
+SignIn.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  signIn: PropTypes.func.isRequired,
+};

@@ -16,6 +16,7 @@ import api from "../services/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../hooks/useAuthUser";
+import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
   container: {
@@ -57,9 +58,9 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
-    fontWeight: "bold", // Make the text bold
-    marginLeft: 15, // Add margin to align text to the left next to the icon
-    flex: 1, // Make the text take up remaining space
+    fontWeight: "bold",
+    marginLeft: 15,
+    flex: 1,
   },
   optionIcon: {
     marginRight: 15,
@@ -80,54 +81,51 @@ const styles = StyleSheet.create({
 const DEFAULT_PROFILE_ICON = require("../assets/rn-logo.png");
 
 export default function Profile({ signOut }) {
+  const { t } = useTranslation();
   const navigation = useNavigation();
+
   const [isNotificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState({});
-  const [userName, setUserName] = useState(''); 
-  const [phoneNumber, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [country, setCountry] = useState('');
+  const [userName, setUserName] = useState("");
+  const [phoneNumber, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
 
   const [profileData, setProfileData] = useState(null);
-  const user = useAuthUser();
+
+  useAuthUser(navigation, (user) => {
+    setUserName(user.attributes.given_name + " " + user.attributes.family_name);
+    setEmail(user.attributes.email);
+    setPhone(user.attributes.phone_number);
+    setCountry(user.attributes["custom:Country"]);
+  });
 
   useEffect(() => {
-    if (user) {
-        setUserName(
-          user.attributes.given_name + " " + user.attributes.family_name
-        );
-        setEmail(user.attributes.email);
-        setPhone(user.attributes.phone_number);
-        setCountry(user.attributes["custom:Country"]);
-    }
-}, [user]);
-
-  useEffect(() => {
-    const getImage = async () => {      
+    const getImage = async () => {
       const value = await AsyncStorage.getItem("profilePhoto");
       console.log(profilePhoto);
-      if (value)
-        setProfilePhoto(JSON.parse(value))        
+      if (value) setProfilePhoto(JSON.parse(value));
     };
     getImage();
   }, []);
 
-  // Function to trigger the sign-out confirmation
   const confirmSignOut = () => {
+    // NOTE: No matching translation keys exist for "Alert", "Are you sure you want to logout?",
+    // and the modal button labels "Cancel"/"Logout", so leaving as-is per your rule.
     Alert.alert(
-      "Alert", // Title
-      "Are you sure you want to logout?", // Message
+      "Alert",
+      "Are you sure you want to logout?",
       [
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel", // Makes the button look like a cancel button
+          style: "cancel",
         },
         {
           text: "Logout",
           onPress: () => signOut(),
-          style: "destructive", // Adds red color to signify destructive action
+          style: "destructive",
         },
       ],
       { cancelable: true }
@@ -171,7 +169,6 @@ export default function Profile({ signOut }) {
       />
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
-          {/* <Image source={require('../assets/rn-logo.png')} style={styles.userImage} onPress={setIsModalOpen(true)}/> */}
           <TouchableOpacity onPress={() => setIsModalOpen(true)}>
             {profilePhoto?.uri ? (
               <Image source={profilePhoto} style={styles.userImage} />
@@ -179,13 +176,13 @@ export default function Profile({ signOut }) {
               <Image source={DEFAULT_PROFILE_ICON} style={styles.userImage} />
             )}
           </TouchableOpacity>
-          <Text style={styles.userName}>
-            {userName}
-          </Text>
+
+          <Text style={styles.userName}>{userName}</Text>
+
           <Text style={styles.userEmail}>
-            {email} |{" "}
-            {phoneNumber}
+            {email} | {phoneNumber}
           </Text>
+
           <Text style={styles.userCountry}>{country}</Text>
         </View>
 
@@ -193,12 +190,8 @@ export default function Profile({ signOut }) {
           style={styles.optionRow}
           onPress={() => navigation.navigate("EditProfile")}
         >
-          <FontAwesome
-            name="user-circle-o"
-            size={20}
-            style={styles.optionIcon}
-          />
-          <Text style={styles.optionText}>Your Profile</Text>
+          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("EDIT")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -206,12 +199,8 @@ export default function Profile({ signOut }) {
           style={styles.optionRow}
           onPress={() => navigation.navigate("EditPersonal")}
         >
-          <FontAwesome
-            name="user-circle-o"
-            size={20}
-            style={styles.optionIcon}
-          />
-          <Text style={styles.optionText}>Personal Information</Text>
+          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("PERSONAL_INFORMATION")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -219,12 +208,8 @@ export default function Profile({ signOut }) {
           style={styles.optionRow}
           onPress={() => navigation.navigate("IdentityDocument")}
         >
-          <FontAwesome
-            name="user-circle-o"
-            size={20}
-            style={styles.optionIcon}
-          />
-          <Text style={styles.optionText}>Identity Document</Text>
+          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("IDENTITY_DOCUMENT")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -233,7 +218,7 @@ export default function Profile({ signOut }) {
           onPress={() => navigation.navigate("ChangePassword")}
         >
           <FontAwesome name="lock" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Change Password</Text>
+          <Text style={styles.optionText}>{t("CHANGE_PASSWORD")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -241,25 +226,14 @@ export default function Profile({ signOut }) {
           style={styles.optionRow}
           onPress={() => navigation.navigate("EditOrganization")}
         >
-          <FontAwesome
-            name="user-circle-o"
-            size={20}
-            style={styles.optionIcon}
-          />
-          <Text style={styles.optionText}>Organization Details</Text>
+          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("ORGANIZATION_DETAILS")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("Skills")}
-        >
-          <FontAwesome 
-            name="tags" 
-            size={20} 
-            style={styles.optionIcon} 
-          />
-          <Text style={styles.optionText}>Skills</Text>
+        <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate("Skills")}>
+          <FontAwesome name="tags" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("SKILLS")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -267,12 +241,8 @@ export default function Profile({ signOut }) {
           style={styles.optionRow}
           onPress={() => navigation.navigate("Availability")}
         >
-          <FontAwesome 
-            name="calendar" 
-            size={20} 
-            style={styles.optionIcon}
-          />
-          <Text style={styles.optionText}>Availability</Text>
+          <FontAwesome name="calendar" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("AVAILABILITY")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -280,39 +250,32 @@ export default function Profile({ signOut }) {
           style={styles.optionRow}
           onPress={() => navigation.navigate("Preferences")}
         >
-          <FontAwesome 
-            name="gear" 
-            size={20} 
-            style={styles.optionIcon}
-          />
-          <Text style={styles.optionText}>Preferences</Text>
+          <FontAwesome name="gear" size={20} style={styles.optionIcon} />
+          <Text style={styles.optionText}>{t("PREFERENCES")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={styles.optionRow}
           onPress={() => navigation.navigate("AccountDeletion")}
         >
           <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Sign Off</Text>
+          <Text style={styles.optionText}>{t("SIGN_OFF")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
-        {/* <View style={styles.optionRow}>
+        <View style={styles.optionRow}>
           <FontAwesome name="bell" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Notifications</Text>
-          <Switch
-            value={isNotificationsEnabled}
-            onValueChange={setNotificationsEnabled}
-          />
-        </View> */}
-        
+          <Text style={styles.optionText}>{t("NOTIFICATIONS")}</Text>
+          <Switch value={isNotificationsEnabled} onValueChange={setNotificationsEnabled} />
+        </View>
+
         <TouchableOpacity
           style={styles.optionRow}
           onPress={() => navigation.navigate("TermsAndConditions")}
         >
           <FontAwesome name="file-text-o" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Terms & Conditions</Text>
+          <Text style={styles.optionText}>{t("TERMS_AND_CONDITIONS")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
@@ -321,22 +284,19 @@ export default function Profile({ signOut }) {
           onPress={() => navigation.navigate("PrivacyPolicy")}
         >
           <FontAwesome name="shield" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Privacy Policy</Text>
+          <Text style={styles.optionText}>{t("PRIVACY_POLICY")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("Welcome")}
-        >
+        <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate("Welcome")}>
           <FontAwesome name="info-circle" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Help Center</Text>
+          <Text style={styles.optionText}>{t("HELP_CENTER")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.optionRow} onPress={confirmSignOut}>
           <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>Log Out</Text>
+          <Text style={styles.optionText}>{t("LOGOUT")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
       </ScrollView>

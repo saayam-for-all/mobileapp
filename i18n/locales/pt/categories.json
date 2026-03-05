@@ -1,197 +1,196 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "Geral",
-      "DESC": "Use quando não tiver certeza; descreva sua necessidade com detalhes."
+      "LABEL": "Em geral",
+      "DESC": "Use quando não tiver certeza; descreva detalhadamente sua necessidade."
     },
     "FOOD_AND_ESSENTIALS": {
       "LABEL": "Alimentos e itens essenciais",
-      "DESC": "Acesse apoio alimentar, ajuda com compras e preparação de refeições.",
+      "DESC": "Acesse suporte alimentar, ajuda no supermercado e assistência na preparação de refeições.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Assistência alimentar",
+          "LABEL": "Assistência Alimentar",
           "DESC": "Encontre bancos de alimentos, despensas ou programas de refeições."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Compras e entrega",
-          "DESC": "Peça ajuda para comprar e entregar alimentos."
+          "LABEL": "Compras e entrega de alimentos",
+          "DESC": "Solicite ajuda para comprar e entregar mantimentos."
         },
         "COOKING_HELP": {
-          "LABEL": "Ajuda na cozinha",
-          "DESC": "Receba orientação para preparar e cozinhar refeições."
+          "LABEL": "Ajuda para cozinhar",
+          "DESC": "Obtenha orientação sobre como preparar e cozinhar refeições."
         }
       }
     },
     "CLOTHING_ASSISTANCE": {
-      "LABEL": "Assistência com roupas",
-      "DESC": "Doe, peça emprestado, ajuste ou solicite ajuda com roupas.",
+      "LABEL": "Assistência para roupas",
+      "DESC": "Doe, peça emprestado, adapte ou solicite ajuda com roupas.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Doar roupas",
-          "DESC": "Ofereça roupas para quem precisa."
+          "LABEL": "Doe roupas",
+          "DESC": "Dê roupas aos necessitados."
         },
         "BORROW_CLOTHES": {
-          "LABEL": "Pegar roupas emprestadas",
-          "DESC": "Pegue roupas em bom estado emprestadas."
+          "LABEL": "Emprestar roupas",
+          "DESC": "Pegue emprestado roupas usadas com cuidado."
         },
         "EMERGENCY_CLOTHING_ASSISTANCE": {
-          "LABEL": "Assistência emergencial com roupas",
-          "DESC": "Ajuda rápida quando você precisa de roupas com urgência."
+          "LABEL": "Assistência emergencial para roupas",
+          "DESC": "Suporte rápido de roupas para situações urgentes."
         },
         "TAILORING": {
-          "LABEL": "Costura",
-          "DESC": "Serviços de reparo e ajustes de roupas."
+          "LABEL": "Alfaiataria",
+          "DESC": "Serviços de conserto e alteração de roupas."
         }
       }
     },
     "HOUSING_ASSISTANCE": {
-      "LABEL": "Assistência em moradia",
-      "DESC": "Apoio com aluguel, mudança e organização da casa.",
+      "LABEL": "Assistência Habitacional",
+      "DESC": "Suporte para aluguel, mudança e configuração doméstica.",
       "SUBCATEGORIES": {
         "LEASE_SUPPORT": {
-          "LABEL": "Suporte com contratos de aluguel",
-          "DESC": "Ajuda para entender termos e exigências do contrato."
+          "LABEL": "Suporte de locação",
+          "DESC": "Ajude a entender os termos e requisitos do aluguel."
         },
         "TENANT_RENT_SUPPORT": {
-          "LABEL": "Ajuda com pagamento de aluguel",
-          "DESC": "Orientação quando estiver com dificuldade para pagar o aluguel."
+          "LABEL": "Apoio ao aluguel do inquilino",
+          "DESC": "Orientação quando você está lutando com o aluguel."
         },
         "REPAIR_MAINTENANCE_SUPPORT": {
-          "LABEL": "Suporte em reparos e manutenção",
-          "DESC": "Assistência para organizar reparos domésticos básicos."
+          "LABEL": "Suporte para reparo e manutenção",
+          "DESC": "Assistência no agendamento de reparos ou manutenções básicas."
         },
         "UTILITIES_SETUP_SUPPORT": {
-          "LABEL": "Configuração de serviços básicos",
-          "DESC": "Ajuda para ativar internet, energia ou outros serviços."
+          "LABEL": "Suporte para configuração de utilitários",
+          "DESC": "Ajude a configurar internet, eletricidade ou outros serviços públicos."
         },
         "LOOKING_FOR_RENTAL": {
-          "LABEL": "Procura por imóvel para alugar",
-          "DESC": "Apoio para encontrar apartamentos ou quartos."
+          "LABEL": "Procurando Aluguel",
+          "DESC": "Apoie a localização de apartamentos ou quartos."
         },
         "FIND_ROOMATE": {
-          "LABEL": "Encontrar colega de quarto",
-          "DESC": "Conecte-se com pessoas para dividir moradia."
+          "LABEL": "Encontre um colega de quarto",
+          "DESC": "Combine com colegas de quarto ou moradia compartilhada."
         },
         "MOVE_IN_HELP": {
-          "LABEL": "Ajuda na mudança",
-          "DESC": "Suporte prático para empacotar, carregar e desempacotar."
+          "LABEL": "Ajuda para mudança",
+          "DESC": "Ajuda prática para embalar, levantar ou desembalar."
         },
         "BOOKING_PACKERS_MOVERS_SUPPORT": {
-          "LABEL": "Suporte para contratar mudanças",
-          "DESC": "Orientação para reservar empresas de mudança confiáveis."
+          "LABEL": "Suporte para empacotadores e transportadores",
+          "DESC": "Assistência na reserva de serviços de mudança confiáveis."
         },
         "BUY_THINGS": {
-          "LABEL": "Comprar itens para o lar",
-          "DESC": "Ajuda para encontrar móveis e itens essenciais."
+          "LABEL": "Compre itens domésticos",
+          "DESC": "Ajude a adquirir móveis e utensílios domésticos essenciais."
         },
         "SELL_THINGS": {
-          "LABEL": "Vender itens do lar",
-          "DESC": "Apoio para vender ou doar objetos que não usa mais."
+          "LABEL": "Venda itens domésticos",
+          "DESC": "Obtenha uma lista de suporte ou doe itens que você não precisa mais."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Apoio educacional e profissional",
-      "DESC": "Aplicações universitárias, revisão de SOP, tutoria e suporte aos estudos.",
+      "LABEL": "Educação e apoio profissional",
+      "DESC": "Aplicativos universitários, análises de SOP, aulas particulares e suporte de estudo.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "Ajuda com inscrições",
-          "DESC": "Assistência com formulários e processos de inscrição."
+          "LABEL": "Ajuda para inscrição na faculdade",
+          "DESC": "Ajuda com inscrições e formulários."
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "Revisão de SOP e redações",
-          "DESC": "Feedback sobre declarações e redações."
+          "LABEL": "Revisão de SOP e ensaio",
+          "DESC": "Feedback sobre declarações e ensaios."
         },
         "TUTORING": {
           "LABEL": "Tutoria",
-          "DESC": "Suporte de estudo e reforço em disciplinas."
+          "DESC": "Monitoria de disciplinas e apoio ao estudo."
         },
         "SCHOLARSHIP_KNOWLEDGE": {
-          "LABEL": "Informações sobre bolsas",
-          "DESC": "Compartilhe detalhes sobre bolsas e auxílios financeiros."
+          "LABEL": "Conhecimento de bolsa de estudos",
+          "DESC": "Compartilhe informações sobre bolsas de estudo e subsídios."
         },
         "STUDY_GROUP_FORMATION": {
-          "LABEL": "Formação de grupos de estudo",
-          "DESC": "Encontre ou organize grupos colaborativos de estudo."
+          "LABEL": "Formação de Grupo de Estudo",
+          "DESC": "Encontre ou organize grupos de estudo colaborativos."
         },
         "CAREER_GUIDANCE": {
           "LABEL": "Orientação de carreira",
-          "DESC": "Planejamento de carreira, currículos e entrevistas."
+          "DESC": "Planejamento de carreira, currículo e suporte para entrevistas."
         },
         "EDUCATION_RESOURCE_SHARING": {
           "LABEL": "Compartilhamento de recursos educacionais",
-          "DESC": "Compartilhe anotações, gravações ou materiais de prática."
+          "DESC": "Compartilhe notas, gravações ou material prático."
         }
       }
     },
     "HEALTHCARE_AND_WELLNESS": {
       "LABEL": "Saúde e bem-estar",
-      "DESC": "Orientação não clínica, lembretes e apoio ao bem-estar.",
+      "DESC": "Orientação médica não clínica, lembretes e apoio ao bem-estar.",
       "SUBCATEGORIES": {
         "MEDICAL_CONSULTATION": {
-          "LABEL": "Consulta médica",
-          "DESC": "Ajuda para coordenar teleconsultas ou informações básicas."
+          "LABEL": "Consulta Médica",
+          "DESC": "Ajude a coordenar tele-consultas ou informações médicas básicas."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "Entrega de medicamentos",
-          "DESC": "Retirada e entrega de medicamentos sem receita."
+          "DESC": "Coleta e entrega de medicamentos isentos de prescrição."
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "Apoio à saúde mental",
-          "DESC": "Acesso a recursos gerais de saúde mental."
+          "LABEL": "Apoio ao bem-estar mental",
+          "DESC": "Acesse recursos gerais de saúde mental."
         },
         "MEDICATION_REMINDERS": {
           "LABEL": "Lembretes de medicação",
-          "DESC": "Lembretes não clínicos para tomar medicamentos."
+          "DESC": "Lembretes de medicamentos não clínicos."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Educação em saúde",
-          "DESC": "Conscientização sobre bem-estar e educação em saúde."
+          "LABEL": "Orientação de Educação em Saúde",
+          "DESC": "Conscientização sobre o bem-estar e educação em saúde."
         }
       }
     },
     "ELDERLY_COMMUNITY_ASSISTANCE": {
-      "LABEL": "Assistência comunitária para idosos",
-      "DESC": "Suporte não clínico para idosos, cuidadores e comunidades.",
+      "LABEL": "Assistência Comunitária a Idosos",
+      "DESC": "Apoio não médico para idosos, cuidadores e comunidades.",
       "SUBCATEGORIES": {
         "SENIOR_RELOCATION_SUPPORT": {
-          "LABEL": "Apoio à mudança de idosos",
-          "DESC": "Planeje mudanças entre casas ou instituições de cuidado."
+          "LABEL": "Suporte de Relocação Sênior",
+          "DESC": "Planeje mudanças entre casas ou instalações de cuidados."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Ajuda digital para idosos",
+          "LABEL": "Suporte Digital para Idosos",
           "DESC": "Assistência com dispositivos e aplicativos."
         },
         "MEDICATION_MANAGEMENT": {
-          "LABEL": "Gerenciamento de medicação",
-          "DESC": "Controle de horários, lembretes e armazenamento de remédios."
+          "LABEL": "Gestão de Medicamentos",
+          "DESC": "Certifique-se de que programações, lembretes e armazenamento estejam em dia."
         },
         "MEDICAL_DEVICES_SETUP": {
           "LABEL": "Configuração de dispositivos médicos",
-          "DESC": "Instale ou ajuste equipamentos médicos e de apoio."
+          "DESC": "Configure ou solucione problemas de dispositivos médicos e de assistência."
         },
         "ERRANDS_EVENTS_TRANSPORTATION": {
-          "LABEL": "Compromissos, eventos e transporte",
-          "DESC": "Acompanhamento em tarefas, eventos ou passeios."
+          "LABEL": "Recados, eventos e transporte",
+          "DESC": "Acompanhe os idosos em tarefas ou eventos especiais."
         },
         "TRANSPORTATION_APPOINTMENTS_EVENTS": {
-          "LABEL": "Transporte para consultas",
-          "DESC": "Organize deslocamentos para consultas e encontros."
+          "LABEL": "Transporte para Consultas",
+          "DESC": "Organize passeios para compromissos e reuniões."
         },
         "SCHEDULING_APPOINTMENTS_OR_TASKS": {
-          "LABEL": "Agendamento de consultas ou tarefas",
-          "DESC": "Mantenha o controle de compromissos, renovações e atividades."
+          "LABEL": "Agendamento de compromissos ou tarefas",
+          "DESC": "Acompanhe compromissos, recargas e tarefas."
         },
         "SOCIAL_CONNECTION": {
           "LABEL": "Conexão social",
-          "DESC": "Companhia e atividades sociais."
+          "DESC": "Companheirismo e atividades sociais."
         },
         "MEAL_SUPPORT": {
-          "LABEL": "Apoio com refeições",
-          "DESC": "Ajuda para preparar e cozinhar refeições."
+          "LABEL": "Apoio Refeição",
+          "DESC": "Ajuda na preparação e cozimento das refeições."
         }
       }
     }
   }
 }
-

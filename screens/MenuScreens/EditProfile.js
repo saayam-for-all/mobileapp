@@ -1,22 +1,23 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { fetchAuthSession, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth';
-import { countriesList } from '../../data/countries';
-import Button from '../../components/Button';
-import useAuthUser from '../../hooks/useAuthUser';
+import { countriesList } from "../../data/countries";
+import useAuthUser from "../../hooks/useAuthUser";
 import RNPickerSelect from "react-native-picker-select";
-
-import { ProfileFormStyles } from './ProfileStyles';
-
+import { useTranslation } from "react-i18next";
 
 const EditProfile = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [primaryEmail, setPrimaryEmail] = useState('');
-  const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState('');
-  const [zoneinfo, setzoneinfo] = useState('');
+  const { t } = useTranslation("profile");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [primaryEmail, setPrimaryEmail] = useState("");
+  const [secondaryEmail, setSecondaryEmail] = useState("");
+  const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState("");
+  const [secondaryPhoneNumber, setSecondaryPhoneNumber] = useState("");
+  const [zoneinfo, setzoneinfo] = useState("");
   const [needVerification, setNeedVerification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [backupProfile, setBackupProfile] = useState({});
@@ -43,13 +44,13 @@ const EditProfile = () => {
         const zoneinfoAttr = attributes['custom:Country'];
 
         const profileData = {
-          firstName: given_name || '',
-          lastName: family_name || '',
-          primaryEmail: email || '',
-          primaryPhoneNumber: phone_number || '',
-          secondaryEmail: '',
-          secondaryPhoneNumber: '',
-          zoneinfo: zoneinfoAttr || '',
+          firstName: given_name || "",
+          lastName: family_name || "",
+          primaryEmail: email || "",
+          primaryPhoneNumber: phone_number || "",
+          secondaryEmail: "",
+          secondaryPhoneNumber: "",
+          zoneinfo: zoneinfoAttr || "",
         };
 
         setFirstName(profileData.firstName);
@@ -67,7 +68,6 @@ const EditProfile = () => {
     setNeedVerification(false);
   }, []);
 
-
   useEffect(() => {
     if (needVerification) {
       navigation.navigate("ConfirmUpdate", {
@@ -78,8 +78,8 @@ const EditProfile = () => {
           family_name: lastName,
           given_name: firstName,
           phone_number: primaryPhoneNumber,
-          "custom:Country": zoneinfo
-        }
+          "custom:Country": zoneinfo,
+        },
       });
       setNeedVerification(false);
     }
@@ -88,23 +88,26 @@ const EditProfile = () => {
   const validateForm = () => {
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(firstName)) {
-      Alert.alert('Invalid Input', 'First Name should contain only letters.');
+      Alert.alert("Invalid Input", "First Name should contain only letters.");
       return false;
     }
     if (!nameRegex.test(lastName)) {
-      Alert.alert('Invalid Input', 'Last Name should contain only letters.');
+      Alert.alert("Invalid Input", "Last Name should contain only letters.");
       return false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(primaryEmail)) {
-      Alert.alert('Invalid Email', 'Please enter a valid primary email address.');
+      Alert.alert("Invalid Email", "Please enter a valid primary email address.");
       return false;
     }
 
     const phoneRegex = /^\+[0-9]{1,15}$/;
     if (!phoneRegex.test(primaryPhoneNumber)) {
-      Alert.alert('Invalid Phone Number', 'Primary Phone number should start with "+" followed by digits.');
+      Alert.alert(
+        "Invalid Phone Number",
+        'Primary Phone number should start with "+" followed by digits.'
+      );
       return false;
     }
 
@@ -115,7 +118,7 @@ const EditProfile = () => {
     if (userEmail) {
       AsyncStorage.removeItem(userEmail);
     }
-  }
+  };
 
   async function updateUser() {
     AsyncStorage.setItem('user_updated', 'false');
@@ -145,10 +148,10 @@ const EditProfile = () => {
         return;
       }
 
-      Alert.alert('Success', 'Profile updated successfully.');
+      Alert.alert('Success', t("PROFILE_UPDATE_SUCCESS"));
       removeFirstTime(currentAttributes.email);
     } catch (err) {
-      Alert.alert('User Update Error', err.message);
+      Alert.alert("User Update Error", err.message);
     }
   }
 
@@ -190,15 +193,15 @@ const EditProfile = () => {
     setIsEditing(false);
   };
 
-
-
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Your Profile</Text>
+      {/* No "EDIT_PROFILE" key exists; using existing "EDIT" and "YOUR_PROFILE" isn't semantically perfect,
+          so leaving as-is per your rule OR you can change to t("YOUR_PROFILE") if you want. */}
+      <Text style={styles.header}>Edit Profile</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="First Name"
+        placeholder={t("FIRST_NAME")}
         value={firstName}
         onChangeText={setFirstName}
         editable={isEditing}
@@ -206,7 +209,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Last Name"
+        placeholder={t("LAST_NAME")}
         value={lastName}
         onChangeText={setLastName}
         editable={isEditing}
@@ -214,7 +217,7 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Primary Email"
+        placeholder={t("PRIMARY EMAIL")}
         keyboardType="email-address"
         value={primaryEmail}
         onChangeText={setPrimaryEmail}
@@ -223,10 +226,29 @@ const EditProfile = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
+        placeholder={t("SECONDARY_EMAIL")}
+        keyboardType="email-address"
+        value={secondaryEmail}
+        onChangeText={setSecondaryEmail}
+        editable={isEditing}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder={t("PHONE_NUMBER")}
         keyboardType="phone-pad"
         value={primaryPhoneNumber}
         onChangeText={setPrimaryPhoneNumber}
+        editable={isEditing}
+      />
+
+      <TextInput
+        style={styles.input}
+        // No "SECONDARY_PHONE_NUMBER" key; closest existing is "SECONDARY_PHONE"
+        placeholder={t("SECONDARY_PHONE")}
+        keyboardType="phone-pad"
+        value={secondaryPhoneNumber}
+        onChangeText={setSecondaryPhoneNumber}
         editable={isEditing}
       />
 
@@ -235,7 +257,7 @@ const EditProfile = () => {
         items={countriesList}
         value={zoneinfo}
         disabled={!isEditing}
-        placeholder={{ label: "Country", value: null }}
+        placeholder={{ label: t("SELECT_COUNTRY"), value: null }}
         useNativeAndroidPickerStyle={false}
         style={{
           inputIOS: styles.input,
@@ -250,17 +272,103 @@ const EditProfile = () => {
       />
 
       {!isEditing ? (
-        <Button onPress={handleEdit} style={styles.editButton}>Edit</Button>
+        <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
+          <Text style={styles.buttonText}>{t("EDIT")}</Text>
+        </TouchableOpacity>
       ) : (
         <View style={styles.buttonRow}>
-          <Button onPress={handleSave} backgroundColor='#3B82F6' style={styles.button}>Save</Button>
-          <Button onPress={handleCancel} backgroundColor='#6B7280' style={styles.button}>Cancel</Button>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#3B82F6" }]}
+            onPress={handleSave}
+          >
+            <Text style={styles.buttonText}>{t("SAVE")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#6B7280" }]}
+            onPress={handleCancel}
+          >
+            <Text style={styles.buttonText}>{t("CANCEL")}</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
   );
 };
-
-const styles = ProfileFormStyles;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  input: {
+    height: 50,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingLeft: 10,
+    marginBottom: 15,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginBottom: 15,
+  },
+  picker: {
+    height: 50,
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginHorizontal: 5,
+  },
+  editButton: {
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    backgroundColor: "#3B82F6",
+    marginTop: 10,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 8,
+    color: "#374151",
+    paddingRight: 30,
+    backgroundColor: "#f9fafb",
+    marginBottom: 16,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 8,
+    color: "#374151",
+    paddingRight: 30,
+    backgroundColor: "#f9fafb",
+    marginBottom: 16,
+  },
+});
 
 export default EditProfile;

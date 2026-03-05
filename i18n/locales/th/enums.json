@@ -1,7 +1,7 @@
 {
   "requestFor": {
     "SELF": "ตัวเอง",
-    "OTHER": "คนอื่น"
+    "OTHER": "อื่น"
   },
   "requestPriority": {
     "LOW": "ต่ำ",
@@ -10,15 +10,17 @@
     "CRITICAL": "วิกฤต"
   },
   "requestStatus": {
-    "CREATED": "สร้างแล้ว",
-    "MATCHING VOLUNTEER": "กำลังจับคู่อาสาสมัคร",
-    "MANAGED": "จัดการแล้ว",
+    "CREATED": "สร้าง",
+    "MATCHING_VOLUNTEER": "อาสาสมัครที่ตรงกัน",
+    "MANAGED": "จัดการ",
     "RESOLVED": "แก้ไขแล้ว",
-    "CANCELLED": "ยกเลิกแล้ว",
-    "DELETED": "ลบแล้ว"
+    "CANCELLED": "ยกเลิก",
+    "DELETED": "ลบแล้ว",
+    "RATED_BY_REQUESTER": "ให้คะแนนโดยผู้ขอ",
+    "RATED_BY_VOLUNTEER": "ให้คะแนนโดยอาสาสมัคร"
   },
   "requestType": {
-    "INPERSON": "พบตัว",
+    "IN_PERSON": "ในบุคคล",
     "REMOTE": "ระยะไกล"
   }
 }

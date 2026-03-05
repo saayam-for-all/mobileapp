@@ -1,26 +1,26 @@
 {
   "requestFor": {
-    "SELF": "নিজের জন্য",
-    "OTHER": "অন্যের জন্য"
+    "SELF": "স্ব",
+    "OTHER": "অন্যান্য"
   },
   "requestPriority": {
-    "LOW": "নিম্ন",
+    "LOW": "কম",
     "MEDIUM": "মাঝারি",
     "HIGH": "উচ্চ",
-    "CRITICAL": "গুরুত্বপূর্ণ"
+    "CRITICAL": "সমালোচনামূলক"
   },
   "requestStatus": {
     "CREATED": "তৈরি হয়েছে",
-    "MATCHING_VOLUNTEER": "স্বেচ্ছাসেবক খোঁজা হচ্ছে",
+    "MATCHING_VOLUNTEER": "ম্যাচিং স্বেচ্ছাসেবক",
     "MANAGED": "পরিচালিত",
-    "RESOLVED": "সমাধান হয়েছে",
-    "CANCELLED": "বাতিল করা হয়েছে",
+    "RESOLVED": "সমাধান করা হয়েছে",
+    "CANCELLED": "বাতিল",
     "DELETED": "মুছে ফেলা হয়েছে",
-    "RATED_BY_REQUESTER": "অনুরোধকারী দ্বারা মূল্যায়িত",
-    "RATED_BY_VOLUNTEER": "স্বেচ্ছাসেবক দ্বারা মূল্যায়িত"
+    "RATED_BY_REQUESTER": "অনুরোধকারী দ্বারা রেট",
+    "RATED_BY_VOLUNTEER": "স্বেচ্ছাসেবক দ্বারা রেট"
   },
   "requestType": {
-    "IN_PERSON": "সরাসরি",
+    "IN_PERSON": "ব্যক্তিগতভাবে",
     "REMOTE": "দূরবর্তী"
   }
 }

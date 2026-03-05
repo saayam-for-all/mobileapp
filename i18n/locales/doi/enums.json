@@ -1,24 +1,26 @@
 {
   "requestFor": {
-    "SELF": "अपने लेई",
+    "SELF": "खुद",
     "OTHER": "होर"
   },
   "requestPriority": {
     "LOW": "घट्ट",
-    "MEDIUM": "मध्यम",
-    "HIGH": "उच्च",
-    "CRITICAL": "गंभीर"
+    "MEDIUM": "दरम्याना",
+    "HIGH": "उच्चा",
+    "CRITICAL": "संगीन"
   },
   "requestStatus": {
-    "CREATED": "बनाया गेया",
-    "MATCHING VOLUNTEER": "स्वयंसेवक तोपा करदे",
-    "MANAGED": "प्रबंधत",
-    "RESOLVED": "हल होया",
-    "CANCELLED": "रद्द होया",
-    "DELETED": "मिटाया गेया"
+    "CREATED": "बनाया गया",
+    "MATCHING_VOLUNTEER": "मिलान वालंटियर",
+    "MANAGED": "प्रबंधित कीता",
+    "RESOLVED": "हल हो गया",
+    "CANCELLED": "रद्द कर दी गई",
+    "DELETED": "डिलीट कर दिया",
+    "RATED_BY_REQUESTER": "निवेदक द्वारा रेटेड कीता गेदा ऐ",
+    "RATED_BY_VOLUNTEER": "वालंटियर द्वारा रेटेड"
   },
   "requestType": {
-    "INPERSON": "खुद मिलीकरी",
-    "REMOTE": "दूर थमां"
+    "IN_PERSON": "व्यक्तिगत रूप च",
+    "REMOTE": "रिमोट"
   }
 }

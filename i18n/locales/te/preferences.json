@@ -1,13 +1,13 @@
 {
-  "title": "Preferences",
+  "title": "ప్రాధాన్యతలు",
   "labels": {
-    "timezone": "Time Zone",
-    "language": "Language",
-    "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "timezone": "టైమ్ జోన్",
+    "language": "భాష",
+    "notifications": "నోటిఫికేషన్‌లు",
+    "save": "సేవ్ చేయండి",
+    "cancel": "రద్దు చేయి"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "ప్రాధాన్యతలు విజయవంతంగా సేవ్ చేయబడ్డాయి."
   }
 }

@@ -15,10 +15,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.saayam.mobileapp",
       "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app needs access to the microphone to record audio messages.",
         "NSFaceIDUsageDescription": "We use Face ID to securely sign you in to your account."
       }
     },
     "android": {
+      "permissions": [
+        "RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -30,9 +34,16 @@
     },
     "plugins": [
       "expo-secure-store",
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
       "expo-localization",
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      "expo-audio"
     ]
   }
 }

@@ -1,9 +1,9 @@
-/* eslint-disable no-console */
+
 import React, { useState } from 'react';
-import {
-  View, StyleSheet, Text, Alert
-} from 'react-native';
+import { View, StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
+import { FontAwesome } from "@expo/vector-icons";
 import { signUp } from 'aws-amplify/auth';
+import { useTranslation } from "react-i18next";
 import Button from '../../components/Button';
 import Spacer from '../../components/Spacer';
 import Input from '../../components/Input';
@@ -13,26 +13,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start",
     paddingTop: 10,
   },
-  warnText:{
+  warnText: {
     fontSize: 10,
-    fontWeight: 'bold',
-  },
-  innerText:{
-    color:'Blue'
+    fontWeight: "bold",
+    marginHorizontal: "3%",
+    marginTop: 10,
   },
   alertText: {
-    color: 'red',
-    marginHorizontal: '3%',
-    marginTop: '-3%',
-    width: '94%'
+    color: "red",
+    marginHorizontal: "3%",
+    marginTop: 6,
+    width: "94%",
   },
   textDescriptionontainer: {
-    marginHorizontal: '3%',
+    marginHorizontal: "3%",
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
@@ -40,37 +39,98 @@ const styles = StyleSheet.create({
 });
 
 export default function SignUp({ navigation }) {
-  const [name, onChangeName] = useState('');
-  const [lastName, onChangeLastName] = useState('');
-  const [email, onChangeEmail] = useState('');
-  const [phone_number, onChangePhone] = useState('');
-  const [full_phone,setFullPhone] = useState('');
-  const [country_code, onChangeCountryCode] = useState('+1');
+  const { t } = useTranslation("auth");
+
+  const [name, onChangeName] = useState("");
+  const [lastName, onChangeLastName] = useState("");
+  const [email, onChangeEmail] = useState("");
+  const [phone_number, onChangePhone] = useState("");
+  const [full_phone, setFullPhone] = useState("");
+  const [country_code, onChangeCountryCode] = useState("+1");
   const [country_name, onChangeCountryName] = useState("United States");
-  const [zoneinfo, onChangeTimeZone] = useState('');
-  const [password, onChangePassword] = useState('');
+
+  const [password, onChangePassword] = useState("");
+  const [repeatPassword, onChangeRepeatPassword] = useState("");
+
   const [passwordValid, setPasswordValid] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  const [repeatPassword, onChangeRepeatPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
 
   const [invalidMessage, setInvalidMessage] = useState(null);
-  const errorMessages = {
-    password: 'Password must be equal and have greater length than 8 with uppercase, digits and special characters.',
-    email: 'Please enter a valid email address.',
-    phone: 'Phone number must be valid numeric values.'
-  }
+
+  // ✅ Independent show/hide toggles
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
+  const popError = (message) =>
+    Alert.alert(
+      t("ACCOUNT_DELETION_ERROR"), // generic title available in your auth.json
+      message,
+      [{ text: "OK" }]
+    );
+
+  const validateEmail = (value) => {
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(value);
+  };
+
+  const validateStrongPassword = (value) => {
+    const valid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
+    return valid.test(value);
+  };
 
   const signUpUser = async () => {
     const validPassword = password.length > 5 && (password === repeatPassword);
     let errorMessage = null;
     let hasError = false;
     const allFields = [name, lastName, email, phone_number, password, repeatPassword];
-    // Detect if there is an empty field
-    const isNotEmpty = (value) => typeof value === 'string' && value.trim()!== '';
+    const isNotEmpty = (v) => typeof v === "string" && v.trim() !== "";
     const allInputsFilled = allFields.every(isNotEmpty);
+
+    if (!allInputsFilled) {
+      const msg = "Please fill all fields."; // add a translation key later if you want
+      setInvalidMessage(msg);
+      popError(msg);
+      return;
+    }
+
+    const emailOk = validateEmail(email);
+    setEmailValid(emailOk);
+    if (!emailOk) {
+      const msg = t("EMAIL_REQUIRED");
+      setInvalidMessage(msg);
+      popError(msg);
+      return;
+    }
+
+    const pwOk = validateStrongPassword(password);
+    setPasswordValid(pwOk);
+    if (!pwOk) {
+      const msg = t("PASSWORD_REQUIREMENTS_ERROR");
+      setInvalidMessage(msg);
+      popError(msg);
+      return;
+    }
+
+    if (password !== repeatPassword) {
+      const msg = t("PASSWORD_MISMATCH_ERROR");
+      setInvalidMessage(msg);
+      popError(msg);
+      return;
+    }
+
+    if (!isPhoneValid) {
+      const msg = "Invalid phone number."; // add a translation key later if you want
+      setInvalidMessage(msg);
+      popError(msg);
+      return;
+    }
+
+    setInvalidMessage(null);
+
     console.log(allInputsFilled);
     if (validPassword && emailValid && isPhoneValid && allInputsFilled) {
       setInvalidMessage(null);
@@ -107,175 +167,117 @@ export default function SignUp({ navigation }) {
           }
           console.log(err);
         });
-    } else {
-      if (!validPassword || password == '') {
-        errorMessage = errorMessages.password;
-      }
-      if (!emailValid || email == '') {
-        errorMessage = errorMessages.email;
-      }
-      if (!isPhoneValid || phone_number == '') {
-        errorMessage = errorMessages.phone;
-      }
-      if (!allInputsFilled) {
-        errorMessage = 'Please fill all fields.';
-      }
-      setInvalidMessage(errorMessage);
-      popError(errorMessage);
     }
   };
-  const popError = (errorMessage) =>
-    Alert.alert('Submission Failed', errorMessage, [
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-  ]);
+
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", width: "100%",paddingHorizontal:'1.5%', marginBottom:'1.5%', alignItems: "stretch", alignContent: 'flex-start'}}>
-        <View style={{width: '50%', padding: 0}}>
+      {/* First/Last Name */}
+      <View style={{ flexDirection: "row", width: "100%", paddingHorizontal: "1.5%" }}>
+        <View style={{ width: "50%" }}>
           <View style={styles.textDescriptionontainer}>
             <Text>First Name</Text>
           </View>
-          <Input
-            value={name}
-            placeholder="First Name"
-            onChange={(text) => onChangeName(text)} 
-            autoFocus
-          />
+          <Input value={name} placeholder="First Name" onChange={onChangeName} autoFocus />
         </View>
 
-        <View style={{width: '50%', }}>
+        <View style={{ width: "50%" }}>
           <View style={styles.textDescriptionontainer}>
             <Text>Last Name</Text>
           </View>
-          <Input
-            value={lastName}
-            placeholder="Last Name"
-            onChange={(text) => onChangeLastName(text)}
-            //autoFocus
-          />
+          <Input value={lastName} placeholder="Last Name" onChange={onChangeLastName} />
         </View>
       </View>
-      <View style={{width: '100%'}}>
-        <View style={{...styles.textDescriptionontainer}}>
-          <Text>Email</Text>
+
+      {/* Email */}
+      <View style={{ width: "100%" }}>
+        <View style={styles.textDescriptionontainer}>
+          <Text>{t("EMAIL")}</Text>
         </View>
         <Input
           value={email}
           placeholder="email@example.com"
-          
           onChange={(text) => {
             onChangeEmail(text);
-            const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            const valid = regex.test(text);
-              // address is invalid
-              if (!valid) {
-                setEmailValid(false);
-              } else {
-                setEmailValid(true);
-              }
-            }
-          }
+            setEmailValid(validateEmail(text));
+          }}
           autoCapitalize="none"
           autoCompleteType="email"
           keyboardType="email-address"
         />
-        {!emailValid && 
-          <Text style={styles.alertText}>
-            {errorMessages.email}
-          </Text>
-        }
+        {!emailValid && <Text style={styles.alertText}>{t("EMAIL_REQUIRED")}</Text>}
       </View>
-      {/* <Input
-        value={phone_number}
-        placeholder="Phone number"
-        onChange={(text) => onChangePhone(text)}
-        autoCapitalize="none"
-        autoCompleteType="tel"
-        keyboardType="phone-pad"
-      /> */}
-      <View style={{width: '100%'}}>
-        <View style={{...styles.textDescriptionontainer}}>
+
+      {/* Phone */}
+      <View style={{ width: "100%" }}>
+        <View style={styles.textDescriptionontainer}>
           <Text>Phone Number</Text>
         </View>
         <PhoneInput
-          countryCode= {country_code}
-          setCountryCode={(text) => onChangeCountryCode(text)}
-          countryName={country_name} 
+          countryCode={country_code}
+          setCountryCode={onChangeCountryCode}
+          countryName={country_name}
           onChangeCountryName={onChangeCountryName}
           setFullPhone={setFullPhone}
           phone={phone_number}
           placeholder="1234567890"
-          onChangePhone={(text) => onChangePhone(text)}
-          isPhoneValid = {isPhoneValid}
-          setIsPhoneValid = {setIsPhoneValid}
-          preferredCountries ={['US']}
-          label=''
-          errorMessage = ""
+          onChangePhone={onChangePhone}
+          isPhoneValid={isPhoneValid}
+          setIsPhoneValid={setIsPhoneValid}
+          preferredCountries={["US"]}
+          label=""
+          errorMessage=""
         />
-      {/*<Input
-        value={zoneinfo}
-        placeholder="PST"
-        onChange={(text) => onChangeTimeZone(text)}
-        autoCapitalize="none"
-       // autoCompleteType="email"
-       // keyboardType="email-address"
-      />*/}
-        {!isPhoneValid && 
-          <Text style={styles.alertText}>
-            {errorMessages.phone}
-          </Text>
-        }
+        {!isPhoneValid && <Text style={styles.alertText}>Invalid phone number.</Text>}
       </View>
-      <View style={{width: '100%'}}>
-        <View style={{...styles.textDescriptionontainer}}>
+
+      {/* Zone/Country */}
+      <View style={{ width: "100%" }}>
+        <View style={styles.textDescriptionontainer}>
           <Text>Zone</Text>
         </View>
         <Input
-            value={country_name}
-            placeholder="United States"
-            onChange={(text) => onChangeCountryName(text)}
-            autoCapitalize="none"
-          // autoCompleteType="email"
-          // keyboardType="email-address"
+          value={country_name}
+          placeholder="United States"
+          onChange={onChangeCountryName}
+          autoCapitalize="none"
         />
       </View>
-      <View style={{width: '100%'}}>
-        <View style={{...styles.textDescriptionontainer}}>
-          <Text>Password</Text>
+
+      {/* Password (with eye icon) */}
+      <View style={{ width: "100%" }}>
+        <View style={styles.textDescriptionontainer}>
+          <Text>{t("PASSWORD")}</Text>
         </View>
-        <Input
-          value={password}
-          placeholder="password"
-          onChange={(text) => {
-            const valid = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
-            const isValid = valid.test(text);
-            if(!isValid) {
-              setPasswordValid(false);
-            } else {
-              setPasswordValid(true);
-            }
-            onChangePassword(text);
+
+        <View
+          style={{
+            width: "94%",
+            marginHorizontal: "3%",
+            flexDirection: "row",
+            alignItems: "center",
           }}
-          secureTextEntry
-          autoCompleteType="password"
-        />
-        {!passwordValid && 
-          <Text style={styles.alertText}>
-            {errorMessages.password}
-          </Text>
-        }
-      </View>
-      <View style={{width: '100%'}}>
-        <View style={{...styles.textDescriptionontainer}}>
-          <Text>Confirm Password</Text>
+        >
+          <Input
+            value={password}
+            placeholder={t("PASSWORD")}
+            onChange={(text) => {
+              onChangePassword(text);
+              setPasswordValid(validateStrongPassword(text));
+            }}
+            secureTextEntry={!showPassword}
+            autoCompleteType="password"
+            style={{ flex: 1 }}
+          />
+
+          <TouchableOpacity onPress={() => setShowPassword((v) => !v)}>
+            <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color="#777" />
+          </TouchableOpacity>
         </View>
-        <Input
-          value={repeatPassword}
-          placeholder="Repeat password"
-          onChange={(text) => onChangeRepeatPassword(text)}
-          secureTextEntry
-          autoCompleteType="password"
-        />
+
+        {!passwordValid && (
+          <Text style={styles.alertText}>{t("PASSWORD_REQUIREMENTS_ERROR")}</Text>
+        )}
       </View>
       <Spacer size={40}/>
       <Button
@@ -283,13 +285,17 @@ export default function SignUp({ navigation }) {
         onPress={() => signUpUser()}
         loading={loading}
       >
-        Sign Up
+        {t("SIGNUP")}
       </Button>
-      <Text style={styles.warnText}>You will receive one time authentication code sent to your phone from <Text style={{ color: '#538CC6' }}>Saayam For All. </Text> Message and data rates may apply.
+
+      <Text style={styles.warnText}>
+        You will receive one time authentication code sent to your phone from{" "}
+        <Text style={{ color: "#538CC6" }}>Saayam For All.</Text> Message and data rates may apply.
       </Text>
-      <Text>
-        {invalidMessage}
-      </Text>
+
+      {invalidMessage ? (
+        <Text style={{ marginTop: 10, marginHorizontal: "3%" }}>{invalidMessage}</Text>
+      ) : null}
     </View>
   );
 }

@@ -1,24 +1,26 @@
 {
   "requestFor": {
     "SELF": "Bản thân",
-    "OTHER": "Người khác"
+    "OTHER": "Khác"
   },
   "requestPriority": {
     "LOW": "Thấp",
     "MEDIUM": "Trung bình",
     "HIGH": "Cao",
-    "CRITICAL": "Khẩn cấp"
+    "CRITICAL": "Phê bình"
   },
   "requestStatus": {
-    "CREATED": "Đã tạo",
-    "MATCHING VOLUNTEER": "Đang tìm tình nguyện viên",
-    "MANAGED": "Đã quản lý",
+    "CREATED": "Tạo",
+    "MATCHING_VOLUNTEER": "Tình nguyện viên phù hợp",
+    "MANAGED": "Được quản lý",
     "RESOLVED": "Đã giải quyết",
     "CANCELLED": "Đã hủy",
-    "DELETED": "Đã xóa"
+    "DELETED": "Đã xóa",
+    "RATED_BY_REQUESTER": "Được người yêu cầu xếp hạng",
+    "RATED_BY_VOLUNTEER": "Được đánh giá bởi tình nguyện viên"
   },
   "requestType": {
-    "INPERSON": "Trực tiếp",
-    "REMOTE": "Từ xa"
+    "IN_PERSON": "Trực tiếp",
+    "REMOTE": "Xa"
   }
 }

@@ -1,7 +1,7 @@
 {
   "requestFor": {
     "SELF": "Sarili",
-    "OTHER": "Iba"
+    "OTHER": "Iba pa"
   },
   "requestPriority": {
     "LOW": "Mababa",
@@ -11,14 +11,14 @@
   },
   "requestStatus": {
     "CREATED": "Nilikha",
-    "MATCHING VOLUNTEER": "Naghahanap ng Boluntaryo",
+    "MATCHING VOLUNTEER": "Matching Volunteer",
     "MANAGED": "Pinamamahalaan",
     "RESOLVED": "Nalutas",
     "CANCELLED": "Kinansela",
     "DELETED": "Tinanggal"
   },
   "requestType": {
-    "INPERSON": "Personal",
-    "REMOTE": "Malayuan"
+    "INPERSON": "Sa Tao",
+    "REMOTE": "Remote"
   }
 }

@@ -18,13 +18,41 @@ const getToken = async () => {
   }
 };
 
+// Request interceptor
 api.interceptors.request.use(
   async (config) => {
-    const token = await getToken();
-    if (token) {
-      config.headers.Authorization = `${token}`;
+    // Modify the request config (e.g., add headers) 
+    // config.headers.Authorization = 'Bearer YOUR_TOKEN';
+    const session = ((await Auth.currentSession()));
+    //let token = session.getIdToken().getJwtToken();
+    //console.log ('token api', token)
+    idTokenExpire = session.getIdToken().getExpiration();
+    refreshToken = session.getRefreshToken();
+    currentTimeSeconds = Math.round(+new Date() / 1000);
+    if (idTokenExpire < currentTimeSeconds) {
+      Auth.currentAuthenticatedUser()
+        .then((res) => {
+          res.refreshSession(refreshToken, (err, data) => {
+            if (err) {
+              Auth.signOut()
+            } else {
+              config.headers.Authorization = data.getIdToken().getJwtToken();
+              //console.log('Token refreshed')
+              return config;
+            }
+          });
+        });
+    } else {
+      config.headers.Authorization = session.getIdToken().getJwtToken();
+      //console.log('no refresh', idTokenExpire + ' ' + currentTimeSeconds)
+      return config;
     }
-    return config;
+
+    /*  if (token) {
+        config.headers['Authorization'] =  token; 
+       // console.log('header', config.headers.Authorization)
+      }
+   return config;*/
   },
   (error) => Promise.reject(error),
 );
@@ -76,7 +104,8 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  },
+  }
+
 );
 
 export default api;
