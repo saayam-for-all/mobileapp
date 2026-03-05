@@ -27,6 +27,7 @@ import Availability from '../screens/MenuScreens/Availability';
 import Preferences from '../screens/MenuScreens/Preferences';
 import AccountDeletion from '../screens/MenuScreens/AccountDeletion';
 import IdentityDocument from '../screens/MenuScreens/IdentityDocument';
+import EmergencyContact from '../screens/EmergencyContact/EmergencyContact';
 
 const AppStack = createStackNavigator();
 
@@ -98,6 +99,8 @@ export default function App({ signOut }) {
         options={{ title: 'Donation' }}/>
       <AppStack.Screen name="Benevity" component={BenevityInfo} 
         options={{ title: 'Benevity' }}/>
+      <AppStack.Screen name="EmergencyContact" component={EmergencyContact} 
+        options={{ title: 'Emergency Contact' }}/>
       <AppStack.Screen name="Admin" component={AdminPanel} 
         options={{ title: 'Administration' }}/>
       <AppStack.Screen 
