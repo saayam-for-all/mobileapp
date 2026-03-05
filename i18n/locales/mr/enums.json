@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "तयार केले",
-    "MATCHING VOLUNTEER": "जुळणारे स्वयंसेवक",
+    "MATCHING_VOLUNTEER": "जुळणारे स्वयंसेवक",
     "MANAGED": "व्यवस्थापित",
     "RESOLVED": "निराकरण केले",
     "CANCELLED": "रद्द केले",
-    "DELETED": "हटवले"
+    "DELETED": "हटवले",
+    "RATED_BY_REQUESTER": "विनंतीकर्त्याने रेट केले",
+    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारे रेट केले"
   },
   "requestType": {
-    "INPERSON": "व्यक्तीगत",
+    "IN_PERSON": "व्यक्तीगत",
     "REMOTE": "रिमोट"
   }
 }

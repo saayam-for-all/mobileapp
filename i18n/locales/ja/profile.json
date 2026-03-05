@@ -77,7 +77,7 @@
   "SECONDARY PHONE": "補助電話",
   "TIMEZONE": "タイムゾーン",
   "USE_CURRENT_TIMEZONE": "現在のタイムゾーンを使用する",
-  "RECEIVE EMERGENCY NOTIFICATIONS": "緊急通知を受け取る",
+  "RECEIVE EMERGENCY NOTIFICATIONS": "緊急通知を受信する",
   "PREFERENCES UPDATED SUCCESS": "設定が正常に更新されました。",
   "ACCOUNT_DELETION_WARNING_TITLE": "アカウントの削除",
   "ACCOUNT_DELETION_WARNING_TEXT": "この操作により、アカウントと関連するすべてのデータが完全に削除されます。この操作は元に戻すことができません。続行する前に、重要な情報を必ずバックアップしてください。",

@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "সৃষ্টি কৰা হৈছে",
-    "MATCHING VOLUNTEER": "স্বেচ্ছাসেৱক মেচিং",
-    "MANAGED": "পৰিচালিত পৰিচালিত",
+    "MATCHING_VOLUNTEER": "মেচিং ভলান্টিয়াৰ",
+    "MANAGED": "পৰিচালিত হৈছে",
     "RESOLVED": "সমাধান কৰা হৈছে",
     "CANCELLED": "বাতিল কৰা হৈছে",
-    "DELETED": "মচি পেলাওক"
+    "DELETED": "মচি পেলোৱা হৈছে",
+    "RATED_BY_REQUESTER": "অনুৰোধকাৰীৰ দ্বাৰা ৰেটিং কৰা হৈছে",
+    "RATED_BY_VOLUNTEER": "স্বেচ্ছাসেৱকৰ দ্বাৰা ৰেটিং কৰা হৈছে"
   },
   "requestType": {
-    "INPERSON": "ব্যক্তিগতভাৱে",
+    "IN_PERSON": "ব্যক্তিগতভাৱে",
     "REMOTE": "দূৰৱৰ্তী"
   }
 }

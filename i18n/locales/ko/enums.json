@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "생성됨",
-    "MATCHING VOLUNTEER": "매칭 자원봉사자",
+    "MATCHING_VOLUNTEER": "매칭 자원봉사자",
     "MANAGED": "관리됨",
     "RESOLVED": "해결됨",
     "CANCELLED": "취소",
-    "DELETED": "삭제됨"
+    "DELETED": "삭제됨",
+    "RATED_BY_REQUESTER": "요청자가 평가함",
+    "RATED_BY_VOLUNTEER": "자원봉사자가 평가한"
   },
   "requestType": {
-    "INPERSON": "직접",
+    "IN_PERSON": "직접",
     "REMOTE": "원격"
   }
 }

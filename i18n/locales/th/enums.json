@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "สร้าง",
-    "MATCHING VOLUNTEER": "อาสาสมัครที่ตรงกัน",
+    "MATCHING_VOLUNTEER": "อาสาสมัครที่ตรงกัน",
     "MANAGED": "จัดการ",
     "RESOLVED": "แก้ไขแล้ว",
     "CANCELLED": "ยกเลิก",
-    "DELETED": "ลบแล้ว"
+    "DELETED": "ลบแล้ว",
+    "RATED_BY_REQUESTER": "ให้คะแนนโดยผู้ขอ",
+    "RATED_BY_VOLUNTEER": "ให้คะแนนโดยอาสาสมัคร"
   },
   "requestType": {
-    "INPERSON": "ในบุคคล",
+    "IN_PERSON": "ในบุคคล",
     "REMOTE": "ระยะไกล"
   }
 }

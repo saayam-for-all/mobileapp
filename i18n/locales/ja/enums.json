@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "作成されました",
-    "MATCHING VOLUNTEER": "マッチングボランティア",
+    "MATCHING_VOLUNTEER": "マッチングボランティア",
     "MANAGED": "管理された",
     "RESOLVED": "解決済み",
     "CANCELLED": "キャンセル",
-    "DELETED": "削除されました"
+    "DELETED": "削除されました",
+    "RATED_BY_REQUESTER": "依頼者による評価",
+    "RATED_BY_VOLUNTEER": "ボランティアによる評価"
   },
   "requestType": {
-    "INPERSON": "直接",
+    "IN_PERSON": "直接",
     "REMOTE": "リモート"
   }
 }

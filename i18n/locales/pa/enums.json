@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "ਬਣਾਇਆ",
-    "MATCHING VOLUNTEER": "ਮੇਲ ਖਾਂਦਾ ਵਾਲੰਟੀਅਰ",
+    "MATCHING_VOLUNTEER": "ਮੇਲ ਖਾਂਦਾ ਵਾਲੰਟੀਅਰ",
     "MANAGED": "ਪ੍ਰਬੰਧਿਤ",
     "RESOLVED": "ਹੱਲ ਕੀਤਾ",
     "CANCELLED": "ਰੱਦ ਕਰ ਦਿੱਤਾ",
-    "DELETED": "ਮਿਟਾਇਆ ਗਿਆ"
+    "DELETED": "ਮਿਟਾਇਆ ਗਿਆ",
+    "RATED_BY_REQUESTER": "ਬੇਨਤੀਕਰਤਾ ਦੁਆਰਾ ਦਰਜਾ ਦਿੱਤਾ ਗਿਆ",
+    "RATED_BY_VOLUNTEER": "ਵਾਲੰਟੀਅਰ ਦੁਆਰਾ ਦਰਜਾ ਦਿੱਤਾ ਗਿਆ"
   },
   "requestType": {
-    "INPERSON": "ਵਿਅਕਤੀ ਵਿੱਚ",
+    "IN_PERSON": "ਵਿਅਕਤੀ ਵਿੱਚ",
     "REMOTE": "ਰਿਮੋਟ"
   }
 }

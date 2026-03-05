@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "സൃഷ്ടിച്ചത്",
-    "MATCHING VOLUNTEER": "പൊരുത്തപ്പെടുന്ന സന്നദ്ധപ്രവർത്തകൻ",
-    "MANAGED": "കൈകാര്യം ചെയ്തു",
+    "MATCHING_VOLUNTEER": "പൊരുത്തപ്പെടുന്ന സന്നദ്ധപ്രവർത്തകൻ",
+    "MANAGED": "നിയന്ത്രിച്ചു",
     "RESOLVED": "പരിഹരിച്ചു",
     "CANCELLED": "റദ്ദാക്കി",
-    "DELETED": "ഇല്ലാതാക്കി"
+    "DELETED": "ഇല്ലാതാക്കി",
+    "RATED_BY_REQUESTER": "റിക്വസ്റ്റർ റേറ്റുചെയ്തത്",
+    "RATED_BY_VOLUNTEER": "സന്നദ്ധപ്രവർത്തകൻ റേറ്റുചെയ്തത്"
   },
   "requestType": {
-    "INPERSON": "വ്യക്തിപരമായി",
+    "IN_PERSON": "വ്യക്തിപരമായി",
     "REMOTE": "റിമോട്ട്"
   }
 }

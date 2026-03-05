@@ -11,13 +11,13 @@
   },
   "requestStatus": {
     "CREATED": "Creado",
-    "MATCHING VOLUNTEER": "Voluntario coincidente",
+    "MATCHING_VOLUNTEER": "Voluntario coincidente",
     "MANAGED": "Administrado",
     "RESOLVED": "Resuelto",
     "CANCELLED": "Cancelado",
     "DELETED": "Eliminado",
     "RATED_BY_REQUESTER": "Calificado por el solicitante",
-    "RATED_BY_VOLUNTEER": "Calificado por el voluntario"
+    "RATED_BY_VOLUNTEER": "Calificado por voluntario"
   },
   "requestType": {
     "IN_PERSON": "En persona",

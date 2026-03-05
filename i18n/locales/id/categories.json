@@ -4,9 +4,9 @@
       "LABEL": "Umum",
       "DESC": "Gunakan saat Anda tidak yakin; jelaskan kebutuhan Anda secara detail."
     },
-    "FOOD_AND_ESSENTIALS_SUPPORT": {
+    "FOOD_AND_ESSENTIALS": {
       "LABEL": "Makanan & Kebutuhan Penting",
-      "DESC": "Akses dukungan makanan, layanan bahan makanan, dan bantuan memasak.",
+      "DESC": "Akses dukungan makanan, bantuan bahan makanan, dan bantuan persiapan makan.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
           "LABEL": "Bantuan Pangan",
@@ -22,25 +22,21 @@
         }
       }
     },
-    "CLOTHING_SUPPORT": {
-      "LABEL": "Dukungan Pakaian",
-      "DESC": "Menyumbangkan, meminjam, memperbaiki, atau meminta bantuan pakaian.",
+    "CLOTHING_ASSISTANCE": {
+      "LABEL": "Bantuan Pakaian",
+      "DESC": "Menyumbangkan, meminjam, menyesuaikan, atau meminta bantuan pakaian.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
           "LABEL": "Menyumbangkan Pakaian",
-          "DESC": "Berikan pakaian kepada mereka yang membutuhkan."
+          "DESC": "Memberikan pakaian kepada mereka yang membutuhkan."
         },
         "BORROW_CLOTHES": {
           "LABEL": "Pinjam Pakaian",
           "DESC": "Pinjamlah pakaian bekas dengan hati-hati."
         },
-        "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Bantuan Darurat",
-          "DESC": "Kebutuhan pakaian darurat pada saat krisis."
-        },
-        "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Pemberitahuan Perjalanan Musiman",
-          "DESC": "Penggalangan dana dan donasi pakaian musiman."
+        "EMERGENCY_CLOTHING_ASSISTANCE": {
+          "LABEL": "Bantuan Pakaian Darurat",
+          "DESC": "Dukungan pakaian cepat untuk situasi mendesak."
         },
         "TAILORING": {
           "LABEL": "Jahitan",
@@ -48,37 +44,49 @@
         }
       }
     },
-    "HOUSING_SUPPORT": {
-      "LABEL": "Dukungan Perumahan",
-      "DESC": "Teman sekamar, panduan menyewa, dukungan pindahan dan pengaturan rumah.",
+    "HOUSING_ASSISTANCE": {
+      "LABEL": "Bantuan Perumahan",
+      "DESC": "Menyewa, memindahkan, dan dukungan pengaturan rumah tangga.",
       "SUBCATEGORIES": {
-        "FIND_A_ROOMMATE": {
+        "LEASE_SUPPORT": {
+          "LABEL": "Dukungan Sewa",
+          "DESC": "Membantu memahami syarat dan persyaratan sewa."
+        },
+        "TENANT_RENT_SUPPORT": {
+          "LABEL": "Dukungan Sewa Penyewa",
+          "DESC": "Panduan ketika Anda kesulitan dengan uang sewa."
+        },
+        "REPAIR_MAINTENANCE_SUPPORT": {
+          "LABEL": "Dukungan Perbaikan & Pemeliharaan",
+          "DESC": "Bantuan menjadwalkan perbaikan atau pemeliharaan dasar."
+        },
+        "UTILITIES_SETUP_SUPPORT": {
+          "LABEL": "Dukungan Pengaturan Utilitas",
+          "DESC": "Membantu mengatur internet, listrik, atau utilitas lainnya."
+        },
+        "LOOKING_FOR_RENTAL": {
+          "LABEL": "Mencari Sewa",
+          "DESC": "Mendukung pencarian apartemen atau kamar."
+        },
+        "FIND_ROOMATE": {
           "LABEL": "Temukan Teman Sekamar",
-          "DESC": "Dapatkan bantuan untuk menemukan teman sekamar."
+          "DESC": "Cocokkan dengan teman sekamar atau tempat tinggal bersama."
         },
-        "RENTING_SUPPORT": {
-          "LABEL": "Menyewa Dukungan",
-          "DESC": "Bantuan dengan dasar-dasar persewaan dan penyewaan."
+        "MOVE_IN_HELP": {
+          "LABEL": "Bantuan Pindah",
+          "DESC": "Bantuan langsung dalam mengemas, mengangkat, atau membongkar."
         },
-        "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Pertukaran Barang Rumah Tangga",
-          "DESC": "Membantu membeli atau menjual barang-barang rumah tangga."
+        "BOOKING_PACKERS_MOVERS_SUPPORT": {
+          "LABEL": "Dukungan Pengemas & Penggerak",
+          "DESC": "Bantuan pemesanan jasa pindahan yang terpercaya."
         },
-        "MOVING_ASSISTANCE": {
-          "LABEL": "Bantuan Pindahan",
-          "DESC": "Dukungan dengan pemindahan dan pengepakan."
+        "BUY_THINGS": {
+          "LABEL": "Beli Barang Rumah Tangga",
+          "DESC": "Membantu mencari furnitur dan kebutuhan rumah tangga."
         },
-        "CLEANING_HELP": {
-          "LABEL": "Bantuan Pembersihan",
-          "DESC": "Bantuan dengan tugas pembersihan dasar."
-        },
-        "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Dukungan Perbaikan Rumah",
-          "DESC": "Dukungan untuk perbaikan kecil di rumah."
-        },
-        "UTILITIES_SETUP": {
-          "LABEL": "Pengaturan Utilitas",
-          "DESC": "Membantu menyiapkan utilitas dan layanan."
+        "SELL_THINGS": {
+          "LABEL": "Jual Barang Rumah Tangga",
+          "DESC": "Dapatkan daftar dukungan atau sumbangkan barang-barang yang tidak lagi Anda perlukan."
         }
       }
     },
@@ -97,16 +105,32 @@
         "TUTORING": {
           "LABEL": "bimbingan belajar",
           "DESC": "Bimbingan mata pelajaran dan dukungan belajar."
+        },
+        "SCHOLARSHIP_KNOWLEDGE": {
+          "LABEL": "Pengetahuan Beasiswa",
+          "DESC": "Bagikan informasi tentang beasiswa dan hibah."
+        },
+        "STUDY_GROUP_FORMATION": {
+          "LABEL": "Pembentukan Kelompok Belajar",
+          "DESC": "Temukan atau atur kelompok belajar kolaboratif."
+        },
+        "CAREER_GUIDANCE": {
+          "LABEL": "Bimbingan Karir",
+          "DESC": "Perencanaan jalur karir, resume, dan dukungan wawancara."
+        },
+        "EDUCATION_RESOURCE_SHARING": {
+          "LABEL": "Berbagi Sumber Daya Pendidikan",
+          "DESC": "Bagikan catatan, rekaman, atau materi latihan."
         }
       }
     },
-    "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Kesehatan & Kesejahteraan",
-      "DESC": "Navigasi kesehatan non-klinis dan dukungan kesehatan.",
+    "HEALTHCARE_AND_WELLNESS": {
+      "LABEL": "Perawatan Kesehatan & Kebugaran",
+      "DESC": "Panduan medis non-klinis, pengingat, dan dukungan kesejahteraan.",
       "SUBCATEGORIES": {
-        "MEDICAL_NAVIGATION": {
-          "LABEL": "Navigasi Medis",
-          "DESC": "Navigasi dasar dan panduan non-klinis."
+        "MEDICAL_CONSULTATION": {
+          "LABEL": "Konsultasi Medis",
+          "DESC": "Membantu mengoordinasikan tele-konsultasi atau informasi medis dasar."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "Pengiriman Obat",
@@ -126,25 +150,37 @@
         }
       }
     },
-    "ELDERLY_SUPPORT": {
-      "LABEL": "Dukungan Lansia",
-      "DESC": "Bantuan non medis untuk lansia dan dukungan masyarakat.",
+    "ELDERLY_COMMUNITY_ASSISTANCE": {
+      "LABEL": "Bantuan Masyarakat Lanjut Usia",
+      "DESC": "Dukungan non-medis untuk manula, pengasuh, dan masyarakat.",
       "SUBCATEGORIES": {
-        "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Relokasi Hidup Lansia",
-          "DESC": "Bantuan dengan perumahan senior dan pindahan."
+        "SENIOR_RELOCATION_SUPPORT": {
+          "LABEL": "Dukungan Relokasi Senior",
+          "DESC": "Rencanakan perpindahan antar rumah atau fasilitas perawatan."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
           "LABEL": "Dukungan Digital untuk Lansia",
           "DESC": "Bantuan dengan perangkat dan aplikasi."
         },
-        "MEDICAL_HELP": {
-          "LABEL": "Bantuan Medis",
-          "DESC": "Bantuan medis non-klinis untuk lansia."
+        "MEDICATION_MANAGEMENT": {
+          "LABEL": "Manajemen Pengobatan",
+          "DESC": "Pastikan jadwal, pengingat, dan penyimpanan sesuai jalur."
         },
-        "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Tugas & Transportasi",
-          "DESC": "Membantu urusan dan transportasi."
+        "MEDICAL_DEVICES_SETUP": {
+          "LABEL": "Penyiapan Alat Kesehatan",
+          "DESC": "Menyiapkan atau memecahkan masalah perangkat medis dan alat bantu."
+        },
+        "ERRANDS_EVENTS_TRANSPORTATION": {
+          "LABEL": "Tugas, Acara & Transportasi",
+          "DESC": "Mengantar manula ke suatu tugas atau acara khusus."
+        },
+        "TRANSPORTATION_APPOINTMENTS_EVENTS": {
+          "LABEL": "Transportasi untuk Janji Temu",
+          "DESC": "Atur perjalanan ke janji temu dan pertemuan."
+        },
+        "SCHEDULING_APPOINTMENTS_OR_TASKS": {
+          "LABEL": "Menjadwalkan Janji atau Tugas",
+          "DESC": "Pantau janji temu, isi ulang, dan tugas-tugas."
         },
         "SOCIAL_CONNECTION": {
           "LABEL": "Koneksi Sosial",

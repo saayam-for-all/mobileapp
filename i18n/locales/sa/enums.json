@@ -10,15 +10,17 @@
     "CRITICAL": "गंभीरः"
   },
   "requestStatus": {
-    "CREATED": "सृष्टः २.",
-    "MATCHING VOLUNTEER": "मेलकर स्वयंसेवक 1 .",
-    "MANAGED": "प्रबन्धित 1 .",
-    "RESOLVED": "संकल्पित 1 .",
-    "CANCELLED": "रद्दं 1 .",
-    "DELETED": "विलोपित 1 ."
+    "CREATED": "निर्मितम्",
+    "MATCHING_VOLUNTEER": "मिलान स्वयंसेवक",
+    "MANAGED": "प्रबन्धितम्",
+    "RESOLVED": "संकल्पितम्",
+    "CANCELLED": "रद्दं कृतम्",
+    "DELETED": "विलोपितम्",
+    "RATED_BY_REQUESTER": "अनुरोधकेन मूल्याङ्कितम्",
+    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा मूल्याङ्कितम्"
   },
   "requestType": {
-    "INPERSON": "व्यक्तिगतरूपेण .",
+    "IN_PERSON": "व्यक्तिगतरूपेण",
     "REMOTE": "दूरस्थ"
   }
 }

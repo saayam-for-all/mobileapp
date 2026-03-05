@@ -5,20 +5,22 @@
   },
   "requestPriority": {
     "LOW": "کم",
-    "MEDIUM": "میڈیم",
+    "MEDIUM": "درمیانہ",
     "HIGH": "اعلی",
-    "CRITICAL": "تنقید"
+    "CRITICAL": "تنقیدی"
   },
   "requestStatus": {
-    "CREATED": "تخلیق کیا",
-    "MATCHING VOLUNTEER": "رضاکار سے ملاپ",
+    "CREATED": "بنایا",
+    "MATCHING_VOLUNTEER": "مماثل رضاکار",
     "MANAGED": "منظم",
-    "RESOLVED": "حل",
+    "RESOLVED": "حل ہو گیا۔",
     "CANCELLED": "منسوخ",
-    "DELETED": "حذف"
+    "DELETED": "حذف کر دیا گیا۔",
+    "RATED_BY_REQUESTER": "درخواست کنندہ کے ذریعہ درجہ بندی کی گئی۔",
+    "RATED_BY_VOLUNTEER": "رضاکار کی طرف سے درجہ بندی"
   },
   "requestType": {
-    "INPERSON": "ذاتی طور پر",
-    "REMOTE": "دور دراز"
+    "IN_PERSON": "شخصی طور پر",
+    "REMOTE": "ریموٹ"
   }
 }

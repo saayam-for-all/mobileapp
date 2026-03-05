@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "सिर्जना गरियो",
-    "MATCHING VOLUNTEER": "मिल्दो स्वयंसेवक",
+    "MATCHING_VOLUNTEER": "मिल्दो स्वयंसेवक",
     "MANAGED": "व्यवस्थित",
     "RESOLVED": "समाधान गरियो",
     "CANCELLED": "रद्द गरियो",
-    "DELETED": "मेटाइयो"
+    "DELETED": "मेटाइयो",
+    "RATED_BY_REQUESTER": "अनुरोधकर्ता द्वारा मूल्याङ्कन गरिएको",
+    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा मूल्याङ्कन गरिएको"
   },
   "requestType": {
-    "INPERSON": "व्यक्तिमा",
+    "IN_PERSON": "व्यक्तिमा",
     "REMOTE": "रिमोट"
   }
 }

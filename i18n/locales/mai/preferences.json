@@ -1,9 +1,9 @@
 {
-  "title": "वरीयता 10।",
+  "title": "वरीयताएँ",
   "labels": {
-    "timezone": "समय क्षेत्र २.",
+    "timezone": "समय क्षेत्र",
     "language": "भाषा",
-    "notifications": "सूचना ८.",
+    "notifications": "अधिसूचना",
     "save": "बचाउ",
     "cancel": "रद्द"
   },

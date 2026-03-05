@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "Dibuat",
-    "MATCHING VOLUNTEER": "Relawan yang Cocok",
+    "MATCHING_VOLUNTEER": "Relawan yang Cocok",
     "MANAGED": "Dikelola",
     "RESOLVED": "Terselesaikan",
     "CANCELLED": "Dibatalkan",
-    "DELETED": "Dihapus"
+    "DELETED": "Dihapus",
+    "RATED_BY_REQUESTER": "Dinilai oleh Pemohon",
+    "RATED_BY_VOLUNTEER": "Dinilai oleh Relawan"
   },
   "requestType": {
-    "INPERSON": "Secara langsung",
+    "IN_PERSON": "Secara langsung",
     "REMOTE": "Terpencil"
   }
 }

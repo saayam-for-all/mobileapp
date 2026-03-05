@@ -11,16 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "مخلوق",
-    "MATCHING VOLUNTEER": "مطابقة المتطوع",
+    "MATCHING_VOLUNTEER": "مطابقة المتطوع",
     "MANAGED": "تمكنت",
     "RESOLVED": "تم الحل",
     "CANCELLED": "تم الإلغاء",
     "DELETED": "تم الحذف",
-    "RATED_BY_REQUESTER": "تم التقييم من قبل مقدم الطلب",
-    "RATED_BY_VOLUNTEER": "تم التقييم من قبل المتطوع"
+    "RATED_BY_REQUESTER": "تم التقييم بواسطة الطالب",
+    "RATED_BY_VOLUNTEER": "تم تقييمه بواسطة متطوع"
   },
   "requestType": {
-    "INPERSON": "شخصيا",
+    "IN_PERSON": "شخصيا",
     "REMOTE": "بعيد"
   }
 }

@@ -4,9 +4,9 @@
       "LABEL": "Heneral",
       "DESC": "Gamitin kapag hindi ka sigurado; ilarawan nang detalyado ang iyong pangangailangan."
     },
-    "FOOD_AND_ESSENTIALS_SUPPORT": {
+    "FOOD_AND_ESSENTIALS": {
       "LABEL": "Pagkain at Mahahalaga",
-      "DESC": "I-access ang suporta sa pagkain, mga serbisyo sa grocery, at tulong sa pagluluto.",
+      "DESC": "I-access ang suporta sa pagkain, tulong sa grocery, at tulong sa paghahanda ng pagkain.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
           "LABEL": "Tulong sa Pagkain",
@@ -22,9 +22,9 @@
         }
       }
     },
-    "CLOTHING_SUPPORT": {
-      "LABEL": "Suporta sa Damit",
-      "DESC": "Mag-donate, humiram, magkumpuni, o humiling ng tulong sa pananamit.",
+    "CLOTHING_ASSISTANCE": {
+      "LABEL": "Tulong sa pananamit",
+      "DESC": "Mag-donate, humiram, magpatahi, o humiling ng tulong sa pananamit.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
           "LABEL": "Mag-donate ng mga Damit",
@@ -34,13 +34,9 @@
           "LABEL": "Pahiram ng Damit",
           "DESC": "Manghiram ng damit na ginamit nang malumanay."
         },
-        "EMERGENCY_ASSISTANCE": {
-          "LABEL": "Tulong sa Emergency",
-          "DESC": "Pang-emergency na damit na kailangan sa panahon ng krisis."
-        },
-        "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "Pana-panahong Notification ng Drive",
-          "DESC": "Mga pana-panahong pananamit at mga donasyon."
+        "EMERGENCY_CLOTHING_ASSISTANCE": {
+          "LABEL": "Tulong sa Pang-emergency na Damit",
+          "DESC": "Mabilis na suporta sa pananamit para sa mga kagyat na sitwasyon."
         },
         "TAILORING": {
           "LABEL": "Pananahi",
@@ -48,37 +44,49 @@
         }
       }
     },
-    "HOUSING_SUPPORT": {
-      "LABEL": "Suporta sa Pabahay",
-      "DESC": "Mga kasama sa silid, gabay sa pagrenta, paglipat at suporta sa pag-setup ng bahay.",
+    "HOUSING_ASSISTANCE": {
+      "LABEL": "Tulong sa Pabahay",
+      "DESC": "Pag-upa, paglipat, at suporta sa pag-setup ng sambahayan.",
       "SUBCATEGORIES": {
-        "FIND_A_ROOMMATE": {
+        "LEASE_SUPPORT": {
+          "LABEL": "Suporta sa Pag-upa",
+          "DESC": "Tumulong sa pag-unawa sa mga tuntunin at kinakailangan sa pag-upa."
+        },
+        "TENANT_RENT_SUPPORT": {
+          "LABEL": "Suporta sa Rent ng Nangungupahan",
+          "DESC": "Patnubay kapag nahihirapan ka sa upa."
+        },
+        "REPAIR_MAINTENANCE_SUPPORT": {
+          "LABEL": "Suporta sa Pag-aayos at Pagpapanatili",
+          "DESC": "Pag-iskedyul ng tulong sa mga pangunahing pag-aayos o pagpapanatili."
+        },
+        "UTILITIES_SETUP_SUPPORT": {
+          "LABEL": "Suporta sa Setup ng Mga Utility",
+          "DESC": "Tumulong sa pag-set up ng internet, kuryente, o iba pang mga utility."
+        },
+        "LOOKING_FOR_RENTAL": {
+          "LABEL": "Naghahanap ng Rental",
+          "DESC": "Suportahan ang paghahanap ng mga apartment o kwarto."
+        },
+        "FIND_ROOMATE": {
           "LABEL": "Maghanap ng Roommate",
-          "DESC": "Humingi ng tulong sa paghahanap ng kasama sa kuwarto."
+          "DESC": "Itugma sa mga kasama sa silid o shared housing."
         },
-        "RENTING_SUPPORT": {
-          "LABEL": "Pag-upa ng Suporta",
-          "DESC": "Tulong sa mga pangunahing kaalaman sa pag-upa at pag-upa."
-        },
-        "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "Pagpapalitan ng Item sa Bahay",
-          "DESC": "Tumulong sa pagbili o pagbebenta ng mga gamit sa bahay."
-        },
-        "MOVING_ASSISTANCE": {
+        "MOVE_IN_HELP": {
           "LABEL": "Tulong sa Paglipat",
-          "DESC": "Suporta sa paglipat at pag-iimpake."
+          "DESC": "Hands-on na tulong sa pag-iimpake, pagbubuhat, o pag-unpack."
         },
-        "CLEANING_HELP": {
-          "LABEL": "Tulong sa Paglilinis",
-          "DESC": "Tulong sa mga pangunahing gawain sa paglilinis."
+        "BOOKING_PACKERS_MOVERS_SUPPORT": {
+          "LABEL": "Suporta sa Packers at Movers",
+          "DESC": "Tulong sa pag-book ng maaasahang mga serbisyo sa paglilipat."
         },
-        "HOME_REPAIR_SUPPORT": {
-          "LABEL": "Suporta sa Pag-aayos ng Bahay",
-          "DESC": "Suporta para sa menor de edad na pag-aayos sa bahay."
+        "BUY_THINGS": {
+          "LABEL": "Bumili ng mga gamit sa Bahay",
+          "DESC": "Tumulong sa pagkuha ng mga kasangkapan at mga mahahalagang gamit sa bahay."
         },
-        "UTILITIES_SETUP": {
-          "LABEL": "Setup ng Mga Utility",
-          "DESC": "Tumulong sa pag-set up ng mga utility at serbisyo."
+        "SELL_THINGS": {
+          "LABEL": "Magbenta ng mga gamit sa Bahay",
+          "DESC": "Kumuha ng listahan ng suporta o mag-donate ng mga item na hindi mo na kailangan."
         }
       }
     },
@@ -97,16 +105,32 @@
         "TUTORING": {
           "LABEL": "Nagtuturo",
           "DESC": "Pagtuturo ng paksa at suporta sa pag-aaral."
+        },
+        "SCHOLARSHIP_KNOWLEDGE": {
+          "LABEL": "Kaalaman sa Scholarship",
+          "DESC": "Magbahagi ng impormasyon tungkol sa mga scholarship at grant."
+        },
+        "STUDY_GROUP_FORMATION": {
+          "LABEL": "Pagbuo ng Grupo ng Pag-aaral",
+          "DESC": "Maghanap o ayusin ang mga collaborative na grupo ng pag-aaral."
+        },
+        "CAREER_GUIDANCE": {
+          "LABEL": "Gabay sa Karera",
+          "DESC": "Pagpaplano ng landas ng karera, resume, at suporta sa pakikipanayam."
+        },
+        "EDUCATION_RESOURCE_SHARING": {
+          "LABEL": "Pagbabahagi ng Mapagkukunan ng Edukasyon",
+          "DESC": "Magbahagi ng mga tala, recording, o materyal sa pagsasanay."
         }
       }
     },
-    "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "Pangangalaga sa Kalusugan at Kagalingan",
-      "DESC": "Non-clinical na pag-navigate sa kalusugan at suporta sa kalusugan.",
+    "HEALTHCARE_AND_WELLNESS": {
+      "LABEL": "Pangangalaga sa Kalusugan at Kaayusan",
+      "DESC": "Non-clinical na medikal na patnubay, mga paalala, at suporta sa kalusugan.",
       "SUBCATEGORIES": {
-        "MEDICAL_NAVIGATION": {
-          "LABEL": "Medikal na Nabigasyon",
-          "DESC": "Basic navigation at non-clinical na gabay."
+        "MEDICAL_CONSULTATION": {
+          "LABEL": "Konsultasyon sa Medikal",
+          "DESC": "Tumulong sa pag-coordinate ng mga tele-consult o pangunahing medikal na impormasyon."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "Paghahatid ng gamot",
@@ -126,25 +150,37 @@
         }
       }
     },
-    "ELDERLY_SUPPORT": {
-      "LABEL": "Suporta sa Matatanda",
-      "DESC": "Tulong na hindi medikal para sa mga nakatatanda at suporta sa komunidad.",
+    "ELDERLY_COMMUNITY_ASSISTANCE": {
+      "LABEL": "Tulong sa Komunidad ng Matatanda",
+      "DESC": "Suporta na hindi medikal para sa mga nakatatanda, tagapag-alaga, at komunidad.",
       "SUBCATEGORIES": {
-        "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "Relokasyon ng Senior Living",
-          "DESC": "Tulong sa senior housing at paglipat."
+        "SENIOR_RELOCATION_SUPPORT": {
+          "LABEL": "Suporta sa Senior Relocation",
+          "DESC": "Magplano ng mga paglipat sa pagitan ng mga tahanan o pasilidad ng pangangalaga."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
           "LABEL": "Digital na Suporta para sa Mga Nakatatanda",
           "DESC": "Tulong sa mga device at app."
         },
-        "MEDICAL_HELP": {
-          "LABEL": "Tulong Medikal",
-          "DESC": "Non-clinical na tulong medikal para sa mga nakatatanda."
+        "MEDICATION_MANAGEMENT": {
+          "LABEL": "Pamamahala ng gamot",
+          "DESC": "Tiyaking nasa track ang mga iskedyul, paalala, at storage."
         },
-        "ERRANDS_TRANSPORTATION": {
-          "LABEL": "Mga gawain at Transportasyon",
-          "DESC": "Tulong sa mga gawain at transportasyon."
+        "MEDICAL_DEVICES_SETUP": {
+          "LABEL": "Pag-setup ng Mga Medikal na Device",
+          "DESC": "I-set up o i-troubleshoot ang mga medikal at pantulong na device."
+        },
+        "ERRANDS_EVENTS_TRANSPORTATION": {
+          "LABEL": "Mga gawain, Kaganapan, at Transportasyon",
+          "DESC": "I-eskort ang mga nakatatanda sa mga gawain o mga espesyal na kaganapan."
+        },
+        "TRANSPORTATION_APPOINTMENTS_EVENTS": {
+          "LABEL": "Transportasyon para sa mga Appointment",
+          "DESC": "Ayusin ang mga sakay sa mga appointment at pagtitipon."
+        },
+        "SCHEDULING_APPOINTMENTS_OR_TASKS": {
+          "LABEL": "Pag-iskedyul ng mga Appointment o Gawain",
+          "DESC": "Subaybayan ang mga appointment, refill, at mga gawain."
         },
         "SOCIAL_CONNECTION": {
           "LABEL": "Koneksyong Panlipunan",

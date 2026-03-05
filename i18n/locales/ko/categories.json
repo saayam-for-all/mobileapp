@@ -4,9 +4,9 @@
       "LABEL": "일반적인",
       "DESC": "확신이 없을 때 사용하세요. 귀하의 필요 사항을 자세히 설명하십시오."
     },
-    "FOOD_AND_ESSENTIALS_SUPPORT": {
+    "FOOD_AND_ESSENTIALS": {
       "LABEL": "음식 및 필수품",
-      "DESC": "음식 지원, 식료품 서비스, 요리 지원을 이용하세요.",
+      "DESC": "음식 지원, 식료품 지원, 식사 준비 지원을 이용하세요.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
           "LABEL": "식량 지원",
@@ -22,9 +22,9 @@
         }
       }
     },
-    "CLOTHING_SUPPORT": {
+    "CLOTHING_ASSISTANCE": {
       "LABEL": "의류 지원",
-      "DESC": "기부, 대여, 수리 또는 의류 지원을 요청하세요.",
+      "DESC": "기부, 대여, 맞춤 제작 또는 의류 지원을 요청하세요.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
           "LABEL": "옷 기부",
@@ -34,13 +34,9 @@
           "LABEL": "옷 빌려주기",
           "DESC": "가볍게 사용한 옷을 빌려보세요."
         },
-        "EMERGENCY_ASSISTANCE": {
-          "LABEL": "긴급 지원",
-          "DESC": "위기 상황 시 비상복이 필요합니다."
-        },
-        "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "계절별 드라이브 알림",
-          "DESC": "계절별 의류 캠페인 및 기부."
+        "EMERGENCY_CLOTHING_ASSISTANCE": {
+          "LABEL": "비상복 지원",
+          "DESC": "긴급 상황에 대한 신속한 의류 지원."
         },
         "TAILORING": {
           "LABEL": "양복 짓는 솜씨",
@@ -48,37 +44,49 @@
         }
       }
     },
-    "HOUSING_SUPPORT": {
-      "LABEL": "주거지원",
-      "DESC": "룸메이트, 임대 안내, 이사 및 집 마련 지원.",
+    "HOUSING_ASSISTANCE": {
+      "LABEL": "주택 지원",
+      "DESC": "임대, 이사, 가구설치를 지원합니다.",
       "SUBCATEGORIES": {
-        "FIND_A_ROOMMATE": {
+        "LEASE_SUPPORT": {
+          "LABEL": "임대지원",
+          "DESC": "임대 조건 및 요구 사항을 이해하는 데 도움이 됩니다."
+        },
+        "TENANT_RENT_SUPPORT": {
+          "LABEL": "임차인 임대료 지원",
+          "DESC": "임대료로 어려움을 겪고 있을 때 안내해 드립니다."
+        },
+        "REPAIR_MAINTENANCE_SUPPORT": {
+          "LABEL": "수리 및 유지보수 지원",
+          "DESC": "기본적인 수리 또는 유지보수 일정을 잡는 데 도움을 줍니다."
+        },
+        "UTILITIES_SETUP_SUPPORT": {
+          "LABEL": "유틸리티 설정 지원",
+          "DESC": "인터넷, 전기 또는 기타 유틸리티 설정을 도와주세요."
+        },
+        "LOOKING_FOR_RENTAL": {
+          "LABEL": "임대를 찾고 있습니다",
+          "DESC": "아파트나 방 찾기를 지원합니다."
+        },
+        "FIND_ROOMATE": {
           "LABEL": "룸메이트 찾기",
-          "DESC": "룸메이트를 찾는 데 도움을 받으세요."
+          "DESC": "룸메이트나 쉐어하우스와 매치해보세요."
         },
-        "RENTING_SUPPORT": {
-          "LABEL": "임대 지원",
-          "DESC": "임대 및 임대 기본 사항에 대한 지원."
+        "MOVE_IN_HELP": {
+          "LABEL": "입주 도움말",
+          "DESC": "포장, 들어 올리기, 포장 풀기 등을 직접 도와드립니다."
         },
-        "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "생활용품 교환",
-          "DESC": "가정용품 구매 또는 판매에 도움을 드립니다."
+        "BOOKING_PACKERS_MOVERS_SUPPORT": {
+          "LABEL": "포장업자 및 이사업체 지원",
+          "DESC": "믿을 수 있는 이사 서비스 예약을 도와드립니다."
         },
-        "MOVING_ASSISTANCE": {
-          "LABEL": "이사 지원",
-          "DESC": "이사 및 포장을 지원합니다."
+        "BUY_THINGS": {
+          "LABEL": "가정용품 구매",
+          "DESC": "가구 및 가정 필수품 소싱을 도와주세요."
         },
-        "CLEANING_HELP": {
-          "LABEL": "청소 도움말",
-          "DESC": "기본적인 청소 작업을 지원합니다."
-        },
-        "HOME_REPAIR_SUPPORT": {
-          "LABEL": "집 수리 지원",
-          "DESC": "간단한 집 수리를 지원합니다."
-        },
-        "UTILITIES_SETUP": {
-          "LABEL": "유틸리티 설정",
-          "DESC": "유틸리티 및 서비스 설정을 도와드립니다."
+        "SELL_THINGS": {
+          "LABEL": "가정용품 판매",
+          "DESC": "더 이상 필요하지 않은 품목을 나열하거나 기부하는 데 도움을 받으세요."
         }
       }
     },
@@ -97,16 +105,32 @@
         "TUTORING": {
           "LABEL": "튜터링",
           "DESC": "과목별 지도 및 학습 지원."
+        },
+        "SCHOLARSHIP_KNOWLEDGE": {
+          "LABEL": "장학금 지식",
+          "DESC": "장학금 및 보조금에 대한 정보를 공유합니다."
+        },
+        "STUDY_GROUP_FORMATION": {
+          "LABEL": "스터디 그룹 구성",
+          "DESC": "공동 스터디 그룹을 찾거나 조직하세요."
+        },
+        "CAREER_GUIDANCE": {
+          "LABEL": "진로지도",
+          "DESC": "진로 계획, 이력서, 면접 지원."
+        },
+        "EDUCATION_RESOURCE_SHARING": {
+          "LABEL": "교육자원 공유",
+          "DESC": "메모, 녹음 또는 연습 자료를 공유하세요."
         }
       }
     },
-    "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "건강 관리 및 웰빙",
-      "DESC": "비임상 건강 탐색 및 웰빙 지원.",
+    "HEALTHCARE_AND_WELLNESS": {
+      "LABEL": "건강관리 및 웰니스",
+      "DESC": "비임상 의료 안내, 알림, 웰빙 지원.",
       "SUBCATEGORIES": {
-        "MEDICAL_NAVIGATION": {
-          "LABEL": "의료 내비게이션",
-          "DESC": "기본 탐색 및 비임상 지침."
+        "MEDICAL_CONSULTATION": {
+          "LABEL": "의료 상담",
+          "DESC": "원격 상담 또는 기본 의료 정보 조정을 돕습니다."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "약 전달",
@@ -126,25 +150,37 @@
         }
       }
     },
-    "ELDERLY_SUPPORT": {
-      "LABEL": "노인 지원",
-      "DESC": "노인을 위한 비의료 지원 및 지역사회 지원.",
+    "ELDERLY_COMMUNITY_ASSISTANCE": {
+      "LABEL": "노인 지역사회 지원",
+      "DESC": "노인, 간병인, 지역사회를 위한 비의료적 지원.",
       "SUBCATEGORIES": {
-        "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "노인 생활 이전",
-          "DESC": "노인 주거 및 이사를 도와드립니다."
+        "SENIOR_RELOCATION_SUPPORT": {
+          "LABEL": "노인 이주 지원",
+          "DESC": "집이나 요양 시설 간 이동을 계획합니다."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
           "LABEL": "노인을 위한 디지털 지원",
           "DESC": "장치 및 앱에 대한 지원."
         },
-        "MEDICAL_HELP": {
-          "LABEL": "의료 도움",
-          "DESC": "노인을 위한 비임상 의료 지원."
+        "MEDICATION_MANAGEMENT": {
+          "LABEL": "약물 관리",
+          "DESC": "일정, 알림, 저장 공간이 제대로 진행되고 있는지 확인하세요."
         },
-        "ERRANDS_TRANSPORTATION": {
-          "LABEL": "심부름 및 교통",
-          "DESC": "심부름과 교통을 도와드립니다."
+        "MEDICAL_DEVICES_SETUP": {
+          "LABEL": "의료 기기 설정",
+          "DESC": "의료 및 보조 장치를 설정하거나 문제를 해결합니다."
+        },
+        "ERRANDS_EVENTS_TRANSPORTATION": {
+          "LABEL": "심부름, 행사 및 교통",
+          "DESC": "심부름이나 특별 행사에 노인을 안내하십시오."
+        },
+        "TRANSPORTATION_APPOINTMENTS_EVENTS": {
+          "LABEL": "약속을 위한 교통수단",
+          "DESC": "약속이나 모임에 가는 차량을 준비해 보세요."
+        },
+        "SCHEDULING_APPOINTMENTS_OR_TASKS": {
+          "LABEL": "약속 또는 작업 예약",
+          "DESC": "약속, 리필, 집안일을 추적하세요."
         },
         "SOCIAL_CONNECTION": {
           "LABEL": "사회적 연결",

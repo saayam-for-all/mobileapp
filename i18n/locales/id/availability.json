@@ -11,7 +11,7 @@
   "SUNDAY": "Minggu",
   "AVAILABILITY_VALIDATION_ERROR": "Silakan isi semua bidang yang wajib diisi",
   "START_END_TIMES_MUST_BE_DIFFERENT": "Waktu mulai dan berakhir harus berbeda",
-  "VACATION_START_BEFORE_END": "Tanggal mulai liburan harus sebelum tanggal akhir",
+  "VACATION_START_BEFORE_END": "Tanggal mulai liburan harus sebelum tanggal berakhir",
   "AVAILABILITY_UPDATED_SUCCESS": "Ketersediaan berhasil diperbarui!",
   "SAVE_ERROR": "Terjadi kesalahan saat menyimpan. Silakan coba lagi.",
   "TIMEZONE": "Zona waktu",

@@ -18,7 +18,7 @@
   "USE_CURRENT_TIMEZONE": "Gamitin ang kasalukuyang timezone",
   "CURRENT_DETECTED_TIMEZONE": "Kasalukuyang natukoy na timezone",
   "VACATION_MODE": "Mode ng Bakasyon",
-  "VACATION_MODE_DESCRIPTION": "I-enable ang vacation mode para pansamantalang i-disable ang availability para sa mga boluntaryong kahilingan",
+  "VACATION_MODE_DESCRIPTION": "I-enable ang vacation mode para pansamantalang i-disable ang availability para sa mga kahilingan sa boluntaryo",
   "VACATION_START_DATE": "Petsa ng Pagsisimula ng Bakasyon",
   "VACATION_END_DATE": "Petsa ng Pagtatapos ng Bakasyon",
   "YOUR_AVAILABLE_TIME_SLOTS": "Ang iyong magagamit na mga puwang ng oras",

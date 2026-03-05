@@ -4,13 +4,13 @@
       "LABEL": "一般的",
       "DESC": "当你不确定时使用；详细描述您的需求。"
     },
-    "FOOD_AND_ESSENTIALS_SUPPORT": {
+    "FOOD_AND_ESSENTIALS": {
       "LABEL": "食品和必需品",
-      "DESC": "获得食品支持、杂货服务和烹饪帮助。",
+      "DESC": "获得食品支持、杂货帮助和膳食准备帮助。",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
           "LABEL": "食品援助",
-          "DESC": "寻找食物银行、救助站或供餐项目。"
+          "DESC": "查找食品银行、食品储藏室或膳食计划。"
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
           "LABEL": "杂货购物和送货",
@@ -22,9 +22,9 @@
         }
       }
     },
-    "CLOTHING_SUPPORT": {
-      "LABEL": "服装支持",
-      "DESC": "捐赠、借用、修理或请求衣物援助。",
+    "CLOTHING_ASSISTANCE": {
+      "LABEL": "服装协助",
+      "DESC": "捐赠、借用、裁缝或请求服装帮助。",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
           "LABEL": "捐赠衣服",
@@ -34,13 +34,9 @@
           "LABEL": "借衣服",
           "DESC": "借用旧衣服。"
         },
-        "EMERGENCY_ASSISTANCE": {
-          "LABEL": "紧急援助",
-          "DESC": "危机期间的紧急服装需求。"
-        },
-        "SEASONAL_DRIVE_NOTIFICATION": {
-          "LABEL": "季节性驾驶通知",
-          "DESC": "季节性服装活动和捐赠。"
+        "EMERGENCY_CLOTHING_ASSISTANCE": {
+          "LABEL": "紧急服装援助",
+          "DESC": "紧急情况下的快速服装支持。"
         },
         "TAILORING": {
           "LABEL": "剪裁",
@@ -48,57 +44,49 @@
         }
       }
     },
-    "HOUSING_SUPPORT": {
-      "LABEL": "住房支持",
-      "DESC": "室友、租赁指导、搬家和家居设置支持。",
+    "HOUSING_ASSISTANCE": {
+      "LABEL": "住房援助",
+      "DESC": "租赁、搬家和家庭设置支持。",
       "SUBCATEGORIES": {
         "LEASE_SUPPORT": {
-          "LABEL": "租约支持",
-          "DESC": "帮助理解租约条款与要求。"
+          "LABEL": "租赁支持",
+          "DESC": "帮助了解租赁条款和要求。"
         },
         "TENANT_RENT_SUPPORT": {
-          "LABEL": "租金协助",
-          "DESC": "当支付房租有困难时提供指导。"
+          "LABEL": "租户租金支持",
+          "DESC": "当您在租金方面遇到困难时提供指导。"
         },
         "REPAIR_MAINTENANCE_SUPPORT": {
-          "LABEL": "维修与维护支持",
-          "DESC": "协助安排基本的家庭维修。"
+          "LABEL": "维修和保养支持",
+          "DESC": "协助安排基本维修或维护。"
         },
         "UTILITIES_SETUP_SUPPORT": {
-          "LABEL": "公共服务开通",
-          "DESC": "帮助开通网络、电力等基本服务。"
+          "LABEL": "实用程序设置支持",
+          "DESC": "帮助设置互联网、电力或其他公用设施。"
         },
         "LOOKING_FOR_RENTAL": {
-          "LABEL": "寻找租住房",
-          "DESC": "协助寻找公寓或合租房间。"
+          "LABEL": "寻找出租",
+          "DESC": "支持寻找公寓或房间。"
         },
         "FIND_ROOMATE": {
-          "LABEL": "寻找室友",
-          "DESC": "寻求帮助寻找室友。"
+          "LABEL": "找室友",
+          "DESC": "与室友匹配或合住。"
         },
-        "RENTING_SUPPORT": {
-          "LABEL": "租赁支持",
-          "DESC": "协助租赁和租赁基础知识。"
-        },
-        "HOUSEHOLD_ITEM_EXCHANGE": {
-          "LABEL": "家居用品交换",
-          "DESC": "帮助购买或销售家居用品。"
-        },
-        "MOVING_ASSISTANCE": {
-          "LABEL": "搬家协助",
-          "DESC": "支持搬家和包装。"
+        "MOVE_IN_HELP": {
+          "LABEL": "入住帮助",
+          "DESC": "亲自帮助包装、搬运或拆包。"
         },
         "BOOKING_PACKERS_MOVERS_SUPPORT": {
-          "LABEL": "预订搬家公司支持",
-          "DESC": "指导你预订可靠的搬家服务。"
+          "LABEL": "包装工和搬运工支持",
+          "DESC": "协助预订可靠的搬家服务。"
         },
-        "HOME_REPAIR_SUPPORT": {
-          "LABEL": "上门维修支持",
-          "DESC": "支持小型房屋维修。"
+        "BUY_THINGS": {
+          "LABEL": "购买家居用品",
+          "DESC": "帮助采购家具和家居必需品。"
         },
-        "UTILITIES_SETUP": {
-          "LABEL": "实用程序设置",
-          "DESC": "帮助设置公用事业和服务。"
+        "SELL_THINGS": {
+          "LABEL": "出售家居用品",
+          "DESC": "获取支持列出或捐赠您不再需要的物品。"
         }
       }
     },
@@ -117,16 +105,32 @@
         "TUTORING": {
           "LABEL": "家教",
           "DESC": "学科辅导和学习支持。"
+        },
+        "SCHOLARSHIP_KNOWLEDGE": {
+          "LABEL": "奖学金知识",
+          "DESC": "分享有关奖学金和助学金的信息。"
+        },
+        "STUDY_GROUP_FORMATION": {
+          "LABEL": "研究小组的组建",
+          "DESC": "寻找或组织合作学习小组。"
+        },
+        "CAREER_GUIDANCE": {
+          "LABEL": "职业指导",
+          "DESC": "职业道路规划、简历和面试支持。"
+        },
+        "EDUCATION_RESOURCE_SHARING": {
+          "LABEL": "教育资源共享",
+          "DESC": "分享笔记、录音或练习材料。"
         }
       }
     },
-    "HEALTHCARE_WELLNESS_SUPPORT": {
-      "LABEL": "医疗保健与福祉",
-      "DESC": "非临床健康导航和健康支持。",
+    "HEALTHCARE_AND_WELLNESS": {
+      "LABEL": "医疗保健与保健",
+      "DESC": "非临床医疗指导、提醒和健康支持。",
       "SUBCATEGORIES": {
-        "MEDICAL_NAVIGATION": {
-          "LABEL": "医疗导航",
-          "DESC": "基本导航和非临床指导。"
+        "MEDICAL_CONSULTATION": {
+          "LABEL": "医疗咨询",
+          "DESC": "帮助协调电话咨询或基本医疗信息。"
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "药品输送",
@@ -134,7 +138,7 @@
         },
         "MENTAL_WELLBEING_SUPPORT": {
           "LABEL": "心理健康支持",
-          "DESC": "获取通用的心理健康资源。"
+          "DESC": "获取一般心理健康资源。"
         },
         "MEDICATION_REMINDERS": {
           "LABEL": "用药提醒",
@@ -146,25 +150,37 @@
         }
       }
     },
-    "ELDERLY_SUPPORT": {
-      "LABEL": "老人支援",
-      "DESC": "为老年人提供非医疗援助和社区支持。",
+    "ELDERLY_COMMUNITY_ASSISTANCE": {
+      "LABEL": "长者社区援助",
+      "DESC": "为老年人、护理人员和社区提供非医疗支持。",
       "SUBCATEGORIES": {
-        "SENIOR_LIVING_RELOCATION": {
-          "LABEL": "老年生活搬迁",
-          "DESC": "帮助老年人住房和搬家。"
+        "SENIOR_RELOCATION_SUPPORT": {
+          "LABEL": "高级搬迁支持",
+          "DESC": "计划在家庭或护理机构之间移动。"
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
           "LABEL": "老年人的数字支持",
           "DESC": "设备和应用程序方面的帮助。"
         },
-        "MEDICAL_HELP": {
-          "LABEL": "医疗帮助",
-          "DESC": "为老年人提供非临床医疗援助。"
+        "MEDICATION_MANAGEMENT": {
+          "LABEL": "药物管理",
+          "DESC": "确保时间表、提醒和存储步入正轨。"
         },
-        "ERRANDS_TRANSPORTATION": {
-          "LABEL": "差事和交通",
-          "DESC": "帮助处理差事和交通。"
+        "MEDICAL_DEVICES_SETUP": {
+          "LABEL": "医疗设备设置",
+          "DESC": "设置医疗和辅助设备或排除故障。"
+        },
+        "ERRANDS_EVENTS_TRANSPORTATION": {
+          "LABEL": "差事、活动和交通",
+          "DESC": "护送老年人去办事或特殊活动。"
+        },
+        "TRANSPORTATION_APPOINTMENTS_EVENTS": {
+          "LABEL": "预约交通",
+          "DESC": "安排乘车前往约会和聚会。"
+        },
+        "SCHEDULING_APPOINTMENTS_OR_TASKS": {
+          "LABEL": "安排约会或任务",
+          "DESC": "跟踪约会、补充和杂务。"
         },
         "SOCIAL_CONNECTION": {
           "LABEL": "社交关系",

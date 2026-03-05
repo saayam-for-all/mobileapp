@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "Erstellt",
-    "MATCHING VOLUNTEER": "Passender Freiwilliger",
+    "MATCHING_VOLUNTEER": "Passender Freiwilliger",
     "MANAGED": "Verwaltet",
     "RESOLVED": "Gelöst",
     "CANCELLED": "Abgesagt",
-    "DELETED": "Gelöscht"
+    "DELETED": "Gelöscht",
+    "RATED_BY_REQUESTER": "Vom Anforderer bewertet",
+    "RATED_BY_VOLUNTEER": "Von Freiwilligen bewertet"
   },
   "requestType": {
-    "INPERSON": "Persönlich",
+    "IN_PERSON": "Persönlich",
     "REMOTE": "Fernbedienung"
   }
 }

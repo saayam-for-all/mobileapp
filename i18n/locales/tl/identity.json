@@ -15,5 +15,5 @@
   "FILE_TYPE_REQUIREMENT": "Mga JPEG, JPG, PNG, o PDF file lang. Max na laki: 2MB.",
   "UPLOAD_SUCCESS": "Matagumpay na na-upload ang file",
   "UPLOAD_FAILED": "Nabigo ang pag-upload ng file",
-  "UPLOAD_ERROR": "Nagkaroon ng error habang nag-a-upload ng file"
+  "UPLOAD_ERROR": "Nagkaroon ng error sa pag-upload ng file"
 }

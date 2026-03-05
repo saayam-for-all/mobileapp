@@ -11,13 +11,13 @@
   },
   "requestStatus": {
     "CREATED": "సృష్టించబడింది",
-    "MATCHING VOLUNTEER": "సరిపోలే వాలంటీర్",
+    "MATCHING_VOLUNTEER": "సరిపోలే వాలంటీర్",
     "MANAGED": "నిర్వహించబడింది",
     "RESOLVED": "పరిష్కరించబడింది",
     "CANCELLED": "రద్దు చేయబడింది",
     "DELETED": "తొలగించబడింది",
-    "RATED_BY_REQUESTER": "అభ్యర్థి రేటింగ్ ఇచ్చారు",
-    "RATED_BY_VOLUNTEER": "స్వచ్ఛంద సేవకుడు రేటింగ్ ఇచ్చారు"
+    "RATED_BY_REQUESTER": "రిక్వెస్టర్ ద్వారా రేట్ చేయబడింది",
+    "RATED_BY_VOLUNTEER": "వాలంటీర్ ద్వారా రేట్ చేయబడింది"
   },
   "requestType": {
     "IN_PERSON": "వ్యక్తిగతంగా",

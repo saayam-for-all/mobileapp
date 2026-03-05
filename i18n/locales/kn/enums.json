@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "ರಚಿಸಲಾಗಿದೆ",
-    "MATCHING VOLUNTEER": "ಹೊಂದಾಣಿಕೆಯ ಸ್ವಯಂಸೇವಕ",
+    "MATCHING_VOLUNTEER": "ಹೊಂದಾಣಿಕೆಯ ಸ್ವಯಂಸೇವಕ",
     "MANAGED": "ನಿರ್ವಹಿಸಲಾಗಿದೆ",
     "RESOLVED": "ಪರಿಹರಿಸಲಾಗಿದೆ",
     "CANCELLED": "ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
-    "DELETED": "ಅಳಿಸಲಾಗಿದೆ"
+    "DELETED": "ಅಳಿಸಲಾಗಿದೆ",
+    "RATED_BY_REQUESTER": "ವಿನಂತಿಸಿದವರಿಂದ ರೇಟ್ ಮಾಡಲಾಗಿದೆ",
+    "RATED_BY_VOLUNTEER": "ಸ್ವಯಂಸೇವಕರಿಂದ ರೇಟ್ ಮಾಡಲಾಗಿದೆ"
   },
   "requestType": {
-    "INPERSON": "ವೈಯಕ್ತಿಕವಾಗಿ",
+    "IN_PERSON": "ವೈಯಕ್ತಿಕವಾಗಿ",
     "REMOTE": "ರಿಮೋಟ್"
   }
 }

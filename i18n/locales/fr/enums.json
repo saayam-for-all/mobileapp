@@ -11,16 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "Créé",
-    "MATCHING VOLUNTEER": "Bénévole correspondant",
+    "MATCHING_VOLUNTEER": "Bénévole correspondant",
     "MANAGED": "Géré",
     "RESOLVED": "Résolu",
     "CANCELLED": "Annulé",
     "DELETED": "Supprimé",
     "RATED_BY_REQUESTER": "Évalué par le demandeur",
-    "RATED_BY_VOLUNTEER": "Évalué par le bénévole"
+    "RATED_BY_VOLUNTEER": "Évalué par un bénévole"
   },
   "requestType": {
-    "INPERSON": "En personne",
+    "IN_PERSON": "En personne",
     "REMOTE": "Télécommande"
   }
 }

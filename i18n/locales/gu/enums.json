@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "બનાવ્યું",
-    "MATCHING VOLUNTEER": "મેચિંગ સ્વયંસેવક",
+    "MATCHING_VOLUNTEER": "મેચિંગ સ્વયંસેવક",
     "MANAGED": "વ્યવસ્થાપિત",
     "RESOLVED": "ઉકેલાઈ",
     "CANCELLED": "રદ કરેલ",
-    "DELETED": "કાઢી નાખ્યું"
+    "DELETED": "કાઢી નાખ્યું",
+    "RATED_BY_REQUESTER": "Requester દ્વારા રેટ કરેલ",
+    "RATED_BY_VOLUNTEER": "સ્વયંસેવક દ્વારા રેટ કરેલ"
   },
   "requestType": {
-    "INPERSON": "વ્યક્તિમાં",
+    "IN_PERSON": "વ્યક્તિમાં",
     "REMOTE": "દૂરસ્થ"
   }
 }

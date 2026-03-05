@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "Tạo",
-    "MATCHING VOLUNTEER": "Tình nguyện viên phù hợp",
+    "MATCHING_VOLUNTEER": "Tình nguyện viên phù hợp",
     "MANAGED": "Được quản lý",
     "RESOLVED": "Đã giải quyết",
     "CANCELLED": "Đã hủy",
-    "DELETED": "Đã xóa"
+    "DELETED": "Đã xóa",
+    "RATED_BY_REQUESTER": "Được người yêu cầu xếp hạng",
+    "RATED_BY_VOLUNTEER": "Được đánh giá bởi tình nguyện viên"
   },
   "requestType": {
-    "INPERSON": "Trực tiếp",
+    "IN_PERSON": "Trực tiếp",
     "REMOTE": "Xa"
   }
 }

@@ -10,15 +10,17 @@
     "CRITICAL": "आलोचनात्मक"
   },
   "requestStatus": {
-    "CREATED": "निर्मित",
-    "MATCHING VOLUNTEER": "मिलान स्वयंसेवक",
+    "CREATED": "सृजित",
+    "MATCHING_VOLUNTEER": "मिलान स्वयंसेवक",
     "MANAGED": "प्रबंधित",
-    "RESOLVED": "संकल्पित",
-    "CANCELLED": "रद्द कएल गेल",
-    "DELETED": "मेटा देल गेल"
+    "RESOLVED": "समाधान भ गेल",
+    "CANCELLED": "रद्द क देल गेल",
+    "DELETED": "मेटा देल गेल",
+    "RATED_BY_REQUESTER": "अनुरोधक द्वारा रेटेड",
+    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा रेटेड"
   },
   "requestType": {
-    "INPERSON": "व्यक्तिगत रूप से",
+    "IN_PERSON": "व्यक्तिगत रूप से",
     "REMOTE": "दूर सँ"
   }
 }

@@ -23,7 +23,7 @@
   "VACATION_END_DATE": "休暇終了日",
   "YOUR_AVAILABLE_TIME_SLOTS": "ご利用可能な時間帯",
   "REMOVE_TIME_SLOT": "タイムスロットの削除",
-  "ADD_TIME_SLOT": "時間帯を追加",
+  "ADD_TIME_SLOT": "時間枠の追加",
   "VACATION_MODE_ACTIVE": "休暇モードがアクティブです",
   "NO_AVAILABILITY_SLOTS": "可用性スロットが構成されていません"
 }

@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "ٺاهيل",
-    "MATCHING VOLUNTEER": "ملندڙ رضاڪار",
+    "MATCHING_VOLUNTEER": "ملندڙ رضاڪار",
     "MANAGED": "منظم",
     "RESOLVED": "حل ٿيل",
     "CANCELLED": "منسوخ ٿيل",
-    "DELETED": "حذف ٿيل"
+    "DELETED": "حذف ٿيل",
+    "RATED_BY_REQUESTER": "درخواست ڪندڙ طرفان درجه بندي",
+    "RATED_BY_VOLUNTEER": "رضاڪار پاران ڏنل"
   },
   "requestType": {
-    "INPERSON": "شخص ۾",
+    "IN_PERSON": "شخص ۾",
     "REMOTE": "ريموٽ"
   }
 }

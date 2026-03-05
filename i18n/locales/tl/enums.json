@@ -11,14 +11,16 @@
   },
   "requestStatus": {
     "CREATED": "Nilikha",
-    "MATCHING VOLUNTEER": "Matching Volunteer",
+    "MATCHING_VOLUNTEER": "Matching Volunteer",
     "MANAGED": "Pinamamahalaan",
     "RESOLVED": "Nalutas",
     "CANCELLED": "Kinansela",
-    "DELETED": "Tinanggal"
+    "DELETED": "Tinanggal",
+    "RATED_BY_REQUESTER": "Na-rate ng Humihiling",
+    "RATED_BY_VOLUNTEER": "Na-rate ng Volunteer"
   },
   "requestType": {
-    "INPERSON": "Sa Tao",
+    "IN_PERSON": "Sa Tao",
     "REMOTE": "Remote"
   }
 }
