@@ -52,29 +52,10 @@ web-build/
 *.mobileprovision
 
 # Android
-android/app/build/
-android/build/
-android/.gradle/
-android/app/release/
-android/local.properties
-android/.cxx/
-android/app/.cxx/
+android/
 
 # iOS
-ios/Pods/
-ios/build/
-ios/*.xcworkspace/xcuserdata/
-ios/*.xcworkspace/xcshareddata/
-ios/Podfile.lock
-DerivedData/
-*.pbxuser
-*.mode1v3
-*.mode2v3
-*.perspectivev3
-*.hmap
-*.ipa
-*.dSYM.zip
-*.dSYM
+ios/
 
 # macOS
 .DS_Store
