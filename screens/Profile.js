@@ -290,8 +290,7 @@ export default function Profile({ signOut }) {
 
         <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate("Welcome")}>
           <FontAwesome name="info-circle" size={20} style={styles.optionIcon} />
-          {/* No "HELP_CENTER" key in your JSON; leaving as-is */}
-          <Text style={styles.optionText}>Help Center</Text>
+          <Text style={styles.optionText}>{t("HELP_CENTER")}</Text>
           <Ionicons name="chevron-forward" size={20} color="#777" />
         </TouchableOpacity>
 
