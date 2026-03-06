@@ -1,26 +1,24 @@
 {
   "requestFor": {
-    "SELF": "अपन व्यक्तित्व",
-    "OTHER": "दोसर"
+    "SELF": "अपन",
+    "OTHER": "आन"
   },
   "requestPriority": {
     "LOW": "कम",
-    "MEDIUM": "माध्यम",
-    "HIGH": "ऊंच",
-    "CRITICAL": "आलोचनात्मक"
+    "MEDIUM": "मध्यम",
+    "HIGH": "उच्च",
+    "CRITICAL": "गंभीर"
   },
   "requestStatus": {
-    "CREATED": "सृजित",
-    "MATCHING_VOLUNTEER": "मिलान स्वयंसेवक",
+    "CREATED": "बनाओल गेल",
+    "MATCHING VOLUNTEER": "स्वयंसेवक खोजि रहल अछि",
     "MANAGED": "प्रबंधित",
-    "RESOLVED": "समाधान भ गेल",
-    "CANCELLED": "रद्द क देल गेल",
-    "DELETED": "मेटा देल गेल",
-    "RATED_BY_REQUESTER": "अनुरोधक द्वारा रेटेड",
-    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा रेटेड"
+    "RESOLVED": "हल कएल गेल",
+    "CANCELLED": "रद्द कएल गेल",
+    "DELETED": "मिटाओल गेल"
   },
   "requestType": {
-    "IN_PERSON": "व्यक्तिगत रूप से",
+    "INPERSON": "व्यक्तिगत रूप सँ",
     "REMOTE": "दूर सँ"
   }
 }

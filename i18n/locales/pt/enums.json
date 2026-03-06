@@ -1,26 +1,26 @@
 {
   "requestFor": {
-    "SELF": "Auto",
+    "SELF": "Próprio",
     "OTHER": "Outro"
   },
   "requestPriority": {
-    "LOW": "Baixo",
-    "MEDIUM": "Médio",
-    "HIGH": "Alto",
-    "CRITICAL": "Crítico"
+    "LOW": "Baixa",
+    "MEDIUM": "Média",
+    "HIGH": "Alta",
+    "CRITICAL": "Crítica"
   },
   "requestStatus": {
     "CREATED": "Criado",
-    "MATCHING_VOLUNTEER": "Voluntário correspondente",
-    "MANAGED": "Gerenciou",
+    "MATCHING_VOLUNTEER": "Procurando voluntário",
+    "MANAGED": "Gerenciado",
     "RESOLVED": "Resolvido",
     "CANCELLED": "Cancelado",
     "DELETED": "Excluído",
     "RATED_BY_REQUESTER": "Avaliado pelo solicitante",
-    "RATED_BY_VOLUNTEER": "Avaliado por Voluntário"
+    "RATED_BY_VOLUNTEER": "Avaliado pelo voluntário"
   },
   "requestType": {
-    "IN_PERSON": "Pessoalmente",
+    "IN_PERSON": "Presencial",
     "REMOTE": "Remoto"
   }
 }

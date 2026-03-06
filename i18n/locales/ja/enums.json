@@ -1,26 +1,24 @@
 {
   "requestFor": {
-    "SELF": "自己",
-    "OTHER": "他の"
+    "SELF": "自分",
+    "OTHER": "他の人"
   },
   "requestPriority": {
-    "LOW": "低い",
-    "MEDIUM": "中くらい",
-    "HIGH": "高い",
-    "CRITICAL": "致命的"
+    "LOW": "低",
+    "MEDIUM": "中",
+    "HIGH": "高",
+    "CRITICAL": "緊急"
   },
   "requestStatus": {
-    "CREATED": "作成されました",
-    "MATCHING_VOLUNTEER": "マッチングボランティア",
-    "MANAGED": "管理された",
+    "CREATED": "作成済み",
+    "MATCHING VOLUNTEER": "ボランティア検索中",
+    "MANAGED": "管理中",
     "RESOLVED": "解決済み",
-    "CANCELLED": "キャンセル",
-    "DELETED": "削除されました",
-    "RATED_BY_REQUESTER": "依頼者による評価",
-    "RATED_BY_VOLUNTEER": "ボランティアによる評価"
+    "CANCELLED": "キャンセル済み",
+    "DELETED": "削除済み"
   },
   "requestType": {
-    "IN_PERSON": "直接",
+    "INPERSON": "対面",
     "REMOTE": "リモート"
   }
 }

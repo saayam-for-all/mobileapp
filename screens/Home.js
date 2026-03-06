@@ -310,7 +310,7 @@ export default function Home({ signOut }) {
           <Icon name="add-outline" size={20} color="#fff" />
           <Text style={[styles.actionButtonText, { color: "#fff" }]}>
             {" "}
-            {t("CREATE_A_REQUEST")}
+            {t("CREATE_HELP_REQUEST")}
           </Text>
         </TouchableOpacity>
       </View>
