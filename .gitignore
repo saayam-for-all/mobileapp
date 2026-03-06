@@ -52,13 +52,7 @@ web-build/
 *.mobileprovision
 
 # Android (include project-specific configs)
-android/app/build/
-android/build/
-android/.gradle/
-android/app/release/
-android/local.properties
-android/.cxx/
-android/app/.cxx/
+
 
 # iOS
 ios/
