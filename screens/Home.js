@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import {
   View,
   Text,
@@ -178,11 +178,13 @@ export default function Home({ signOut }) {
   const [userName, setUserName] = useState("");
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
-  const [userVolunteer, setVolunteer] = useState(false);
+  const [userRole, setUserRole] = useState("Beneficiary");
   const [showPicker, setShowPicker] = useState(false);
   const [selectedDashboard, setSelectedDashboard] = useState("Volunteer Dashboard");
 
+  const beneficiary = "Beneficiary";
   const volunteer = "Volunteers";
+
 
   const getGroup = async (user) => {
     try {
@@ -190,10 +192,13 @@ export default function Home({ signOut }) {
       const userGroup =
         session.tokens?.accessToken?.payload["cognito:groups"];
       //console.log('user group', userGroup)
-      if (userGroup && userGroup.includes(volunteer)) {
-        setVolunteer(true);
+      if (userGroup && userGroup.includes(beneficiary)) {
+        setUserRole(beneficiary);
+      }
+      else if (userGroup && userGroup.includes(volunteer)) {
+        setUserRole(volunteer);
       } 
-       //Refresh token 
+      //Refresh token 
       const refreshedSession = await fetchAuthSession({ forceRefresh: true });
       //console.log('session', refreshedSession);
       const { idToken, refreshToken, accessToken } = refreshedSession.tokens || {};
@@ -310,13 +315,23 @@ export default function Home({ signOut }) {
 
       <View>
         {/* Action Buttons */}
-        {!userVolunteer && (
+        {!(userRole == volunteer) && (
           <TouchableOpacity
             style={styles.actionButton}
             onPress={() => navigation.navigate("PromoteToVolunteer")}
           >
             <Icon name="heart-outline" size={20} color="#4f8ef7" />
-            <Text style={styles.actionButtonText}> Become A Volunteer</Text>
+            <Text style={styles.actionButtonText}> Become A Volunteer </Text>
+          </TouchableOpacity>
+        )}
+
+        {(userRole == beneficiary) && (
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate("EmergencyContact")}
+          >
+            <Icon name="heart-outline" size={20} color="#4f8ef7" />
+            <Text style={styles.actionButtonText}> Emergency Contact </Text>
           </TouchableOpacity>
         )}
 
