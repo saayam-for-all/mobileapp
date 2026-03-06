@@ -29,6 +29,7 @@ import Availability from "../screens/MenuScreens/Availability";
 import Preferences from "../screens/MenuScreens/Preferences";
 import AccountDeletion from "../screens/MenuScreens/AccountDeletion";
 import IdentityDocument from "../screens/MenuScreens/IdentityDocument";
+import EmergencyContact from '../screens/EmergencyContact/EmergencyContact';
 
 const AppStack = createStackNavigator();
 
@@ -186,6 +187,9 @@ export default function App({ signOut }) {
 
       {/* No key for "Benevity" */}
       <AppStack.Screen name="Benevity" component={BenevityInfo} options={{ title: "Benevity" }} />
+
+      <AppStack.Screen name="EmergencyContact" component={EmergencyContact} 
+        options={{ title: t("EMERGENCY_CONTACT", { ns: "common" }) }}/>
 
       {/* ✅ common.json has ADMINISTRATE, but your title is "Administration" */}
       <AppStack.Screen name="Admin" component={AdminPanel} options={{ title: "Administration" }} />

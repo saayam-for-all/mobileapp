@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -16,6 +17,8 @@ import api from "../services/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../hooks/useAuthUser";
+import { fetchProfileImage } from "../services/volunteerServices";
+import { blobToBase64 } from "../utils/blobToBase64";
 import { useTranslation } from "react-i18next";
 
 const styles = StyleSheet.create({
@@ -93,22 +96,44 @@ export default function Profile({ signOut }) {
   const [country, setCountry] = useState("");
 
   const [profileData, setProfileData] = useState(null);
-
-  useAuthUser(navigation, (user) => {
-    setUserName(user.attributes.given_name + " " + user.attributes.family_name);
-    setEmail(user.attributes.email);
-    setPhone(user.attributes.phone_number);
-    setCountry(user.attributes["custom:Country"]);
-  });
+  const user = useAuthUser();
+  const userDbId = user?.attributes?.userDbId;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
+    if (!isFocused) return;
     const getImage = async () => {
-      const value = await AsyncStorage.getItem("profilePhoto");
-      console.log(profilePhoto);
-      if (value) setProfilePhoto(JSON.parse(value));
+      if (userDbId) {
+        try {
+          const blob = await fetchProfileImage(userDbId);
+          if (blob) {
+            const base64 = await blobToBase64(blob);
+            setProfilePhoto({ uri: base64 });
+            await AsyncStorage.setItem('profilePhoto', JSON.stringify({ uri: base64 }));
+          }
+        } catch (err) {
+          console.log("Error fetching profile image:", err);
+          const value = await AsyncStorage.getItem('profilePhoto');
+          if (value) setProfilePhoto(JSON.parse(value));
+        }
+      } else {
+        const value = await AsyncStorage.getItem('profilePhoto');
+        if (value) setProfilePhoto(JSON.parse(value));
+      }
     };
     getImage();
-  }, []);
+  }, [isFocused, userDbId]);
+
+  useEffect(() => {
+    if (user) {
+        setUserName(
+          user.attributes.given_name + " " + user.attributes.family_name
+        );
+        setEmail(user.attributes.email);
+        setPhone(user.attributes.phone_number);
+        setCountry(user.attributes["custom:Country"]);
+    }
+}, [user]);
 
   const confirmSignOut = () => {
     // NOTE: No matching translation keys exist for "Alert", "Are you sure you want to logout?",

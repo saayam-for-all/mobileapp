@@ -46,7 +46,10 @@ export default function useAuthUser() {
                     let userDbId = null;
                     try {
                         const result = await getUserId(email);
-                        userDbId = result?.data?.id || null;
+                        if (!result?.data?.user_id) {
+                            throw new Error("userDbId not found");
+                        }
+                        userDbId = result.data.user_id;
                     } catch (dbError) {
                         console.warn("DB lookup failed:", dbError.message);
                     }
