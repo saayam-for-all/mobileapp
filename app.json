@@ -33,6 +33,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "./plugins/withAndroidFix.cjs",
+      ["expo-build-properties", {
+        "android": {
+          "enableJetifier": true,
+          "jvmArgs": "-Xmx4096m -XX:MaxMetaspaceSize=512m"
+        }
+      }],
       "expo-secure-store",
       [
         "expo-av",

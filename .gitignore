@@ -51,8 +51,8 @@ web-build/
 *.key
 *.mobileprovision
 
-# Android (include project-specific configs)
-
+# Android
+android/
 
 # iOS
 ios/
