@@ -37,6 +37,8 @@ import useAuthUser from "../../../hooks/useAuthUser";
 const ButtonsView = () => {
   const [infoOpen, setInfoOpen] = useState(false);
   const [info, setInfo] = useState('');
+
+  const navigation = useNavigation();
   const route = useRoute();
   const req = route.params?.item;
   // CURRENTLY NOT WORKING - FIX AFTER RECEIVING CORRECT USER DATA
@@ -106,33 +108,34 @@ const ButtonsView = () => {
         </Text>
         </TouchableOpacity>
         <TouchableOpacity
-        style={{
-            width: 125,
-            height: 50,
-            borderRadius: 10,
-            marginLeft: 10,
-            alignContent: "center",
-            flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: "#EB5757",
-        }}
+          onPress={() => navigation.navigate("EmergencyContact")}
+          style={{
+              width: 125,
+              height: 50,
+              borderRadius: 10,
+              marginLeft: 10,
+              alignContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "#EB5757",
+          }}
         >
-        <MaterialIcons
-            name="emergency"
-            size={20}
-            color="white"
-            style={{ marginRight: 5 }}
-        />
-        <Text
-            style={{
-            fontSize: 15,
-            marginTop: 1,
-            marginLeft: 10,
-            color: "white",
-            }}
-        >
-            Emergency Contact{" "}
-        </Text>
+          <MaterialIcons
+              name="emergency"
+              size={20}
+              color="white"
+              style={{ marginRight: 5 }}
+          />
+          <Text
+              style={{
+              fontSize: 15,
+              marginTop: 1,
+              marginLeft: 10,
+              color: "white",
+              }}
+          >
+              Emergency Contact
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -147,22 +150,22 @@ const ButtonsView = () => {
           }}
           onPress={generateAnswer}
         >
-        <FontAwesome5
-          name="info-circle"
-          size={16}
-          color="white"
-          style={{ marginRight: 5 }}
-        />
-        <Text
-          style={{
-          fontSize: 15,
-          marginTop: 1,
-          marginLeft: 10,
-          color: "white",
-          }}
-        >
-            More Information{" "}
-        </Text>
+          <FontAwesome5
+            name="info-circle"
+            size={16}
+            color="white"
+            style={{ marginRight: 5 }}
+          />
+          <Text
+            style={{
+            fontSize: 15,
+            marginTop: 1,
+            marginLeft: 10,
+            color: "white",
+            }}
+          >
+              More Information{" "}
+          </Text>
         </TouchableOpacity>
     </View>
   )

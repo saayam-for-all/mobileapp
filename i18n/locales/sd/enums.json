@@ -6,21 +6,19 @@
   "requestPriority": {
     "LOW": "گھٽ",
     "MEDIUM": "وچولي",
-    "HIGH": "هاءِ",
+    "HIGH": "وڌيڪ",
     "CRITICAL": "نازڪ"
   },
   "requestStatus": {
-    "CREATED": "ٺاهيل",
-    "MATCHING_VOLUNTEER": "ملندڙ رضاڪار",
-    "MANAGED": "منظم",
-    "RESOLVED": "حل ٿيل",
-    "CANCELLED": "منسوخ ٿيل",
-    "DELETED": "حذف ٿيل",
-    "RATED_BY_REQUESTER": "درخواست ڪندڙ طرفان درجه بندي",
-    "RATED_BY_VOLUNTEER": "رضاڪار پاران ڏنل"
+    "CREATED": "ٺاهيو ويو",
+    "MATCHING VOLUNTEER": "رضاڪار ڳولي رهيا آهيون",
+    "MANAGED": "منظم ٿيل",
+    "RESOLVED": "حل ٿيو",
+    "CANCELLED": "منسوخ ٿيو",
+    "DELETED": "ڊاٺو ويو"
   },
   "requestType": {
-    "IN_PERSON": "شخص ۾",
-    "REMOTE": "ريموٽ"
+    "INPERSON": "ذاتي طور تي",
+    "REMOTE": "پري کان"
   }
 }
