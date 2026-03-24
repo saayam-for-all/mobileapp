@@ -104,7 +104,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           )
             filteredCategories[cat.catId] = cat;
         }
-        console.log("Categories: ",filteredCategories);
+        console.log("Categories: ", filteredCategories);
         setCategories(filteredCategories);
       } else {
         throw new Error('No categories found');
@@ -126,7 +126,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       requestDescription: formData.requestDescription,
       isCalamity: formData.isCalamity,
       isLeadVolunteer: 1,
-      
+
       requestPriority: {
         requestPriorityId: formData.requestPriorityId
       },
@@ -136,7 +136,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       requestFor: {
         requestForId: formData.requestForId
       },
-      
+
       helpCategory: { catId: formData.requestSubCategory || formData.requestCategory }
     };
 
@@ -202,7 +202,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       Alert.alert('Validation Error', 'Description is required. Please fill out the Description tab.');
       return;
     }
-    
+
     // Validate other person info if not for self
     if (!isSelfRequest()) {
       const { firstName, lastName, email } = otherPersonInfo;
@@ -254,7 +254,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           return {
             text: category,
             onPress: async () => {
-              await submit(category=category);
+              await submit(category = category);
               setLoading(false);
             }
           }
@@ -398,26 +398,21 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                   value={formData.requestDescription}
                   onChangeText={(text) => updateFormData('requestDescription', text)}
                 />
-                  <AudioRecorder
-                    visible={isRecorderVisible}
-                    onStop={(uri) => {
-                      setRecordedAudioUri(uri); // store audio URI
-                      setIsRecorderVisible(false); // close recorder
-                    }}
-                    onClose={() => setIsRecorderVisible(false)}
-                  />
-
-
-                {/* Microphone Icon to open Floating AudioRecorder */}
-                <TouchableOpacity
-                  onPress={() => setIsRecorderVisible(true)}
-                  style={{
-                    position: 'absolute',
-                    right: 10,
-                    top: 16, // adjust to vertically center
+                <AudioRecorder
+                  visible={isRecorderVisible}
+                  onStop={({ uri, transcript }) => {
+                    setRecordedAudioUri(uri);
+                    if (transcript) {
+                      updateFormData('requestDescription',
+                        formData.requestDescription
+                          ? formData.requestDescription + ' ' + transcript
+                          : transcript
+                      );
+                    }
+                    setIsRecorderVisible(false);
                   }}
-                >
-                </TouchableOpacity>
+                  onClose={() => setIsRecorderVisible(false)}
+                />
 
               </View>
 
@@ -430,7 +425,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           </Tab>
 
           <Tab label="Details">
-              {/* Details Field */}
+            {/* Details Field */}
 
             <View style={styles.field}>
               <Text style={styles.label}>For Self</Text>
@@ -644,7 +639,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           </Tab>
         </Tabs>
 
-        
+
         <View style={styles.buttonContainer}>
           <Button backgroundColor="red" onPress={isEdit ? onClose : handleCancel}>
             Cancel
@@ -776,7 +771,7 @@ const pickerSelectStyles = StyleSheet.create({
   },
   // https://github.com/lawnstarter/react-native-picker-select/issues/719#issuecomment-3549813072
   inputIOSContainer: {
-    zIndex:100,
+    zIndex: 100,
   },
   inputAndroid: {
     fontSize: 16,
