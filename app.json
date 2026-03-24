@@ -40,10 +40,15 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
       ],
+      [
+        "@siteed/expo-audio-studio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ],
       "expo-localization",
       "expo-asset",
-      "expo-font",
-      "expo-audio"
+      "expo-font"
     ]
   }
 }
