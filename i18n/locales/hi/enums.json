@@ -1,6 +1,6 @@
 {
   "requestFor": {
-    "SELF": "खुद",
+    "SELF": "स्वयं",
     "OTHER": "अन्य"
   },
   "requestPriority": {
@@ -10,17 +10,17 @@
     "CRITICAL": "गंभीर"
   },
   "requestStatus": {
-    "CREATED": "बनाया था",
-    "MATCHING_VOLUNTEER": "मिलान स्वयंसेवक",
+    "CREATED": "बनाया गया",
+    "MATCHING_VOLUNTEER": "स्वयंसेवक खोज रहे हैं",
     "MANAGED": "प्रबंधित",
-    "RESOLVED": "हल किया",
-    "CANCELLED": "रद्द कर दिया गया",
-    "DELETED": "हटाए गए",
-    "RATED_BY_REQUESTER": "अनुरोधकर्ता द्वारा मूल्यांकित",
-    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा मूल्यांकित"
+    "RESOLVED": "हल किया गया",
+    "CANCELLED": "रद्द किया गया",
+    "DELETED": "हटाया गया",
+    "RATED_BY_REQUESTER": "अनुरोधकर्ता द्वारा रेट किया गया",
+    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा रेट किया गया"
   },
   "requestType": {
-    "IN_PERSON": "स्वयं",
-    "REMOTE": "दूर"
+    "IN_PERSON": "व्यक्तिगत रूप से",
+    "REMOTE": "दूरस्थ"
   }
 }

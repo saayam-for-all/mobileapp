@@ -1,7 +1,7 @@
 {
   "requestFor": {
     "SELF": "Sarili",
-    "OTHER": "Iba pa"
+    "OTHER": "Iba"
   },
   "requestPriority": {
     "LOW": "Mababa",
@@ -11,16 +11,14 @@
   },
   "requestStatus": {
     "CREATED": "Nilikha",
-    "MATCHING_VOLUNTEER": "Matching Volunteer",
+    "MATCHING VOLUNTEER": "Naghahanap ng Boluntaryo",
     "MANAGED": "Pinamamahalaan",
     "RESOLVED": "Nalutas",
     "CANCELLED": "Kinansela",
-    "DELETED": "Tinanggal",
-    "RATED_BY_REQUESTER": "Na-rate ng Humihiling",
-    "RATED_BY_VOLUNTEER": "Na-rate ng Volunteer"
+    "DELETED": "Tinanggal"
   },
   "requestType": {
-    "IN_PERSON": "Sa Tao",
-    "REMOTE": "Remote"
+    "INPERSON": "Personal",
+    "REMOTE": "Malayuan"
   }
 }

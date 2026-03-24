@@ -1,7 +1,7 @@
 {
   "requestFor": {
-    "SELF": "Diri sendiri",
-    "OTHER": "Lainnya"
+    "SELF": "Diri Sendiri",
+    "OTHER": "Orang Lain"
   },
   "requestPriority": {
     "LOW": "Rendah",
@@ -11,16 +11,14 @@
   },
   "requestStatus": {
     "CREATED": "Dibuat",
-    "MATCHING_VOLUNTEER": "Relawan yang Cocok",
+    "MATCHING VOLUNTEER": "Mencocokkan Relawan",
     "MANAGED": "Dikelola",
-    "RESOLVED": "Terselesaikan",
+    "RESOLVED": "Diselesaikan",
     "CANCELLED": "Dibatalkan",
-    "DELETED": "Dihapus",
-    "RATED_BY_REQUESTER": "Dinilai oleh Pemohon",
-    "RATED_BY_VOLUNTEER": "Dinilai oleh Relawan"
+    "DELETED": "Dihapus"
   },
   "requestType": {
-    "IN_PERSON": "Secara langsung",
-    "REMOTE": "Terpencil"
+    "INPERSON": "Langsung",
+    "REMOTE": "Jarak Jauh"
   }
 }

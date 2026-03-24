@@ -2,193 +2,193 @@
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
       "LABEL": "Général",
-      "DESC": "À utiliser en cas de doute ; décrivez votre besoin en détail."
+      "DESC": "Utilisez cette option lorsque vous n'êtes pas sûr ; décrivez votre besoin en détail."
     },
     "FOOD_AND_ESSENTIALS": {
-      "LABEL": "Alimentation et produits essentiels",
-      "DESC": "Accédez à une aide alimentaire, à une aide à l’épicerie et à une aide à la préparation des repas.",
+      "LABEL": "Alimentation et essentiels",
+      "DESC": "Accédez à une aide alimentaire, aux courses et à la préparation des repas.",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "Aide alimentaire",
+          "LABEL": "Assistance alimentaire",
           "DESC": "Trouvez des banques alimentaires, des garde-manger ou des programmes de repas."
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
-          "LABEL": "Épicerie et livraison",
-          "DESC": "Demandez de l’aide pour faire les courses et livrer les courses."
+          "LABEL": "Courses et livraison",
+          "DESC": "Demandez de l'aide pour faire les courses et les livrer."
         },
         "COOKING_HELP": {
           "LABEL": "Aide à la cuisine",
-          "DESC": "Obtenez des conseils sur la préparation des repas et la cuisine."
+          "DESC": "Recevez des conseils pour préparer et cuisiner les repas."
         }
       }
     },
     "CLOTHING_ASSISTANCE": {
-      "LABEL": "Aide vestimentaire",
-      "DESC": "Faites un don, empruntez, adaptez ou demandez de l'aide pour vos vêtements.",
+      "LABEL": "Assistance vestimentaire",
+      "DESC": "Donnez, empruntez, faites réparer ou demandez une aide pour les vêtements.",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "Faire un don de vêtements",
-          "DESC": "Donnez des vêtements à ceux qui en ont besoin."
+          "LABEL": "Donner des vêtements",
+          "DESC": "Offrez des vêtements aux personnes dans le besoin."
         },
         "BORROW_CLOTHES": {
           "LABEL": "Emprunter des vêtements",
-          "DESC": "Empruntez des vêtements légèrement usagés."
+          "DESC": "Empruntez des vêtements en bon état."
         },
         "EMERGENCY_CLOTHING_ASSISTANCE": {
-          "LABEL": "Assistance vestimentaire d’urgence",
-          "DESC": "Assistance vestimentaire rapide pour les situations d’urgence."
+          "LABEL": "Assistance vestimentaire d'urgence",
+          "DESC": "Soutien rapide lorsque des vêtements sont nécessaires immédiatement."
         },
         "TAILORING": {
-          "LABEL": "Adaptation",
-          "DESC": "Services de réparation et de modification de vêtements."
+          "LABEL": "Retouches",
+          "DESC": "Services de réparation et d'ajustement des vêtements."
         }
       }
     },
     "HOUSING_ASSISTANCE": {
-      "LABEL": "Aide au logement",
-      "DESC": "Assistance à la location, au déménagement et à l'installation du ménage.",
+      "LABEL": "Assistance au logement",
+      "DESC": "Aide pour la location, les déménagements et l'organisation du foyer.",
       "SUBCATEGORIES": {
         "LEASE_SUPPORT": {
-          "LABEL": "Assistance location",
-          "DESC": "Aide à comprendre les conditions et les exigences du bail."
+          "LABEL": "Soutien aux baux",
+          "DESC": "Aide pour comprendre les clauses et exigences du bail."
         },
         "TENANT_RENT_SUPPORT": {
-          "LABEL": "Aide au loyer des locataires",
-          "DESC": "Des conseils lorsque vous avez des difficultés avec le loyer."
+          "LABEL": "Aide au paiement du loyer",
+          "DESC": "Conseils lorsque vous avez des difficultés à payer le loyer."
         },
         "REPAIR_MAINTENANCE_SUPPORT": {
-          "LABEL": "Assistance réparation et entretien",
-          "DESC": "Assistance pour planifier les réparations ou l’entretien de base."
+          "LABEL": "Soutien réparations et maintenance",
+          "DESC": "Assistance pour organiser des réparations domestiques de base."
         },
         "UTILITIES_SETUP_SUPPORT": {
-          "LABEL": "Prise en charge de la configuration des utilitaires",
-          "DESC": "Aide à la configuration d'Internet, de l'électricité ou d'autres services publics."
+          "LABEL": "Installation des services essentiels",
+          "DESC": "Aide pour activer internet, électricité ou autres services."
         },
         "LOOKING_FOR_RENTAL": {
-          "LABEL": "À la recherche d'une location",
-          "DESC": "Aide à la recherche d'appartements ou de chambres."
+          "LABEL": "Recherche de logement à louer",
+          "DESC": "Soutien pour trouver un appartement ou une chambre."
         },
         "FIND_ROOMATE": {
           "LABEL": "Trouver un colocataire",
-          "DESC": "Match avec des colocataires ou un logement partagé."
+          "DESC": "Mise en relation pour la colocation ou le logement partagé."
         },
         "MOVE_IN_HELP": {
-          "LABEL": "Aide à l'emménagement",
-          "DESC": "Aide pratique pour emballer, soulever ou déballer."
+          "LABEL": "Aide à l'installation",
+          "DESC": "Aide pratique pour emballer, transporter et déballer."
         },
         "BOOKING_PACKERS_MOVERS_SUPPORT": {
-          "LABEL": "Assistance aux emballeurs et aux déménageurs",
-          "DESC": "Assistance pour la réservation de services de déménagement fiables."
+          "LABEL": "Réserver des déménageurs",
+          "DESC": "Conseils pour choisir des services de déménagement fiables."
         },
         "BUY_THINGS": {
           "LABEL": "Acheter des articles ménagers",
-          "DESC": "Aide à l'approvisionnement en meubles et articles ménagers essentiels."
+          "DESC": "Aide pour trouver meubles et essentiels domestiques."
         },
         "SELL_THINGS": {
           "LABEL": "Vendre des articles ménagers",
-          "DESC": "Obtenez une liste d'assistance ou faites don d'articles dont vous n'avez plus besoin."
+          "DESC": "Aide pour vendre ou donner les objets dont vous n'avez plus besoin."
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "Soutien à l’éducation et à la carrière",
-      "DESC": "Applications universitaires, examens SOP, tutorat et aide aux études.",
+      "LABEL": "Soutien éducatif et professionnel",
+      "DESC": "Candidatures universitaires, révisions de SOP, tutorat et soutien aux études.",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "Aide pour postuler à l'université",
-          "DESC": "Aide avec les demandes et les formulaires."
+          "LABEL": "Aide aux candidatures universitaires",
+          "DESC": "Assistance pour les candidatures et les formulaires."
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP et révision des essais",
+          "LABEL": "Révision de SOP et d'essais",
           "DESC": "Commentaires sur les déclarations et les essais."
         },
         "TUTORING": {
           "LABEL": "Tutorat",
-          "DESC": "Tutorat de matière et soutien aux études."
+          "DESC": "Accompagnement scolaire et soutien aux études."
         },
         "SCHOLARSHIP_KNOWLEDGE": {
-          "LABEL": "Connaissance des bourses",
-          "DESC": "Partagez des informations sur les bourses et les subventions."
+          "LABEL": "Informations sur les bourses",
+          "DESC": "Partager des détails sur les bourses et aides financières."
         },
         "STUDY_GROUP_FORMATION": {
-          "LABEL": "Formation de groupes d'étude",
-          "DESC": "Trouvez ou organisez des groupes d’étude collaboratifs."
+          "LABEL": "Création de groupes d'étude",
+          "DESC": "Trouver ou organiser des groupes d'étude collaboratifs."
         },
         "CAREER_GUIDANCE": {
           "LABEL": "Orientation professionnelle",
-          "DESC": "Planification de cheminement de carrière, CV et aide aux entretiens."
+          "DESC": "Planification de carrière, CV et préparation aux entretiens."
         },
         "EDUCATION_RESOURCE_SHARING": {
           "LABEL": "Partage de ressources éducatives",
-          "DESC": "Partagez des notes, des enregistrements ou du matériel de pratique."
+          "DESC": "Partager notes, enregistrements ou supports d'exercice."
         }
       }
     },
     "HEALTHCARE_AND_WELLNESS": {
       "LABEL": "Santé et bien-être",
-      "DESC": "Conseils médicaux non cliniques, rappels et soutien au bien-être.",
+      "DESC": "Conseils médicaux non cliniques, rappels et soutien bien-être.",
       "SUBCATEGORIES": {
         "MEDICAL_CONSULTATION": {
-          "LABEL": "Consultation Médicale",
-          "DESC": "Aide à la coordination des téléconsultations ou des informations médicales de base."
+          "LABEL": "Consultation médicale",
+          "DESC": "Aide pour coordonner des télé-consultations ou des informations de base."
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "Livraison de médicaments",
-          "DESC": "Récupération et livraison de médicaments OTC."
+          "DESC": "Collecte et livraison de médicaments en vente libre."
         },
         "MENTAL_WELLBEING_SUPPORT": {
           "LABEL": "Soutien au bien-être mental",
-          "DESC": "Accédez à des ressources générales en santé mentale."
+          "DESC": "Accès aux ressources générales de santé mentale."
         },
         "MEDICATION_REMINDERS": {
           "LABEL": "Rappels de médicaments",
-          "DESC": "Rappels de médicaments non cliniques."
+          "DESC": "Rappels non cliniques pour la prise de médicaments."
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "Orientation en matière d'éducation sanitaire",
-          "DESC": "Sensibilisation au bien-être et éducation à la santé."
+          "LABEL": "Sensibilisation santé",
+          "DESC": "Éducation à la santé et prévention."
         }
       }
     },
     "ELDERLY_COMMUNITY_ASSISTANCE": {
-      "LABEL": "Aide communautaire aux personnes âgées",
-      "DESC": "Soutien non médical aux personnes âgées, aux soignants et aux communautés.",
+      "LABEL": "Assistance communautaire aux aînés",
+      "DESC": "Soutien non clinique pour les aînés, aidants et communautés.",
       "SUBCATEGORIES": {
         "SENIOR_RELOCATION_SUPPORT": {
-          "LABEL": "Soutien à la réinstallation des seniors",
-          "DESC": "Planifiez les déplacements entre les domiciles ou les établissements de soins."
+          "LABEL": "Soutien au relogement des aînés",
+          "DESC": "Planifier les déménagements entre domiciles ou centres de soins."
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "Accompagnement numérique pour les seniors",
-          "DESC": "Assistance avec les appareils et les applications."
+          "LABEL": "Aide numérique pour aînés",
+          "DESC": "Assistance avec appareils et applications."
         },
         "MEDICATION_MANAGEMENT": {
           "LABEL": "Gestion des médicaments",
-          "DESC": "Assurez-vous que les plannings, les rappels et le stockage sont sur la bonne voie."
+          "DESC": "Suivi des horaires, rappels et stockage des traitements."
         },
         "MEDICAL_DEVICES_SETUP": {
-          "LABEL": "Configuration des dispositifs médicaux",
-          "DESC": "Installer ou dépanner des appareils médicaux et fonctionnels."
+          "LABEL": "Installation des dispositifs médicaux",
+          "DESC": "Mettre en place ou régler les appareils médicaux et d'assistance."
         },
         "ERRANDS_EVENTS_TRANSPORTATION": {
-          "LABEL": "Courses, événements et transports",
-          "DESC": "Accompagner les personnes âgées aux courses ou à des événements spéciaux."
+          "LABEL": "Courses, événements et transport",
+          "DESC": "Accompagnement aux courses ou événements spéciaux."
         },
         "TRANSPORTATION_APPOINTMENTS_EVENTS": {
-          "LABEL": "Transport pour les rendez-vous",
-          "DESC": "Organisez des déplacements vers des rendez-vous et des rassemblements."
+          "LABEL": "Transport vers les rendez-vous",
+          "DESC": "Organisation des trajets pour les rendez-vous et rencontres."
         },
         "SCHEDULING_APPOINTMENTS_OR_TASKS": {
-          "LABEL": "Planification de rendez-vous ou de tâches",
-          "DESC": "Gardez une trace des rendez-vous, des recharges et des tâches."
+          "LABEL": "Planification de rendez-vous ou tâches",
+          "DESC": "Tenir à jour les rendez-vous, renouvellements et tâches."
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "Connexion sociale",
-          "DESC": "Compagnonnage et activités sociales."
+          "LABEL": "Lien social",
+          "DESC": "Compagnie et activités sociales."
         },
         "MEAL_SUPPORT": {
           "LABEL": "Soutien aux repas",
-          "DESC": "Aide à la préparation des repas et à la cuisine."
+          "DESC": "Aide pour la préparation des repas et la cuisine."
         }
       }
     }

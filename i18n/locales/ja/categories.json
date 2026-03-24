@@ -1,194 +1,158 @@
 {
   "REQUEST_CATEGORIES": {
     "GENERAL_CATEGORY": {
-      "LABEL": "一般的な",
-      "DESC": "確信が持てない場合に使用してください。ニーズを詳しく説明してください。"
+      "LABEL": "一般",
+      "DESC": "わからない場合は使用してください；あなたのニーズを詳しく説明してください。"
     },
-    "FOOD_AND_ESSENTIALS": {
-      "LABEL": "食品と必需品",
-      "DESC": "食事のサポート、食料品の購入、食事の準備のサポートにアクセスします。",
+    "FOOD_AND_ESSENTIALS_SUPPORT": {
+      "LABEL": "食料品と必需品",
+      "DESC": "食料支援、食料品の買い物、料理の手伝いを受けられます。",
       "SUBCATEGORIES": {
         "FOOD_ASSISTANCE": {
-          "LABEL": "食糧支援",
-          "DESC": "フードバンク、パントリー、食事プログラムを見つけてください。"
+          "LABEL": "食料支援",
+          "DESC": "フードバンク、パントリー、食事プログラムを見つけましょう。"
         },
         "GROCERY_SHOPPING_AND_DELIVERY": {
           "LABEL": "食料品の買い物と配達",
-          "DESC": "食料品の買い物や配達のお手伝いを依頼してください。"
+          "DESC": "食料品の買い物と配達の手伝いを依頼しましょう。"
         },
         "COOKING_HELP": {
-          "LABEL": "料理のお手伝い",
-          "DESC": "食事の準備や調理について指導を受けます。"
+          "LABEL": "料理の手伝い",
+          "DESC": "食事の準備と料理のガイダンスを受けましょう。"
         }
       }
     },
-    "CLOTHING_ASSISTANCE": {
-      "LABEL": "衣料品のお手伝い",
-      "DESC": "衣服を寄付したり、借りたり、仕立てたり、援助を依頼したりできます。",
+    "CLOTHING_SUPPORT": {
+      "LABEL": "衣類サポート",
+      "DESC": "寄付、貸し借り、修理、または衣類の支援を依頼しましょう。",
       "SUBCATEGORIES": {
         "DONATE_CLOTHES": {
-          "LABEL": "衣類を寄付する",
-          "DESC": "困っている人たちに衣服を与えましょう。"
+          "LABEL": "衣類の寄付",
+          "DESC": "必要な人に衣類を提供しましょう。"
         },
         "BORROW_CLOTHES": {
-          "LABEL": "服を借りる",
-          "DESC": "丁寧に古着を借りてみましょう。"
+          "LABEL": "衣類の借用",
+          "DESC": "軽く使用された衣類を借りましょう。"
         },
-        "EMERGENCY_CLOTHING_ASSISTANCE": {
-          "LABEL": "緊急時の衣類支援",
-          "DESC": "緊急事態に迅速な衣類サポート。"
+        "EMERGENCY_ASSISTANCE": {
+          "LABEL": "緊急支援",
+          "DESC": "危機時の緊急衣類ニーズ。"
+        },
+        "SEASONAL_DRIVE_NOTIFICATION": {
+          "LABEL": "季節キャンペーン通知",
+          "DESC": "季節の衣類キャンペーンと寄付。"
         },
         "TAILORING": {
           "LABEL": "仕立て",
-          "DESC": "衣類の修理・お直しサービス。"
+          "DESC": "衣類の修理と修正サービス。"
         }
       }
     },
-    "HOUSING_ASSISTANCE": {
-      "LABEL": "住宅補助",
-      "DESC": "賃貸、引っ越し、住まいづくりのサポート。",
+    "HOUSING_SUPPORT": {
+      "LABEL": "住宅支援",
+      "DESC": "ルームメイト、賃貸のガイダンス、引っ越しと家のセットアップ支援。",
       "SUBCATEGORIES": {
-        "LEASE_SUPPORT": {
-          "LABEL": "リースサポート",
-          "DESC": "リース条件と要件を理解するのに役立ちます。"
+        "FIND_A_ROOMMATE": {
+          "LABEL": "ルームメイト探し",
+          "DESC": "ルームメイトを見つける手伝いを受けましょう。"
         },
-        "TENANT_RENT_SUPPORT": {
-          "LABEL": "テナント家賃サポート",
-          "DESC": "家賃に困った時の参考に。"
+        "RENTING_SUPPORT": {
+          "LABEL": "賃貸支援",
+          "DESC": "賃貸とリースの基本について支援。"
         },
-        "REPAIR_MAINTENANCE_SUPPORT": {
-          "LABEL": "修理・メンテナンスサポート",
-          "DESC": "基本的な修理やメンテナンスのスケジュール設定を支援します。"
+        "HOUSEHOLD_ITEM_EXCHANGE": {
+          "LABEL": "家庭用品の交換",
+          "DESC": "家庭用品の売買の手伝い。"
         },
-        "UTILITIES_SETUP_SUPPORT": {
-          "LABEL": "ユーティリティセットアップサポート",
-          "DESC": "インターネット、電気、その他の公共施設のセットアップを支援します。"
+        "MOVING_ASSISTANCE": {
+          "LABEL": "引っ越し支援",
+          "DESC": "引っ越しと梱包のサポート。"
         },
-        "LOOKING_FOR_RENTAL": {
-          "LABEL": "レンタルを探しています",
-          "DESC": "アパート・お部屋探しをサポートします。"
+        "CLEANING_HELP": {
+          "LABEL": "掃除の手伝い",
+          "DESC": "基本的な掃除作業の支援。"
         },
-        "FIND_ROOMATE": {
-          "LABEL": "ルームメイトを探す",
-          "DESC": "ルームメイトやシェアハウスとマッチングします。"
+        "HOME_REPAIR_SUPPORT": {
+          "LABEL": "住宅修理支援",
+          "DESC": "軽微な住宅修理のサポート。"
         },
-        "MOVE_IN_HELP": {
-          "LABEL": "入居ヘルプ",
-          "DESC": "梱包、持ち上げ、開梱を実際にお手伝いします。"
-        },
-        "BOOKING_PACKERS_MOVERS_SUPPORT": {
-          "LABEL": "梱包業者と引越し業者のサポート",
-          "DESC": "信頼できる引越しサービスの予約をサポートします。"
-        },
-        "BUY_THINGS": {
-          "LABEL": "家庭用品を買う",
-          "DESC": "家具や家庭用品の調達をお手伝いします。"
-        },
-        "SELL_THINGS": {
-          "LABEL": "家庭用品を販売する",
-          "DESC": "不要になったアイテムのサポートリストを取得したり、寄付したりできます。"
+        "UTILITIES_SETUP": {
+          "LABEL": "ユーティリティ設定",
+          "DESC": "ユーティリティとサービスの設定支援。"
         }
       }
     },
     "EDUCATION_CAREER_SUPPORT": {
-      "LABEL": "教育とキャリアサポート",
-      "DESC": "大学アプリ、SOP レビュー、個別指導、学習サポート。",
+      "LABEL": "教育とキャリア支援",
+      "DESC": "大学の申請、SOPのレビュー、チュータリング、学習支援。",
       "SUBCATEGORIES": {
         "COLLEGE_APPLICATION_HELP": {
-          "LABEL": "大学出願ヘルプ",
-          "DESC": "申請書やフォームの作成をお手伝いします。"
+          "LABEL": "大学申請の手伝い",
+          "DESC": "申請とフォームの手伝い。"
         },
         "SOP_ESSAY_REVIEW": {
-          "LABEL": "SOP とエッセイのレビュー",
-          "DESC": "発言やエッセイに対するフィードバック。"
+          "LABEL": "SOPとエッセイのレビュー",
+          "DESC": "志望理由書とエッセイへのフィードバック。"
         },
         "TUTORING": {
-          "LABEL": "家庭教師",
-          "DESC": "科目指導と学習サポート。"
-        },
-        "SCHOLARSHIP_KNOWLEDGE": {
-          "LABEL": "学問の知識",
-          "DESC": "奨学金や助成金に関する情報を共有します。"
-        },
-        "STUDY_GROUP_FORMATION": {
-          "LABEL": "研究グループの結成",
-          "DESC": "共同研究グループを検索または組織します。"
-        },
-        "CAREER_GUIDANCE": {
-          "LABEL": "キャリアガイダンス",
-          "DESC": "キャリアパスの計画、履歴書、面接のサポート。"
-        },
-        "EDUCATION_RESOURCE_SHARING": {
-          "LABEL": "教育リソースの共有",
-          "DESC": "メモ、録音、練習教材を共有します。"
+          "LABEL": "チュータリング",
+          "DESC": "科目のチュータリングと学習支援。"
         }
       }
     },
-    "HEALTHCARE_AND_WELLNESS": {
-      "LABEL": "ヘルスケアとウェルネス",
-      "DESC": "非臨床的な医療指導、リマインダー、健康サポート。",
+    "HEALTHCARE_WELLNESS_SUPPORT": {
+      "LABEL": "ヘルスケアとウェルビーイング",
+      "DESC": "非臨床的な健康ナビゲーションとウェルネス支援。",
       "SUBCATEGORIES": {
-        "MEDICAL_CONSULTATION": {
-          "LABEL": "医療相談",
-          "DESC": "電話相談や基本的な医療情報の調整を支援します。"
+        "MEDICAL_NAVIGATION": {
+          "LABEL": "医療ナビゲーション",
+          "DESC": "基本的なナビゲーションと非臨床的なガイダンス。"
         },
         "MEDICINE_DELIVERY": {
           "LABEL": "薬の配達",
-          "DESC": "OTC医薬品の集荷・配達業務。"
+          "DESC": "OTC薬の受け取りと配達。"
         },
         "MENTAL_WELLBEING_SUPPORT": {
-          "LABEL": "メンタルヘルスのサポート",
-          "DESC": "一般的なメンタルヘルス リソースにアクセスします。"
+          "LABEL": "メンタルウェルビーイング支援",
+          "DESC": "一般的なメンタルヘルスリソースへのアクセス。"
         },
         "MEDICATION_REMINDERS": {
-          "LABEL": "服薬リマインダー",
-          "DESC": "非臨床薬のリマインダー。"
+          "LABEL": "薬のリマインダー",
+          "DESC": "非臨床的な薬のリマインダー。"
         },
         "HEALTH_EDUCATION_GUIDANCE": {
-          "LABEL": "保健教育指導",
+          "LABEL": "健康教育ガイダンス",
           "DESC": "ウェルネス意識と健康教育。"
         }
       }
     },
-    "ELDERLY_COMMUNITY_ASSISTANCE": {
-      "LABEL": "高齢者の地域支援",
-      "DESC": "高齢者、介護者、地域社会に対する医療以外のサポート。",
+    "ELDERLY_SUPPORT": {
+      "LABEL": "高齢者支援",
+      "DESC": "高齢者のための非医療支援とコミュニティサポート。",
       "SUBCATEGORIES": {
-        "SENIOR_RELOCATION_SUPPORT": {
-          "LABEL": "シニアの移住サポート",
-          "DESC": "自宅や介護施設間の移動を計画します。"
+        "SENIOR_LIVING_RELOCATION": {
+          "LABEL": "高齢者住宅移転",
+          "DESC": "高齢者住宅と移転の支援。"
         },
         "DIGITAL_SUPPORT_FOR_SENIORS": {
-          "LABEL": "シニア向けデジタルサポート",
-          "DESC": "デバイスとアプリのサポート。"
+          "LABEL": "高齢者のためのデジタル支援",
+          "DESC": "デバイスとアプリの支援。"
         },
-        "MEDICATION_MANAGEMENT": {
-          "LABEL": "服薬管理",
-          "DESC": "スケジュール、リマインダー、ストレージが順調に進んでいることを確認します。"
+        "MEDICAL_HELP": {
+          "LABEL": "医療支援",
+          "DESC": "高齢者のための非臨床医療支援。"
         },
-        "MEDICAL_DEVICES_SETUP": {
-          "LABEL": "医療機器のセットアップ",
-          "DESC": "医療機器や補助機器のセットアップやトラブルシューティングを行います。"
-        },
-        "ERRANDS_EVENTS_TRANSPORTATION": {
-          "LABEL": "用事、イベント、交通手段",
-          "DESC": "高齢者を用事や特別なイベントにエスコートします。"
-        },
-        "TRANSPORTATION_APPOINTMENTS_EVENTS": {
-          "LABEL": "予約時の交通手段",
-          "DESC": "約束や集まりへの送迎を手配します。"
-        },
-        "SCHEDULING_APPOINTMENTS_OR_TASKS": {
-          "LABEL": "予定やタスクのスケジュールを設定する",
-          "DESC": "予定、補充、雑務を記録します。"
+        "ERRANDS_TRANSPORTATION": {
+          "LABEL": "用事と交通",
+          "DESC": "用事と交通の支援。"
         },
         "SOCIAL_CONNECTION": {
-          "LABEL": "社会的なつながり",
-          "DESC": "仲間意識と社会活動。"
+          "LABEL": "社会的つながり",
+          "DESC": "お付き合いと社会的活動。"
         },
         "MEAL_SUPPORT": {
-          "LABEL": "食事サポート",
-          "DESC": "食事の準備や調理の手伝いをしていただきます。"
+          "LABEL": "食事支援",
+          "DESC": "食事の準備と料理の支援。"
         }
       }
     }

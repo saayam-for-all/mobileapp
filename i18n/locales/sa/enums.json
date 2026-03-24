@@ -1,26 +1,24 @@
 {
   "requestFor": {
-    "SELF": "स्वयं",
-    "OTHER": "इतर"
+    "SELF": "स्वयम्",
+    "OTHER": "अन्य"
   },
   "requestPriority": {
-    "LOW": "न्यूनम्‌",
+    "LOW": "न्यून",
     "MEDIUM": "मध्यम",
-    "HIGH": "उच्चैः",
-    "CRITICAL": "गंभीरः"
+    "HIGH": "उच्च",
+    "CRITICAL": "गुरुतर"
   },
   "requestStatus": {
     "CREATED": "निर्मितम्",
-    "MATCHING_VOLUNTEER": "मिलान स्वयंसेवक",
+    "MATCHING VOLUNTEER": "स्वयंसेवकं अन्वेषणम्",
     "MANAGED": "प्रबन्धितम्",
-    "RESOLVED": "संकल्पितम्",
-    "CANCELLED": "रद्दं कृतम्",
-    "DELETED": "विलोपितम्",
-    "RATED_BY_REQUESTER": "अनुरोधकेन मूल्याङ्कितम्",
-    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा मूल्याङ्कितम्"
+    "RESOLVED": "समाधितम्",
+    "CANCELLED": "निरस्तम्",
+    "DELETED": "विलोपितम्"
   },
   "requestType": {
-    "IN_PERSON": "व्यक्तिगतरूपेण",
-    "REMOTE": "दूरस्थ"
+    "INPERSON": "प्रत्यक्षम्",
+    "REMOTE": "दूरस्थम्"
   }
 }

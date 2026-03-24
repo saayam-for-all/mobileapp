@@ -1,26 +1,24 @@
 {
   "requestFor": {
-    "SELF": "स्व",
+    "SELF": "आफैं",
     "OTHER": "अन्य"
   },
   "requestPriority": {
     "LOW": "कम",
     "MEDIUM": "मध्यम",
     "HIGH": "उच्च",
-    "CRITICAL": "क्रिटिकल"
+    "CRITICAL": "गम्भीर"
   },
   "requestStatus": {
     "CREATED": "सिर्जना गरियो",
-    "MATCHING_VOLUNTEER": "मिल्दो स्वयंसेवक",
+    "MATCHING VOLUNTEER": "स्वयंसेवक खोज्दै",
     "MANAGED": "व्यवस्थित",
     "RESOLVED": "समाधान गरियो",
     "CANCELLED": "रद्द गरियो",
-    "DELETED": "मेटाइयो",
-    "RATED_BY_REQUESTER": "अनुरोधकर्ता द्वारा मूल्याङ्कन गरिएको",
-    "RATED_BY_VOLUNTEER": "स्वयंसेवक द्वारा मूल्याङ्कन गरिएको"
+    "DELETED": "मेटाइयो"
   },
   "requestType": {
-    "IN_PERSON": "व्यक्तिमा",
-    "REMOTE": "रिमोट"
+    "INPERSON": "व्यक्तिगत रूपमा",
+    "REMOTE": "टाढाबाट"
   }
 }

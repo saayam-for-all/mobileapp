@@ -1,13 +1,13 @@
 {
-  "title": "वरीयताएँ",
+  "title": "Preferences",
   "labels": {
-    "timezone": "समय क्षेत्र",
-    "language": "भाषा",
-    "notifications": "अधिसूचना",
-    "save": "बचाउ",
-    "cancel": "रद्द"
+    "timezone": "Time Zone",
+    "language": "Language",
+    "notifications": "Notifications",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "messages": {
-    "saved": "वरीयता सफलतापूर्वक सहेजल गेल।"
+    "saved": "Preferences saved successfully."
   }
 }
