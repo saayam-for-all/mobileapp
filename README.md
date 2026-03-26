@@ -1,44 +1,88 @@
 ## Instructions
 
-Clone and checkout to the branch
+### Prerequisites
 
-To install libraries
-`npm install`
+#### Android Emulator Setup
 
-Works with Expo go 52
+1. Install [Android Studio](https://developer.android.com/studio)
+2. Open Android Studio → **More Actions** → **Virtual Device Manager**
+3. Click **Create Device** → choose a device (e.g. Pixel 8) → select a system image (API 33+ recommended) → Finish
+4. Start the emulator by clicking the ▶ play button
+5. Verify it's running: `adb devices` should list an emulator
+
+> Make sure **ANDROID_HOME** is set in your environment:
+> ```bash
+> # ~/.zshrc or ~/.bashrc
+> export ANDROID_HOME=$HOME/Library/Android/sdk
+> export PATH=$PATH:$ANDROID_HOME/emulator
+> export PATH=$PATH:$ANDROID_HOME/platform-tools
+> ```
+
+---
+
+#### iOS Simulator Setup (macOS only)
+
+1. Install [Xcode](https://apps.apple.com/us/app/xcode/id497799835) from the Mac App Store
+2. Open Xcode → **Settings** → **Platforms** → download the latest iOS simulator runtime
+3. Launch a simulator: **Xcode** → **Open Developer Tool** → **Simulator**
+4. Verify with: `xcrun simctl list devices | grep Booted`
+
+---
+
+### Project Setup
+
+Clone and checkout to the branch, then install dependencies:
+```bash
+npm install
+```
+
+Works with Expo Go 52.
+
+---
 
 ### Important Notice
 
-Since amplify v6 doesn't support Expo Go, we need Build for this branch.
+Since Amplify v6 doesn't support Expo Go, a **development build** is required for this branch.
 
-To configure Build:
+To configure and run the build:
+```bash
+# Android
+npx expo run:android    # or: npm run build:android
 
+# iOS
+npx expo run:ios        # or: npm run build:ios
 ```
-# Android (npm run build:android)
-npx expo run:android
-# iOS (npm run build:ios)
-npx expo run:ios
-```
 
-If everything is successful, will be able to see options for Expo.
+If successful, you'll see device/emulator options from Expo.
+
+> If you see `› Using Expo Go › Press s │ switch to development build`, press `s` to switch to Expo Build, then `a` for Android or `i` for iOS.
+
+---
 
 ### Debugging
 
-Roll back `package.json` to remove updated/installed modules, then run `npm install`, and redo the build
+- Roll back `package.json` to remove updated/installed modules, then:
+```bash
+  npm install
+```
+  Then redo the build.
 
-Clean prebuilds by `rm -rf android ios`
-
-If it shows ```› Using Expo Go › Press s │ switch to development build```, press ```s``` to switch to Expo Build, then ```a``` to start android emulator.
+- Clean prebuilds:
+```bash
+  rm -rf android ios
+```
 
 #### Android
 
-If build still fails, remove previous builds by `adb uninstall {package_name}` with the emulator turned on
+If the build still fails, uninstall the previous build (with emulator running):
+```bash
+adb uninstall {package_name}
+```
 
 #### iOS
 
-If build still fails, remove previous builds by
-
-```
-rm -rf \~/Library/Developer/Xcode/DerivedData/\*
+If the build still fails, remove previous builds:
+```bash
+rm -rf ~/Library/Developer/Xcode/DerivedData/*
 xcrun simctl uninstall booted {package_name}
 ```
