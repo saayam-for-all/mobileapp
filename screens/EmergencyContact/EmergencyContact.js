@@ -52,11 +52,11 @@ const EmergencyContact = () => {
         try {
           return JSON.parse(raw.body);
         } catch (e) {
-          console.error("❌ Failed to parse body:", e, raw.body);
+          console.error("Failed to parse body:", e, raw.body);
           return null;
         }
       }
-      return raw;
+      return raw.body;
     };
 
     const fetchContacts = async () => {
@@ -152,7 +152,7 @@ const EmergencyContact = () => {
         )}
 
         {emergencyContacts.map((section, idx) => (
-          <View key={idx} style={styles.section}>
+          <View key={"section-"+idx} style={styles.section}>
             <View style={styles.sectionHeaderRow}>
               <View style={styles.sectionAccent} />
               <Text style={styles.sectionTitle}>{section.category}</Text>
@@ -160,13 +160,13 @@ const EmergencyContact = () => {
 
             {section.contacts.map((contact, cidx) => (
               <TouchableOpacity
-                key={cidx}
+                key={contact+"-"+cidx}
                 style={styles.contactItem}
                 onPress={() => handleCall(contact.phone)}
                 activeOpacity={0.7}
               >
                 <Text style={styles.contactText}>
-                  {contact.name} — {contact.phone}
+                  {contact.name + "—" + contact.phone}
                 </Text>
               </TouchableOpacity>
             ))}

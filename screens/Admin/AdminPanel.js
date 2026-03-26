@@ -3,6 +3,8 @@ import {StyleSheet} from "react-native";
 import {View, Text, Button} from "react-native";
 import AdminPieChart from "./AdminPieChart";
 import { MyReqData } from "../../data/MyReqData";
+import ApplicationAnalytics from "./analytics/ApplicationAnalytics";
+import GoogleAnalytics from "./analytics/GoogleAnalytics";
 
 const AdminPanel = () => {
     const [data, setData] = useState(MyReqData)
@@ -11,9 +13,9 @@ const AdminPanel = () => {
     const othersColor = "rgb(78,191,177)"
 
     return (
-
         <View style={styles.container}>
-            <AdminPieChart title="User/Voluteer Requests" data={data} groupCol="role" groupCriteria={{[userColor]: "User", [volunteerColor]: "Volunteer", [othersColor]: "Others"}}/>
+            <ApplicationAnalytics />
+            <GoogleAnalytics />
         </View>
     )
 }
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#fff',
         width: '100%',
+        overflow: 'scroll',
       },
 });
 export default AdminPanel;

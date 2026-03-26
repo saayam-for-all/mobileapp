@@ -26,13 +26,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import config from "../components/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated from "react-native-reanimated";
+import AdminPanel from "./Admin/AdminPanel";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
     width: "100%",
-    overflow: "visible",
+    overflow: "scroll",
   },
   topBar: {
     flexDirection: "row",
@@ -173,6 +174,7 @@ export default function Home({ signOut }) {
 
   // ✅ store dashboard by key so it's language-independent
   const [selectedDashboardKey, setSelectedDashboardKey] = useState("VOLUNTEER_DASHBOARD");
+  const DASHBOARD_OPTIONS = ["VOLUNTEER_DASHBOARD", "BENEFICIARY_DASHBOARD", "ALL_DASHBOARD", "ADMIN_DASHBOARD"];
 
   const beneficiary = "Beneficiary";
   const volunteer = "Volunteers";
@@ -413,6 +415,7 @@ export default function Home({ signOut }) {
           </View>
         </Animated.View>
       )}
+      <AdminPanel />
     </SafeAreaView>
   );
 }
