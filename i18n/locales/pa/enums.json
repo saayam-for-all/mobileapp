@@ -1,26 +1,24 @@
 {
   "requestFor": {
-    "SELF": "ਸਵੈ",
+    "SELF": "ਖੁਦ",
     "OTHER": "ਹੋਰ"
   },
   "requestPriority": {
     "LOW": "ਘੱਟ",
-    "MEDIUM": "ਦਰਮਿਆਨਾ",
+    "MEDIUM": "ਮੱਧਮ",
     "HIGH": "ਉੱਚ",
-    "CRITICAL": "ਨਾਜ਼ੁਕ"
+    "CRITICAL": "ਗੰਭੀਰ"
   },
   "requestStatus": {
-    "CREATED": "ਬਣਾਇਆ",
-    "MATCHING_VOLUNTEER": "ਮੇਲ ਖਾਂਦਾ ਵਾਲੰਟੀਅਰ",
+    "CREATED": "ਬਣਾਇਆ ਗਿਆ",
+    "MATCHING VOLUNTEER": "ਵਲੰਟੀਅਰ ਲੱਭ ਰਹੇ ਹਾਂ",
     "MANAGED": "ਪ੍ਰਬੰਧਿਤ",
-    "RESOLVED": "ਹੱਲ ਕੀਤਾ",
-    "CANCELLED": "ਰੱਦ ਕਰ ਦਿੱਤਾ",
-    "DELETED": "ਮਿਟਾਇਆ ਗਿਆ",
-    "RATED_BY_REQUESTER": "ਬੇਨਤੀਕਰਤਾ ਦੁਆਰਾ ਦਰਜਾ ਦਿੱਤਾ ਗਿਆ",
-    "RATED_BY_VOLUNTEER": "ਵਾਲੰਟੀਅਰ ਦੁਆਰਾ ਦਰਜਾ ਦਿੱਤਾ ਗਿਆ"
+    "RESOLVED": "ਹੱਲ ਕੀਤਾ ਗਿਆ",
+    "CANCELLED": "ਰੱਦ ਕੀਤਾ ਗਿਆ",
+    "DELETED": "ਮਿਟਾਇਆ ਗਿਆ"
   },
   "requestType": {
-    "IN_PERSON": "ਵਿਅਕਤੀ ਵਿੱਚ",
+    "INPERSON": "ਵਿਅਕਤੀਗਤ ਤੌਰ 'ਤੇ",
     "REMOTE": "ਰਿਮੋਟ"
   }
 }

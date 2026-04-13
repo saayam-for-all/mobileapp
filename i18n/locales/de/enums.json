@@ -5,22 +5,22 @@
   },
   "requestPriority": {
     "LOW": "Niedrig",
-    "MEDIUM": "Medium",
+    "MEDIUM": "Mittel",
     "HIGH": "Hoch",
     "CRITICAL": "Kritisch"
   },
   "requestStatus": {
     "CREATED": "Erstellt",
-    "MATCHING_VOLUNTEER": "Passender Freiwilliger",
+    "MATCHING_VOLUNTEER": "Freiwilliger wird gesucht",
     "MANAGED": "Verwaltet",
     "RESOLVED": "Gelöst",
-    "CANCELLED": "Abgesagt",
+    "CANCELLED": "Abgebrochen",
     "DELETED": "Gelöscht",
-    "RATED_BY_REQUESTER": "Vom Anforderer bewertet",
-    "RATED_BY_VOLUNTEER": "Von Freiwilligen bewertet"
+    "RATED_BY_REQUESTER": "Vom Antragsteller bewertet",
+    "RATED_BY_VOLUNTEER": "Vom Freiwilligen bewertet"
   },
   "requestType": {
     "IN_PERSON": "Persönlich",
-    "REMOTE": "Fernbedienung"
+    "REMOTE": "Remote"
   }
 }
