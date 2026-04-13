@@ -18,6 +18,7 @@ import * as FileSystem from "expo-file-system";
 import api from "../services/api";
 
 const MAX_RECORDING_SECONDS = 60;
+const MAX_FILE_SIZE_BYTES = 4.5 * 1024 * 1024; // 4.5 MB
 
 const RECORDING_CONFIG = {
     sampleRate: 16000,
@@ -37,6 +38,12 @@ function formatTime(seconds) {
     return `${m}:${s}`;
 }
 
+const formatDuration = (ms) => formatTime(Math.floor(ms / 1000));
+
+function formatFileSize(bytes) {
+    return (bytes / (1024 * 1024)).toFixed(2);
+}
+
 /* ================= RECORDER HOOK ================= */
 function useRecorder({ onStopped }) {
     const { startRecording, stopRecording, isRecording, analysisData } = useAudioRecorder();
@@ -45,6 +52,10 @@ function useRecorder({ onStopped }) {
     const [elapsedSeconds, setElapsed] = useState(0);
 
     const audioLevel = analysisData?.rms ?? 0;
+
+    // Refs to prevent double-start and double-stop races
+    const isStartingRef = useRef(false);
+    const isStoppingRef = useRef(false);
 
     useEffect(() => {
         if (!isRecording) {
@@ -56,7 +67,15 @@ function useRecorder({ onStopped }) {
     }, [isRecording]);
 
     const stop = useCallback(async () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
+        // Guard: prevent double-stop
+        if (isStoppingRef.current) return;
+        isStoppingRef.current = true;
+
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+
         try {
             const result = await stopRecording();
 
@@ -67,31 +86,55 @@ function useRecorder({ onStopped }) {
             });
 
             if (result?.fileUri) {
-                // 1. You MUST fetch the file info here before logging 'info.size'
                 const info = await FileSystem.getInfoAsync(result.fileUri);
+
+                // Compute duration from PCM file size: size / (sampleRate * channels * bytesPerSample)
+                // pcm_16bit = 2 bytes per sample
+                const durationMs = info.exists
+                    ? Math.round((info.size / (RECORDING_CONFIG.sampleRate * RECORDING_CONFIG.channels * 2)) * 1000)
+                    : undefined;
 
                 console.log("=== RECORDING STOPPED ===");
                 console.log("File URI:", result.fileUri);
-
-                // 2. Now 'info' exists and has a 'size' property
                 console.log("File Size:", info.size, "bytes");
-
+                console.log("File Size (MB):", formatFileSize(info.size), "MB");
                 console.log("Mime Type:", result?.mimeType);
                 console.log("Channels:", result?.channels);
                 console.log("Sample Rate:", result?.sampleRate);
-                console.log("Duration (ms):", result?.duration);
+                console.log("Duration (ms) [computed]:", durationMs);
 
-                onStopped(result.fileUri);
+                if (info.size > MAX_FILE_SIZE_BYTES) {
+                    console.warn("File exceeds max size:", formatFileSize(info.size), "MB");
+                    Alert.alert(
+                        "File Too Large",
+                        `Recording is ${formatFileSize(info.size)} MB. Maximum allowed is ${formatFileSize(MAX_FILE_SIZE_BYTES)} MB.`,
+                        [
+                            {
+                                text: "OK",
+                                onPress: async () => {
+                                    await FileSystem.deleteAsync(result.fileUri, { idempotent: true });
+                                },
+                            },
+                        ]
+                    );
+                    return;
+                }
+
+                onStopped?.({ uri: result.fileUri, durationMs, status: "stopped" });
             }
         } catch (err) {
             console.error("stopRecording error", err);
+        } finally {
+            isStoppingRef.current = false;
         }
     }, [stopRecording, onStopped]);
 
     const start = useCallback(async () => {
-        try {
-            if (isRecording) return;
+        // Guard: prevent double-start — check both react state and ref
+        if (isRecording || isStartingRef.current) return;
+        isStartingRef.current = true;
 
+        try {
             const { granted } = await ExpoAudioStreamModule.requestPermissionsAsync();
             if (!granted) {
                 Alert.alert("Permission Required", "Microphone permission needed");
@@ -105,34 +148,46 @@ function useRecorder({ onStopped }) {
 
             await startRecording(RECORDING_CONFIG);
 
-            timerRef.current = setTimeout(stop, MAX_RECORDING_SECONDS * 1000);
+            // Auto-stop after max duration
+            timerRef.current = setTimeout(() => {
+                stop();
+            }, MAX_RECORDING_SECONDS * 1000);
+
         } catch (err) {
             console.error("startRecording error", err);
             Alert.alert("Error", err.message);
+        } finally {
+            isStartingRef.current = false;
         }
     }, [isRecording, startRecording, stop]);
 
+    // Cleanup on unmount
     useEffect(() => {
         return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
             if (isRecording) {
                 stopRecording().catch(() => { });
             }
         };
-    }, [isRecording, stopRecording]);
+    }, []); // intentionally empty — only runs on unmount
 
     return { isRecording, audioLevel, elapsedSeconds, start, stop };
 }
 
 /* ================= PLAYER HOOK ================= */
 function usePlayer(uri) {
-    const [sound, setSound] = useState(null);
+    const soundRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
 
+    // Unload when uri changes or on unmount
     useEffect(() => {
         return () => {
-            if (sound) sound.unloadAsync().catch(() => { });
+            if (soundRef.current) {
+                soundRef.current.unloadAsync().catch(() => { });
+                soundRef.current = null;
+            }
         };
-    }, [sound]);
+    }, [uri]);
 
     const playPause = useCallback(async () => {
         if (!uri) return;
@@ -142,36 +197,44 @@ function usePlayer(uri) {
             playsInSilentModeIOS: true,
             playThroughEarpieceAndroid: false,
             staysActiveInBackground: false,
-            shouldDuckAndroid: false,  
+            shouldDuckAndroid: false,
         });
 
-        if (sound) {
-            const status = await sound.getStatusAsync();
+        if (soundRef.current) {
+            const status = await soundRef.current.getStatusAsync();
             if (status.isPlaying) {
-                await sound.pauseAsync();
+                await soundRef.current.pauseAsync();
                 setIsPlaying(false);
             } else {
+                // Replay from start if finished
                 if (status.positionMillis >= status.durationMillis && status.durationMillis > 0) {
-                    await sound.setPositionAsync(0);
+                    await soundRef.current.setPositionAsync(0);
                 }
-                await sound.playAsync();
+                await soundRef.current.playAsync();
                 setIsPlaying(true);
             }
         } else {
-            const { sound: newSound } = await Audio.Sound.createAsync({ uri }, { shouldPlay: true });
-            setSound(newSound);
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                { uri },
+                { shouldPlay: true },
+                (status) => {
+                    // Auto-reset isPlaying when playback finishes
+                    if (status.didJustFinish) setIsPlaying(false);
+                }
+            );
+            soundRef.current = newSound;
             setIsPlaying(true);
         }
-    }, [sound, uri]);
+    }, [uri]);
 
     const cleanup = useCallback(async () => {
-        if (sound) {
-            await sound.stopAsync();
-            await sound.unloadAsync();
+        if (soundRef.current) {
+            await soundRef.current.stopAsync().catch(() => { });
+            await soundRef.current.unloadAsync().catch(() => { });
+            soundRef.current = null;
             setIsPlaying(false);
-            setSound(null);
         }
-    }, [sound]);
+    }, []);
 
     return { isPlaying, playPause, cleanup };
 }
@@ -187,6 +250,14 @@ function useTranscription({ onSuccess }) {
             setIsSending(true);
             setError(null);
             try {
+                // Double-check file size before encoding
+                const info = await FileSystem.getInfoAsync(uri);
+                if (info.size > MAX_FILE_SIZE_BYTES) {
+                    throw new Error(
+                        `File size (${formatFileSize(info.size)} MB) exceeds maximum allowed (${formatFileSize(MAX_FILE_SIZE_BYTES)} MB)`
+                    );
+                }
+
                 const base64 = await FileSystem.readAsStringAsync(uri, {
                     encoding: FileSystem.EncodingType.Base64,
                 });
@@ -199,8 +270,13 @@ function useTranscription({ onSuccess }) {
 
                 console.log("Full API response:", JSON.stringify(response.data, null, 2));
 
-                const result = response.data[0]?.transcript ?? "";
+                const result = (response.data || [])
+                    .map(item => item.transcript)
+                    .filter(Boolean)
+                    .join(' ');
                 setTranscript(result);
+
+                // Only call parent callback here — after user confirms Send
                 onSuccess?.({ uri, response: response.data, transcript: result });
 
                 await FileSystem.deleteAsync(uri, { idempotent: true });
@@ -224,33 +300,47 @@ function useTranscription({ onSuccess }) {
 }
 
 /* ================= MAIN COMPONENT ================= */
-function AudioRecorderTesterInner({ onStop = () => { } }) {
+function AudioRecorderInner({ onStop = () => { }, startTrigger }) {
     const [recordedUri, setRecordedUri] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
     const [dotCount, setDotCount] = useState(0);
-    const [mounted, setMounted] = useState(false);
 
     const rippleScale = useRef(new Animated.Value(1)).current;
     const rippleOpacity = useRef(new Animated.Value(0)).current;
 
     const { isRecording, audioLevel, elapsedSeconds, start, stop } = useRecorder({
-        onStopped: (uri) => {
+        onStopped: ({ uri, durationMs }) => {
             setRecordedUri(uri);
+            setAudioDuration(durationMs || 0);
             setShowPreview(true);
         },
     });
 
     const { isPlaying, playPause, cleanup } = usePlayer(recordedUri);
-    const { isSending, transcript, error, send, reset } = useTranscription({ onSuccess: onStop });
+    const { isSending, error, send, reset } = useTranscription({
+        // Called only after successful transcription send
+        onSuccess: onStop,
+    });
 
-    useEffect(() => setMounted(true), []);
+    const [audioDuration, setAudioDuration] = useState(0);
 
+    // Start recording when trigger flips to true
+    const prevTriggerRef = useRef(false);
+    useEffect(() => {
+        if (startTrigger && !prevTriggerRef.current && !isRecording) {
+            start();
+        }
+        prevTriggerRef.current = startTrigger;
+    }, [startTrigger]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Animated dots while recording
     useEffect(() => {
         if (!isRecording) return;
         const id = setInterval(() => setDotCount((p) => (p + 1) % 4), 350);
         return () => clearInterval(id);
     }, [isRecording]);
 
+    // Ripple animation driven by audio level
     useEffect(() => {
         if (!isRecording) return;
         const intensity = Math.min(1, audioLevel * 5);
@@ -269,18 +359,21 @@ function AudioRecorderTesterInner({ onStop = () => { } }) {
     }, [audioLevel, isRecording]);
 
     const discardRecording = async () => {
-        cleanup();
-        if (recordedUri) await FileSystem.deleteAsync(recordedUri, { idempotent: true });
+        await cleanup();
+        if (recordedUri) {
+            await FileSystem.deleteAsync(recordedUri, { idempotent: true });
+        }
         setRecordedUri(null);
         setShowPreview(false);
         reset();
+        // Notify parent that recorder was dismissed without a transcript
+        onStop({ uri: null, transcript: null });
     };
 
     const handleSend = async () => {
         if (!recordedUri) return;
         setShowPreview(false);
-        cleanup();
-
+        await cleanup();
         try {
             await send(recordedUri);
             Alert.alert("Success", "Audio sent successfully");
@@ -292,68 +385,66 @@ function AudioRecorderTesterInner({ onStop = () => { } }) {
     const timerProgress = elapsedSeconds / MAX_RECORDING_SECONDS;
     const timerColor = timerProgress >= 0.85 ? "#ef4444" : "#22c55e";
 
-    if (!mounted) return null;
-
     return (
         <>
-            <TouchableOpacity style={styles.startButton} onPress={start} disabled={isRecording}>
-                <Icon name="mic" size={30} color="#000" />
-            </TouchableOpacity>
+            {/* Recording in-progress modal */}
+            <Modal transparent visible={isRecording} animationType="fade">
+                <View style={styles.overlay}>
+                    <View style={styles.floatingTab}>
+                        <Text style={[styles.timerText, { color: timerColor }]}>
+                            {formatTime(elapsedSeconds)} / {formatTime(MAX_RECORDING_SECONDS)}
+                        </Text>
+                        <Text style={styles.recordingText}>
+                            Recording{".".repeat(dotCount)}
+                        </Text>
+                        <TouchableOpacity style={styles.stopButton} onPress={stop}>
+                            <View style={styles.squareInside} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
 
-            {mounted && (
-                <>
-                    <Modal transparent visible={isRecording}>
-                        <View style={styles.overlay}>
-                            <View style={styles.floatingTab}>
-                                <Text style={[styles.timerText, { color: timerColor }]}>
-                                    {formatTime(elapsedSeconds)} / {formatTime(MAX_RECORDING_SECONDS)}
-                                </Text>
-                                <Text style={styles.recordingText}>Recording{".".repeat(dotCount)}</Text>
-                                <TouchableOpacity style={styles.stopButton} onPress={stop}>
-                                    <View style={styles.squareInside} />
-                                </TouchableOpacity>
-                            </View>
+            {/* Preview modal */}
+            <Modal transparent visible={showPreview} animationType="fade">
+                <View style={styles.overlay}>
+                    <View style={styles.previewTab}>
+                        <Text style={styles.previewTitle}>Preview Recording</Text>
+                        <TouchableOpacity style={styles.playButton} onPress={playPause}>
+                            <Icon name={isPlaying ? "pause" : "play"} size={32} color="#fff" />
+                        </TouchableOpacity>
+                        <Text style={styles.previewDuration}>
+                            {formatTime(elapsedSeconds)} / {formatDuration(audioDuration)}
+                        </Text>
+                        <View style={styles.previewActions}>
+                            <TouchableOpacity style={styles.discardButton} onPress={discardRecording}>
+                                <Text style={styles.actionText}>Discard</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+                                <Text style={styles.actionText}>Send</Text>
+                            </TouchableOpacity>
                         </View>
-                    </Modal>
+                    </View>
+                </View>
+            </Modal>
 
-                    <Modal transparent visible={showPreview}>
-                        <View style={styles.overlay}>
-                            <View style={styles.previewTab}>
-                                <Text style={styles.previewTitle}>Preview Recording</Text>
-                                <TouchableOpacity style={styles.playButton} onPress={playPause}>
-                                    <Icon name={isPlaying ? "pause" : "play"} size={32} color="#fff" />
-                                </TouchableOpacity>
-                                <View style={styles.previewActions}>
-                                    <TouchableOpacity style={styles.discardButton} onPress={discardRecording}>
-                                        <Text style={styles.actionText}>Discard</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-                                        <Text style={styles.actionText}>Send</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    </Modal>
-
-                    <Modal transparent visible={isSending}>
-                        <View style={styles.overlay}>
-                            <View style={styles.sendingTab}>
-                                <ActivityIndicator size="large" color="#3b82f6" />
-                                <Text style={styles.sendingText}>Processing audio...</Text>
-                            </View>
-                        </View>
-                    </Modal>
-                </>
-            )}
+            {/* Sending/processing modal */}
+            <Modal transparent visible={isSending} animationType="fade">
+                <View style={styles.overlay}>
+                    <View style={styles.sendingTab}>
+                        <ActivityIndicator size="large" color="#3b82f6" />
+                        <Text style={styles.sendingText}>Processing audio...</Text>
+                    </View>
+                </View>
+            </Modal>
         </>
     );
 }
 
-/* ================= PROVIDER ================= */
-export default function AudioRecorderTester(props) {
+/* ================= PROVIDER WRAPPER ================= */
+export default function AudioRecorder(props) {
     return (
         <AudioRecorderProvider>
-            <AudioRecorderTesterInner {...props} />
+            <AudioRecorderInner {...props} />
         </AudioRecorderProvider>
     );
 }
@@ -397,15 +488,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 4,
     },
-    startButton: {
-        position: "absolute",
-        bottom: 50,
-        right: 5,
-        width: 55,
-        height: 55,
-        justifyContent: "center",
-        alignItems: "center",
-    },
     previewTab: {
         width: 300,
         backgroundColor: "#fff",
@@ -429,6 +511,13 @@ const styles = StyleSheet.create({
     previewActions: {
         flexDirection: "row",
         gap: 16,
+    },
+    previewDuration: {
+        fontSize: 14,
+        color: "#6b7280",
+        fontWeight: "600",
+        marginTop: 12,
+        marginBottom: 18,
     },
     discardButton: {
         backgroundColor: "#ef4444",
@@ -454,23 +543,5 @@ const styles = StyleSheet.create({
     sendingText: {
         marginTop: 10,
         fontWeight: "600",
-    },
-    transcriptBox: {
-        margin: 16,
-        padding: 14,
-        backgroundColor: "#f0fdf4",
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: "#bbf7d0",
-    },
-    transcriptLabel: {
-        fontSize: 12,
-        fontWeight: "700",
-        color: "#16a34a",
-        marginBottom: 4,
-    },
-    transcriptText: {
-        fontSize: 15,
-        color: "#1f2937",
     },
 });
