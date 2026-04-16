@@ -37,7 +37,7 @@ export const getEmergencyContactInfo = async ({ lat, lng } = {}) => {
     params:
       typeof lat === "number" && typeof lng === "number"
         ? { lat, lng }
-        : undefined,
+        : {undefined},
   });
   return response.data;
 };

@@ -30,6 +30,8 @@ import Preferences from "../screens/MenuScreens/Preferences";
 import AccountDeletion from "../screens/MenuScreens/AccountDeletion";
 import IdentityDocument from "../screens/MenuScreens/IdentityDocument";
 import EmergencyContact from '../screens/EmergencyContact/EmergencyContact';
+import ApplicationAnalytics from "../screens/Admin/analytics/ApplicationAnalytics";
+import GoogleAnalytics from "../screens/Admin/analytics/GoogleAnalytics";
 
 const AppStack = createStackNavigator();
 
@@ -72,6 +74,18 @@ export default function App({ signOut }) {
         component={ManagedReqs}
         options={{ title: t("MANAGED_REQUESTS", { ns: "common" }) }}
       />
+
+      <AppStack.Screen
+        name="ApplicationAnalytics"
+        component={ApplicationAnalytics}
+        options={{ title: "Application Analytics" }}
+      ></AppStack.Screen>
+
+      <AppStack.Screen
+        name="GoogleAnalytics"
+        component={GoogleAnalytics}
+        options={{ title: "Google Analytics" }}
+      ></AppStack.Screen>
 
       <AppStack.Screen
         name="RequestDetails"

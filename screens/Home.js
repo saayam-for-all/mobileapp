@@ -26,13 +26,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import config from "../components/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated from "react-native-reanimated";
+import useAuthUser from "../hooks/useAuthUser";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
     width: "100%",
-    overflow: "visible",
+    overflow: "scroll",
   },
   topBar: {
     flexDirection: "row",
@@ -168,32 +169,46 @@ export default function Home({ signOut }) {
   const { t } = useTranslation("common"); // ✅ common.json
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
+  
+  const user = useAuthUser();
   const [userRole, setUserRole] = useState("Beneficiary");
   const [showPicker, setShowPicker] = useState(false);
 
   // ✅ store dashboard by key so it's language-independent
   const [selectedDashboardKey, setSelectedDashboardKey] = useState("VOLUNTEER_DASHBOARD");
+  // Make each an object with key and (string) as userRole
+  const DASHBOARD_OPTIONS = [
+    { option: "VOLUNTEER_DASHBOARD", role: "Volunteer" },
+    { option: "BENEFICIARY_DASHBOARD", role: "Beneficiary" },
+    { option: "ADMIN_DASHBOARD", role: "Admin" },
+    { option: "SUPER_ADMIN_DASHBOARD", role: "Admin" }
+  ];
 
   const beneficiary = "Beneficiary";
-  const volunteer = "Volunteers";
+  const volunteer = "Volunteer";
+  const steward = "Steward";
+  const admin = "Admin";
 
   const getGroup = async (user) => {
     try {
       const session = await fetchAuthSession();
       const userGroup =
         session.tokens?.accessToken?.payload["cognito:groups"];
-      //console.log('user group', userGroup)
-      if (userGroup && userGroup.includes(beneficiary)) {
-        setUserRole(beneficiary);
-      }
-      else if (userGroup && userGroup.includes(volunteer)) {
-        setUserRole(volunteer);
+      
+      let role = beneficiary; // default user role
+      if (userGroup && userGroup.includes(volunteer)) {
+        role = volunteer;
       } 
-      //Refresh token 
-      const refreshedSession = await fetchAuthSession({ forceRefresh: true });
-      //console.log('session', refreshedSession);
-      const { idToken, refreshToken, accessToken } = refreshedSession.tokens || {};
-       //console.log('group');
+      else if (userGroup && userGroup.includes(steward)) {
+        role = steward;
+      } 
+      else if (userGroup && userGroup.includes(admin)) {
+        role = admin;
+      }
+      else {
+        role = beneficiary;
+      }
+      setUserRole(role);
     } catch (error) {
       console.log("error getting group", error);
     }
@@ -202,8 +217,10 @@ export default function Home({ signOut }) {
     const username = user?.attributes?.email;
     if (!username) return;
 
+    // Will be stored in backend, for now just use AsyncStorage to track if user is first time, key: username, value: boolean
     AsyncStorage.getItem(username).then((item) => {
-      const ft = JSON.parse(item);
+      const ft = JSON.parse(item) || false;
+      console.log("First time check for user", username, "is", ft);
       if (ft) {
         Alert.alert(t("DEAR_USER"), t("FILL_PERSONAL_INFO_MESSAGE"), [
           {
@@ -219,6 +236,13 @@ export default function Home({ signOut }) {
       }
     });
   };
+
+  useEffect(() => {
+    if (user) {
+      getGroup(user);
+      getFirstTime(user);
+    }
+  }, [user]);
 
   return (
     <SafeAreaView style={[styles.container, { zIndex: 1 }]}>
@@ -272,12 +296,26 @@ export default function Home({ signOut }) {
             </TouchableOpacity>
           </>
         ) : (
-          <TouchableOpacity
-            style={[styles.buttonView, styles.fullWidthButton]}
-            onPress={() => navigation.navigate("AllRequests")}
-          >
-            <Text style={styles.buttonText}>{t("ALL_REQUESTS")}</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              style={[styles.buttonView, styles.fullWidthButton]}
+              onPress={() => navigation.navigate("ApplicationAnalytics")}
+            >
+              <Text style={styles.buttonText}>{"Application Analytics"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.buttonView, styles.fullWidthButton]}
+              onPress={() => navigation.navigate("GoogleAnalytics")}
+            >
+              <Text style={styles.buttonText}>{"Google Analytics"}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.buttonView, styles.fullWidthButton]}
+              onPress={() => navigation.navigate("OtherRequests")}
+            >
+              <Text style={styles.buttonText}>{t("ALL_REQUESTS")}</Text>
+            </TouchableOpacity>
+          </>
         )}
       </View>
 
@@ -390,26 +428,32 @@ export default function Home({ signOut }) {
       {showPicker && (
         <Animated.View style={styles.dropdownWrapper}>
           <View style={styles.dropdownMenu}>
-            {DASHBOARD_OPTIONS.map((key) => (
-              <TouchableOpacity
-                key={key}
-                onPress={() => {
-                  setShowPicker(false);
-                  setSelectedDashboardKey(key);
-                }}
-                style={{ flexDirection: "row", alignItems: "center", padding: 12 }}
-              >
-                <Feather
-                  name="check"
-                  size={25}
-                  color={selectedDashboardKey === key ? "#000000ff" : "transparent"}
-                  style={{ marginRight: 10 }}
-                />
-                <Text style={selectedDashboardKey === key ? { fontWeight: "bold" } : null}>
-                  {t(key)}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            {DASHBOARD_OPTIONS.map((ele) => {
+              const key = ele.option;
+              const role = ele.role;
+              return (
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => {
+                    setShowPicker(false);
+                    console.log("Dashboard option selected:", key, "with role:", role);
+                    setUserRole(role);
+                    setSelectedDashboardKey(key);
+                  }}
+                  style={{ flexDirection: "row", alignItems: "center", padding: 12 }}
+                >
+                  <Feather
+                    name="check"
+                    size={25}
+                    color={selectedDashboardKey === key ? "#000000ff" : "transparent"}
+                    style={{ marginRight: 10 }}
+                  />
+                  <Text style={selectedDashboardKey === key ? { fontWeight: "bold" } : null}>
+                    {t(key)}
+                  </Text>
+                </TouchableOpacity>
+              )
+            })}
           </View>
         </Animated.View>
       )}
