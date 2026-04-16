@@ -125,6 +125,8 @@ const KPIAnalytics = () => {
                   selectedValue={breakdownView}
                   onValueChange={setBreakdownView}
                   style={styles.picker}
+                  // iOS only style
+                  itemStyle={styles.picker}
                 >
                   <Picker.Item label="By Category" value="category" />
                   <Picker.Item label="By Region" value="region" />
@@ -151,6 +153,7 @@ const KPIAnalytics = () => {
                 labelComponent={
                   <VictoryTooltip
                     flyoutStyle={{ fill: "#fff", stroke: "#e5e7eb" }}
+                    renderInPortal={false}
                   />
                 }
                 events={[
@@ -284,7 +287,7 @@ const KPIAnalytics = () => {
               },
             }}
             labels={({ datum }) => `${datum.y}h`}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip renderInPortal={false}/>}
           />
           {/* SLA reference lines */}
           <VictoryLine

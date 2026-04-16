@@ -32,25 +32,9 @@ const REPORTS = [
   },
 ];
 
-const TabBar = ({ activeTab, onTabChange }) => (
-  <View style={styles.pickerWrapper}>
-    <Picker
-      selectedValue={activeTab}
-      onValueChange={onTabChange}
-      style={styles.picker}
-    >
-      {REPORTS.map((r) => (
-        <Picker.Item key={r.id} label={r.label} value={r.id} />
-      ))}
-    </Picker>
-  </View>
-);
-
 const GoogleAnalytics = () => {
   const [activeTab, setActiveTab] = useState(REPORTS[0].id);
   const [isLoadingInline, setIsLoadingInline] = useState(true);
-  const [isLoadingModal, setIsLoadingModal] = useState(true);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const activeReport = REPORTS.find((r) => r.id === activeTab);
 
@@ -62,198 +46,98 @@ const GoogleAnalytics = () => {
     });
   }, []);
 
-  const handleTabChange = (reportId) => {
-    if (reportId !== activeTab) {
-      setIsLoadingInline(true);
-      setIsLoadingModal(true);
-      setActiveTab(reportId);
-      AsyncStorage.setItem(STORAGE_KEY, reportId);
-    }
-  };
-
   return (
     <>
-      <View style={styles.card}>
-        <View style={styles.tabRow}>
-          <TabBar activeTab={activeTab} onTabChange={handleTabChange} />
+      <View style={styles.tabBar}>
+        {REPORTS.map((tab, index) => (
           <TouchableOpacity
-            onPress={() => {
-              setIsLoadingModal(true);
-              setIsExpanded(true);
-            }}
-            style={styles.expandBtn}
-            accessibilityLabel="Expand report"
+            key={tab.id}
+            style={[
+              styles.tab,
+              activeTab === tab.id && styles.tabActive,
+              index < REPORTS.length - 1 && styles.tabMargin,
+            ]}
+            onPress={() => setActiveTab(tab.id)}
           >
-            <Text style={styles.expandIcon}>⤢</Text>
+            <Text
+              style={[
+                styles.tabLabel,
+                activeTab === tab.id && styles.tabLabelActive,
+              ]}
+            >
+              {tab.label}
+            </Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.webviewContainer}>
-          {isLoadingInline && (
-            <View style={styles.spinner}>
-              <ActivityIndicator size="large" color="#3b82f6" />
-              <Text style={styles.spinnerText}>Loading report...</Text>
-            </View>
-          )}
-          {activeReport && (
-            <WebView
-              source={{ uri: activeReport.src }}
-              style={styles.webview}
-              onLoadEnd={() => setIsLoadingInline(false)}
-              onLoadStart={() => setIsLoadingInline(true)}
-              javaScriptEnabled
-              domStorageEnabled
-            />
-          )}
-        </View>
+        ))}
       </View>
 
-      <Modal visible={isExpanded} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalTabRow}>
-              <TabBar activeTab={activeTab} onTabChange={handleTabChange} />
-              <TouchableOpacity
-                onPress={() => setIsExpanded(false)}
-                style={styles.closeBtn}
-                accessibilityLabel="Close expanded report"
-              >
-                <Text style={styles.closeIcon}>✕</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.modalWebviewContainer}>
-              {isLoadingModal && (
-                <View style={styles.spinner}>
-                  <ActivityIndicator size="large" color="#3b82f6" />
-                  <Text style={styles.spinnerText}>Loading report...</Text>
-                </View>
-              )}
-              {activeReport && (
-                <WebView
-                  source={{ uri: activeReport.src }}
-                  style={styles.webview}
-                  onLoadEnd={() => setIsLoadingModal(false)}
-                  onLoadStart={() => setIsLoadingModal(true)}
-                  javaScriptEnabled
-                  domStorageEnabled
-                />
-              )}
-            </View>
+      <View style={styles.webviewContainer}>
+        {isLoadingInline && (
+          <View style={styles.spinner}>
+            <ActivityIndicator size="large" color="#3b82f6" />
+            <Text style={styles.spinnerText}>Loading report...</Text>
           </View>
-        </View>
-      </Modal>
+        )}
+        {activeReport && (
+          <WebView
+            source={{ uri: activeReport.src }}
+            style={styles.webview}
+            onLoadEnd={() => setIsLoadingInline(false)}
+            onLoadStart={() => setIsLoadingInline(true)}
+            javaScriptEnabled
+            domStorageEnabled
+          />
+        )}
+      </View>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#ffffff",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  tabRow: {
+  tabBar: {
     flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
-    backgroundColor: "#f9fafb",
   },
-  pickerWrapper: {
+  tab: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#d1d5db",
-    borderRadius: 6,
-    overflow: "hidden",
+    paddingVertical: 6,
+    alignItems: "center",
+    backgroundColor: "#f3f4f6",
+    borderBottomWidth: 2,
+    borderBottomColor: "transparent",
+  },
+  tabActive: {
     backgroundColor: "#ffffff",
+    borderBottomColor: "#3b82f6",
   },
-  picker: {
-    height: Platform.OS === "ios" ? 120 : 40,
-    color: "#374151",
+  tabMargin: {
+    marginRight: 4,
   },
-  expandBtn: {
-    marginLeft: 8,
-    padding: 6,
-    borderRadius: 6,
+  tabLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#6b7280",
   },
-  expandIcon: {
-    fontSize: 16,
-    color: "#9ca3af",
+  tabLabelActive: {
+    color: "#3b82f6",
   },
   webviewContainer: {
-    height: 400,
+    flex: 1,
     position: "relative",
   },
   webview: {
     flex: 1,
   },
   spinner: {
-    position: "absolute",
-    inset: 0,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f9fafb",
-    zIndex: 1,
+    backgroundColor: "#fff",
+    zIndex: 10,
   },
   spinnerText: {
     marginTop: 8,
-    fontSize: 13,
     color: "#6b7280",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  modalContent: {
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
-    width: "100%",
-    height: "92%",
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  modalTabRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f3f4f6",
-    backgroundColor: "#f9fafb",
-  },
-  closeBtn: {
-    marginLeft: 8,
-    padding: 8,
-    borderRadius: 8,
-  },
-  closeIcon: {
-    fontSize: 16,
-    color: "#9ca3af",
-  },
-  modalWebviewContainer: {
-    flex: 1,
-    position: "relative",
+    fontSize: 14,
   },
 });
 

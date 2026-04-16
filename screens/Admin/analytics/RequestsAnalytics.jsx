@@ -169,7 +169,7 @@ const RequestsAnalytics = () => {
               },
             }}
             labels={({ datum }) => `${datum.y}`}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip renderInPortal={false}/>}
           />
         </VictoryChart>
       </ChartContainer>
@@ -186,6 +186,8 @@ const RequestsAnalytics = () => {
               selectedValue={selectedCategory}
               onValueChange={setSelectedCategory}
               style={styles.picker}
+              // iOS only style
+              itemStyle={styles.picker}
             >
               <Picker.Item label="All Categories" value="all" />
               {categories.map((c) => (
@@ -198,6 +200,8 @@ const RequestsAnalytics = () => {
               selectedValue={selectedCountry}
               onValueChange={setSelectedCountry}
               style={styles.picker}
+              // iOS only style
+              itemStyle={styles.picker}
             >
               <Picker.Item label="All Countries" value="all" />
               {countries.map((c) => (

@@ -166,7 +166,7 @@ const BeneficiariesAnalytics = () => {
             }))}
             style={{ data: { fill: "#8b5cf6" } }}
             labels={({ datum }) => datum.y}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip renderInPortal={false}/>}
           />
           <VictoryLine
             data={growthChartData.map((d) => ({
@@ -223,7 +223,7 @@ const BeneficiariesAnalytics = () => {
             data={countryData}
             style={{ data: { fill: "#8b5cf6" } }}
             labels={({ datum }) => datum.y}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip renderInPortal={false}/>}
           />
         </VictoryChart>
 

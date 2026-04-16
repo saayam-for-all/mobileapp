@@ -120,7 +120,7 @@ const VolunteerAnalytics = () => {
             data={activityData.map((d) => ({ x: d.x, y: d.newVolunteers }))}
             style={{ data: { stroke: "#f59e0b", strokeWidth: 2 } }}
             labels={({ datum }) => datum.y}
-            labelComponent={<VictoryTooltip />}
+            labelComponent={<VictoryTooltip renderInPortal={false}/>}
           />
           <VictoryLine
             data={activityData.map((d) => ({ x: d.x, y: d.activeVolunteers }))}
@@ -175,6 +175,8 @@ const VolunteerAnalytics = () => {
               selectedValue={selectedCountry}
               onValueChange={setSelectedCountry}
               style={styles.picker}
+              // iOS only style
+              itemStyle={styles.picker}
             >
               <Picker.Item label="All Countries" value="all" />
               {countries.map((c) => (
@@ -187,6 +189,8 @@ const VolunteerAnalytics = () => {
               selectedValue={viewType}
               onValueChange={setViewType}
               style={styles.picker}
+              // iOS only style
+              itemStyle={styles.picker}
             >
               <Picker.Item label="Bar Chart" value="chart" />
               <Picker.Item label="Table" value="table" />
@@ -208,7 +212,7 @@ const VolunteerAnalytics = () => {
               data={locationBarData}
               style={{ data: { fill: "#f59e0b" } }}
               labels={({ datum }) => datum.y}
-              labelComponent={<VictoryTooltip />}
+              labelComponent={<VictoryTooltip renderInPortal={false}/>}
             />
           </VictoryChart>
         ) : (

@@ -16,7 +16,7 @@ const ApplicationAnalytics = () => {
   const [activeTab, setActiveTab] = useState("requests");
 
   return (
-    <View>
+    <>
       <View style={styles.tabBar}>
         {TABS.map((tab, index) => (
           <TouchableOpacity
@@ -40,20 +40,17 @@ const ApplicationAnalytics = () => {
         ))}
       </View>
 
-      <View>
-        {activeTab === "requests" && <RequestsAnalytics />}
-        {activeTab === "kpi" && <KPIAnalytics />}
-        {activeTab === "beneficiaries" && <BeneficiariesAnalytics />}
-        {activeTab === "volunteers" && <VolunteerAnalytics />}
-      </View>
-    </View>
+      {activeTab === "requests" && <RequestsAnalytics />}
+      {activeTab === "kpi" && <KPIAnalytics />}
+      {activeTab === "beneficiaries" && <BeneficiariesAnalytics />}
+      {activeTab === "volunteers" && <VolunteerAnalytics />}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
-    marginBottom: 8,
   },
   tab: {
     flex: 1,
