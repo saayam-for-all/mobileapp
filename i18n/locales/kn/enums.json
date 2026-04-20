@@ -1,24 +1,26 @@
 {
   "requestFor": {
-    "SELF": "ಸ್ವತಃ",
-    "OTHER": "ಇತರರು"
+    "SELF": "ಸ್ವಯಂ",
+    "OTHER": "ಇತರೆ"
   },
   "requestPriority": {
     "LOW": "ಕಡಿಮೆ",
     "MEDIUM": "ಮಧ್ಯಮ",
     "HIGH": "ಹೆಚ್ಚು",
-    "CRITICAL": "ನಿರ್ಣಾಯಕ"
+    "CRITICAL": "ವಿಮರ್ಶಾತ್ಮಕ"
   },
   "requestStatus": {
     "CREATED": "ರಚಿಸಲಾಗಿದೆ",
-    "MATCHING VOLUNTEER": "ಸ್ವಯಂಸೇವಕರನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ",
+    "MATCHING_VOLUNTEER": "ಹೊಂದಾಣಿಕೆಯ ಸ್ವಯಂಸೇವಕ",
     "MANAGED": "ನಿರ್ವಹಿಸಲಾಗಿದೆ",
     "RESOLVED": "ಪರಿಹರಿಸಲಾಗಿದೆ",
     "CANCELLED": "ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
-    "DELETED": "ಅಳಿಸಲಾಗಿದೆ"
+    "DELETED": "ಅಳಿಸಲಾಗಿದೆ",
+    "RATED_BY_REQUESTER": "ವಿನಂತಿಸಿದವರಿಂದ ರೇಟ್ ಮಾಡಲಾಗಿದೆ",
+    "RATED_BY_VOLUNTEER": "ಸ್ವಯಂಸೇವಕರಿಂದ ರೇಟ್ ಮಾಡಲಾಗಿದೆ"
   },
   "requestType": {
-    "INPERSON": "ವೈಯಕ್ತಿಕವಾಗಿ",
-    "REMOTE": "ದೂರಸ್ಥ"
+    "IN_PERSON": "ವೈಯಕ್ತಿಕವಾಗಿ",
+    "REMOTE": "ರಿಮೋಟ್"
   }
 }

@@ -1,24 +1,26 @@
 {
   "requestFor": {
-    "SELF": "தானே",
-    "OTHER": "மற்றவர்"
+    "SELF": "சுய",
+    "OTHER": "மற்றவை"
   },
   "requestPriority": {
-    "LOW": "குறைவான",
+    "LOW": "குறைந்த",
     "MEDIUM": "நடுத்தர",
-    "HIGH": "அதிக",
-    "CRITICAL": "முக்கியமான"
+    "HIGH": "உயர்",
+    "CRITICAL": "விமர்சனம்"
   },
   "requestStatus": {
     "CREATED": "உருவாக்கப்பட்டது",
-    "MATCHING VOLUNTEER": "தன்னார்வலரைத் தேடுகிறது",
-    "MANAGED": "நிர்வகிக்கப்படுகிறது",
+    "MATCHING_VOLUNTEER": "பொருந்தக்கூடிய தன்னார்வலர்",
+    "MANAGED": "நிர்வகிக்கப்பட்டது",
     "RESOLVED": "தீர்க்கப்பட்டது",
     "CANCELLED": "ரத்து செய்யப்பட்டது",
-    "DELETED": "நீக்கப்பட்டது"
+    "DELETED": "நீக்கப்பட்டது",
+    "RATED_BY_REQUESTER": "கோரிக்கையாளரால் மதிப்பிடப்பட்டது",
+    "RATED_BY_VOLUNTEER": "தன்னார்வலரால் மதிப்பிடப்பட்டது"
   },
   "requestType": {
-    "INPERSON": "நேரடியாக",
-    "REMOTE": "தொலைநிலை"
+    "IN_PERSON": "நேரில்",
+    "REMOTE": "ரிமோட்"
   }
 }
