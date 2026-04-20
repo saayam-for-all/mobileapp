@@ -1,26 +1,26 @@
 {
   "requestFor": {
     "SELF": "خود",
-    "OTHER": "دوسرے"
+    "OTHER": "دیگر"
   },
   "requestPriority": {
     "LOW": "کم",
     "MEDIUM": "درمیانہ",
-    "HIGH": "زیادہ",
-    "CRITICAL": "نازک"
+    "HIGH": "اعلی",
+    "CRITICAL": "تنقیدی"
   },
   "requestStatus": {
-    "CREATED": "تخلیق کیا گیا",
-    "MATCHING_VOLUNTEER": "رضاکار تلاش کر رہے ہیں",
-    "MANAGED": "منظم کیا گیا",
-    "RESOLVED": "حل کیا گیا",
-    "CANCELLED": "منسوخ کیا گیا",
-    "DELETED": "حذف کیا گیا",
-    "RATED_BY_REQUESTER": "درخواست گزار نے درجہ بندی کی",
-    "RATED_BY_VOLUNTEER": "رضاکار نے درجہ بندی کی"
+    "CREATED": "بنایا",
+    "MATCHING_VOLUNTEER": "مماثل رضاکار",
+    "MANAGED": "منظم",
+    "RESOLVED": "حل ہو گیا۔",
+    "CANCELLED": "منسوخ",
+    "DELETED": "حذف کر دیا گیا۔",
+    "RATED_BY_REQUESTER": "درخواست کنندہ کے ذریعہ درجہ بندی کی گئی۔",
+    "RATED_BY_VOLUNTEER": "رضاکار کی طرف سے درجہ بندی"
   },
   "requestType": {
-    "IN_PERSON": "ذاتی طور پر",
-    "REMOTE": "دور سے"
+    "IN_PERSON": "شخصی طور پر",
+    "REMOTE": "ریموٹ"
   }
 }

@@ -1,24 +1,26 @@
 {
   "requestFor": {
-    "SELF": "ନିଜେ",
-    "OTHER": "ଅନ୍ୟ"
+    "SELF": "ଆତ୍ମ",
+    "OTHER": "ଅନ୍ୟମାନେ |"
   },
   "requestPriority": {
-    "LOW": "କମ୍",
+    "LOW": "ନିମ୍ନ",
     "MEDIUM": "ମଧ୍ୟମ",
     "HIGH": "ଉଚ୍ଚ",
-    "CRITICAL": "ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ"
+    "CRITICAL": "ଗୁରୁତର"
   },
   "requestStatus": {
-    "CREATED": "ସୃଷ୍ଟି ହୋଇଛି",
-    "MATCHING VOLUNTEER": "ସ୍ୱେଚ୍ଛାସେବୀ ଖୋଜୁଛି",
+    "CREATED": "ସୃଷ୍ଟି ହୋଇଛି |",
+    "MATCHING_VOLUNTEER": "ସ୍ବେଚ୍ଛାସେବୀ ସହିତ ମେଳ |",
     "MANAGED": "ପରିଚାଳିତ",
     "RESOLVED": "ସମାଧାନ ହୋଇଛି",
-    "CANCELLED": "ବାତିଲ ହୋଇଛି",
-    "DELETED": "ବିଲୋପ ହୋଇଛି"
+    "CANCELLED": "ବାତିଲ",
+    "DELETED": "ବିଲୋପ",
+    "RATED_BY_REQUESTER": "ଅନୁରୋଧକାରୀ ଦ୍ୱାରା ମୂଲ୍ୟାୟନ",
+    "RATED_BY_VOLUNTEER": "ସ୍ୱେଚ୍ଛାସେବୀ ଦ୍ୱାରା ମୂଲ୍ୟାୟନ"
   },
   "requestType": {
-    "INPERSON": "ବ୍ୟକ୍ତିଗତଭାବେ",
-    "REMOTE": "ଦୂରବର୍ତ୍ତୀ"
+    "IN_PERSON": "ବ୍ୟକ୍ତିଗତ ଭାବରେ |",
+    "REMOTE": "ସୁଦୂର"
   }
 }

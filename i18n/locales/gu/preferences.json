@@ -1,13 +1,13 @@
 {
-  "title": "Preferences",
+  "title": "પસંદગીઓ",
   "labels": {
-    "timezone": "Time Zone",
-    "language": "Language",
-    "notifications": "Notifications",
-    "save": "Save",
-    "cancel": "Cancel"
+    "timezone": "સમય ઝોન",
+    "language": "ભાષા",
+    "notifications": "સૂચનાઓ",
+    "save": "સાચવો",
+    "cancel": "રદ કરો"
   },
   "messages": {
-    "saved": "Preferences saved successfully."
+    "saved": "પસંદગીઓ સફળતાપૂર્વક સાચવી."
   }
 }

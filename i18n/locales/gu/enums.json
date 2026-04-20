@@ -1,24 +1,26 @@
 {
   "requestFor": {
-    "SELF": "પોતે",
+    "SELF": "સ્વ",
     "OTHER": "અન્ય"
   },
   "requestPriority": {
-    "LOW": "ઓછું",
+    "LOW": "નીચું",
     "MEDIUM": "મધ્યમ",
-    "HIGH": "ઊંચું",
-    "CRITICAL": "ગંભીર"
+    "HIGH": "ઉચ્ચ",
+    "CRITICAL": "ક્રિટિકલ"
   },
   "requestStatus": {
     "CREATED": "બનાવ્યું",
-    "MATCHING VOLUNTEER": "સ્વયંસેવક શોધી રહ્યા છીએ",
-    "MANAGED": "સંચાલિત",
-    "RESOLVED": "ઉકેલાયું",
-    "CANCELLED": "રદ કર્યું",
-    "DELETED": "કાઢી નાખ્યું"
+    "MATCHING_VOLUNTEER": "મેચિંગ સ્વયંસેવક",
+    "MANAGED": "વ્યવસ્થાપિત",
+    "RESOLVED": "ઉકેલાઈ",
+    "CANCELLED": "રદ કરેલ",
+    "DELETED": "કાઢી નાખ્યું",
+    "RATED_BY_REQUESTER": "Requester દ્વારા રેટ કરેલ",
+    "RATED_BY_VOLUNTEER": "સ્વયંસેવક દ્વારા રેટ કરેલ"
   },
   "requestType": {
-    "INPERSON": "રૂબરૂ",
+    "IN_PERSON": "વ્યક્તિમાં",
     "REMOTE": "દૂરસ્થ"
   }
 }

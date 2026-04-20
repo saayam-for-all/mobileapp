@@ -1,24 +1,26 @@
 {
   "requestFor": {
-    "SELF": "নিজে",
-    "OTHER": "আন"
+    "SELF": "নিজক",
+    "OTHER": "অন্যান্য"
   },
   "requestPriority": {
-    "LOW": "কম",
-    "MEDIUM": "মধ্যম",
-    "HIGH": "উচ্চ",
-    "CRITICAL": "গুৰুত্বপূৰ্ণ"
+    "LOW": "নিম্ন",
+    "MEDIUM": "মাধ্যম",
+    "HIGH": "ওখ",
+    "CRITICAL": "জটিল অৱস্থা"
   },
   "requestStatus": {
     "CREATED": "সৃষ্টি কৰা হৈছে",
-    "MATCHING VOLUNTEER": "স্বেচ্ছাসেৱক বিচাৰি আছে",
-    "MANAGED": "পৰিচালিত",
+    "MATCHING_VOLUNTEER": "মেচিং ভলান্টিয়াৰ",
+    "MANAGED": "পৰিচালিত হৈছে",
     "RESOLVED": "সমাধান কৰা হৈছে",
     "CANCELLED": "বাতিল কৰা হৈছে",
-    "DELETED": "মচি পেলোৱা হৈছে"
+    "DELETED": "মচি পেলোৱা হৈছে",
+    "RATED_BY_REQUESTER": "অনুৰোধকাৰীৰ দ্বাৰা ৰেটিং কৰা হৈছে",
+    "RATED_BY_VOLUNTEER": "স্বেচ্ছাসেৱকৰ দ্বাৰা ৰেটিং কৰা হৈছে"
   },
   "requestType": {
-    "INPERSON": "ব্যক্তিগতভাৱে",
+    "IN_PERSON": "ব্যক্তিগতভাৱে",
     "REMOTE": "দূৰৱৰ্তী"
   }
 }
