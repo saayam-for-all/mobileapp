@@ -37,13 +37,18 @@ export const getEmergencyContactInfo = async ({ lat, lng } = {}) => {
     params:
       typeof lat === "number" && typeof lng === "number"
         ? { lat, lng }
-        : {undefined},
+        : undefined,
   });
   return response.data;
 };
 
 export const predictCategories = async (request) => {
   const response = await api.post(endpoints.PREDICT_CATEGORIES, request);
+  return response.data;
+};
+
+export const generateSubject = async (description) => {
+  const response = await api.post(endpoints.GENERATE_SUBJECT, { description });
   return response.data;
 };
 
@@ -54,6 +59,11 @@ export const GET_NOTIFICATIONS = async () => {
 
 export const moreInformation = async (request) => {
   const response = await api.post(endpoints.GENERATE_ANSWER, request);
+  return response.data;
+};
+
+export const moreInformationChat = async (payload) => {
+  const response = await api.post(endpoints.GENERATE_ANSWER_API, payload);
   return response.data;
 };
 

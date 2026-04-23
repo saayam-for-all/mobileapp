@@ -5,19 +5,20 @@ import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useTranslation } from 'react-i18next';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import api from '../services/api';
-import languagesData from '../i18n/languagesData';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import api from '../../services/api';
+import languagesData from '../../i18n/languagesData';
 import * as DocumentPicker from 'expo-document-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native';
-import AudioRecorder from '../components/AudioRecorder';
+import AudioRecorder from '../../components/AudioRecorder';
+import DynamicAdditionalFields from './Categories/DynamicAdditionalFields';
 
-import useAuthUser from '../hooks/useAuthUser';
+import useAuthUser from '../../hooks/useAuthUser';
 
-import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../services/requestServices';
-import { Tab, Tabs } from '../components/Tabs';
+import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../../services/requestServices';
+import { Tab, Tabs } from '../../components/Tabs';
 
 const genderOptions = [
   { label: 'Select', value: 'Select' },
@@ -62,6 +63,10 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
   const [categories, setCategories] = useState({});
   const [subCategories, setSubCategories] = useState([]);
+  // Dynamic form for categories
+  // Dynamic additional fields state
+  const [additionalFieldValues, setAdditionalFieldValues] = useState({});
+
   const [enums, setEnums] = useState(null);
   const [attachedFile, setAttachedFile] = useState(null);
   const navigation = useNavigation();
@@ -332,6 +337,11 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 />
               </View>
             )}
+            {/* Dynamic additional fields from metadata */}
+            <DynamicAdditionalFields
+              catId={formData.requestSubCategory}
+              onChange={setAdditionalFieldValues}
+            />
 
             <View style={styles.field}>
               <Text style={styles.label}>

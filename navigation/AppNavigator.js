@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import Administration from "../screens/Administration";
-import UserRequest from "../screens/UserRequest";
+import UserRequest from "../screens/HelpRequest/UserRequest";
 import MyReqs from "../screens/AllRequests/MyReqs";
 import OtherRequests from "../screens/AllRequests/OtherRequests";
 import ManagedReqs from "../screens/AllRequests/ManagedReqs";
