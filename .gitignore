@@ -64,3 +64,6 @@ ios/
 node_modules/
 npm-debug.log
 yarn-error.log
+
+# AI
+CLAUDE.md

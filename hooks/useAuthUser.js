@@ -75,8 +75,8 @@ export default function useAuthUser() {
                     if (cancelled) return;
                     
                     if (!error?.message?.toLowerCase().includes("auth")) {
-                        Alert.alert("Alert", "Network Error. Please refresh later",
-                            [{ text: "OK", onPress: () => AuthHandler.signOut() }]);
+                        Alert.alert("Alert", "Auth Error. Please refresh later",
+                            [{ text: "OK", onPress: () => AuthHandler.signOut(), style: "destructive"  }]);
                     } else {
                         Alert.alert("Alert", "Session timeout. Please sign in again",
                             [{ text: "Logout", onPress: () => AuthHandler.signOut(), style: "destructive" }]);

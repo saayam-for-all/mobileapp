@@ -113,7 +113,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     }
   };
 
-  const submit = async (category = '') => {
+  const submit = async () => {
     if (!authUser?.attributes?.userDbId) {
       Alert.alert('Error', 'User not authenticated properly. Please log in again.');
       return;
@@ -128,6 +128,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       requestType: { requestTypeId: formData.requestTypeId },
       requestFor: { requestForId: formData.requestForId },
       helpCategory: { catId: formData.requestSubCategory || formData.requestCategory },
+      additionalFields: additionalFieldValues,
     };
 
     if (!isSelfRequest()) {
@@ -209,18 +210,48 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       }
 
       if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
+
+        const formatApiCategoryName = (name) =>
+          name
+            .toLowerCase()
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+
         const defaultCategories = ["Health", "Education", "Electronics", "General"];
-        let suggestedCategories = await predictCategories(
+        let response = await predictCategories(
           { subject: formData.requestSubject, description: formData.requestDescription }
         );
-        if (!suggestedCategories) suggestedCategories = defaultCategories;
-        suggestedCategories.push('General');
+        const rawCategories = response?.body?.categories ?? [];
+        const formattedCategories = rawCategories.map((cat) => ({
+          id: cat.category_name,
+          name: cat.category_name,
+          category_number: cat.category_number,
+          displayName: formatApiCategoryName(cat.category_name),
+          hierarchy: cat.hierarchy,
+          confidence: cat.confidence,
+        }));
+
+        const suggestedCategories = [
+          { id: "general", name: "General", displayName: "General", category_number: "0.0.0.0.0" },
+          ...formattedCategories,
+        ];
 
         const alertCategories = suggestedCategories.map((category) => ({
-          text: category,
+          text: category.displayName,
           onPress: async () => {
-            await submit(category);
-            setLoading(false);
+            try {
+              if (category.id === "general") {
+                formData.requestCategory = category.category_number;
+              } else {
+                formData.requestSubCategory = category.category_number;
+              }
+              await submit();
+            } catch (error) {
+              console.error('Error submitting request with category:', error);
+              Alert.alert('Error', 'Failed to submit request. Please try again.');
+            } finally {
+              setLoading(false);
+            }
           },
         }));
 
@@ -254,7 +285,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     const fetchEnumsData = async () => {
       try {
         const data = await getEnums();
-        console.log("Enums API response:", data);
         setEnums(data);
       } catch (error) {
         console.error('Error fetching enums:', error);
