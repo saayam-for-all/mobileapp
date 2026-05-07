@@ -4,7 +4,7 @@ import { resetPassword, confirmResetPassword } from 'aws-amplify/auth';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Spacer from '../../components/Spacer';
-import { FontAwesome, Ionicons } from '@expo/vector-icons'; 
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { useTranslation } from "react-i18next";
 
@@ -130,25 +130,16 @@ function ForgetPassword({ navigation }) {
               value={newPassword}
               placeholder="password"
               onChange={(text) => setNewPassword(text)}
-              secureTextEntry={!showPassword}
+              secureTextEntry={!showNewPassword}
               autoCompleteType="password"
               style={{ flex: 1 }}
             />
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
-            </TouchableOpacity>
-          </View>
-          <View style={{ width: '94%', flexDirection: 'row', alignItems: 'center', margin: '3%' }}>
-            <Input
-              value={confirmPassword}
-              placeholder="password"
-              onChange={(text) => setConfirmPassword(text)}
-              secureTextEntry={!showPassword}
-              autoCompleteType="password"
-              style={{ flex: 1 }}
-            />
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
+            <TouchableOpacity onPress={() => setShowNewPassword(!showNewPassword)}>
+              <FontAwesome
+                name={showNewPassword ? "eye-slash" : "eye"}
+                size={20}
+                color="#777"
+              />
             </TouchableOpacity>
           </View>
 

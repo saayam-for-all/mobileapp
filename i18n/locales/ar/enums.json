@@ -1,26 +1,26 @@
 {
   "requestFor": {
-    "SELF": "نفسي",
+    "SELF": "النفس",
     "OTHER": "آخر"
   },
   "requestPriority": {
-    "LOW": "منخفض",
-    "MEDIUM": "متوسط",
+    "LOW": "قليل",
+    "MEDIUM": "واسطة",
     "HIGH": "عالي",
-    "CRITICAL": "حرج"
+    "CRITICAL": "شديد الأهمية"
   },
   "requestStatus": {
-    "CREATED": "تم الإنشاء",
-    "MATCHING_VOLUNTEER": "البحث عن متطوع",
-    "MANAGED": "تتم الإدارة",
+    "CREATED": "مخلوق",
+    "MATCHING_VOLUNTEER": "مطابقة المتطوع",
+    "MANAGED": "تمكنت",
     "RESOLVED": "تم الحل",
     "CANCELLED": "تم الإلغاء",
     "DELETED": "تم الحذف",
-    "RATED_BY_REQUESTER": "تم التقييم من قبل مقدم الطلب",
-    "RATED_BY_VOLUNTEER": "تم التقييم من قبل المتطوع"
+    "RATED_BY_REQUESTER": "تم التقييم بواسطة الطالب",
+    "RATED_BY_VOLUNTEER": "تم تقييمه بواسطة متطوع"
   },
   "requestType": {
-    "IN_PERSON": "شخصياً",
-    "REMOTE": "عن بعد"
+    "IN_PERSON": "شخصيا",
+    "REMOTE": "بعيد"
   }
 }

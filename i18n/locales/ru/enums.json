@@ -5,22 +5,22 @@
   },
   "requestPriority": {
     "LOW": "Низкий",
-    "MEDIUM": "Средний",
+    "MEDIUM": "Середина",
     "HIGH": "Высокий",
     "CRITICAL": "Критический"
   },
   "requestStatus": {
-    "CREATED": "Создано",
-    "MATCHING_VOLUNTEER": "Поиск волонтёра",
-    "MANAGED": "Управляется",
+    "CREATED": "Созданный",
+    "MATCHING_VOLUNTEER": "Соответствующий волонтер",
+    "MANAGED": "Удалось",
     "RESOLVED": "Решено",
     "CANCELLED": "Отменено",
     "DELETED": "Удалено",
-    "RATED_BY_REQUESTER": "Оценено запросившим",
-    "RATED_BY_VOLUNTEER": "Оценено волонтёром"
+    "RATED_BY_REQUESTER": "Оценено запрашивающим",
+    "RATED_BY_VOLUNTEER": "Оценка волонтера"
   },
   "requestType": {
     "IN_PERSON": "Лично",
-    "REMOTE": "Удалённо"
+    "REMOTE": "Удаленный"
   }
 }

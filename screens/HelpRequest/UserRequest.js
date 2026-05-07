@@ -74,6 +74,19 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   // Controls whether the AudioRecorder modal should start recording
   const [isRecorderVisible, setIsRecorderVisible] = useState(false);
 
+  // Single source of truth for the description box content (typed + voice combined)
+  const [description, setDescription] = useState(
+    isEdit && requestItem?.description ? requestItem.description : ''
+  );
+
+  // Keep formData.requestDescription in sync whenever description changes
+  const updateDescription = (text) => {
+    // Enforce 500 char limit on the combined string
+    const capped = text.slice(0, 500);
+    setDescription(capped);
+    updateFormData('requestDescription', capped);
+  };
+
   const updateFormData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -84,7 +97,8 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
   const isSelfRequest = () => formData.requestForId === 0;
 
-  const descriptionLength = formData.requestDescription?.length || 0;
+  // Character count reflects everything visible in the box (typed + transcript)
+  const descriptionLength = description.length;
 
   const fetchCategories = async () => {
     try {
@@ -164,9 +178,11 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
         type: "*/*",
         copyToCacheDirectory: true,
       });
-      if (result.type === "success") {
-        setAttachedFile(result);
-        Alert.alert("File Attached", result.name);
+      // FIX: expo-document-picker v10+ no longer uses result.type === "success"
+      if (!result.canceled && result.assets?.length) {
+        const file = result.assets[0];
+        setAttachedFile(file);
+        Alert.alert("File Attached", file.name);
       }
     } catch (err) {
       console.log("File picker error:", err);
@@ -319,12 +335,12 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           startTrigger={isRecorderVisible}
           onStop={({ uri, transcript }) => {
             if (transcript) {
-              updateFormData(
-                'requestDescription',
-                formData.requestDescription
-                  ? formData.requestDescription + ' ' + transcript
-                  : transcript
-              );
+              // FIX: merge transcript into the single description state directly.
+              // This prevents double-appending and keeps the counter accurate.
+              const updated = description
+                ? description + ' ' + transcript
+                : transcript;
+              updateDescription(updated);
             }
             setIsRecorderVisible(false);
           }}
@@ -411,8 +427,11 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
               <View style={styles.textAreaWrapper}>
 
-                {/* COUNTER (TOP RIGHT INSIDE BOX) */}
-                <Text style={styles.charCounterInside}>
+                {/* COUNTER — reflects all characters in the box (typed + transcript) */}
+                <Text style={[
+                  styles.charCounterInside,
+                  descriptionLength >= 500 && { color: '#ef4444' },
+                ]}>
                   {descriptionLength} / 500
                 </Text>
 
@@ -422,8 +441,9 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                   scrollEnabled={true}
                   maxLength={500}
                   placeholder="Describe your request..."
-                  value={formData.requestDescription}
-                  onChangeText={(text) => updateFormData('requestDescription', text)}
+                  // FIX: drive value directly from description (single source of truth)
+                  value={description}
+                  onChangeText={(text) => updateDescription(text)}
                 />
               </View>
 
@@ -621,7 +641,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                     updateFormData('location', details?.description || data.description);
                   }}
                   onFail={(error) => console.log('Google Place API Error:', error)}
-                  query={{ key: '', language: 'en' }}
+                  query={{ key: Constants.expoConfig?.extra?.googlePlacesApiKey || '', language: 'en' }}
                   styles={{ textInput: pickerSelectStyles.inputAndroid }}
                   disableScroll={true}
                 />
@@ -703,7 +723,6 @@ const styles = StyleSheet.create({
   field: {
     marginBottom: 16,
   },
-  // Row for label + icons (paperclip + mic)
   labelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -763,11 +782,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 24,
   },
-
   textAreaWrapper: {
     position: 'relative',
   },
-
   charCounterInside: {
     position: 'absolute',
     top: 8,

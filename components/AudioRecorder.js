@@ -32,13 +32,15 @@ const RECORDING_CONFIG = {
     },
 };
 
+// Expects seconds → "mm:ss"
 function formatTime(seconds) {
     const m = Math.floor(seconds / 60).toString().padStart(2, "0");
     const s = (seconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
 }
 
-const formatDuration = (ms) => formatTime(Math.floor(ms / 1000));
+// Expects milliseconds → "mm:ss"
+const formatDuration = (ms) => formatTime(Math.floor((ms || 0) / 1000));
 
 function formatFileSize(bytes) {
     return (bytes / (1024 * 1024)).toFixed(2);
@@ -175,69 +177,79 @@ function useRecorder({ onStopped }) {
 }
 
 /* ================= PLAYER HOOK ================= */
-function usePlayer(uri) {
+const usePlayer = (uri) => {
     const soundRef = useRef(null);
-    const [isPlaying, setIsPlaying] = useState(false);
 
-    // Unload when uri changes or on unmount
-    useEffect(() => {
-        return () => {
-            if (soundRef.current) {
-                soundRef.current.unloadAsync().catch(() => { });
-                soundRef.current = null;
-            }
-        };
-    }, [uri]);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [positionMillis, setPositionMillis] = useState(0);
+    const [durationMillis, setDurationMillis] = useState(0);
 
     const playPause = useCallback(async () => {
         if (!uri) return;
 
-        await Audio.setAudioModeAsync({
-            allowsRecordingIOS: false,
-            playsInSilentModeIOS: true,
-            playThroughEarpieceAndroid: false,
-            staysActiveInBackground: false,
-            shouldDuckAndroid: false,
-        });
-
-        if (soundRef.current) {
-            const status = await soundRef.current.getStatusAsync();
-            if (status.isPlaying) {
-                await soundRef.current.pauseAsync();
-                setIsPlaying(false);
-            } else {
-                // Replay from start if finished
-                if (status.positionMillis >= status.durationMillis && status.durationMillis > 0) {
-                    await soundRef.current.setPositionAsync(0);
-                }
-                await soundRef.current.playAsync();
-                setIsPlaying(true);
-            }
-        } else {
-            const { sound: newSound } = await Audio.Sound.createAsync(
+        // If sound not created yet → create it
+        if (!soundRef.current) {
+            const { sound } = await Audio.Sound.createAsync(
                 { uri },
                 { shouldPlay: true },
                 (status) => {
-                    // Auto-reset isPlaying when playback finishes
-                    if (status.didJustFinish) setIsPlaying(false);
+                    if (!status.isLoaded) return;
+
+                    setPositionMillis(status.positionMillis ?? 0);
+                    setDurationMillis(status.durationMillis ?? 0);
+                    setIsPlaying(status.isPlaying);
+
+                    // reset when finished
+                    if (status.didJustFinish) {
+                        setIsPlaying(false);
+                        setPositionMillis(0);
+                    }
                 }
             );
-            soundRef.current = newSound;
+
+            soundRef.current = sound;
+            setIsPlaying(true);
+            return;
+        }
+
+        // If already exists → toggle play/pause
+        const status = await soundRef.current.getStatusAsync();
+
+        if (status.isPlaying) {
+            await soundRef.current.pauseAsync();
+            setIsPlaying(false);
+        } else {
+            await soundRef.current.playAsync();
             setIsPlaying(true);
         }
     }, [uri]);
 
     const cleanup = useCallback(async () => {
         if (soundRef.current) {
-            await soundRef.current.stopAsync().catch(() => { });
-            await soundRef.current.unloadAsync().catch(() => { });
+            await soundRef.current.unloadAsync();
             soundRef.current = null;
-            setIsPlaying(false);
         }
+        setIsPlaying(false);
+        setPositionMillis(0);
+        setDurationMillis(0);
     }, []);
 
-    return { isPlaying, playPause, cleanup };
-}
+    useEffect(() => {
+        return () => {
+            if (soundRef.current) {
+                soundRef.current.unloadAsync();
+            }
+        };
+    }, []);
+
+    return {
+        isPlaying,
+        playPause,
+        cleanup,
+        positionMillis,
+        durationMillis,
+    };
+};
 
 /* ================= TRANSCRIPTION ================= */
 function useTranscription({ onSuccess }) {
@@ -316,7 +328,13 @@ function AudioRecorderInner({ onStop = () => { }, startTrigger }) {
         },
     });
 
-    const { isPlaying, playPause, cleanup } = usePlayer(recordedUri);
+    const {
+        isPlaying,
+        playPause,
+        cleanup,
+        positionMillis,
+        durationMillis,
+    } = usePlayer(recordedUri);
     const { isSending, error, send, reset } = useTranscription({
         // Called only after successful transcription send
         onSuccess: onStop,
@@ -412,8 +430,9 @@ function AudioRecorderInner({ onStop = () => { }, startTrigger }) {
                         <TouchableOpacity style={styles.playButton} onPress={playPause}>
                             <Icon name={isPlaying ? "pause" : "play"} size={32} color="#fff" />
                         </TouchableOpacity>
+                        {/* FIX: use formatDuration (expects ms) instead of formatTime (expects seconds) */}
                         <Text style={styles.previewDuration}>
-                            {formatTime(elapsedSeconds)} / {formatDuration(audioDuration)}
+                            {formatDuration(positionMillis)} / {formatDuration(durationMillis)}
                         </Text>
                         <View style={styles.previewActions}>
                             <TouchableOpacity style={styles.discardButton} onPress={discardRecording}>
