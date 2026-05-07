@@ -21,12 +21,6 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (fromSignIn) {
-      resendCode();
-    }
-  },[]);
-
-  useEffect(() => {
     if (isUpdate) {
       setCanResend(false);
       setTimer(undefined);

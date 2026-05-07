@@ -279,6 +279,38 @@ export default function SignUp({ navigation }) {
           <Text style={styles.alertText}>{t("PASSWORD_REQUIREMENTS_ERROR")}</Text>
         )}
       </View>
+      {/* Confirm Password (with eye icon) */}
+      <View style={{ width: "100%" }}>
+        <View style={styles.textDescriptionontainer}>
+          <Text>{t("CONFIRM_PASSWORD")}</Text>
+        </View>
+
+        <View
+          style={{
+            width: "94%",
+            marginHorizontal: "3%",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Input
+            value={repeatPassword}
+            placeholder={t("CONFIRM_PASSWORD")}
+            onChange={onChangeRepeatPassword}
+            secureTextEntry={!showRepeatPassword}
+            autoCompleteType="password"
+            style={{ flex: 1 }}
+          />
+
+          <TouchableOpacity onPress={() => setShowRepeatPassword((v) => !v)}>
+            <FontAwesome
+              name={showRepeatPassword ? "eye-slash" : "eye"}
+              size={20}
+              color="#777"
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
       <Spacer size={40}/>
       <Button
         style={{width: '96%', marginHorizontal: '3%'}}
