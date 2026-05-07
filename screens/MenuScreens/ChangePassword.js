@@ -1,10 +1,11 @@
 import React, { use, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { fetchUserAttributes, updatePassword } from 'aws-amplify/auth';
 import useAuthUser from "../../hooks/useAuthUser";
 import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
 
 
 export default function ChangePassword() {
@@ -156,16 +157,14 @@ export default function ChangePassword() {
       )}
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity
-          style={[styles.button, styles.saveButton, loading && { opacity: 0.7 }]}
+        <Button
+          loading={loading}
           onPress={changePassword}
-          disabled={loading}
+          backgroundColor="#3B82F6"
+          style={{ flex: 1, paddingVertical: 15, borderRadius: 8, marginHorizontal: 5, borderWidth: 0 }}
         >
-          {loading
-            ? <ActivityIndicator color="#fff" size="small" />
-            : <Text style={styles.buttonText}>{t("SAVE", { ns: "common" })}</Text>
-          }
-        </TouchableOpacity>
+          {t("SAVE", { ns: "common" })}
+        </Button>
 
         <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
           <Text style={styles.buttonText}>{t("CANCEL", { ns: "common" })}</Text>

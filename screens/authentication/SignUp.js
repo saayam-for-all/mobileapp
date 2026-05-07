@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Alert, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { FontAwesome } from "@expo/vector-icons";
 import { signUp } from 'aws-amplify/auth';
 import { useTranslation } from "react-i18next";
@@ -30,11 +29,58 @@ const styles = StyleSheet.create({
     marginTop: 6,
     width: "94%",
   },
-  textDescriptionontainer: {
+  textDescriptionContainer: {
     marginHorizontal: "3%",
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+  },
+  invalidMessage: {
+    marginTop: 10,
+    marginHorizontal: "3%",
+  },
+  // Name row
+  nameRow: {
+    flexDirection: "row",
+    width: "100%",
+    paddingHorizontal: "1.5%",
+  },
+  nameFieldLeft: {
+    width: "50%",
+  },
+  nameFieldRight: {
+    width: "50%",
+  },
+  // Full-width field wrapper
+  fieldContainer: {
+    width: "100%",
+  },
+  passwordInputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "94%",
+    marginHorizontal: "3%",
+    marginVertical: "2%",
+    borderWidth: 1,
+    borderColor: "lightgray",
+    borderRadius: 5,
+    backgroundColor: "#fff",
+    paddingRight: 12,
+  },
+  passwordInput: {
+    flex: 1,
+    borderWidth: 0,
+    padding: 10,
+    margin: 0,
+    marginVertical: 0,
+    width: "100%",
+  },
+  eyeIcon: {
+    padding: 4,
+  },
+  button: {
+    width: '96%',
+    marginHorizontal: '3%',
   },
 });
 
@@ -57,16 +103,14 @@ export default function SignUp({ navigation }) {
   const [isPhoneValid, setIsPhoneValid] = useState(true);
 
   const [loading, setLoading] = useState(false);
-
   const [invalidMessage, setInvalidMessage] = useState(null);
 
-  // Independent show/hide toggles
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const popError = (message) =>
     Alert.alert(
-      t("Error creating account"), 
+      t("Error creating account"),
       message,
       [{ text: "OK" }]
     );
@@ -83,15 +127,12 @@ export default function SignUp({ navigation }) {
   };
 
   const signUpUser = async () => {
-    const validPassword = password.length > 5 && (password === repeatPassword);
-    let errorMessage = null;
-    let hasError = false;
     const allFields = [name, lastName, email, phone_number, password, repeatPassword];
     const isNotEmpty = (v) => typeof v === "string" && v.trim() !== "";
     const allInputsFilled = allFields.every(isNotEmpty);
 
     if (!allInputsFilled) {
-      const msg = "Please fill all fields."; // add a translation key later if you want
+      const msg = "Please fill all fields.";
       setInvalidMessage(msg);
       popError(msg);
       return;
@@ -123,66 +164,57 @@ export default function SignUp({ navigation }) {
     }
 
     if (!isPhoneValid) {
-      const msg = "Invalid phone number."; // add a translation key later if you want
+      const msg = "Invalid phone number.";
       setInvalidMessage(msg);
       popError(msg);
       return;
     }
 
     setInvalidMessage(null);
+    setLoading(true);
 
-    console.log(allInputsFilled);
-    if (validPassword && emailValid && isPhoneValid && allInputsFilled) {
-      setInvalidMessage(null);
-      setLoading(true);
-      signUp({
-        username: email, 
-        password,
-        options: {
-          userAttributes: {
-            email, // optional
-            given_name: name,
-            // country_code, // later added to db
-            "custom:Country": country_name,
-            phone_number: full_phone, // later changed into phone without country code
-            //zoneinfo,
-            family_name: lastName
-          }
+    signUp({
+      username: email,
+      password,
+      options: {
+        userAttributes: {
+          email,
+          given_name: name,
+          "custom:Country": country_name,
+          phone_number: full_phone,
+          family_name: lastName,
+        },
+      },
+    })
+      .then((data) => {
+        setLoading(false);
+        if (data?.user?.username) {
+          AsyncStorage.setItem(data?.user?.username, JSON.stringify(true));
         }
+        navigation.navigate('Confirmation', { email });
       })
-        .then((data) => {
-          setLoading(false);
-          console.log(data?.user?.username);
-          if(data?.user?.username){
-            AsyncStorage.setItem(data?.user?.username, JSON.stringify(true))
-          }
-          console.log('navigation: ', navigation);
-          navigation.navigate('Confirmation', { email });
-        })
-        .catch((err) => {
-          setLoading(false);
-          if (err.message) {
-            popError(err.message);
-            setInvalidMessage(err.message);
-          }
-          console.log(err);
-        });
-    }
+      .catch((err) => {
+        setLoading(false);
+        if (err.message) {
+          popError(err.message);
+          setInvalidMessage(err.message);
+        }
+        console.log(err);
+      });
   };
 
   return (
     <View style={styles.container}>
-      {/* First/Last Name */}
-      <View style={{ flexDirection: "row", width: "100%", paddingHorizontal: "1.5%" }}>
-        <View style={{ width: "50%" }}>
-          <View style={styles.textDescriptionontainer}>
+      {/* First / Last Name */}
+      <View style={styles.nameRow}>
+        <View style={styles.nameFieldLeft}>
+          <View style={styles.textDescriptionContainer}>
             <Text>First Name</Text>
           </View>
           <Input value={name} placeholder="First Name" onChange={onChangeName} autoFocus />
         </View>
-
-        <View style={{ width: "50%" }}>
-          <View style={styles.textDescriptionontainer}>
+        <View style={styles.nameFieldRight}>
+          <View style={styles.textDescriptionContainer}>
             <Text>Last Name</Text>
           </View>
           <Input value={lastName} placeholder="Last Name" onChange={onChangeLastName} />
@@ -190,8 +222,8 @@ export default function SignUp({ navigation }) {
       </View>
 
       {/* Email */}
-      <View style={{ width: "100%" }}>
-        <View style={styles.textDescriptionontainer}>
+      <View style={styles.fieldContainer}>
+        <View style={styles.textDescriptionContainer}>
           <Text>{t("EMAIL")}</Text>
         </View>
         <Input
@@ -209,8 +241,8 @@ export default function SignUp({ navigation }) {
       </View>
 
       {/* Phone */}
-      <View style={{ width: "100%" }}>
-        <View style={styles.textDescriptionontainer}>
+      <View style={styles.fieldContainer}>
+        <View style={styles.textDescriptionContainer}>
           <Text>Phone Number</Text>
         </View>
         <PhoneInput
@@ -231,9 +263,9 @@ export default function SignUp({ navigation }) {
         {!isPhoneValid && <Text style={styles.alertText}>Invalid phone number.</Text>}
       </View>
 
-      {/* Zone/Country */}
-      <View style={{ width: "100%" }}>
-        <View style={styles.textDescriptionontainer}>
+      {/* Zone */}
+      <View style={styles.fieldContainer}>
+        <View style={styles.textDescriptionContainer}>
           <Text>Zone</Text>
         </View>
         <Input
@@ -244,20 +276,12 @@ export default function SignUp({ navigation }) {
         />
       </View>
 
-      {/* Password (with eye icon) */}
-      <View style={{ width: "100%" }}>
-        <View style={styles.textDescriptionontainer}>
+      {/* Password */}
+      <View style={styles.fieldContainer}>
+        <View style={styles.textDescriptionContainer}>
           <Text>{t("PASSWORD")}</Text>
         </View>
-
-        <View
-          style={{
-            width: "94%",
-            marginHorizontal: "3%",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.passwordInputRow}>
           <Input
             value={password}
             placeholder={t("PASSWORD")}
@@ -267,56 +291,40 @@ export default function SignUp({ navigation }) {
             }}
             secureTextEntry={!showPassword}
             autoCompleteType="password"
-            style={{ flex: 1 }}
+            style={styles.passwordInput}
           />
-
-          <TouchableOpacity onPress={() => setShowPassword((v) => !v)}>
+          <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword((v) => !v)}>
             <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color="#777" />
           </TouchableOpacity>
         </View>
-
         {!passwordValid && (
           <Text style={styles.alertText}>{t("PASSWORD_REQUIREMENTS_ERROR")}</Text>
         )}
       </View>
-      {/* Confirm Password (with eye icon) */}
-      <View style={{ width: "100%" }}>
-        <View style={styles.textDescriptionontainer}>
+
+      {/* Confirm Password */}
+      <View style={styles.fieldContainer}>
+        <View style={styles.textDescriptionContainer}>
           <Text>{t("CONFIRM_PASSWORD")}</Text>
         </View>
-
-        <View
-          style={{
-            width: "94%",
-            marginHorizontal: "3%",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.passwordInputRow}>
           <Input
             value={repeatPassword}
             placeholder={t("CONFIRM_PASSWORD")}
             onChange={onChangeRepeatPassword}
             secureTextEntry={!showRepeatPassword}
             autoCompleteType="password"
-            style={{ flex: 1 }}
+            style={styles.passwordInput}
           />
-
-          <TouchableOpacity onPress={() => setShowRepeatPassword((v) => !v)}>
-            <FontAwesome
-              name={showRepeatPassword ? "eye-slash" : "eye"}
-              size={20}
-              color="#777"
-            />
+          <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowRepeatPassword((v) => !v)}>
+            <FontAwesome name={showRepeatPassword ? "eye-slash" : "eye"} size={20} color="#777" />
           </TouchableOpacity>
         </View>
       </View>
-      <Spacer size={40}/>
-      <Button
-        style={{width: '96%', marginHorizontal: '3%'}}
-        onPress={() => signUpUser()}
-        loading={loading}
-      >
+
+      <Spacer size={40} />
+
+      <Button style={styles.button} onPress={signUpUser} loading={loading}>
         {t("SIGNUP")}
       </Button>
 
@@ -326,7 +334,7 @@ export default function SignUp({ navigation }) {
       </Text>
 
       {invalidMessage ? (
-        <Text style={{ marginTop: 10, marginHorizontal: "3%" }}>{invalidMessage}</Text>
+        <Text style={styles.invalidMessage}>{invalidMessage}</Text>
       ) : null}
     </View>
   );

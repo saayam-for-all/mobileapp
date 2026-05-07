@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  View, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator,
+  View, StyleSheet, Text, TextInput, TouchableOpacity,
 } from 'react-native';
 import { confirmSignUp, resendSignUpCode, confirmUserAttribute, updateUserAttribute, fetchAuthSession } from 'aws-amplify/auth';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
 
 const CODE_LENGTH = 6;
 
@@ -152,35 +153,34 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
           </View>
         ))}
       </TouchableOpacity>
+      {!isUpdate && (
+        <View style={styles.resendContainer}>
+          <View style={styles.resendRow}>
+            <Text style={styles.resendText}>{t("DIDNT_RECEIVE_CODE")}</Text>
 
-      <View style={styles.resendContainer}>
-        <View style={styles.resendRow}>
-          <Text style={styles.resendText}>{t("DIDNT_RECEIVE_CODE")}</Text>
+            <TouchableOpacity onPress={resendCode} disabled={!canResend}>
+              <Text style={[styles.resendLink, !canResend && { color: "#ccc" }]}>
+                {t("RESEND_CODE")}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity onPress={resendCode} disabled={!canResend}>
-            <Text style={[styles.resendLink, !canResend && { color: "#ccc" }]}>
-              {t("RESEND_CODE")}
+          {!canResend && (
+            <Text style={styles.timerText}>
+              {t("RESEND_IN", { time: formatTimer(timer) })}
             </Text>
-          </TouchableOpacity>
+          )}
         </View>
+      )} 
 
-        {!canResend && (
-          <Text style={styles.timerText}>
-            {t("RESEND_IN", { time: formatTimer(timer) })}
-          </Text>
-        )}
-      </View>
-
-      <TouchableOpacity
-        style={[styles.verifyButton, loading && { opacity: 0.7 }]}
+      <Button
+        loading={loading}
         onPress={isUpdate ? confirmUpdate : confirmSignUpHandler}
-        disabled={loading}
+        backgroundColor="#4A90E2"
+        style={{ width: "100%", paddingVertical: 15, borderRadius: 8, marginBottom: 20, borderWidth: 0 }}
       >
-        {loading
-          ? <ActivityIndicator color="#fff" size="small" />
-          : <Text style={styles.verifyButtonText}>{t("VERIFY_ACCOUNT")}</Text>
-        }
-      </TouchableOpacity>
+        {t("VERIFY_ACCOUNT")}
+      </Button>
 
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>

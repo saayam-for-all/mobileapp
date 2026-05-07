@@ -1,12 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { fetchAuthSession, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth';
 import { countriesList } from "../../data/countries";
 import useAuthUser from "../../hooks/useAuthUser";
 import RNPickerSelect from "react-native-picker-select";
 import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
 
 const EditProfile = () => {
   const { t } = useTranslation("profile");
@@ -281,16 +282,14 @@ const EditProfile = () => {
         </TouchableOpacity>
       ) : (
         <View style={styles.buttonRow}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: loading ? "#93C5FD" : "#3B82F6" }]}
+          <Button
+            loading={loading}
             onPress={handleSave}
-            disabled={loading}
+            backgroundColor="#3B82F6"
+            style={{ flex: 1, paddingVertical: 15, borderRadius: 8, marginHorizontal: 5, borderWidth: 0 }}
           >
-            {loading
-              ? <ActivityIndicator color="#fff" size="small" />
-              : <Text style={styles.buttonText}>{t("SAVE")}</Text>
-            }
-          </TouchableOpacity>
+            {t("SAVE")}
+          </Button>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "#6B7280" }]}
             onPress={handleCancel}

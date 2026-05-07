@@ -37,17 +37,23 @@ import useAuthUser from "../../../hooks/useAuthUser";
 const ButtonsView = () => {
   const [infoOpen, setInfoOpen] = useState(false);
   const [info, setInfo] = useState('');
+  const [infoLoading, setInfoLoading] = useState(false);
 
   const navigation = useNavigation();
   const route = useRoute();
   const req = route.params?.item;
-  // CURRENTLY NOT WORKING - FIX AFTER RECEIVING CORRECT USER DATA
+
   const generateAnswer = async () => {
-    const res = await moreInformation(
-      {category: req?.category, subject:req?.subject, description: req?.description}
-    );
-    setInfo(res.data);
-    setInfoOpen(true);
+    setInfoLoading(true);
+    try {
+      const res = await moreInformation(
+        {category: req?.category, subject:req?.subject, description: req?.description}
+      );
+      setInfo(res.data);
+      setInfoOpen(true);
+    } finally {
+      setInfoLoading(false);
+    }
   }
   return (
     <View style={{ flexDirection: "row", marginBottom: 15, marginTop: 15 }}>
@@ -137,36 +143,14 @@ const ButtonsView = () => {
               Emergency Contact
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-              width: 125,
-              height: 50,
-              borderRadius: 10,
-              marginLeft: 10,
-              alignContent: "center",
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: "#F2C94C",
-          }}
+        <Button
           onPress={generateAnswer}
+          loading={infoLoading}
+          backgroundColor="#F2C94C"
+          style={{ width: 125, height: 50, borderRadius: 10, marginLeft: 10, borderWidth: 0 }}
         >
-          <FontAwesome5
-            name="info-circle"
-            size={16}
-            color="white"
-            style={{ marginRight: 5 }}
-          />
-          <Text
-            style={{
-            fontSize: 15,
-            marginTop: 1,
-            marginLeft: 10,
-            color: "white",
-            }}
-          >
-              More Information{" "}
-          </Text>
-        </TouchableOpacity>
+          More Information
+        </Button>
     </View>
   )
 }
@@ -411,6 +395,7 @@ const Volunteer = ({title="Volunteer"}) => {
     const [rowHeights, setRowHeights] = useState({}); // Store max height for each row
     const [inputValue, setInputValue] = useState(0);
     const [showVolunteers, setShowVolunteers] = useState(false);
+    const [volunteerLoading, setVolunteerLoading] = useState(false);
 
     const columnWidths = {
         name: 150,
@@ -434,6 +419,7 @@ const Volunteer = ({title="Volunteer"}) => {
     },[]);
 
     const handleRequestVolunteers = async () => {
+        setVolunteerLoading(true);
         try {
           const data = await getVolunteerOrgsList();
           if (data.body && data.body.length > 0) {
@@ -449,9 +435,10 @@ const Volunteer = ({title="Volunteer"}) => {
               id: "",
             });
           }
-          //console.log("volunteer", volunteerData);
         } catch (error) {
           console.error("Error requesting volunteers:", error);
+        } finally {
+          setVolunteerLoading(false);
         }
     };
 
@@ -481,16 +468,17 @@ const Volunteer = ({title="Volunteer"}) => {
                 />
             </View>
 
-            <TouchableOpacity
-                style={styles.requestButton}
+            <Button
                 onPress={() => {
                   setVolunteerCount(inputValue);
                   handleRequestVolunteers();
                 }}
+                loading={volunteerLoading}
+                backgroundColor="#2F80ED"
+                style={{ borderRadius: 5, paddingVertical: 10, paddingHorizontal: 15, borderWidth: 0 }}
             >
-                <FontAwesome5 name="user-plus" size={16} color="white" />
-                <Text style={styles.buttonText}> Request Volunteers</Text>
-            </TouchableOpacity>
+              Request Volunteers
+            </Button>
             </View>
 
             {/* Volunteer Table - Rendered Below the Button */}
