@@ -5,19 +5,20 @@ import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useTranslation } from 'react-i18next';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import api from '../services/api';
-import languagesData from '../i18n/languagesData';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
+import api from '../../services/api';
+import languagesData from '../../i18n/languagesData';
 import * as DocumentPicker from 'expo-document-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import { TouchableOpacity } from 'react-native';
-import AudioRecorder from '../components/AudioRecorder';
+import AudioRecorder from '../../components/AudioRecorder';
+import DynamicAdditionalFields from './Categories/DynamicAdditionalFields';
 
-import useAuthUser from '../hooks/useAuthUser';
+import useAuthUser from '../../hooks/useAuthUser';
 
-import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../services/requestServices';
-import { Tab, Tabs } from '../components/Tabs';
+import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../../services/requestServices';
+import { Tab, Tabs } from '../../components/Tabs';
 
 const genderOptions = [
   { label: 'Select', value: 'Select' },
@@ -62,6 +63,10 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
   const [categories, setCategories] = useState({});
   const [subCategories, setSubCategories] = useState([]);
+  // Dynamic form for categories
+  // Dynamic additional fields state
+  const [additionalFieldValues, setAdditionalFieldValues] = useState({});
+
   const [enums, setEnums] = useState(null);
   const [attachedFile, setAttachedFile] = useState(null);
   const navigation = useNavigation();
@@ -122,7 +127,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     }
   };
 
-  const submit = async (category = '') => {
+  const submit = async () => {
     if (!authUser?.attributes?.userDbId) {
       Alert.alert('Error', 'User not authenticated properly. Please log in again.');
       return;
@@ -137,6 +142,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       requestType: { requestTypeId: formData.requestTypeId },
       requestFor: { requestForId: formData.requestForId },
       helpCategory: { catId: formData.requestSubCategory || formData.requestCategory },
+      additionalFields: additionalFieldValues,
     };
 
     if (!isSelfRequest()) {
@@ -220,18 +226,48 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       }
 
       if (!formData.requestCategory || formData.requestCategory === '0.0.0.0.0') {
+
+        const formatApiCategoryName = (name) =>
+          name
+            .toLowerCase()
+            .replace(/_/g, " ")
+            .replace(/\b\w/g, (c) => c.toUpperCase());
+
         const defaultCategories = ["Health", "Education", "Electronics", "General"];
-        let suggestedCategories = await predictCategories(
+        let response = await predictCategories(
           { subject: formData.requestSubject, description: formData.requestDescription }
         );
-        if (!suggestedCategories) suggestedCategories = defaultCategories;
-        suggestedCategories.push('General');
+        const rawCategories = response?.body?.categories ?? [];
+        const formattedCategories = rawCategories.map((cat) => ({
+          id: cat.category_name,
+          name: cat.category_name,
+          category_number: cat.category_number,
+          displayName: formatApiCategoryName(cat.category_name),
+          hierarchy: cat.hierarchy,
+          confidence: cat.confidence,
+        }));
+
+        const suggestedCategories = [
+          { id: "general", name: "General", displayName: "General", category_number: "0.0.0.0.0" },
+          ...formattedCategories,
+        ];
 
         const alertCategories = suggestedCategories.map((category) => ({
-          text: category,
+          text: category.displayName,
           onPress: async () => {
-            await submit(category);
-            setLoading(false);
+            try {
+              if (category.id === "general") {
+                formData.requestCategory = category.category_number;
+              } else {
+                formData.requestSubCategory = category.category_number;
+              }
+              await submit();
+            } catch (error) {
+              console.error('Error submitting request with category:', error);
+              Alert.alert('Error', 'Failed to submit request. Please try again.');
+            } finally {
+              setLoading(false);
+            }
           },
         }));
 
@@ -265,7 +301,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
     const fetchEnumsData = async () => {
       try {
         const data = await getEnums();
-        console.log("Enums API response:", data);
         setEnums(data);
       } catch (error) {
         console.error('Error fetching enums:', error);
@@ -348,6 +383,11 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 />
               </View>
             )}
+            {/* Dynamic additional fields from metadata */}
+            <DynamicAdditionalFields
+              catId={formData.requestSubCategory}
+              onChange={setAdditionalFieldValues}
+            />
 
             <View style={styles.field}>
               <Text style={styles.label}>

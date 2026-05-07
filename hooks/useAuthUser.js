@@ -66,20 +66,23 @@ export default function useAuthUser() {
                         }
                     };
                     
-                    // Update AsyncStorage
+                    // Only mark cache as complete when userDbId is present;
+                    // otherwise the next focus will retry the DB lookup.
                     await AsyncStorage.setItem(USER_KEY, JSON.stringify(userData));
-                    await AsyncStorage.setItem(USER_UPDATED_KEY, "true");
+                    if (userDbId) {
+                        await AsyncStorage.setItem(USER_UPDATED_KEY, "true");
+                    }
                     setAuthUser(userData);
                     
                 } catch (error) {
                     if (cancelled) return;
                     
-                    if (!error?.message?.toLowerCase().includes("auth")) {
-                        Alert.alert("Alert", "Network Error. Please refresh later",
-                            [{ text: "OK", onPress: () => AuthHandler.signOut() }]);
-                    } else {
+                    if (error?.message?.toLowerCase().includes("auth")) {
                         Alert.alert("Alert", "Session timeout. Please sign in again",
                             [{ text: "Logout", onPress: () => AuthHandler.signOut(), style: "destructive" }]);
+                    } else {
+                        Alert.alert("Alert", "Auth Error. Please refresh later",
+                            [{ text: "OK", onPress: () => AuthHandler.signOut(), style: "destructive"  }]);
                     }
                 }
             }

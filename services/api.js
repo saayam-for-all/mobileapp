@@ -1,5 +1,6 @@
 import axios from "axios";
-import { fetchAuthSession, getCurrentUser, signOut } from "aws-amplify/auth";
+import { fetchAuthSession } from "aws-amplify/auth";
+import AuthHandler from "../global/authHandler";
 
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -14,6 +15,16 @@ const getToken = async () => {
     return session?.tokens?.idToken?.toString();
   } catch (error) {
     console.log("Error fetching token:", error);
+    return null;
+  }
+};
+
+const getRefreshedToken = async () => {
+  try {
+    const session = await fetchAuthSession({ forceRefresh: true });
+    return session?.tokens?.idToken?.toString();
+  } catch (error) {
+    console.log("Error refreshing token:", error);
     return null;
   }
 };
@@ -55,10 +66,10 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
       try {
-        const newToken = await getToken();
+        const newToken = await getRefreshedToken();
         if (!newToken) {
           console.log("Error refreshing token. Logging Out..");
-          signOut();
+          AuthHandler.signOut();
           return Promise.reject(error);
         }
         failedRequestqueue.forEach((p) => p.resolve(newToken));
@@ -69,7 +80,7 @@ api.interceptors.response.use(
         console.log("Token refresh failed:", refreshError);
         failedRequestqueue.forEach((p) => p.reject(refreshError));
         failedRequestqueue = [];
-        signOut();
+        AuthHandler.signOut();
         return Promise.reject(error);
       } finally {
         isRefreshing = false;

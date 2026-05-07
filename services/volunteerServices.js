@@ -84,7 +84,7 @@ export const fetchProfileImage = async (userId) => {
       {
         responseType: "blob",
         headers: {
-          Accept: ["image/jpeg", "image/png"],
+          Accept: "image/jpeg, image/png",
         },
       },
     );

@@ -28,7 +28,7 @@ import Input from "../../../components/Input";
 import config from "../../../components/config";
 import api from "../../../services/api";
 import { TextInput } from "react-native";
-import UserRequest from "../../UserRequest";
+import UserRequest from "../../HelpRequest/UserRequest";
 import Button from '../../../components/Button';
 import { getVolunteerOrgsList } from "../../../services/volunteerServices";
 import { moreInformation } from "../../../services/requestServices";
