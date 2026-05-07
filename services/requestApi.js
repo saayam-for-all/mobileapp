@@ -5,8 +5,8 @@ export const requestApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://a9g3p46u59.execute-api.us-east-1.amazonaws.com/saayam/",
 
-    prepareHeaders: (headers) => {
-      const token = getToken();
+    prepareHeaders: async (headers) => {
+      const token = await getToken();
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

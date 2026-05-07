@@ -60,13 +60,13 @@ export default function SignUp({ navigation }) {
 
   const [invalidMessage, setInvalidMessage] = useState(null);
 
-  // ✅ Independent show/hide toggles
+  // Independent show/hide toggles
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const popError = (message) =>
     Alert.alert(
-      t("ACCOUNT_DELETION_ERROR"), // generic title available in your auth.json
+      t("Error creating account"), 
       message,
       [{ text: "OK" }]
     );

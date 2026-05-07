@@ -1,32 +1,34 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 /**
  * Helper functions for dashboard filters using Enums and Categories APIs
- * Handles reading from localStorage and providing translated values
+ * Handles reading from AsyncStorage and providing translated values
  */
 
 /**
- * Get enums from localStorage
+ * Get enums from AsyncStorage
  * @returns {Object|null} Enums object or null if not available
  */
-export const getEnumsFromStorage = () => {
+export const getEnumsFromStorage = async () => {
   try {
-    const enums = localStorage.getItem("enums");
+    const enums = await AsyncStorage.getItem("enums");
     return enums ? JSON.parse(enums) : null;
   } catch (error) {
-    console.warn("Failed to parse enums from localStorage:", error);
+    console.warn("Failed to parse enums from AsyncStorage:", error);
     return null;
   }
 };
 
 /**
- * Get categories from localStorage
+ * Get categories from AsyncStorage
  * @returns {Array|null} Categories array or null if not available
  */
-export const getCategoriesFromStorage = () => {
+export const getCategoriesFromStorage = async () => {
   try {
-    const categories = localStorage.getItem("categories");
+    const categories = await AsyncStorage.getItem("categories");
     return categories ? JSON.parse(categories) : null;
   } catch (error) {
-    console.warn("Failed to parse categories from localStorage:", error);
+    console.warn("Failed to parse categories from AsyncStorage:", error);
     return null;
   }
 };
@@ -36,8 +38,8 @@ export const getCategoriesFromStorage = () => {
  * @param {Function} t - Translation function from useTranslation
  * @returns {Array} Array of status objects with key and translated label
  */
-export const getStatusOptions = (t) => {
-  const enums = getEnumsFromStorage();
+export const getStatusOptions = async (t) => {
+  const enums = await getEnumsFromStorage();
 
   if (enums && Array.isArray(enums.requestStatus)) {
     const options = enums.requestStatus.map((status) => ({
@@ -87,8 +89,8 @@ export const getStatusOptions = (t) => {
  * @param {Function} t - Translation function from useTranslation
  * @returns {Array} Array of priority objects with key and translated label
  */
-export const getPriorityOptions = (t) => {
-  const enums = getEnumsFromStorage();
+export const getPriorityOptions = async (t) => {
+  const enums = await getEnumsFromStorage();
 
   if (enums && enums.requestPriority) {
     const priorityKeys = Object.keys(enums.requestPriority);
@@ -129,8 +131,8 @@ export const getPriorityOptions = (t) => {
  * @param {Function} t - Translation function from useTranslation
  * @returns {Array} Array of type objects with key and translated label
  */
-export const getTypeOptions = (t) => {
-  const enums = getEnumsFromStorage();
+export const getTypeOptions = async (t) => {
+  const enums = await getEnumsFromStorage();
 
   if (enums && enums.requestType) {
     const typeKeys = Object.keys(enums.requestType);
@@ -167,8 +169,8 @@ export const getTypeOptions = (t) => {
  * @param {Function} t - Translation function from useTranslation
  * @returns {Array} Array of category objects with name and translated label
  */
-export const getCategoryOptions = (t) => {
-  const categories = getCategoriesFromStorage();
+export const getCategoryOptions = async (t) => {
+  const categories = await getCategoriesFromStorage();
 
   if (categories && Array.isArray(categories)) {
     return categories.map((cat) => ({
