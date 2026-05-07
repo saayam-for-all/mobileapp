@@ -1,14 +1,13 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const TOKEN_KEY = "idToken";
 
-// Saving token after login
-export const setToken = (token) => {
+export const setToken = async (token) => {
   if (token) {
-    sessionStorage.setItem(TOKEN_KEY, token);
+    await AsyncStorage.setItem(TOKEN_KEY, token);
   }
 };
 
-// Get token when API calls
-export const getToken = () => sessionStorage.getItem(TOKEN_KEY);
+export const getToken = async () => AsyncStorage.getItem(TOKEN_KEY);
 
-// Clear token when user logout
-export const clearToken = () => sessionStorage.removeItem(TOKEN_KEY);
+export const clearToken = async () => AsyncStorage.removeItem(TOKEN_KEY);

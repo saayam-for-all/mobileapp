@@ -7,6 +7,7 @@ import { countriesList } from "../../data/countries";
 import useAuthUser from "../../hooks/useAuthUser";
 import RNPickerSelect from "react-native-picker-select";
 import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
 
 const EditProfile = () => {
   const { t } = useTranslation("profile");
@@ -21,6 +22,7 @@ const EditProfile = () => {
   const [needVerification, setNeedVerification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [backupProfile, setBackupProfile] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
   const user = useAuthUser();
@@ -168,17 +170,20 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     if (validateForm()) {
-      await updateUser();
-
-      setBackupProfile({
-        firstName,
-        lastName,
-        primaryEmail,
-        primaryPhoneNumber,
-        zoneinfo,
-      });
-
-      setIsEditing(false);
+      setLoading(true);
+      try {
+        await updateUser();
+        setBackupProfile({
+          firstName,
+          lastName,
+          primaryEmail,
+          primaryPhoneNumber,
+          zoneinfo,
+        });
+        setIsEditing(false);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -277,12 +282,14 @@ const EditProfile = () => {
         </TouchableOpacity>
       ) : (
         <View style={styles.buttonRow}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#3B82F6" }]}
+          <Button
+            loading={loading}
             onPress={handleSave}
+            backgroundColor="#3B82F6"
+            style={{ flex: 1, paddingVertical: 15, borderRadius: 8, marginHorizontal: 5, borderWidth: 0 }}
           >
-            <Text style={styles.buttonText}>{t("SAVE")}</Text>
-          </TouchableOpacity>
+            {t("SAVE")}
+          </Button>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "#6B7280" }]}
             onPress={handleCancel}

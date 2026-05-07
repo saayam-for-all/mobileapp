@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { fetchUserAttributes, updatePassword } from 'aws-amplify/auth';
 import useAuthUser from "../../hooks/useAuthUser";
 import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
 
 
 export default function ChangePassword() {
@@ -18,29 +19,12 @@ export default function ChangePassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordValid, setConfirmPasswordValid] = useState(false);
   const [logPasswordValid, setLogPasswordValid] = useState([false, false]);
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
-  const getUser = async () => {
-    try {
-      const user = await fetchUserAttributes();
-      setUser(user);
-    } catch (err) {
-      //signOut();  // If error getting user then signout
-      Alert.alert( // show alert to signout
-        "Alert", // Title
-        "Session timeout. Please sign in again", // Message
-        [            
-          {
-            text: "Logout",
-            onPress: () => signOut(),
-            style: "destructive", 
-          },
-        ],
-      );  
-      console.log("error from cognito : ", err);
-    }
-  };
+  const user = useAuthUser();
+  
   const toggleSecureEntry = (ind) => {
     setSecureEntry(
       secureEntry.map((ele,i)=>{
@@ -72,8 +56,11 @@ export default function ChangePassword() {
       errorMessage = t("ERROR_GENERIC_SUPPORT", { ns: "auth" });
     } else {
       if (!user) {
-        await getUser();
+        error = true;
+        // No exact key for the original sentence; using existing generic error
+        errorMessage = t("ERROR_GENERIC_SUPPORT", { ns: "auth" });
       }
+      setLoading(true);
       try {
         await updatePassword({
           oldPassword: oldPassword,
@@ -87,6 +74,8 @@ export default function ChangePassword() {
       } catch (err) {
         error = true;
         errorMessage = String(err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -168,9 +157,14 @@ export default function ChangePassword() {
       )}
 
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={changePassword}>
-          <Text style={styles.buttonText}>{t("SAVE", { ns: "common" })}</Text>
-        </TouchableOpacity>
+        <Button
+          loading={loading}
+          onPress={changePassword}
+          backgroundColor="#3B82F6"
+          style={{ flex: 1, paddingVertical: 15, borderRadius: 8, marginHorizontal: 5, borderWidth: 0 }}
+        >
+          {t("SAVE", { ns: "common" })}
+        </Button>
 
         <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancel}>
           <Text style={styles.buttonText}>{t("CANCEL", { ns: "common" })}</Text>

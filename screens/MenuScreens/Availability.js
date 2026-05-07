@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, CustomButton,AntDesignButton,Button, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { SafeAreaView } from 'react-native';
@@ -9,6 +9,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TimezonePicker from '../../components/TimeZonePicker';
+import Button from '../../components/Button';
 // import api from '../../services/api';
 
 export default function Availability() {
@@ -17,6 +18,7 @@ export default function Availability() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [vacationMode, setVacationMode] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
   const dayOptions = [
@@ -147,13 +149,14 @@ export default function Availability() {
   };
   // Handle submit
   const handleSaveClick = async () => {
-    try {
-      const slotsValidation = validateTimeSlots();
-      if (!slotsValidation.isValid) {
-        alert(slotsValidation.message);
-        return;
-      }
+    const slotsValidation = validateTimeSlots();
+    if (!slotsValidation.isValid) {
+      alert(slotsValidation.message);
+      return;
+    }
 
+    setLoading(true);
+    try {
       const availabilityData = {
         slots: timeSlots,
         vacationMode,
@@ -169,13 +172,13 @@ export default function Availability() {
       );
 
       Alert.alert(
-        'Success', 
+        'Success',
         'Time zone: ' + selectedTimezone + ', \n' + 'Time slots: \n' + timeSlots.reduce((acc,curr)=>{
             return acc + '  ' + curr.day + ': ' + curr.startTime + ' to ' + curr.endTime + '\n'
-        },''), 
+        },''),
         [
             {
-                text: 'Back', 
+                text: 'Back',
                 onPress: ()=>{navigation.navigate('Profile');}
             },
             {
@@ -190,6 +193,8 @@ export default function Availability() {
     } catch (error) {
       console.error("Error saving availability:", error);
       Alert.alert('Error Saving Availability', error, [{text: 'Ok', onPress: ()=>{}}]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -201,12 +206,6 @@ export default function Availability() {
     fetchAvailabilityFromLocal();
   
   }, []);
-
-  const CustomButton = ({ title, onPress, style, textStyle }) => (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-    </TouchableOpacity>
-  );
 
 
   return (
@@ -278,12 +277,14 @@ export default function Availability() {
               style={styles.backButton}
               textStyle={styles.backButtonText}
             /> */}
-            <CustomButton 
-              title="CONFIRM" 
-              onPress={handleSaveClick} 
-              style={styles.confirmButton}
-              textStyle={styles.confirmButtonText}
-            />
+            <Button
+              loading={loading}
+              onPress={handleSaveClick}
+              backgroundColor="#007BFF"
+              style={[styles.button, { borderWidth: 0 }]}
+            >
+              CONFIRM
+            </Button>
           </View>
     </View>
     </ScrollView>

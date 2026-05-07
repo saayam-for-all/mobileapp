@@ -7,38 +7,78 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { deleteUser } from 'aws-amplify/auth';
+import { signOffUser, getUserId } from '../../services/volunteerServices';
+import useAuthUser from '../../hooks/useAuthUser';
 
 const AccountDeletion = ({signOut}) => {
   const navigation = useNavigation();
   const [isChecked, setIsChecked] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const authUser = useAuthUser();
 
   const handleConfirmDelete = async () => {
+    setIsDeleting(true);
     try {
-      // TODO: Implement AWS Cognito deleteUser() method
-      // TODO: Implement backend API call to delete user data
+      // Step 1: Get userDbId from authUser hook
+      let userId = authUser?.attributes?.userDbId;
+      let userExistsInDb = true;
 
-      console.log("Deleting user account...");
+      // If not in hook, try to fetch via API using email
+      if (!userId) {
+        const userEmail = authUser?.attributes?.email;
+        if (!userEmail) {
+          throw new Error("User information not found. Please try logging in again.");
+        }
+        console.log("Fetching user ID from database using email...");
+        try {
+          const result = await getUserId(userEmail);
+          userId = result?.data?.user_id;
+        } catch (fetchError) {
+          console.log("User not found in database, will skip DB deletion:", fetchError.message);
+          userExistsInDb = false;
+        }
+      }
 
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Step 2: Delete user from database (if they exist)
+      if (userExistsInDb && userId) {
+        console.log("Deleting user from database...", userId);
+        const dbResponse = await signOffUser(userId);
+        console.log("Database deletion response:", dbResponse);
 
-      // Clear local storage and redirect to home
-      AsyncStorage.clear();
+        if (!dbResponse.success) {
+          throw new Error(dbResponse.message || "Failed to delete user from database.");
+        }
+      } else {
+        console.log("Skipping database deletion - user not found in database");
+      }
 
-      // TO DELETE: call Auth.signOut() to mimic deletion
+      // Step 3: Delete user from AWS Cognito
+      console.log("Deleting user from Cognito...");
+      try {
+        await deleteUser();
+        console.log("Cognito user deleted successfully");
+      } catch (cognitoError) {
+        console.error("Error deleting user from Cognito:", cognitoError);
+      }
+
+      // Clear local storage and sign out
+      await AsyncStorage.clear();
       signOut();
     } catch (error) {
       console.error("Error deleting account:", error);
       Alert.alert(
-        'Error deleting account',
-        'Please try again later',
-        [
-            { text: 'Ok'},
-        ]
+        'Error',
+        error.message || 'An error occurred while deleting your account. Please try again.',
+        [{ text: 'OK' }]
       );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -106,14 +146,15 @@ const AccountDeletion = ({signOut}) => {
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity 
-          style={[styles.submitButton, !isChecked && styles.submitButtonDisabled]}
+        <TouchableOpacity
+          style={[styles.submitButton, (!isChecked || isDeleting) && styles.submitButtonDisabled]}
           onPress={handleSubmit}
-          disabled={!isChecked}
+          disabled={!isChecked || isDeleting}
         >
-          <Text style={[styles.submitButtonText, !isChecked && styles.submitButtonTextDisabled]}>
-            Submit
-          </Text>
+          {isDeleting
+            ? <ActivityIndicator size="small" color="#fff" />
+            : <Text style={[styles.submitButtonText, !isChecked && styles.submitButtonTextDisabled]}>Submit</Text>
+          }
         </TouchableOpacity>
       </View>
     </SafeAreaView>

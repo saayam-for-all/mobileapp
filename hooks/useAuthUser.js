@@ -22,9 +22,18 @@ export default function useAuthUser() {
                     const cached = await AsyncStorage.getItem(USER_KEY);
                     const userUpdated = await AsyncStorage.getItem(USER_UPDATED_KEY);
                     if (userUpdated == "true" && cached && !cancelled) {
-                        console.log("Using cached user data");
-                        setAuthUser(JSON.parse(cached));
-                        return;
+                        const session = await fetchAuthSession();
+                        const currentSub = session.tokens?.idToken?.payload?.sub;
+                        const cachedUser = JSON.parse(cached);
+                        if (currentSub && cachedUser?.attributes?.sub === currentSub) {
+                            console.log("Using cached user data");
+                            setAuthUser(cachedUser);
+                            return;
+                        }
+                        // Cached user does not match the current session — clear stale data
+                        console.log("Cached user mismatch, fetching fresh data");
+                        await AsyncStorage.removeItem(USER_KEY);
+                        await AsyncStorage.removeItem(USER_UPDATED_KEY);
                     }
 
                     // Get latest data
@@ -72,6 +81,7 @@ export default function useAuthUser() {
                     if (userDbId) {
                         await AsyncStorage.setItem(USER_UPDATED_KEY, "true");
                     }
+                    if (cancelled) return;
                     setAuthUser(userData);
                     
                 } catch (error) {

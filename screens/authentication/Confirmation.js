@@ -5,6 +5,7 @@ import {
 import { confirmSignUp, resendSignUpCode, confirmUserAttribute, updateUserAttribute, fetchAuthSession } from 'aws-amplify/auth';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from "react-i18next";
+import Button from "../../components/Button";
 
 const CODE_LENGTH = 6;
 
@@ -16,15 +17,10 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   const [error, setError] = useState("");
   const [timer, setTimer] = useState(59);
   const [canResend, setCanResend] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const email = !isUpdate ? route?.params?.email : "";
   const inputRef = useRef(null);
-
-  useEffect(() => {
-    if (fromSignIn) {
-      resendCode();
-    }
-  },[]);
 
   useEffect(() => {
     if (isUpdate) {
@@ -56,11 +52,14 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
 
   const confirmSignUpHandler = async () => {
     if (code.length === CODE_LENGTH) {
+      setLoading(true);
       try {
         await confirmSignUp({ username: email, confirmationCode: code });
         navigation.navigate('SignIn');
       } catch (err) {
         setError(err?.message || t("ERROR_GENERIC_SUPPORT"));
+      } finally {
+        setLoading(false);
       }
     } else {
       setError(t("ERROR_ENTER_ALL_DIGITS", { count: CODE_LENGTH }));
@@ -68,14 +67,15 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   };
 
   const confirmUpdate = async () => {
-
     if (code.length === CODE_LENGTH) {
+      setLoading(true);
       try {
         await confirmUserAttribute({ userAttributeKey: 'email', confirmationCode: code });
-        // If you need to update other attributes, use updateUserAttribute
         navigation.navigate('Profile');
       } catch (err) {
         setError(err.message || 'Something went wrong, please contact support!');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -153,31 +153,34 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
           </View>
         ))}
       </TouchableOpacity>
+      {!isUpdate && (
+        <View style={styles.resendContainer}>
+          <View style={styles.resendRow}>
+            <Text style={styles.resendText}>{t("DIDNT_RECEIVE_CODE")}</Text>
 
-      <View style={styles.resendContainer}>
-        <View style={styles.resendRow}>
-          <Text style={styles.resendText}>{t("DIDNT_RECEIVE_CODE")}</Text>
+            <TouchableOpacity onPress={resendCode} disabled={!canResend}>
+              <Text style={[styles.resendLink, !canResend && { color: "#ccc" }]}>
+                {t("RESEND_CODE")}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity onPress={resendCode} disabled={!canResend}>
-            <Text style={[styles.resendLink, !canResend && { color: "#ccc" }]}>
-              {t("RESEND_CODE")}
+          {!canResend && (
+            <Text style={styles.timerText}>
+              {t("RESEND_IN", { time: formatTimer(timer) })}
             </Text>
-          </TouchableOpacity>
+          )}
         </View>
+      )} 
 
-        {!canResend && (
-          <Text style={styles.timerText}>
-            {t("RESEND_IN", { time: formatTimer(timer) })}
-          </Text>
-        )}
-      </View>
-
-      <TouchableOpacity
-        style={styles.verifyButton}
+      <Button
+        loading={loading}
         onPress={isUpdate ? confirmUpdate : confirmSignUpHandler}
+        backgroundColor="#4A90E2"
+        style={{ width: "100%", paddingVertical: 15, borderRadius: 8, marginBottom: 20, borderWidth: 0 }}
       >
-        <Text style={styles.verifyButtonText}>{t("VERIFY_ACCOUNT")}</Text>
-      </TouchableOpacity>
+        {t("VERIFY_ACCOUNT")}
+      </Button>
 
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>

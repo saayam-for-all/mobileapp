@@ -6,6 +6,7 @@ import { Checkbox } from "react-native-paper";
 import i18n from "../../i18n/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthUser from "../../hooks/useAuthUser";
+import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
 import * as Localization from "expo-localization";
 
@@ -52,6 +53,7 @@ const Preferences = () => {
   const [checked, setChecked] = React.useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [backupProfile, setBackupProfile] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const languageOptions = [
     { value: "default", label: "Default (Device Language)" },
@@ -129,11 +131,11 @@ const Preferences = () => {
   };
 
   const handleSave = async () => {
+    setLoading(true);
     try {
       let langToApply;
 
       if (firstLanguage === "default") {
-        // Detect device language
         langToApply = Localization.locale.split("-")[0];
       } else {
         langToApply = firstLanguage;
@@ -142,10 +144,7 @@ const Preferences = () => {
       console.log("Saving language preference:", firstLanguage);
       console.log("Applying language:", langToApply);
 
-      // Save preference (not actual language, but preference)
       await AsyncStorage.setItem(LANGUAGE_KEY, firstLanguage);
-
-      // Apply actual language
       await i18n.changeLanguage(langToApply);
 
       Alert.alert(
@@ -157,6 +156,8 @@ const Preferences = () => {
     } catch (e) {
       console.log("Error saving/applying language:", e);
       Alert.alert("Error", "Failed to apply language. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -280,9 +281,14 @@ const Preferences = () => {
         </TouchableOpacity>
       ) : (
         <View style={styles.rowButtons}>
-          <TouchableOpacity style={[styles.saveButton, styles.actionButton]} onPress={handleSave}>
-            <Text style={styles.buttonText}>{t("SAVE")}</Text>
-          </TouchableOpacity>
+          <Button
+            loading={loading}
+            onPress={handleSave}
+            backgroundColor="#007BFF"
+            style={[styles.actionButton, { borderWidth: 0 }]}
+          >
+            {t("SAVE")}
+          </Button>
           <TouchableOpacity style={[styles.cancelButton, styles.actionButton]} onPress={handleCancel}>
             <Text style={styles.buttonText}>{t("CANCEL")}</Text>
           </TouchableOpacity>
