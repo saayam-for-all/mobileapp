@@ -106,7 +106,7 @@ function ForgetPassword({ navigation }) {
         keyboardType="email-address"
       />
 
-      <Button style={{ width: "94%", margin: "3%" }} onPress={getConfirmationCode}>
+      <Button style={{ width: "94%", margin: "3%" }} onPress={getConfirmationCode} loading={codeLoading}>
         {t("GET_CONFIRMATION_CODE")}
       </Button>
 
@@ -162,7 +162,7 @@ function ForgetPassword({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <Button style={{ width: "94%", margin: "3%" }} onPress={postNewPassword}>
+          <Button style={{ width: "94%", margin: "3%" }} onPress={postNewPassword} loading={confirmLoading}>
             {t("CHANGE_PASSWORD")}
           </Button>
         </>

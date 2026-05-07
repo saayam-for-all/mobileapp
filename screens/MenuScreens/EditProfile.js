@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { fetchAuthSession, fetchUserAttributes, updateUserAttributes } from 'aws-amplify/auth';
 import { countriesList } from "../../data/countries";
 import useAuthUser from "../../hooks/useAuthUser";
@@ -21,6 +21,7 @@ const EditProfile = () => {
   const [needVerification, setNeedVerification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [backupProfile, setBackupProfile] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
   const user = useAuthUser();
@@ -168,17 +169,20 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     if (validateForm()) {
-      await updateUser();
-
-      setBackupProfile({
-        firstName,
-        lastName,
-        primaryEmail,
-        primaryPhoneNumber,
-        zoneinfo,
-      });
-
-      setIsEditing(false);
+      setLoading(true);
+      try {
+        await updateUser();
+        setBackupProfile({
+          firstName,
+          lastName,
+          primaryEmail,
+          primaryPhoneNumber,
+          zoneinfo,
+        });
+        setIsEditing(false);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -278,10 +282,14 @@ const EditProfile = () => {
       ) : (
         <View style={styles.buttonRow}>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: "#3B82F6" }]}
+            style={[styles.button, { backgroundColor: loading ? "#93C5FD" : "#3B82F6" }]}
             onPress={handleSave}
+            disabled={loading}
           >
-            <Text style={styles.buttonText}>{t("SAVE")}</Text>
+            {loading
+              ? <ActivityIndicator color="#fff" size="small" />
+              : <Text style={styles.buttonText}>{t("SAVE")}</Text>
+            }
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "#6B7280" }]}

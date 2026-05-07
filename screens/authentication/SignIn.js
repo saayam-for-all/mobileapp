@@ -335,7 +335,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         {t("FORGOT_PASSWORD")}
       </Text>
       <Spacer size={30} />
-      <Button onPress={signIn} style={{ width: "100%" }}>
+      <Button onPress={signIn} loading={loading} style={{ width: "100%" }}>
         {t("SIGN_IN")}
       </Button>
 

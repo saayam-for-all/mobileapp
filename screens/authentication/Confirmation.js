@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  View, StyleSheet, Text, TextInput, TouchableOpacity,
+  View, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import { confirmSignUp, resendSignUpCode, confirmUserAttribute, updateUserAttribute, fetchAuthSession } from 'aws-amplify/auth';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   const [error, setError] = useState("");
   const [timer, setTimer] = useState(59);
   const [canResend, setCanResend] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const email = !isUpdate ? route?.params?.email : "";
   const inputRef = useRef(null);
@@ -50,11 +51,14 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
 
   const confirmSignUpHandler = async () => {
     if (code.length === CODE_LENGTH) {
+      setLoading(true);
       try {
         await confirmSignUp({ username: email, confirmationCode: code });
         navigation.navigate('SignIn');
       } catch (err) {
         setError(err?.message || t("ERROR_GENERIC_SUPPORT"));
+      } finally {
+        setLoading(false);
       }
     } else {
       setError(t("ERROR_ENTER_ALL_DIGITS", { count: CODE_LENGTH }));
@@ -62,14 +66,15 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
   };
 
   const confirmUpdate = async () => {
-
     if (code.length === CODE_LENGTH) {
+      setLoading(true);
       try {
         await confirmUserAttribute({ userAttributeKey: 'email', confirmationCode: code });
-        // If you need to update other attributes, use updateUserAttribute
         navigation.navigate('Profile');
       } catch (err) {
         setError(err.message || 'Something went wrong, please contact support!');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -167,10 +172,14 @@ const Confirmation = ({ route, navigation, isUpdate = false, toUpdate = null }) 
       </View>
 
       <TouchableOpacity
-        style={styles.verifyButton}
+        style={[styles.verifyButton, loading && { opacity: 0.7 }]}
         onPress={isUpdate ? confirmUpdate : confirmSignUpHandler}
+        disabled={loading}
       >
-        <Text style={styles.verifyButtonText}>{t("VERIFY_ACCOUNT")}</Text>
+        {loading
+          ? <ActivityIndicator color="#fff" size="small" />
+          : <Text style={styles.verifyButtonText}>{t("VERIFY_ACCOUNT")}</Text>
+        }
       </TouchableOpacity>
 
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
