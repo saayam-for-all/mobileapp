@@ -32,8 +32,7 @@ export default function useAuthUser() {
                         }
                         // Cached user does not match the current session — clear stale data
                         console.log("Cached user mismatch, fetching fresh data");
-                        await AsyncStorage.removeItem(USER_KEY);
-                        await AsyncStorage.removeItem(USER_UPDATED_KEY);
+                        await AsyncStorage.clear();
                     }
 
                     // Get latest data
