@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import DropDownPicker from "react-native-dropdown-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { countriesList } from "../../data/countries";
 import { languagesList } from "../../data/languages";
 import useAuthUser from "../../hooks/useAuthUser";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
+
+const PERSONAL_INFO_KEY = "personal_info";
 
 const styles = StyleSheet.create({
   container: {
@@ -165,6 +168,29 @@ const EditPersonal = () => {
     }
   }, [user]);
 
+  // Load previously saved personal info from AsyncStorage
+  useEffect(() => {
+    const loadPersonalInfo = async () => {
+      try {
+        const stored = await AsyncStorage.getItem(PERSONAL_INFO_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed.dob) setDob(parsed.dob);
+          if (parsed.gender) setGender(parsed.gender);
+          if (parsed.streetAddress) setStreetAddress(parsed.streetAddress);
+          if (parsed.streetAddress2) setStreetAddress2(parsed.streetAddress2);
+          if (parsed.country) setCountry(parsed.country);
+          if (parsed.state) setState(parsed.state);
+          if (parsed.zipCode) setZipCode(parsed.zipCode);
+          if (parsed.language) setLanguage(parsed.language);
+        }
+      } catch (error) {
+        console.log("Failed to load personal info from storage:", error);
+      }
+    };
+    loadPersonalInfo();
+  }, []);
+
   AbortSignal.timeout ??= function timeout(ms) {
     const ctrl = new AbortController();
     setTimeout(() => ctrl.abort(), ms);
@@ -218,20 +244,41 @@ const EditPersonal = () => {
   }, [isEditing]);
 
   const validateForm = () => {
-    // No existing keys for these validation messages, leaving as-is.
+    // Required fields: DOB, Gender, Country, State, Zip Code
+    // Optional fields: Address (streetAddress), Address2 (streetAddress2), Language
+
+    if (!dob.trim()) {
+      Alert.alert("Invalid Date of Birth", "Date of Birth is required.");
+      return false;
+    }
+
     const dobRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
-    if (!dobRegex.test(dob)) {
+    if (!dobRegex.test(dob.trim())) {
       Alert.alert("Invalid Date of Birth", "DOB should be in the format MM/DD/YYYY.");
       return false;
     }
-    return true;
-  };
 
-  const handleUpdateProfile = () => {
-    if (validateForm()) {
-      // You do have this key
-      Alert.alert("Success", t("PROFILE_UPDATE_SUCCESS"));
+    if (!gender.trim()) {
+      Alert.alert("Invalid Gender", "Gender is required.");
+      return false;
     }
+
+    if (!country.trim()) {
+      Alert.alert("Invalid Country", "Country is required.");
+      return false;
+    }
+
+    if (!state.trim()) {
+      Alert.alert("Invalid State", "State is required.");
+      return false;
+    }
+
+    if (!zipCode.trim()) {
+      Alert.alert("Invalid Zip Code", "Zip Code is required.");
+      return false;
+    }
+
+    return true;
   };
 
   const handleEdit = () => {
@@ -248,11 +295,37 @@ const EditPersonal = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    handleUpdateProfile();
-    setLanguageOpen(false);
-    setCountryOpen(false);
-    setIsEditing(false);
+  const handleSave = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    // Persist personal info to AsyncStorage (backend not yet available)
+    try {
+      const personalInfo = {
+        dob,
+        gender,
+        streetAddress,
+        streetAddress2,
+        country,
+        state,
+        zipCode,
+        language,
+      };
+      console.log("[EditPersonal] Saving to AsyncStorage:", JSON.stringify(personalInfo));
+      await AsyncStorage.setItem(PERSONAL_INFO_KEY, JSON.stringify(personalInfo));
+      // Verify the write by reading back immediately
+      const verify = await AsyncStorage.getItem(PERSONAL_INFO_KEY);
+      console.log("[EditPersonal] Verified saved data:", verify);
+
+      setLanguageOpen(false);
+      setCountryOpen(false);
+      setIsEditing(false);
+      Alert.alert("Success", t("PROFILE_UPDATE_SUCCESS"));
+    } catch (error) {
+      console.log("Failed to save personal info to storage:", error);
+      Alert.alert("Error", t("PROFILE_UPDATE_FAILED"));
+    }
   };
 
   const handleCancel = () => {

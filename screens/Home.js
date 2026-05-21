@@ -343,7 +343,31 @@ export default function Home({ signOut }) {
 
         <TouchableOpacity
           style={[styles.actionButton, { backgroundColor: "blue" }]}
-          onPress={() => navigation.navigate("UserRequest")}
+          onPress={async () => {
+            try {
+              const stored = await AsyncStorage.getItem("personal_info");
+              console.log("[Home] personal_info from AsyncStorage:", stored);
+              if (stored) {
+                const parsed = JSON.parse(stored);
+                console.log("[Home] Parsed personal_info:", JSON.stringify(parsed));
+                // Check that at least the mandatory fields are filled
+                const hasRequired = parsed.dob && parsed.gender && parsed.country;
+                console.log("[Home] Has required fields (dob, gender, country):", hasRequired);
+                if (hasRequired) {
+                  navigation.navigate("UserRequest");
+                  return;
+                }
+              }
+              // Personal info missing or incomplete — show alert
+              Alert.alert(t("DEAR_USER"), t("FILL_PERSONAL_INFO_MESSAGE"), [
+                { text: t("CANCEL"), style: "cancel" },
+                { text: t("OK"), onPress: () => navigation.navigate("EditPersonal") },
+              ]);
+            } catch (error) {
+              console.log("Failed to check personal info:", error);
+              navigation.navigate("UserRequest");
+            }
+          }}
         >
           <Icon name="add-outline" size={20} color="#fff" />
           <Text style={[styles.actionButtonText, { color: "#fff" }]}>
