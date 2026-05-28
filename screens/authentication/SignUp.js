@@ -8,11 +8,13 @@ import Spacer from '../../components/Spacer';
 import Input from '../../components/Input';
 import PhoneInput from '../../components/PhoneInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { colors } from '../../styles/theme';
+import { layout } from '../../styles/common';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 10,
@@ -24,7 +26,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   alertText: {
-    color: "red",
+    color: colors.error,
     marginHorizontal: "3%",
     marginTop: 6,
     width: "94%",
@@ -39,7 +41,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: "3%",
   },
-  // Name row
   nameRow: {
     flexDirection: "row",
     width: "100%",
@@ -51,7 +52,6 @@ const styles = StyleSheet.create({
   nameFieldRight: {
     width: "50%",
   },
-  // Full-width field wrapper
   fieldContainer: {
     width: "100%",
   },
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     marginHorizontal: "3%",
     marginVertical: "2%",
     borderWidth: 1,
-    borderColor: "lightgray",
+    borderColor: colors.border,
     borderRadius: 5,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     paddingRight: 12,
   },
   passwordInput: {
@@ -205,7 +205,6 @@ export default function SignUp({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* First / Last Name */}
       <View style={styles.nameRow}>
         <View style={styles.nameFieldLeft}>
           <View style={styles.textDescriptionContainer}>
@@ -221,7 +220,6 @@ export default function SignUp({ navigation }) {
         </View>
       </View>
 
-      {/* Email */}
       <View style={styles.fieldContainer}>
         <View style={styles.textDescriptionContainer}>
           <Text>{t("EMAIL")}</Text>
@@ -240,7 +238,6 @@ export default function SignUp({ navigation }) {
         {!emailValid && <Text style={styles.alertText}>{t("EMAIL_REQUIRED")}</Text>}
       </View>
 
-      {/* Phone */}
       <View style={styles.fieldContainer}>
         <View style={styles.textDescriptionContainer}>
           <Text>Phone Number</Text>
@@ -263,7 +260,6 @@ export default function SignUp({ navigation }) {
         {!isPhoneValid && <Text style={styles.alertText}>Invalid phone number.</Text>}
       </View>
 
-      {/* Zone */}
       <View style={styles.fieldContainer}>
         <View style={styles.textDescriptionContainer}>
           <Text>Zone</Text>
@@ -276,7 +272,6 @@ export default function SignUp({ navigation }) {
         />
       </View>
 
-      {/* Password */}
       <View style={styles.fieldContainer}>
         <View style={styles.textDescriptionContainer}>
           <Text>{t("PASSWORD")}</Text>
@@ -294,7 +289,7 @@ export default function SignUp({ navigation }) {
             style={styles.passwordInput}
           />
           <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword((v) => !v)}>
-            <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color="#777" />
+            <FontAwesome name={showPassword ? "eye-slash" : "eye"} size={20} color={colors.textMuted} />
           </TouchableOpacity>
         </View>
         {!passwordValid && (
@@ -302,7 +297,6 @@ export default function SignUp({ navigation }) {
         )}
       </View>
 
-      {/* Confirm Password */}
       <View style={styles.fieldContainer}>
         <View style={styles.textDescriptionContainer}>
           <Text>{t("CONFIRM_PASSWORD")}</Text>
@@ -317,7 +311,7 @@ export default function SignUp({ navigation }) {
             style={styles.passwordInput}
           />
           <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowRepeatPassword((v) => !v)}>
-            <FontAwesome name={showRepeatPassword ? "eye-slash" : "eye"} size={20} color="#777" />
+            <FontAwesome name={showRepeatPassword ? "eye-slash" : "eye"} size={20} color={colors.textMuted} />
           </TouchableOpacity>
         </View>
       </View>

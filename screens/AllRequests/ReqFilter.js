@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,13 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import { getCategories } from "../../services/requestServices";
+import { getCategories, getEnums } from "../../services/requestServices";
+import { colors } from "../../styles/theme";
+import { text as textStyles, pill, layout } from "../../styles/common";
 
 const { width } = Dimensions.get("window");
 
-const filterData = {
+const DEFAULT_FILTER_DATA = {
   requestFor: {
     "0": "SELF",
     "1": "OTHER",
@@ -70,7 +72,6 @@ function setCategoryChecked(filter, catName, checked) {
       subcategories: setAllChecked(next[catName].subcategories, checked),
     };
   } else {
-    // check subcategories
     Object.keys(next).forEach((key) => {
       next[key] = {
         ...next[key],
@@ -129,6 +130,22 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     currentFilters.selectedPriority || []
   );
   const [isResetClicked, setIsResetClicked] = useState(false);
+  const [enums, setEnums] = useState(null);
+
+  const filterData = useMemo(() => {
+    if (!enums) return DEFAULT_FILTER_DATA;
+
+    const requestStatus = Array.isArray(enums.requestStatus)
+      ? Object.fromEntries(enums.requestStatus.map((s) => [s, s]))
+      : enums.requestStatus || DEFAULT_FILTER_DATA.requestStatus;
+
+    return {
+      requestFor: enums.requestFor || DEFAULT_FILTER_DATA.requestFor,
+      requestPriority: enums.requestPriority || DEFAULT_FILTER_DATA.requestPriority,
+      requestStatus,
+      requestType: enums.requestType || DEFAULT_FILTER_DATA.requestType,
+    };
+  }, [enums]);
 
   const slideAnim = useRef(new Animated.Value(-width * 0.75)).current;
 
@@ -169,6 +186,18 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
       }
     }
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    async function fetchEnums() {
+      try {
+        const data = await getEnums();
+        setEnums(data);
+      } catch (error) {
+        console.log("Failed to fetch enums for filter:", error);
+      }
+    }
+    fetchEnums();
   }, []);
 
   const toggleStatus = (option) => {
@@ -281,84 +310,81 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     });
   };
 
+  const renderPills = (items, selected, onToggle) => (
+    <View style={layout.rowWrap}>
+      {items.map((item) => {
+        const isSelected = typeof selected === "function"
+          ? selected(item)
+          : selected.includes(item);
+        return (
+          <TouchableOpacity
+            key={item}
+            style={[
+              pill.base,
+              isSelected && pill.selected,
+            ]}
+            onPress={() => onToggle(item)}
+          >
+            <Text
+              style={[
+                pill.label,
+                isSelected && pill.labelSelected,
+              ]}
+            >
+              {item}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+
   const ListHeader = () => (
     <View>
       <TouchableOpacity onPress={resetFilter}>
         <Text style={styles.resetText}>Reset Filter</Text>
       </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>Status</Text>
-      <View style={styles.optionsContainer}>
-        {Object.keys(filterData.requestStatus).map((option) => (
-          <TouchableOpacity
-            key={option}
-            style={[
-              styles.optionButton,
-              option in filtersRef.current.requestStatus &&
-              styles.selectedOption,
-            ]}
-            onPress={() => toggleStatus(option)}
-          >
-            <Text
-              style={[
-                styles.optionText,
-                option in filtersRef.current.requestStatus &&
-                styles.selectedOptionText,
-              ]}
-            >
-              {filterData.requestStatus[option]}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <Text style={textStyles.sectionTitle}>Status</Text>
+      {renderPills(
+        Object.values(filterData.requestStatus),
+        (val) => Object.values(filtersRef.current.requestStatus).includes(val),
+        (val) => {
+          const key = Object.keys(filterData.requestStatus).find(
+            (k) => filterData.requestStatus[k] === val
+          );
+          if (key) toggleStatus(key);
+        }
+      )}
 
-      <Text style={styles.sectionTitle}>Priority</Text>
-      <View style={styles.optionsContainer}>
-        {["All", ...Object.keys(filterData.requestPriority).map((k) => filterData.requestPriority[k])].map((option) => (
-          <TouchableOpacity
-            key={option}
-            style={[
-              styles.optionButton,
-              (option === "All" && selectedPriority.length === 0) ||
-                selectedPriority.includes(option)
-                ? styles.selectedOption
-                : null,
-            ]}
-            onPress={() => togglePriority(option)}
-          >
-            <Text
-              style={[
-                styles.optionText,
-                (option === "All" && selectedPriority.length === 0) ||
-                  selectedPriority.includes(option)
-                  ? styles.selectedOptionText
-                  : null,
-              ]}
-            >
-              {option}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <Text style={[textStyles.sectionTitle, { marginTop: 10 }]}>Priority</Text>
+      {renderPills(
+        ["All", ...Object.values(filterData.requestPriority)],
+        (val) =>
+          val === "All"
+            ? selectedPriority.length === 0
+            : selectedPriority.includes(val),
+        (val) => togglePriority(val)
+      )}
 
-      <Text style={styles.sectionTitle}>Categories</Text>
+      <Text style={textStyles.sectionTitle}>Categories</Text>
       {categoriesLoading && (
-        <ActivityIndicator size="small" color="#007BFF" style={{ marginBottom: 10 }} />
+        <ActivityIndicator size="small" color={colors.accent} style={{ marginBottom: 10 }} />
       )}
     </View>
   );
 
   const ListFooter = () => (
     <View style={styles.footer}>
-      <TouchableOpacity
-        onPress={onClose}
-        style={styles.cancelButton}
-      >
-        <Text style={styles.cancelText}>Cancel</Text>
+      <TouchableOpacity onPress={onClose} style={styles.textButton}>
+        <Text style={styles.textButtonLabel}>Cancel</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={applyFilter} style={styles.doneButton}>
-        <Text style={styles.doneText}>Done</Text>
+      <TouchableOpacity
+        onPress={applyFilter}
+        style={[pill.base, pill.selected]}
+      >
+        <Text style={[pill.label, pill.labelSelected]}>Done</Text>
       </TouchableOpacity>
     </View>
   );
@@ -398,12 +424,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: colors.overlay,
   },
   drawerContainer: {
     width: width * 0.80,
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: colors.white,
     position: "absolute",
     left: 0,
     top: 0,
@@ -412,40 +438,10 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
   },
   resetText: {
-    color: "#007BFF",
+    color: colors.accent,
     textAlign: "center",
     marginBottom: 20,
     fontWeight: "600",
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#333",
-  },
-  optionsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    flexWrap: "wrap",
-  },
-  optionButton: {
-    backgroundColor: "#E0E0E0",
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginRight: 10,
-    marginBottom: 10,
-  },
-  optionText: {
-    color: "#000",
-    fontWeight: "600",
-  },
-  selectedOption: {
-    backgroundColor: "#007BFF",
-  },
-  selectedOptionText: {
-    color: "#FFF",
   },
   categoryRow: {
     flexDirection: "row",
@@ -458,7 +454,7 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     fontSize: 18,
-    color: "#007BFF",
+    color: colors.accent,
   },
   categoryLabel: {
     flex: 1,
@@ -475,7 +471,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     fontSize: 18,
-    color: "#007BFF",
+    color: colors.accent,
   },
   footer: {
     flexDirection: "row",
@@ -485,22 +481,12 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     marginTop: 20,
   },
-  cancelButton: {
+  textButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
-  cancelText: {
-    color: "#007BFF",
-    fontWeight: "600",
-  },
-  doneButton: {
-    backgroundColor: "#007BFF",
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  doneText: {
-    color: "#FFF",
+  textButtonLabel: {
+    color: colors.accent,
     fontWeight: "600",
   },
 });

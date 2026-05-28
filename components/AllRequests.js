@@ -1,12 +1,13 @@
 //import * as React from 'react';
 import React, { useEffect } from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
-import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
-import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons'
+import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { AntDesign, Ionicons } from '@expo/vector-icons'
 
 import { TextInput, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
+import { colors } from '../styles/theme';
 
 const AllRequests = ({ data }) => {
   const navigation = useNavigation();
@@ -16,21 +17,11 @@ const AllRequests = ({ data }) => {
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0]
   );
-  const [isVisible, setVisible] = React.useState(false);
-  const toggleVisibility = () => setVisible(!isVisible);
-  const [idBasic, setIdBasic] = React.useState();
-  const [status, setStatus] = React.useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
-  const [isDataBAck, setDataBack] = React.useState(false);
   const [filters, setFilters] = React.useState({ requestStatus: {}, requestPriority: {}, categoryFilter: {}, checkedCategories: [] });
   const [selectedPriority, setSelectedPriority] = React.useState([]);
   const [showFilter, setShowFilter] = React.useState(false);
-
-  /* const showModalBasic = (id, status, category) => {
-     toggleVisibility();
-     setIdBasic('' + id + '\nStatus: ' + status + '\nCategory: ' + category);
-   }*/
 
   const [items] = React.useState(data);
 
@@ -43,7 +34,6 @@ const AllRequests = ({ data }) => {
     setSelectedPriority(newFilters.selectedPriority || []);
     setShowFilter(false);
   };
-
 
   const handlePriorityPress = (level) => {
     if (level === "All") {
@@ -77,14 +67,9 @@ const AllRequests = ({ data }) => {
     setSearchQuery(text);
   };
 
-  /* React.useEffect(() => {
-     setPage(0);
-   }, [itemsPerPage]);*/
-
   useEffect(() => {
     let result = [...data];
 
-    // Search filter
     if (searchQuery) {
       result = result.filter(item =>
         item.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -93,14 +78,12 @@ const AllRequests = ({ data }) => {
       );
     }
 
-    // Request Status filter
     if (Object.keys(filters.requestStatus).length > 0) {
       result = result.filter(item =>
         Object.values(filters.requestStatus).includes(item.status)
       );
     }
 
-    // Request Priority filter from ReqFilter.js
     if (Object.keys(filters.requestPriority).length > 0) {
       result = result.filter(item =>
         Object.values(filters.requestPriority).includes(item.priority)
@@ -111,7 +94,6 @@ const AllRequests = ({ data }) => {
       result = result.filter((item) => selectedPriority.includes(item.priority));
     }
 
-    // Category filter
     if (filters.checkedCategories && filters.checkedCategories.length > 0) {
       result = result.filter(item =>
         filters.checkedCategories.includes(item.category)
@@ -138,7 +120,7 @@ const AllRequests = ({ data }) => {
           style={[styles.filterButton, styles.iconButton]}
           onPress={handleNavigate}
         >
-          <Ionicons name="options-outline" size={18} color="#4d4d4dff" />
+          <Ionicons name="options-outline" size={18} color={colors.chrome} />
         </TouchableOpacity>
 
         <View style={styles.verticalDivider} />
@@ -174,7 +156,7 @@ const AllRequests = ({ data }) => {
       </View>
       {showFilter && (
         <Modal visible={showFilter} animationType="slide" transparent={true}>
-          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <View style={{ flex: 1, backgroundColor: colors.overlay }}>
             <ReqFilter
               currentFilters={{ ...filters, selectedPriority }}
               onGoBack={handleFilterDone}
@@ -185,7 +167,6 @@ const AllRequests = ({ data }) => {
       )}
       <FlatList
         keyExtractor={(item) => item.id}
-        //data={data}
         data={filteredData}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.reqData} onPress={() => { navigation.navigate("RequestDetails", { item, reqTitle: item.id }) }}>
@@ -194,20 +175,7 @@ const AllRequests = ({ data }) => {
                 {" "}
                 Id : {item.id}{" "}
               </Text>
-
-              {/* <Text style={{ flex: 1, textAlign: "right" }}>
-                  <Octicons
-                    name="dot-fill"
-                    size={15}
-                    color={item.status === "Open" ? "orange" : "#aeb6bf"}
-                  />
-                  <Text> {item.status} </Text>
-                </Text> */}
-
             </View>
-            {/* <View>
-              <Text style={{ fontWeight: "350" }}> {item.category} </Text>
-            </View> */}
             <View style={{ flexDirection: "row" }}>
               <Text style={{ fontWeight: "400", fontSize: 17 }}>
                 {" "}
@@ -215,41 +183,22 @@ const AllRequests = ({ data }) => {
               </Text>
               <Text style={{ flex: 1, textAlign: "right" }}>
                 {" "}
-                <AntDesign name="right" size={15} color="black" />
+                <AntDesign name="right" size={15} color={colors.black} />
               </Text>
             </View>
 
             <View style={{ flexDirection: "row" }}>
               <Text>
                 {" "}
-                <AntDesign name="calendar" size={20} color="black" />{" "}
+                <AntDesign name="calendar" size={20} color={colors.black} />{" "}
                 {item.creationDate}{" "}
               </Text>
-              {/* <Text style={{ flex: 1, textAlign: "right" }}>
-                <TouchableOpacity
-                  style={{
-                    height: 20,
-                    width: 70,
-                    backgroundColor:
-                      item.priority === "High"
-                        ? "#7ba6c8"
-                        : item.priority === "Medium"
-                        ? "#796796"
-                        : "#d0d0e1",
-                    borderRadius: 17,
-                  }}
-                >
-                  <Text style={{ color: "white", alignSelf: "center" }}>
-                    {item.priority}
-                  </Text>
-                </TouchableOpacity>
-              </Text> */}
             </View>
 
             <View
               style={{
                 borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: "black",
+                borderBottomColor: colors.black,
                 marginTop: 5,
                 marginBottom: 5,
               }}
@@ -259,93 +208,30 @@ const AllRequests = ({ data }) => {
       />
     </View>
   );
-
-
 };
 
 const styles = StyleSheet.create({
   container: {
-    //width: '100%',
-    //alignContent:'center',
-    //flex: 1,
-    //justifyContent:'center'
     marginLeft: 5,
-    marginRight: 5
-  },
-  tabText: {
-    marginLeft: 24,
-    fontSize: 18,
-    //alignContent:'center',
-    //justifyContent:'center'
-  },
-  alert: {
-    width: '100%',
-    maxWidth: 300,
-    margin: 48,
-    elevation: 24,
-    borderRadius: 2,
-    backgroundColor: '#fff'
-  },
-  alertTitle: {
-    margin: 24,
-    fontWeight: "bold",
-    fontSize: 24,
-    color: "#000"
-  },
-  alertMessage: {
-    marginLeft: 24,
-    marginRight: 24,
-    marginBottom: 24,
-    fontSize: 16,
-    color: "#000"
-  },
-  alertButtonGroup: {
-    marginTop: 0,
-    marginRight: 0,
-    marginBottom: 8,
-    marginLeft: 24,
-    padding: 10,
-    display: "flex",
-    flexDirection: 'row',
-    justifyContent: "flex-end"
-  },
-  alertButton: {
-    marginTop: 12,
-    marginRight: 8,
-    width: 100
-  },
-  reqDataRow: {
-    //flex: .4,
-    flexDirection: 'row',
-    //columnGap: 50
+    marginRight: 5,
   },
   reqData: {
     width: '100%',
-    //height: 100,
     marginBottom: 2,
     borderRadius: 2,
-    backgroundColor: 'white'
-  },
-  priorityButton: {
-    marginTop: 5,
-    marginleft: 100,
-
+    backgroundColor: colors.white,
   },
   input: {
     fontSize: 15,
-    //marginLeft: 5,
     width: "98%",
     marginBottom: 20,
-    //borderWidth: 1,
-    //borderColor: 'lightgray',
     marginRight: 10,
-    height: 28
-
+    height: 28,
   },
 
   filterRow: {
     flexDirection: "row",
-    alignItems: "Left",
+    alignItems: "flex-start",
     justifyContent: "flex-start",
     marginBottom: 10,
     marginTop: 5,
@@ -360,12 +246,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 18,
     borderWidth: 1.5,
-    borderColor: "#4d4d4dff",
-    borderRadius: 25, // pill shape
-    backgroundColor: "white",
-    flexDirection: "row",
-    marginHorizontal: 6,
-    alignItems: "center", // vertical centering
+    borderColor: colors.chrome,
+    borderRadius: 25,
+    backgroundColor: colors.white,
+    alignItems: "center",
     justifyContent: "center",
   },
 
@@ -376,26 +260,24 @@ const styles = StyleSheet.create({
   verticalDivider: {
     width: 1.2,
     height: 40,
-    backgroundColor: "#626262ff",
+    backgroundColor: colors.chromeDivider,
     marginHorizontal: 8,
   },
 
   selectedButton: {
-    backgroundColor: "#4d4d4dff",
-    borderColor: "#4d4d4dff",
+    backgroundColor: colors.chrome,
+    borderColor: colors.chrome,
   },
 
   filterText: {
-    color: "#4d4d4dff",
+    color: colors.chrome,
     fontSize: 13,
     fontWeight: "500",
     textAlign: "center",
-    textAlignVertical: "center", // vertical centering (mainly for Android)
-    alignSelf: "center",         // ensure the text itself stays centered in the parent
   },
 
   selectedText: {
-    color: "white",
+    color: colors.white,
     fontWeight: "600",
   },
 });
