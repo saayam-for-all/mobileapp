@@ -1,7 +1,7 @@
 //import * as React from 'react';
 import React, { useEffect } from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
-import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Modal, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { AntDesign, Ionicons, Octicons } from '@expo/vector-icons'
 
 import { TextInput, } from 'react-native-paper';
@@ -23,7 +23,7 @@ const AllRequests = ({ data }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
   const [isDataBAck, setDataBack] = React.useState(false);
-  const [filters, setFilters] = React.useState({ requestStatus: {}, requestPriority: {}, selectedCategories: [], selectedSubCategories: [] });
+  const [filters, setFilters] = React.useState({ requestStatus: {}, requestPriority: {}, categoryFilter: {}, checkedCategories: [] });
   const [selectedPriority, setSelectedPriority] = React.useState([]);
   const [showFilter, setShowFilter] = React.useState(false);
 
@@ -112,9 +112,9 @@ const AllRequests = ({ data }) => {
     }
 
     // Category filter
-    if (filters.selectedCategories.length > 0) {
+    if (filters.checkedCategories && filters.checkedCategories.length > 0) {
       result = result.filter(item =>
-        filters.selectedCategories.includes(item.category)
+        filters.checkedCategories.includes(item.category)
       );
     }
 
@@ -143,31 +143,33 @@ const AllRequests = ({ data }) => {
 
         <View style={styles.verticalDivider} />
 
-        {["All", "Low", "Medium", "High"].map((level) => (
-          <TouchableOpacity
-            key={level}
-            style={[
-              styles.filterButton,
-              (level === "All" && selectedPriority.length === 0) ||
-                selectedPriority.includes(level)
-                ? styles.selectedButton
-                : null,
-            ]}
-            onPress={() => handlePriorityPress(level)}
-          >
-            <Text
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.priorityScroll}>
+          {["All", "LOW", "MEDIUM", "HIGH", "CRITICAL"].map((level) => (
+            <TouchableOpacity
+              key={level}
               style={[
-                styles.filterText,
+                styles.filterButton,
                 (level === "All" && selectedPriority.length === 0) ||
                   selectedPriority.includes(level)
-                  ? styles.selectedText
+                  ? styles.selectedButton
                   : null,
               ]}
+              onPress={() => handlePriorityPress(level)}
             >
-              {level}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                style={[
+                  styles.filterText,
+                  (level === "All" && selectedPriority.length === 0) ||
+                    selectedPriority.includes(level)
+                    ? styles.selectedText
+                    : null,
+                ]}
+              >
+                {level}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
 
       </View>
       {showFilter && (
@@ -276,19 +278,6 @@ const styles = StyleSheet.create({
     //alignContent:'center',
     //justifyContent:'center'
   },
-  modalContainer: {
-    backgroundColor: "#ccc",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    position: 'absolute',
-  },
-  modalView: {
-    flex: 1,
-    alignContent: 'center',
-    justifyContent: 'center'
-  },
   alert: {
     width: '100%',
     maxWidth: 300,
@@ -360,6 +349,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginBottom: 10,
     marginTop: 5,
+  },
+
+  priorityScroll: {
+    flexShrink: 1,
   },
 
   filterButton: {

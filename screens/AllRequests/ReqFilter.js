@@ -4,78 +4,132 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
-  FlatList,
   Animated,
   Dimensions,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
+import { getCategories } from "../../services/requestServices";
 
 const { width } = Dimensions.get("window");
 
-// Filter from Backend (to be implemented later)
-// {
-//     "requestFor": {
-//         "0": "SELF",
-//         "1": "OTHER"
-//     },
-//     "requestPriority": {
-//         "0": "LOW",
-//         "1": "MEDIUM",
-//         "2": "HIGH",
-//         "3": "CRITICAL"
-//     },
-//     "requestStatus": {
-//         "0": "CREATED",
-//         "1": "MATCHING VOLUNTEER",
-//         "2": "MANAGED",
-//         "3": "CLOSED",
-//         "4": "CANCELLED",
-//         "5": "DELETED"
-//     },
-//     "requestType": {
-//         "0": "INPERSON",
-//         "1": "HYBRID"
-//     }
-// }
-
-// categories = {
-//   "catId": {catName: "Category Name", subCategories: [{catName: "SubCategoryName", catId: "catId"}, ...]},
-//   ...
-// }
-
-// mock data
 const filterData = {
   requestFor: {
-    "0": "Self",
-    "1": "Other",
+    "0": "SELF",
+    "1": "OTHER",
   },
   requestPriority: {
-    "0": "Low",
-    "1": "Medium",
-    "2": "High",
+    "0": "LOW",
+    "1": "MEDIUM",
+    "2": "HIGH",
+    "3": "CRITICAL",
   },
   requestStatus: {
-    "0": "Open",
-    "1": "Close",
+    "0": "CREATED",
+    "1": "MATCHING VOLUNTEER",
+    "2": "MANAGED",
+    "3": "CLOSED",
+    "4": "CANCELLED",
+    "5": "DELETED",
   },
   requestType: {
-    "0": "Personal",
-    "1": "Hybrid",
+    "0": "INPERSON",
+    "1": "HYBRID",
   },
 };
+
+function buildCategoryFilter(categories) {
+  const filter = {};
+  (categories || []).forEach((cat) => {
+    filter[cat.catName] = {
+      checked: false,
+      subcategories: buildCategoryFilter(cat.subCategories || []),
+    };
+  });
+  return filter;
+}
+
+function getCheckedCategoryNames(filter) {
+  const names = [];
+  Object.entries(filter).forEach(([name, state]) => {
+    if (state.checked) {
+      names.push(name);
+    }
+    const childNames = getCheckedCategoryNames(state.subcategories);
+    names.push(...childNames);
+  });
+  return names;
+}
+
+function setCategoryChecked(filter, catName, checked) {
+  const next = { ...filter };
+  if (next[catName]) {
+    next[catName] = {
+      ...next[catName],
+      checked,
+      subcategories: setAllChecked(next[catName].subcategories, checked),
+    };
+  } else {
+    // check subcategories
+    Object.keys(next).forEach((key) => {
+      next[key] = {
+        ...next[key],
+        subcategories: setCategoryChecked(next[key].subcategories, catName, checked),
+      };
+    });
+  }
+  return next;
+}
+
+function setAllChecked(filter, checked) {
+  const next = {};
+  Object.entries(filter).forEach(([name, state]) => {
+    next[name] = {
+      ...state,
+      checked,
+      subcategories: setAllChecked(state.subcategories, checked),
+    };
+  });
+  return next;
+}
+
+function getCategoryState(filter, catName) {
+  for (const [name, state] of Object.entries(filter)) {
+    if (name === catName) {
+      const childNames = getCheckedCategoryNames(state.subcategories);
+      const totalChildren = countAll(state.subcategories);
+      if (state.checked && childNames.length === totalChildren) return "checked";
+      if (!state.checked && childNames.length === 0) return "unchecked";
+      return "indeterminate";
+    }
+    const found = getCategoryState(state.subcategories, catName);
+    if (found) return found;
+  }
+  return null;
+}
+
+function countAll(filter) {
+  let count = 0;
+  Object.entries(filter).forEach(([, state]) => {
+    count += 1 + countAll(state.subcategories);
+  });
+  return count;
+}
 
 const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
   const filtersRef = useRef({ ...currentFilters });
   const [, updateStyle] = useState(0);
-  const [selectedCategories, setSelectedCategories] = useState([]); // Track selected categories
-  const [selectedSubCategories, setSelectedSubCategories] = useState([]); // Track selected subcategories
-  const [expandedCategory, setExpandedCategory] = useState(null); // Track which category is expanded
+  const [categories, setCategories] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [categoryFilter, setCategoryFilter] = useState(
+    currentFilters.categoryFilter || {}
+  );
+  const [expandedCategories, setExpandedCategories] = useState({});
   const [selectedPriority, setSelectedPriority] = useState(
-    currentFilters.selectedPriority || [] // Sync on mount
+    currentFilters.selectedPriority || []
   );
   const [isResetClicked, setIsResetClicked] = useState(false);
 
-  // Animation setup
   const slideAnim = useRef(new Animated.Value(-width * 0.75)).current;
 
   useEffect(() => {
@@ -86,6 +140,37 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     }).start();
   }, []);
 
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const data = await getCategories();
+        let arr;
+        if (Array.isArray(data)) {
+          arr = data;
+        } else if (data && Array.isArray(data.categories)) {
+          arr = data.categories;
+        } else {
+          arr = [];
+        }
+        const valid = arr.filter(
+          (cat) =>
+            cat.catName &&
+            cat.catName !== "cat_name" &&
+            cat.catId !== "cat_id"
+        );
+        setCategories(valid);
+        if (Object.keys(categoryFilter).length === 0) {
+          setCategoryFilter(buildCategoryFilter(valid));
+        }
+      } catch (error) {
+        console.log("Failed to fetch categories for filter:", error);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    }
+    fetchCategories();
+  }, []);
+
   const toggleStatus = (option) => {
     if (option in filtersRef.current.requestStatus) {
       delete filtersRef.current.requestStatus[option];
@@ -93,8 +178,9 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
       filtersRef.current.requestStatus[option] =
         filterData.requestStatus[option];
     }
-    updateStyle((s) => s + 1); // Force re-render
+    updateStyle((s) => s + 1);
   };
+
   const togglePriority = (option) => {
     if (option === "All") {
       setSelectedPriority([]);
@@ -107,173 +193,94 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
       if (selectedPriority.length < 2) {
         setSelectedPriority([...selectedPriority, option]);
       } else {
-        setSelectedPriority([]); // reset to All
+        setSelectedPriority([]);
       }
     }
   };
 
-  const toggleCategory = (category) => {
-    // Inline expansion instead of modal
-    if (expandedCategory === category.name) {
-      setExpandedCategory(null);
-    } else {
-      setExpandedCategory(category.name);
-    }
-
-    setSelectedCategories((prevState) => {
-      if (!prevState.includes(category.name)) {
-        return [...prevState, category.name];
-      }
-      return prevState;
+  const handleCategoryCheck = (catName) => {
+    setCategoryFilter((prev) => {
+      const current = getCategoryState(prev, catName);
+      const newChecked = current !== "checked";
+      return setCategoryChecked(prev, catName, newChecked);
     });
   };
 
-  const toggleSubCategory = (subCategory) => {
-    setSelectedSubCategories((prev) =>
-      prev.includes(subCategory)
-        ? prev.filter((item) => item !== subCategory)
-        : [...prev, subCategory]
-    );
+  const toggleExpanded = (catName) => {
+    setExpandedCategories((prev) => ({
+      ...prev,
+      [catName]: !prev[catName],
+    }));
   };
 
   const resetFilter = () => {
     filtersRef.current = {
       requestStatus: {},
       requestPriority: {},
-      selectedCategories: [],
-      selectedSubCategories: [],
     };
-    setSelectedCategories([]);
-    setSelectedSubCategories([]);
-    setExpandedCategory(null);
+    setCategoryFilter(buildCategoryFilter(categories));
+    setExpandedCategories({});
     setSelectedPriority([]);
     setIsResetClicked(true);
     updateStyle((s) => s + 1);
   };
 
   const applyFilter = () => {
-    if (isResetClicked) {
-      Alert.alert("Filters Reset", "Filters have been reset to default");
-      setIsResetClicked(false); // reset the flag
-    } else {
-      Alert.alert(
-        "Filters Applied",
-        `Status: ${Object.values(filtersRef.current.requestStatus).join(
-          ", "
-        )}\nCategories: ${selectedCategories.join(
-          ", "
-        )}\nSubCategories: ${selectedSubCategories.join(", ")}\nPriority: ${selectedPriority.length > 0 ? selectedPriority.join(", ") : "All"
-        }`
-      );
-    }
-    filtersRef.current.selectedCategories = selectedCategories;
-    filtersRef.current.selectedSubCategories = selectedSubCategories;
+    const checkedCategories = getCheckedCategoryNames(categoryFilter);
+    filtersRef.current.categoryFilter = categoryFilter;
+    filtersRef.current.checkedCategories = checkedCategories;
     filtersRef.current.selectedPriority = selectedPriority;
     onGoBack(filtersRef.current);
     onClose && onClose();
   };
 
-  const categories = [
-    {
-      name: "Logistics",
-      subCategories: [
-        "Logistics 1",
-        "Logistics 2",
-        "Logistics 3",
-        "Logistics 4",
-        "Logistics 5",
-        "Logistics 6",
-      ],
-    },
-    {
-      name: "Maintenance",
-      subCategories: [
-        "Maintenance 1",
-        "Maintenance 2",
-        "Maintenance 3",
-        "Maintenance 4",
-        "Maintenance 5",
-        "Maintenance 6",
-      ],
-    },
-    {
-      name: "Education",
-      subCategories: [
-        "Education 1",
-        "Education 2",
-        "Education 3",
-        "Education 4",
-        "Education 5",
-        "Education 6",
-      ],
-    },
-    {
-      name: "Electronics",
-      subCategories: [
-        "Electronics 1",
-        "Electronics 2",
-        "Electronics 3",
-        "Electronics 4",
-        "Electronics 5",
-        "Electronics 6",
-      ],
-    },
-    {
-      name: "Health",
-      subCategories: [
-        "Health 1",
-        "Health 2",
-        "Health 3",
-        "Health 4",
-        "Health 5",
-        "Health 6",
-      ],
-    },
-    {
-      name: "Essentials",
-      subCategories: [
-        "Essentials 1",
-        "Essentials 2",
-        "Essentials 3",
-        "Essentials 4",
-        "Essentials 5",
-        "Essentials 6",
-      ],
-    },
-  ];
+  const renderCheckbox = (state) => {
+    if (state === "checked") {
+      return <Text style={styles.checkbox}>☑</Text>;
+    }
+    if (state === "indeterminate") {
+      return <Text style={styles.checkbox}>☒</Text>;
+    }
+    return <Text style={styles.checkbox}>☐</Text>;
+  };
 
-  const renderCategory = ({ item }) => (
-    <View>
-      <TouchableOpacity
-        style={styles.categoryContainer}
-        onPress={() => toggleCategory(item)}
-      >
-        <Text style={styles.categoryText}>{item.name}</Text>
-        <Text style={styles.arrow}>
-          {expandedCategory === item.name ? "⌃" : "›"}
-        </Text>
-      </TouchableOpacity>
+  const renderCategoryTree = (cats, depth = 0) => {
+    return cats.map((cat) => {
+      const catState = getCategoryState(categoryFilter, cat.catName) || "unchecked";
+      const hasChildren = cat.subCategories && cat.subCategories.length > 0;
+      const isExpanded = expandedCategories[cat.catName];
 
-      {expandedCategory === item.name && (
-        <View style={styles.subCategoryList}>
-          {item.subCategories.map((sub) => (
+      return (
+        <View key={cat.catName || cat.catId}>
+          <View style={[styles.categoryRow, { paddingLeft: depth * 16 }]}>
             <TouchableOpacity
-              key={sub}
-              style={styles.subCategoryContainer}
-              onPress={() => toggleSubCategory(sub)}
+              style={styles.checkboxArea}
+              onPress={() => handleCategoryCheck(cat.catName)}
             >
-              <Text style={styles.subCategoryText}>{sub}</Text>
-              {selectedSubCategories.includes(sub) && (
-                <Text style={styles.tick}>✓</Text>
+              {renderCheckbox(catState)}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.categoryLabel}
+              onPress={() => hasChildren && toggleExpanded(cat.catName)}
+            >
+              <Text style={styles.categoryText}>{cat.catName}</Text>
+              {hasChildren && (
+                <Text style={styles.arrow}>
+                  {isExpanded ? "⌃" : "›"}
+                </Text>
               )}
             </TouchableOpacity>
-          ))}
+          </View>
+          {hasChildren && isExpanded && (
+            <View style={styles.subCategoryList}>
+              {renderCategoryTree(cat.subCategories, depth + 1)}
+            </View>
+          )}
         </View>
-      )}
-    </View>
-  );
+      );
+    });
+  };
 
-  // Header content for FlatList
   const ListHeader = () => (
     <View>
       <TouchableOpacity onPress={resetFilter}>
@@ -335,10 +342,12 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
       </View>
 
       <Text style={styles.sectionTitle}>Categories</Text>
+      {categoriesLoading && (
+        <ActivityIndicator size="small" color="#007BFF" style={{ marginBottom: 10 }} />
+      )}
     </View>
   );
 
-  // Footer content for FlatList
   const ListFooter = () => (
     <View style={styles.footer}>
       <TouchableOpacity
@@ -356,14 +365,12 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Semi-transparent overlay */}
       <TouchableOpacity
         style={styles.overlay}
         activeOpacity={1}
         onPress={onClose}
       />
 
-      {/* Drawer container */}
       <Animated.View
         style={[
           styles.drawerContainer,
@@ -371,9 +378,11 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
         ]}
       >
         <FlatList
-          data={categories}
-          keyExtractor={(item) => item.name}
-          renderItem={renderCategory}
+          data={[{ key: "categories" }]}
+          keyExtractor={(item) => item.key}
+          renderItem={() => (
+            <View>{renderCategoryTree(categories)}</View>
+          )}
           ListHeaderComponent={ListHeader}
           ListFooterComponent={ListFooter}
         />
@@ -438,37 +447,33 @@ const styles = StyleSheet.create({
   selectedOptionText: {
     color: "#FFF",
   },
-  categoryContainer: {
+  categoryRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: "#E0E0E0",
-    borderRadius: 8,
-    marginVertical: 5,
-  },
-  subCategoryList: {
-    marginLeft: 12,
-    marginBottom: 10,
-    backgroundColor: "#f2f2f2",
-    borderRadius: 8,
-  },
-  subCategoryContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingLeft: 4,
   },
-  subCategoryText: {
-    fontSize: 15,
-    color: "#333",
+  checkboxArea: {
+    paddingRight: 8,
   },
-  arrow: {
+  checkbox: {
     fontSize: 18,
     color: "#007BFF",
   },
-  tick: {
+  categoryLabel: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  categoryText: {
+    fontSize: 15,
+    color: "#333",
+  },
+  subCategoryList: {
+    marginLeft: 8,
+  },
+  arrow: {
     fontSize: 18,
     color: "#007BFF",
   },
