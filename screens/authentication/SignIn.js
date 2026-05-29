@@ -19,13 +19,15 @@ import Spacer from "../../components/Spacer";
 import Input from "../../components/Input";
 import { FontAwesome } from '@expo/vector-icons';
 import { useTranslation } from "react-i18next";
+import { colors, fontSize, borderRadius } from "../../styles/theme";
+import { layout, text as textStyles } from "../../styles/common";
 
 const CREDENTIALS_KEY = "saayam_credentials";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 60,
@@ -40,77 +42,82 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 8,
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
     paddingHorizontal: 15,
     marginVertical: 10,
-    backgroundColor: "#F9FAFB",
-    fontSize: 16,
+    backgroundColor: colors.surface,
+    fontSize: fontSize.lg,
   },
   button: {
-    backgroundColor: "#3B82F6",
+    backgroundColor: colors.primary,
     width: "100%",
     height: 50,
-    borderRadius: 8,
+    borderRadius: borderRadius.md,
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 10,
   },
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
+    color: colors.white,
+    fontSize: fontSize.lg,
     fontWeight: "600",
   },
   forgotPassword: {
-    color: "#6B7280",
-    fontSize: 14,
+    color: colors.textSecondary,
+    fontSize: fontSize.md,
     marginTop: 10,
     textDecorationLine: "underline",
   },
   orText: {
-    color: "#6B7280",
-    fontSize: 14,
+    color: colors.textSecondary,
+    fontSize: fontSize.md,
     marginVertical: 15,
+  },
+  textDescriptionContainer: {
+    marginTop: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   socialButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
   },
-  textDescriptionontainer: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
   socialButton: {
     width: "45%",
     height: 50,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 8,
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
   },
   socialIcon: {
     marginRight: 10,
   },
   signupText: {
-    fontSize: 14,
-    color: "#6B7280",
+    fontSize: fontSize.md,
+    color: colors.textSecondary,
   },
   signupLink: {
-    color: "#3B82F6",
+    color: colors.primary,
     textDecorationLine: "underline",
   },
   alertText: {
-    color: "red",
+    color: colors.error,
     marginHorizontal: "3%",
     width: "94%",
     marginBottom: 20,
     marginLeft: 5,
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.textSecondary,
   },
 });
 
@@ -219,12 +226,11 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       try {
         const { isSignedIn, nextStep } = await amplifySignIn({
           username: emailToUse,
-          password: passwordToUse
+          password: passwordToUse,
         });
 
         setLoading(false);
 
-        // On successful sign-in, offer to save credentials if not already saved
         if (shouldPromptSave && Platform.OS === 'ios' && biometricAvailable && !hasStoredCredentials) {
           Alert.alert(
             tCommon("SAVE_PASSWORD") || "Save Password?",
@@ -258,7 +264,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
             console.log("User not confirmed");
             navigation.navigate("Confirmation", {
               email: emailToUse,
-              fromSignIn: true
+              fromSignIn: true,
             });
           }
           if (err.message) {
@@ -267,7 +273,6 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         }
       }
     } else {
-      // auth.json doesn’t have ERROR_PROVIDE_EMAIL_PASSWORD, so use existing keys:
       setErrorMessage(`${t("EMAIL_REQUIRED")} / ${t("PASSWORD_REQUIRED")}`);
     }
   };
@@ -280,7 +285,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
     <View style={styles.container}>
       <Image source={require("../../assets/saayamforall.jpeg")} style={styles.logo} />
 
-      <View style={styles.textDescriptionontainer}>
+      <View style={styles.textDescriptionContainer}>
         <Text>{t("EMAIL")}</Text>
         <Spacer size={20} />
       </View>
@@ -296,7 +301,7 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         autoFocus={!hasStoredCredentials}
       />
 
-      <View style={styles.textDescriptionontainer}>
+      <View style={styles.textDescriptionContainer}>
         <Text>{t("PASSWORD")}</Text>
         <Spacer size={20} />
       </View>
@@ -324,9 +329,13 @@ export default function SignIn({ navigation, signIn: signInCb }) {
           }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <FontAwesome name={showPassword ? 'eye-slash' : 'eye'} size={20} color="#777" />
-        </TouchableOpacity >
-      </View >
+          <FontAwesome
+            name={showPassword ? 'eye-slash' : 'eye'}
+            size={20}
+            color={colors.textMuted}
+          />
+        </TouchableOpacity>
+      </View>
 
       <Text
         style={[styles.forgotPassword, { textAlign: "left", alignSelf: "flex-start" }]}
@@ -351,21 +360,18 @@ export default function SignIn({ navigation, signIn: signInCb }) {
         <Text style={styles.alertText}>
           {errorMessage}
         </Text>
-    )
-  }
+      )}
 
-  { !!errorMessage && <Text style={styles.alertText}>{errorMessage}</Text> }
+      {!!errorMessage && <Text style={styles.alertText}>{errorMessage}</Text>}
 
       <Spacer size={40} />
 
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <View style={{ flex: 1, height: 1, backgroundColor: "#6B7280" }} />
-        <View>
-          <Text style={{ width: 70, textAlign: "center", ...styles.orText }}>
-            {tCommon("OR_WITH")}
-          </Text>
-        </View>
-        <View style={{ flex: 1, height: 1, backgroundColor: "#6B7280" }} />
+      <View style={layout.row}>
+        <View style={styles.separatorLine} />
+        <Text style={[styles.orText, { width: 70, textAlign: "center" }]}>
+          {tCommon("OR_WITH")}
+        </Text>
+        <View style={styles.separatorLine} />
       </View>
       <View style={styles.socialButtonsContainer}>
         <TouchableOpacity style={styles.socialButton}>
@@ -388,15 +394,15 @@ export default function SignIn({ navigation, signIn: signInCb }) {
       <Spacer size={40} />
 
       <Text style={styles.signupText}>
-        { t("NONE_ACCOUNT") }{" "}
-    <Text
-      style={styles.signupLink}
-      onPress={() => navigation.navigate("SignUp")}
-    >
-      {t("SIGNUP")}
-    </Text>
-  </Text>
-    </View >
+        {t("NONE_ACCOUNT")}{" "}
+        <Text
+          style={styles.signupLink}
+          onPress={() => navigation.navigate("SignUp")}
+        >
+          {t("SIGNUP")}
+        </Text>
+      </Text>
+    </View>
   );
 }
 

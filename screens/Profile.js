@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome, Ionicons } from "@expo/vector-icons"; // Using vector icons
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import api from "../services/api";
 import ProfileImage from "./ProfileImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,10 +20,12 @@ import useAuthUser from "../hooks/useAuthUser";
 import { fetchProfileImage } from "../services/volunteerServices";
 import { blobToBase64 } from "../utils/blobToBase64";
 import { useTranslation } from "react-i18next";
+import { colors, fontSize, borderRadius } from "../styles/theme";
+import { layout } from "../styles/common";
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     padding: 20,
   },
   header: {
@@ -33,22 +35,22 @@ const styles = StyleSheet.create({
   userImage: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: borderRadius.full,
     marginBottom: 10,
   },
   userName: {
-    fontSize: 24,
+    fontSize: fontSize.title,
     fontWeight: "bold",
     marginBottom: 5,
   },
   userEmail: {
-    fontSize: 16,
-    color: "#777",
+    fontSize: fontSize.lg,
+    color: colors.textMuted,
     marginBottom: 10,
   },
   userCountry: {
-    fontSize: 16,
-    color: "#777",
+    fontSize: fontSize.lg,
+    color: colors.textMuted,
     marginBottom: 20,
   },
   optionRow: {
@@ -57,10 +59,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderColor: "#ddd",
+    borderColor: colors.borderLight,
   },
   optionText: {
-    fontSize: 16,
+    fontSize: fontSize.lg,
     fontWeight: "bold",
     marginLeft: 15,
     flex: 1,
@@ -70,14 +72,17 @@ const styles = StyleSheet.create({
   },
   signOutButton: {
     marginTop: 30,
-    backgroundColor: "#ff4444",
+    backgroundColor: colors.error,
     paddingVertical: 15,
-    borderRadius: 8,
+    borderRadius: borderRadius.md,
     alignItems: "center",
   },
   signOutButtonText: {
-    color: "#fff",
-    fontSize: 18,
+    color: colors.white,
+    fontSize: fontSize.xl,
+  },
+  chevron: {
+    marginRight: 15,
   },
 });
 
@@ -126,18 +131,16 @@ export default function Profile({ signOut }) {
 
   useEffect(() => {
     if (user) {
-        setUserName(
-          user.attributes.given_name + " " + user.attributes.family_name
-        );
-        setEmail(user.attributes.email);
-        setPhone(user.attributes.phone_number);
-        setCountry(user.attributes["custom:Country"]);
+      setUserName(
+        user.attributes.given_name + " " + user.attributes.family_name
+      );
+      setEmail(user.attributes.email);
+      setPhone(user.attributes.phone_number);
+      setCountry(user.attributes["custom:Country"]);
     }
-}, [user]);
+  }, [user]);
 
   const confirmSignOut = () => {
-    // NOTE: No matching translation keys exist for "Alert", "Are you sure you want to logout?",
-    // and the modal button labels "Cancel"/"Logout", so leaving as-is per your rule.
     Alert.alert(
       "Alert",
       "Are you sure you want to logout?",
@@ -157,32 +160,13 @@ export default function Profile({ signOut }) {
     );
   };
 
-  const getUser = async () => {
-      try {
-        const userAttributes = await fetchUserAttributes();
-        console.log(userAttributes);
-        setUserName(
-          userAttributes.given_name + " " + userAttributes.family_name
-        );
-        setEmail(userAttributes.email);
-        setPhone(userAttributes.phone_number);
-        setCountry(userAttributes["custom:Country"]);
-      } catch (err) {
-        //signOut();  // If error getting user then signout
-        Alert.alert( // show alert to signout
-              "Alert", // Title
-              "Session timeout. Please sign in again", // Message
-              [            
-                {
-                  text: "Logout",
-                  onPress: () => signOut(),
-                  style: "destructive", 
-                },
-              ],
-            );  
-        console.log("error from cognito : ", err);
-      }
-    };
+  const renderOption = (icon, label, onPress, right) => (
+    <TouchableOpacity style={styles.optionRow} onPress={onPress}>
+      <FontAwesome name={icon} size={20} style={styles.optionIcon} />
+      <Text style={styles.optionText}>{label}</Text>
+      {right || <Ionicons name="chevron-forward" size={20} color={colors.textMuted} style={styles.chevron} />}
+    </TouchableOpacity>
+  );
 
   return (
     <>
@@ -211,83 +195,15 @@ export default function Profile({ signOut }) {
           <Text style={styles.userCountry}>{country}</Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("EditProfile")}
-        >
-          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("EDIT")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("EditPersonal")}
-        >
-          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("PERSONAL_INFORMATION")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("IdentityDocument")}
-        >
-          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("IDENTITY_DOCUMENT")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("ChangePassword")}
-        >
-          <FontAwesome name="lock" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("CHANGE_PASSWORD")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("EditOrganization")}
-        >
-          <FontAwesome name="user-circle-o" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("ORGANIZATION_DETAILS")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate("Skills")}>
-          <FontAwesome name="tags" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("SKILLS")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("Availability")}
-        >
-          <FontAwesome name="calendar" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("AVAILABILITY")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("Preferences")}
-        >
-          <FontAwesome name="gear" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("PREFERENCES")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("AccountDeletion")}
-        >
-          <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("SIGN_OFF")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
+        {renderOption("user-circle-o", t("EDIT"), () => navigation.navigate("EditProfile"))}
+        {renderOption("user-circle-o", t("PERSONAL_INFORMATION"), () => navigation.navigate("EditPersonal"))}
+        {renderOption("user-circle-o", t("IDENTITY_DOCUMENT"), () => navigation.navigate("IdentityDocument"))}
+        {renderOption("lock", t("CHANGE_PASSWORD"), () => navigation.navigate("ChangePassword"))}
+        {renderOption("user-circle-o", t("ORGANIZATION_DETAILS"), () => navigation.navigate("EditOrganization"))}
+        {renderOption("tags", t("SKILLS"), () => navigation.navigate("Skills"))}
+        {renderOption("calendar", t("AVAILABILITY"), () => navigation.navigate("Availability"))}
+        {renderOption("gear", t("PREFERENCES"), () => navigation.navigate("Preferences"))}
+        {renderOption("sign-out", t("SIGN_OFF"), () => navigation.navigate("AccountDeletion"))}
 
         <View style={styles.optionRow}>
           <FontAwesome name="bell" size={20} style={styles.optionIcon} />
@@ -295,35 +211,10 @@ export default function Profile({ signOut }) {
           <Switch value={isNotificationsEnabled} onValueChange={setNotificationsEnabled} />
         </View>
 
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("TermsAndConditions")}
-        >
-          <FontAwesome name="file-text-o" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("TERMS_AND_CONDITIONS")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.optionRow}
-          onPress={() => navigation.navigate("PrivacyPolicy")}
-        >
-          <FontAwesome name="shield" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("PRIVACY_POLICY")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.optionRow} onPress={() => navigation.navigate("Welcome")}>
-          <FontAwesome name="info-circle" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("HELP_CENTER")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.optionRow} onPress={confirmSignOut}>
-          <FontAwesome name="sign-out" size={20} style={styles.optionIcon} />
-          <Text style={styles.optionText}>{t("LOGOUT")}</Text>
-          <Ionicons name="chevron-forward" size={20} color="#777" />
-        </TouchableOpacity>
+        {renderOption("file-text-o", t("TERMS_AND_CONDITIONS"), () => navigation.navigate("TermsAndConditions"))}
+        {renderOption("shield", t("PRIVACY_POLICY"), () => navigation.navigate("PrivacyPolicy"))}
+        {renderOption("info-circle", t("HELP_CENTER"), () => navigation.navigate("Welcome"))}
+        {renderOption("sign-out", t("LOGOUT"), confirmSignOut)}
       </ScrollView>
     </>
   );

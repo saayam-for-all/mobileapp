@@ -20,18 +20,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
 import api from "../services/api";
-//import { Dimensions } from 'react-native';
-//const { width, height } = Dimensions.get("window");
 import Ionicons from "@expo/vector-icons/Ionicons";
 import config from "../components/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated from "react-native-reanimated";
 import useAuthUser from "../hooks/useAuthUser";
+import { colors, borderRadius } from "../styles/theme";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     width: "100%",
     overflow: "scroll",
   },
@@ -42,10 +41,6 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  buttonStyle: {
-    width: config.deviceWidth / 3,
-    paddingTop: config.deviceHeight / 1.5,
   },
   logo: {
     width: 45,
@@ -58,7 +53,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: colors.black,
   },
   profileIcon: {
     width: 40,
@@ -71,11 +66,11 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 40,
-    borderColor: "#ddd",
+    borderColor: colors.borderLight,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: borderRadius.md,
     paddingHorizontal: 12,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: colors.surfaceAlt,
     marginLeft: 15,
     marginRight: 15,
     marginTop: 5,
@@ -85,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     borderTopWidth: 1,
-    borderColor: "#ddd",
+    borderColor: colors.borderLight,
     position: "absolute",
     bottom: 0,
   },
@@ -105,7 +100,7 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: " rgba(0,0,0,0.3)",
+    backgroundColor: colors.overlay,
     zIndex: 9998,
   },
   dropdownWrapper: {
@@ -115,9 +110,9 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   dropdownMenu: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    shadowColor: "#000",
+    backgroundColor: colors.white,
+    borderRadius: borderRadius.lg,
+    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
@@ -128,7 +123,7 @@ const styles = StyleSheet.create({
   buttonView: {
     width: "45%",
     paddingVertical: 20,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: colors.surfaceAlt,
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
@@ -140,7 +135,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#000",
+    color: colors.black,
     textAlign: "center",
   },
   actionButton: {
@@ -149,7 +144,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 15,
     backgroundColor: "#a9c9ff",
-    borderRadius: 8,
+    borderRadius: borderRadius.md,
     marginVertical: 10,
     marginLeft: 20,
     marginRight: 20,
@@ -166,22 +161,20 @@ const styles = StyleSheet.create({
 });
 
 export default function Home({ signOut }) {
-  const { t } = useTranslation("common"); // ✅ common.json
+  const { t } = useTranslation("common");
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
-  
+
   const user = useAuthUser();
   const [userRole, setUserRole] = useState("Beneficiary");
   const [showPicker, setShowPicker] = useState(false);
 
-  // ✅ store dashboard by key so it's language-independent
   const [selectedDashboardKey, setSelectedDashboardKey] = useState("VOLUNTEER_DASHBOARD");
-  // Make each an object with key and (string) as userRole
   const DASHBOARD_OPTIONS = [
     { option: "VOLUNTEER_DASHBOARD", role: "Volunteer" },
     { option: "BENEFICIARY_DASHBOARD", role: "Beneficiary" },
     { option: "ADMIN_DASHBOARD", role: "Admin" },
-    { option: "SUPER_ADMIN_DASHBOARD", role: "Admin" }
+    { option: "SUPER_ADMIN_DASHBOARD", role: "Admin" },
   ];
 
   const beneficiary = "Beneficiary";
@@ -194,30 +187,27 @@ export default function Home({ signOut }) {
       const session = await fetchAuthSession();
       const userGroup =
         session.tokens?.accessToken?.payload["cognito:groups"];
-      
-      let role = beneficiary; // default user role
+
+      let role = beneficiary;
       if (userGroup && userGroup.includes(volunteer)) {
         role = volunteer;
-      } 
-      else if (userGroup && userGroup.includes(steward)) {
+      } else if (userGroup && userGroup.includes(steward)) {
         role = steward;
-      } 
-      else if (userGroup && userGroup.includes(admin)) {
+      } else if (userGroup && userGroup.includes(admin)) {
         role = admin;
-      }
-      else {
+      } else {
         role = beneficiary;
       }
       setUserRole(role);
     } catch (error) {
       console.log("error getting group", error);
     }
-  }
+  };
+
   const getFirstTime = async (user) => {
     const username = user?.attributes?.email;
     if (!username) return;
 
-    // Will be stored in backend, for now just use AsyncStorage to track if user is first time, key: username, value: boolean
     AsyncStorage.getItem(username).then((item) => {
       const ft = JSON.parse(item) || false;
       console.log("First time check for user", username, "is", ft);
@@ -246,22 +236,20 @@ export default function Home({ signOut }) {
 
   return (
     <SafeAreaView style={[styles.container, { zIndex: 1 }]}>
-      {/* Top Bar */}
       <View style={styles.topBar}>
         <Image source={require("../assets/saayamforall.jpeg")} style={styles.logo} />
 
         <View style={{ position: "relative", zIndex: 9999 }}>
           <TouchableOpacity activeOpacity={0.7} onPress={() => setShowPicker((prev) => !prev)}>
-            <Ionicons name="build-outline" size={33} color="black" />
+            <Ionicons name="build-outline" size={33} color={colors.black} />
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
-          <Ionicons name="person-circle-outline" size={40} color="black" />
+          <Ionicons name="person-circle-outline" size={40} color={colors.black} />
         </TouchableOpacity>
       </View>
 
-      {/* Search Bar */}
       <View style={styles.searchBarContainer}>
         <TextInput
           style={styles.searchBar}
@@ -270,7 +258,6 @@ export default function Home({ signOut }) {
         />
       </View>
 
-      {/* Button Container */}
       <View style={styles.buttonContainer}>
         {selectedDashboardKey === "VOLUNTEER_DASHBOARD" ? (
           <TouchableOpacity
@@ -320,7 +307,6 @@ export default function Home({ signOut }) {
       </View>
 
       <View>
-        {/* Action Buttons */}
         {!(userRole == volunteer) && (
           <TouchableOpacity
             style={styles.actionButton}
@@ -342,7 +328,7 @@ export default function Home({ signOut }) {
         )}
 
         <TouchableOpacity
-          style={[styles.actionButton, { backgroundColor: "blue" }]}
+          style={[styles.actionButton, { backgroundColor: colors.primary }]}
           onPress={async () => {
             try {
               const stored = await AsyncStorage.getItem("personal_info");
@@ -350,7 +336,6 @@ export default function Home({ signOut }) {
               if (stored) {
                 const parsed = JSON.parse(stored);
                 console.log("[Home] Parsed personal_info:", JSON.stringify(parsed));
-                // Check that at least the mandatory fields are filled
                 const hasRequired = parsed.dob && parsed.gender && parsed.country;
                 console.log("[Home] Has required fields (dob, gender, country):", hasRequired);
                 if (hasRequired) {
@@ -358,7 +343,6 @@ export default function Home({ signOut }) {
                   return;
                 }
               }
-              // Personal info missing or incomplete — show alert
               Alert.alert(t("DEAR_USER"), t("FILL_PERSONAL_INFO_MESSAGE"), [
                 { text: t("CANCEL"), style: "cancel" },
                 { text: t("OK"), onPress: () => navigation.navigate("EditPersonal") },
@@ -369,15 +353,14 @@ export default function Home({ signOut }) {
             }
           }}
         >
-          <Icon name="add-outline" size={20} color="#fff" />
-          <Text style={[styles.actionButtonText, { color: "#fff" }]}>
+          <Icon name="add-outline" size={20} color={colors.white} />
+          <Text style={[styles.actionButtonText, { color: colors.white }]}>
             {" "}
             {t("CREATE_HELP_REQUEST")}
           </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Bottom Tab Bar */}
       <View style={styles.footer}>
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -469,14 +452,14 @@ export default function Home({ signOut }) {
                   <Feather
                     name="check"
                     size={25}
-                    color={selectedDashboardKey === key ? "#000000ff" : "transparent"}
+                    color={selectedDashboardKey === key ? colors.black : "transparent"}
                     style={{ marginRight: 10 }}
                   />
                   <Text style={selectedDashboardKey === key ? { fontWeight: "bold" } : null}>
                     {t(key)}
                   </Text>
                 </TouchableOpacity>
-              )
+              );
             })}
           </View>
         </Animated.View>
@@ -492,8 +475,6 @@ function HomeTabScreen() {
     </View>
   );
 }
-
-const Tab = createBottomTabNavigator();
 
 function DonateScreen() {
   return (

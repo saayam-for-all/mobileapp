@@ -19,6 +19,7 @@ import useAuthUser from '../../hooks/useAuthUser';
 
 import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../../services/requestServices';
 import { Tab, Tabs } from '../../components/Tabs';
+import { colors, borderRadius } from '../../styles/theme';
 
 const genderOptions = [
   { label: 'Select', value: 'Select' },
@@ -410,7 +411,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 </Text>
                 <View style={styles.labelIcons}>
                   <TouchableOpacity onPress={handleFilePick} style={styles.iconButton}>
-                    <Icon name="paperclip" size={18} color="#374151" />
+                    <Icon name="paperclip" size={18} color={colors.text} />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setIsRecorderVisible(true)}
@@ -419,7 +420,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                     <Icon
                       name="mic"
                       size={18}
-                      color={isRecorderVisible ? "#ef4444" : "#374151"}
+                      color={isRecorderVisible ? colors.error : colors.text}
                     />
                   </TouchableOpacity>
                 </View>
@@ -430,7 +431,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
                 {/* COUNTER — reflects all characters in the box (typed + transcript) */}
                 <Text style={[
                   styles.charCounterInside,
-                  descriptionLength >= 500 && { color: '#ef4444' },
+                  descriptionLength >= 500 && { color: colors.error },
                 ]}>
                   {descriptionLength} / 500
                 </Text>
@@ -671,10 +672,10 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     margin: 16,
     borderRadius: 8,
-    shadowColor: '#000',
+    shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -750,32 +751,32 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: colors.text,
   },
   input: {
-    borderColor: '#d1d5db',
+    borderColor: colors.borderLight,
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
-    backgroundColor: '#f9fafb',
-    color: '#374151',
+    backgroundColor: colors.surface,
+    color: colors.text,
     fontSize: 16,
   },
   textArea: {
-    borderColor: '#d1d5db',
+    borderColor: colors.borderLight,
     borderWidth: 1,
     borderRadius: 8,
     padding: 12,
     textAlignVertical: 'top',
-    backgroundColor: '#f9fafb',
-    color: '#374151',
+    backgroundColor: colors.surface,
+    color: colors.text,
     fontSize: 16,
     textAlign: Platform.OS === 'ios' ? 'justify' : 'left',
   },
   attachedFileText: {
     marginTop: 6,
     fontSize: 13,
-    color: '#374151',
+    color: colors.text,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -790,7 +791,7 @@ const styles = StyleSheet.create({
     top: 8,
     right: 12,
     fontSize: 12,
-    color: '#6b7280',
+    color: colors.textSecondary,
     fontWeight: '500',
     zIndex: 10,
   },
@@ -802,11 +803,11 @@ const pickerSelectStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: colors.borderLight,
     borderRadius: 8,
-    color: '#374151',
+    color: colors.text,
     paddingRight: 30,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.surface,
   },
   inputIOSContainer: {
     zIndex: 100,
@@ -816,10 +817,10 @@ const pickerSelectStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: colors.borderLight,
     borderRadius: 8,
-    color: '#374151',
+    color: colors.text,
     paddingRight: 30,
-    backgroundColor: '#f9fafb',
+    backgroundColor: colors.surface,
   },
 });
