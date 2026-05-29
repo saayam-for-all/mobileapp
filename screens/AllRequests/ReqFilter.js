@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Animated,
   Dimensions,
-  FlatList,
+  ScrollView,
   ActivityIndicator,
 } from "react-native";
 import { getCategories, getEnums } from "../../services/requestServices";
@@ -129,8 +129,21 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
   const [selectedPriority, setSelectedPriority] = useState(
     currentFilters.selectedPriority || []
   );
+  const [selectedType, setSelectedType] = useState(
+    currentFilters.selectedType || []
+  );
+  const [selectedCalamity, setSelectedCalamity] = useState(
+    currentFilters.selectedCalamity || []
+  );
   const [isResetClicked, setIsResetClicked] = useState(false);
   const [enums, setEnums] = useState(null);
+  const [expandedSections, setExpandedSections] = useState({
+    status: false,
+    priority: false,
+    type: false,
+    calamity: false,
+    categories: true,
+  });
 
   const filterData = useMemo(() => {
     if (!enums) return DEFAULT_FILTER_DATA;
@@ -227,6 +240,39 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     }
   };
 
+  const toggleType = (option) => {
+    if (option === "All") {
+      setSelectedType([]);
+      return;
+    }
+
+    if (selectedType.includes(option)) {
+      setSelectedType(selectedType.filter((t) => t !== option));
+    } else {
+      setSelectedType([...selectedType, option]);
+    }
+  };
+
+  const toggleCalamity = (option) => {
+    if (option === "All") {
+      setSelectedCalamity([]);
+      return;
+    }
+
+    if (selectedCalamity.includes(option)) {
+      setSelectedCalamity(selectedCalamity.filter((c) => c !== option));
+    } else {
+      setSelectedCalamity([option]);
+    }
+  };
+
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
   const handleCategoryCheck = (catName) => {
     setCategoryFilter((prev) => {
       const current = getCategoryState(prev, catName);
@@ -250,6 +296,9 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     setCategoryFilter(buildCategoryFilter(categories));
     setExpandedCategories({});
     setSelectedPriority([]);
+    setSelectedType([]);
+    setSelectedCalamity([]);
+    setExpandedSections({ status: false, priority: false, type: false, calamity: false, categories: true });
     setIsResetClicked(true);
     updateStyle((s) => s + 1);
   };
@@ -259,6 +308,8 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     filtersRef.current.categoryFilter = categoryFilter;
     filtersRef.current.checkedCategories = checkedCategories;
     filtersRef.current.selectedPriority = selectedPriority;
+    filtersRef.current.selectedType = selectedType;
+    filtersRef.current.selectedCalamity = selectedCalamity;
     onGoBack(filtersRef.current);
     onClose && onClose();
   };
@@ -339,56 +390,6 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
     </View>
   );
 
-  const ListHeader = () => (
-    <View>
-      <TouchableOpacity onPress={resetFilter}>
-        <Text style={styles.resetText}>Reset Filter</Text>
-      </TouchableOpacity>
-
-      <Text style={textStyles.sectionTitle}>Status</Text>
-      {renderPills(
-        Object.values(filterData.requestStatus),
-        (val) => Object.values(filtersRef.current.requestStatus).includes(val),
-        (val) => {
-          const key = Object.keys(filterData.requestStatus).find(
-            (k) => filterData.requestStatus[k] === val
-          );
-          if (key) toggleStatus(key);
-        }
-      )}
-
-      <Text style={[textStyles.sectionTitle, { marginTop: 10 }]}>Priority</Text>
-      {renderPills(
-        ["All", ...Object.values(filterData.requestPriority)],
-        (val) =>
-          val === "All"
-            ? selectedPriority.length === 0
-            : selectedPriority.includes(val),
-        (val) => togglePriority(val)
-      )}
-
-      <Text style={textStyles.sectionTitle}>Categories</Text>
-      {categoriesLoading && (
-        <ActivityIndicator size="small" color={colors.accent} style={{ marginBottom: 10 }} />
-      )}
-    </View>
-  );
-
-  const ListFooter = () => (
-    <View style={styles.footer}>
-      <TouchableOpacity onPress={onClose} style={styles.textButton}>
-        <Text style={styles.textButtonLabel}>Cancel</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={applyFilter}
-        style={[pill.base, pill.selected]}
-      >
-        <Text style={[pill.label, pill.labelSelected]}>Done</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   return (
     <View style={{ flex: 1 }}>
       <TouchableOpacity
@@ -403,15 +404,91 @@ const ReqFilter = ({ currentFilters, onGoBack, onClose }) => {
           { transform: [{ translateX: slideAnim }] },
         ]}
       >
-        <FlatList
-          data={[{ key: "categories" }]}
-          keyExtractor={(item) => item.key}
-          renderItem={() => (
-            <View>{renderCategoryTree(categories)}</View>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <TouchableOpacity style={styles.resetButton} onPress={resetFilter}>
+            <Text style={styles.resetText}>Reset Filter</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => toggleSection("status")} style={styles.sectionHeader}>
+            <Text style={textStyles.sectionTitle}>Status</Text>
+            <Text style={styles.sectionArrow}>{expandedSections.status ? "⌃" : "›"}</Text>
+          </TouchableOpacity>
+          {expandedSections.status &&
+            renderPills(
+              Object.values(filterData.requestStatus),
+              (val) => Object.values(filtersRef.current.requestStatus).includes(val),
+              (val) => {
+                const key = Object.keys(filterData.requestStatus).find(
+                  (k) => filterData.requestStatus[k] === val
+                );
+                if (key) toggleStatus(key);
+              }
+            )}
+
+          <TouchableOpacity onPress={() => toggleSection("priority")} style={[styles.sectionHeader, { marginTop: 10 }]}>
+            <Text style={textStyles.sectionTitle}>Priority</Text>
+            <Text style={styles.sectionArrow}>{expandedSections.priority ? "⌃" : "›"}</Text>
+          </TouchableOpacity>
+          {expandedSections.priority &&
+            renderPills(
+              ["All", ...Object.values(filterData.requestPriority)],
+              (val) =>
+                val === "All"
+                  ? selectedPriority.length === 0
+                  : selectedPriority.includes(val),
+              (val) => togglePriority(val)
+            )}
+
+          <TouchableOpacity onPress={() => toggleSection("type")} style={[styles.sectionHeader, { marginTop: 10 }]}>
+            <Text style={textStyles.sectionTitle}>Type</Text>
+            <Text style={styles.sectionArrow}>{expandedSections.type ? "⌃" : "›"}</Text>
+          </TouchableOpacity>
+          {expandedSections.type &&
+            renderPills(
+              ["All", ...Object.values(filterData.requestType)],
+              (val) =>
+                val === "All"
+                  ? selectedType.length === 0
+                  : selectedType.includes(val),
+              (val) => toggleType(val)
+            )}
+
+          <TouchableOpacity onPress={() => toggleSection("calamity")} style={[styles.sectionHeader, { marginTop: 10 }]}>
+            <Text style={textStyles.sectionTitle}>Calamity</Text>
+            <Text style={styles.sectionArrow}>{expandedSections.calamity ? "⌃" : "›"}</Text>
+          </TouchableOpacity>
+          {expandedSections.calamity &&
+            renderPills(
+              ["All", "Yes", "No"],
+              (val) =>
+                val === "All"
+                  ? selectedCalamity.length === 0
+                  : selectedCalamity.includes(val),
+              (val) => toggleCalamity(val)
+            )}
+
+          <TouchableOpacity onPress={() => toggleSection("categories")} style={[styles.sectionHeader, { marginTop: 10 }]}>
+            <Text style={textStyles.sectionTitle}>Categories</Text>
+            <Text style={styles.sectionArrow}>{expandedSections.categories ? "⌃" : "›"}</Text>
+          </TouchableOpacity>
+          {categoriesLoading && (
+            <ActivityIndicator size="small" color={colors.accent} style={{ marginBottom: 10 }} />
           )}
-          ListHeaderComponent={ListHeader}
-          ListFooterComponent={ListFooter}
-        />
+          {expandedSections.categories && renderCategoryTree(categories)}
+        </ScrollView>
+
+        <View style={styles.footer}>
+          <TouchableOpacity onPress={onClose} style={styles.textButton}>
+            <Text style={styles.textButtonLabel}>Cancel</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={applyFilter}
+            style={[pill.base, pill.selected]}
+          >
+            <Text style={[pill.label, pill.labelSelected]}>Done</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </View>
   );
@@ -437,11 +514,23 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
   },
+  resetButton: {
+    paddingTop: 40,
+  },
   resetText: {
     color: colors.accent,
     textAlign: "center",
     marginBottom: 20,
     fontWeight: "600",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  sectionArrow: {
+    fontSize: 16,
+    color: colors.accent,
   },
   categoryRow: {
     flexDirection: "row",

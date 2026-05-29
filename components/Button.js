@@ -1,32 +1,43 @@
 import React from 'react';
 import { Text, StyleSheet, ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { colors, borderRadius, fontSize } from '../styles/theme';
-import { layout } from '../styles/common';
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    padding: 10,
-    backgroundColor: colors.primaryDark,
-    borderColor: colors.white,
-    borderRadius: borderRadius.lg,
-    borderWidth: 1,
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.md,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
   textStyle: {
-    fontSize: fontSize.xl,
     color: colors.white,
+    fontSize: fontSize.lg,
+    fontWeight: "600",
+  },
+  contentRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loader: {
+    marginLeft: 8,
   },
 });
 
 const Button = ({
   onPress,
   children,
-  backgroundColor = colors.primary,
+  backgroundColor,
   style = {},
   loading = false,
 }) => {
-  const btnStyle = backgroundColor
-    ? { ...styles.buttonStyle, ...style, backgroundColor }
-    : { ...styles.buttonStyle, ...style };
+  const btnStyle = {
+    ...styles.buttonStyle,
+    ...(backgroundColor ? { backgroundColor } : {}),
+    ...style,
+  };
 
   return (
     <TouchableOpacity
@@ -35,11 +46,11 @@ const Button = ({
       disabled={loading}
       activeOpacity={0.7}
     >
-      <View style={layout.row}>
+      <View style={styles.contentRow}>
         <Text style={styles.textStyle}>
           {children}
         </Text>
-        {loading && <ActivityIndicator color={colors.white} size="small" />}
+        {loading && <ActivityIndicator color={colors.white} size="small" style={styles.loader} />}
       </View>
     </TouchableOpacity>
   );
