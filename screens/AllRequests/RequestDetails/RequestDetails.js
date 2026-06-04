@@ -83,7 +83,7 @@ const ButtonsView = () => {
   };
 
   return (
-    <View style={{ flexDirection: "row", marginBottom: 15, marginTop: 15 }}>
+    <View style={{ flexDirection: "row", marginBottom: 15, marginTop: 15, justifyContent: "space-between" }}>
       <MoreInfoChatModal
         show={showChatModal}
         onClose={() => setShowChatModal(false)}
@@ -92,7 +92,7 @@ const ButtonsView = () => {
       />
         <TouchableOpacity
         style={{
-            width: 125,
+            width: "30%",
             height: 50,
             borderRadius: 10,
             alignContent: "center",
@@ -114,10 +114,9 @@ const ButtonsView = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate("EmergencyContact")}
           style={{
-              width: 125,
+              width: "30%",
               height: 50,
               borderRadius: 10,
-              marginLeft: 10,
               alignContent: "center",
               flexDirection: "row",
               alignItems: "center",
@@ -141,14 +140,36 @@ const ButtonsView = () => {
               Emergency Contact
           </Text>
         </TouchableOpacity>
-        <Button
+        <TouchableOpacity
           onPress={handleMoreInfo}
-          loading={chatLoading}
-          backgroundColor="#F2C94C"
-          style={{ width: 125, height: 50, borderRadius: 10, marginLeft: 10, borderWidth: 0 }}
+          style={{
+              width: "30%",
+              height: 50,
+              borderRadius: 10,
+              alignContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "#F2C94C",
+          }}
         >
-          More Information
-        </Button>
+          {/* <MaterialIcons
+              name="emergency"
+              size={20}
+              color="white"
+              style={{ marginRight: 5 }}
+          /> */}
+          <Text
+              style={{
+              fontSize: 15,
+              marginTop: 1,
+              marginLeft: 10,
+              color: "white",
+              }}
+          >
+              More Information
+          </Text>
+        </TouchableOpacity>
+        
     </View>
   )
 }
