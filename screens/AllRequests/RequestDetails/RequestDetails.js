@@ -662,7 +662,7 @@ export default function RequestDetails({ signOut }) {
   const user = useAuthUser();
   
   const route = useRoute();
-  console.log(route.params);
+  // console.log(route.params);
   const req = route.params?.item;
 
   const userName = user?.attributes?.given_name + " " + user?.attributes?.family_name;
