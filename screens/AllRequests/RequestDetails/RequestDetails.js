@@ -13,7 +13,6 @@ import {
   Alert,
   FlatList,
 } from "react-native";
-import Markdown from 'react-native-markdown-display';
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -31,67 +30,66 @@ import { TextInput } from "react-native";
 import UserRequest from "../../HelpRequest/UserRequest";
 import Button from '../../../components/Button';
 import { getVolunteerOrgsList } from "../../../services/volunteerServices";
-import { moreInformation } from "../../../services/requestServices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { moreInformationChat } from "../../../services/requestServices";
+import MoreInfoChatModal from "../../../components/MoreInfoChatModal";
 import useAuthUser from "../../../hooks/useAuthUser";
 
+const getCooldownKey = (data) =>
+  `moreInfoCooldown_${data?.id ?? data?.subject ?? "default"}`;
+
+const checkCooldown = async (data) => {
+  const raw = await AsyncStorage.getItem(getCooldownKey(data));
+  if (!raw) return false;
+  const { expiresAt } = JSON.parse(raw);
+  if (Date.now() < expiresAt) return true;
+  await AsyncStorage.removeItem(getCooldownKey(data));
+  return false;
+};
+
 const ButtonsView = () => {
-  const [infoOpen, setInfoOpen] = useState(false);
-  const [info, setInfo] = useState('');
-  const [infoLoading, setInfoLoading] = useState(false);
+  const [showChatModal, setShowChatModal] = useState(false);
+  const [initialResponse, setInitialResponse] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
 
   const navigation = useNavigation();
   const route = useRoute();
   const req = route.params?.item;
 
-  const generateAnswer = async () => {
-    setInfoLoading(true);
-    try {
-      const res = await moreInformation(
-        {category: req?.category, subject:req?.subject, description: req?.description}
+  const handleMoreInfo = async () => {
+    const coolingDown = await checkCooldown(req);
+    if (coolingDown) {
+      Alert.alert(
+        "Limit Reached",
+        "You have reached the question limit. Please try again after 30 minutes.",
       );
-      setInfo(res.data);
-      setInfoOpen(true);
-    } finally {
-      setInfoLoading(false);
+      return;
     }
-  }
+
+    setChatLoading(true);
+    try {
+      const rawReply = await moreInformationChat({
+        user_id: "SID-00-000-000-050",
+        req_id: "REQ-00-000-000-0085",
+        conversation_history: [],
+      });
+      setInitialResponse(rawReply?.body?.answer ?? "");
+      setShowChatModal(true);
+    } catch {
+      Alert.alert("Error", "An error occurred while fetching the information.");
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
   return (
     <View style={{ flexDirection: "row", marginBottom: 15, marginTop: 15 }}>
-      {infoOpen && (
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={infoOpen}
-          onRequestClose={() => {
-              Alert.alert("Edit closed.");
-              setInfoOpen(!infoOpen);
-          }}
-          >
-          <View
-              style={{
-              height: "90%",
-              marginTop: "auto",
-              }}
-          >
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-              <View style={styles.infoContainer}>
-              <Markdown>
-                {info}
-              </Markdown>
-              <View style={styles.buttonContainer}>
-                <Button 
-                  backgroundColor="blue" 
-                  style={{width:'25%', marginRight:0, marginLeft:"auto"}}
-                  onPress={()=>{setInfoOpen(false)}}
-                >
-                  Ok
-                </Button>
-              </View>
-              </View>
-            </ScrollView>
-          </View>
-        </Modal>
-      )}
+      <MoreInfoChatModal
+        show={showChatModal}
+        onClose={() => setShowChatModal(false)}
+        requestData={req}
+        initialResponse={initialResponse}
+      />
         <TouchableOpacity
         style={{
             width: 125,
@@ -144,8 +142,8 @@ const ButtonsView = () => {
           </Text>
         </TouchableOpacity>
         <Button
-          onPress={generateAnswer}
-          loading={infoLoading}
+          onPress={handleMoreInfo}
+          loading={chatLoading}
           backgroundColor="#F2C94C"
           style={{ width: 125, height: 50, borderRadius: 10, marginLeft: 10, borderWidth: 0 }}
         >
