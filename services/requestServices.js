@@ -2,8 +2,9 @@ import api from "./api";
 // import axios from "axios";
 import endpoints from "./endpoints.json";
 
-export const getMyRequests = async () => {
-  const response = await api.get(endpoints.GET_MY_REQUESTS);
+
+export const getMyRequests = async (request) => {
+  const response = await api.post(endpoints.GET_MY_REQUESTS, request);
   return response.data;
 };
 
@@ -14,6 +15,13 @@ export const getOthersRequests = async () => {
 
 export const getManagedRequests = async () => {
   const response = await api.get(endpoints.GET_MANAGED_REQUESTS);
+  return response.data;
+};
+
+export const getAllPaginatedRequests = async ({ page = 0, size = 10 } = {}) => {
+  const response = await api.get(endpoints.GET_ALL_REQUESTS, {
+    params: { page, size },
+  });
   return response.data;
 };
 
