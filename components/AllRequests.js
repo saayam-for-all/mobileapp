@@ -166,7 +166,7 @@ const AllRequests = ({ data }) => {
         </Modal>
       )}
       <FlatList
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => String(item.id || item.requestId || index)}
         data={filteredData}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.reqData} onPress={() => { navigation.navigate("RequestDetails", { item, reqTitle: item.id }) }}>
