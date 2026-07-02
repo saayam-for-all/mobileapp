@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { getCategories } from "../services/categoryServices";
+import { getCategories } from "../services/requestServices";
 import { loadCategories } from "../redux/categoriesSlice";
 
 const CATEGORIES_KEY = "categories";

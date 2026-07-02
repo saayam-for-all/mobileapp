@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Constants from 'expo-constants';
-import { View, Text, Switch, Alert, StyleSheet, ScrollView, Platform } from 'react-native';
+import { View, Text, Switch, Alert, StyleSheet, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useTranslation } from 'react-i18next';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
@@ -11,11 +9,11 @@ import api from '../../services/api';
 import languagesData from '../../i18n/languagesData';
 import * as DocumentPicker from 'expo-document-picker';
 import Icon from 'react-native-vector-icons/Feather';
-import { TouchableOpacity } from 'react-native';
 import AudioRecorder from '../../components/AudioRecorder';
 import DynamicAdditionalFields from './Categories/DynamicAdditionalFields';
 
 import useAuthUser from '../../hooks/useAuthUser';
+import LocationSearchModal from '../../components/LocationSearchModal';
 
 import { createRequest, getCategories, getEnums, predictCategories, checkProfanity } from '../../services/requestServices';
 import { Tab, Tabs } from '../../components/Tabs';
@@ -39,6 +37,38 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   const { t, i18n } = useTranslation(["common", "categories"]);
   const [loading, setLoading] = useState(false);
   const authUser = useAuthUser();
+
+  const [isLocationModalVisible, setIsLocationModalVisible] = useState(false);
+
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+              {
+                headers: {
+                  'Accept-Language': 'en',
+                  'User-Agent': 'SaayamForAll/1.0',
+                },
+              },
+            );
+            const data = await response.json();
+            if (data.display_name) {
+              updateFormData('location', data.display_name);
+            }
+          } catch (error) {
+            console.error('Location error:', error);
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+        },
+      );
+    }
+  };
 
   const [formData, setFormData] = useState({
     requestForId: 0,
@@ -133,25 +163,38 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       Alert.alert('Error', 'User not authenticated properly. Please log in again.');
       return;
     }
+    const categoryId = formData.requestSubCategory || formData.requestCategory;
     const requestBody = {
       requesterId: authUser?.attributes?.userDbId,
       requestSubject: formData.requestSubject,
       requestDescription: formData.requestDescription,
-      isCalamity: formData.isCalamity,
+      isCalamity: Boolean(formData.isCalamity),
       isLeadVolunteer: 1,
       requestPriority: { requestPriorityId: formData.requestPriorityId },
       requestType: { requestTypeId: formData.requestTypeId },
       requestFor: { requestForId: formData.requestForId },
-      helpCategory: { catId: formData.requestSubCategory || formData.requestCategory },
+      helpCategory: {
+        catId: (categoryId === 'General' || categoryId === 'GENERAL_CATEGORY')
+          ? '0.0.0.0.0'
+          : categoryId,
+      },
       additionalFields: additionalFieldValues,
     };
 
     if (!isSelfRequest()) {
-      requestBody.otherPerson = otherPersonInfo;
+      requestBody.guestDetails = {
+        reqFname: otherPersonInfo.firstName,
+        reqLname: otherPersonInfo.lastName,
+        reqEmail: otherPersonInfo.email,
+        reqPhone: otherPersonInfo.phone,
+        reqAge: otherPersonInfo.age ? Number(otherPersonInfo.age) : null,
+        reqGender: otherPersonInfo.gender || null,
+        reqPrefLang: otherPersonInfo.preferredLanguage || null,
+      };
     }
 
     if (formData.requestTypeId === 0 && formData.location) {
-      requestBody.location = formData.location;
+      requestBody.requestLocation = formData.location;
     }
 
     console.log('Submitting:', requestBody);
@@ -316,6 +359,12 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       updateFormData('requestSubCategory', '');
     }
   }, [formData.requestCategory]);
+
+  useEffect(() => {
+    if (formData.requestTypeId === 0 && !formData.location) {
+      getUserLocation();
+    }
+  }, [formData.requestTypeId]);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -635,17 +684,19 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
             {formData.requestTypeId === 0 && (
               <View style={styles.field}>
                 <Text style={styles.label}>Location</Text>
-                <GooglePlacesAutocomplete
-                  placeholder='Search'
-                  onPress={(data, details = null) => {
-                    console.log(data, details);
-                    updateFormData('location', details?.description || data.description);
-                  }}
-                  onFail={(error) => console.log('Google Place API Error:', error)}
-                  query={{ key: Constants.expoConfig?.extra?.googlePlacesApiKey || '', language: 'en' }}
-                  styles={{ textInput: pickerSelectStyles.inputAndroid }}
-                  disableScroll={true}
-                />
+                <TouchableOpacity
+                  style={styles.locationInput}
+                  onPress={() => setIsLocationModalVisible(true)}
+                >
+                  <Text
+                    style={
+                      formData.location ? styles.locationText : styles.locationPlaceholder
+                    }
+                    numberOfLines={1}
+                  >
+                    {formData.location || 'Search for location...'}
+                  </Text>
+                </TouchableOpacity>
               </View>
             )}
           </Tab>
@@ -660,6 +711,13 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
           </Button>
         </View>
       </View>
+
+      <LocationSearchModal
+        visible={isLocationModalVisible}
+        onClose={() => setIsLocationModalVisible(false)}
+        onSelectLocation={(displayName) => updateFormData('location', displayName)}
+        initialValue={formData.location}
+      />
     </ScrollView>
   );
 }
@@ -794,6 +852,22 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontWeight: '500',
     zIndex: 10,
+  },
+  locationInput: {
+    borderColor: colors.borderLight,
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+  },
+  locationText: {
+    fontSize: 16,
+    color: colors.text,
+  },
+  locationPlaceholder: {
+    fontSize: 16,
+    color: colors.textSecondary,
   },
 });
 

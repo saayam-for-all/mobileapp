@@ -1,7 +1,7 @@
 //import * as React from 'react';
 import React, { useEffect } from 'react';
 //import { DataTable, Searchbar } from 'react-native-paper';
-import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 
 import { TextInput, } from 'react-native-paper';
@@ -9,21 +9,13 @@ import { useNavigation } from '@react-navigation/native';
 import ReqFilter from '../screens/AllRequests/ReqFilter';
 import { colors } from '../styles/theme';
 
-const AllRequests = ({ data }) => {
+const AllRequests = ({ data, isLoadingMore, onLoadMore }) => {
   const navigation = useNavigation();
-  const [sortAscending, setSortAscending] = React.useState(true);
-  const [page, setPage] = React.useState(0);
-  const [numberOfItemsPerPageList] = React.useState([4, 5]);
-  const [itemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0]
-  );
   const [searchQuery, setSearchQuery] = React.useState('');
   const [filteredData, setFilteredData] = React.useState(data);
   const [filters, setFilters] = React.useState({ requestStatus: {}, requestPriority: {}, categoryFilter: {}, checkedCategories: [] });
   const [selectedPriority, setSelectedPriority] = React.useState([]);
   const [showFilter, setShowFilter] = React.useState(false);
-
-  const [items] = React.useState(data);
 
   const handleNavigate = () => {
     setShowFilter(true);
@@ -51,17 +43,6 @@ const AllRequests = ({ data }) => {
       }
     }
   };
-
-  const sortedItems = items
-    .slice()
-    .sort((item1, item2) =>
-      sortAscending
-        ? item1.creationDate.localeCompare(item2.creationDate)
-        : item2.creationDate.localeCompare(item1.creationDate)
-    );
-
-  const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, items.length);
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -101,7 +82,7 @@ const AllRequests = ({ data }) => {
     }
 
     setFilteredData(result);
-  }, [searchQuery, filters, selectedPriority]);
+  }, [data, searchQuery, filters, selectedPriority]);
 
   return (
     <View style={styles.container}>
@@ -168,6 +149,15 @@ const AllRequests = ({ data }) => {
       <FlatList
         keyExtractor={(item, index) => String(item.id || item.requestId || index)}
         data={filteredData}
+        onEndReached={onLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isLoadingMore ? (
+            <View style={{ paddingVertical: 20 }}>
+              <ActivityIndicator size="small" color={colors.chrome} />
+            </View>
+          ) : null
+        }
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.reqData} onPress={() => { navigation.navigate("RequestDetails", { item, reqTitle: item.id }) }}>
             <View style={{ flexDirection: "row" }}>

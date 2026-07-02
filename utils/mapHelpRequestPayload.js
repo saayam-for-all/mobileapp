@@ -11,7 +11,11 @@ export const mapHelpRequestPayload = ({
 
     isCalamity: Boolean(formData.is_calamity),
 
-    isLeadVolunteer: formData.lead_volunteer === "Yes" ? 1 : 0,
+    requestStatus: { requestStatusId: 1 },
+
+    requestIsLeadVol: {
+      requestIsLeadId: formData.lead_volunteer === "Yes" ? 1 : 0,
+    },
 
     requestPriority: {
       requestPriorityId: enumMaps.requestPriority[formData.priority],
