@@ -78,10 +78,15 @@
     "victory-native": "36"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "jetifier": "^2.0.0",
-    "patch-package": "^8.0.1",
-    "postinstall-postinstall": "^2.1.0"
-  },
+  "@babel/core": "^7.20.0",
+  "@testing-library/jest-native": "^5.4.3",
+  "@testing-library/react-native": "^13.3.3",
+  "babel-jest": "^30.0.5",
+  "jest": "^30.0.5",
+  "jetifier": "^2.0.0",
+  "patch-package": "^8.0.1",
+  "postinstall-postinstall": "^2.1.0",
+  "react-test-renderer": "18.3.1"
+},
   "private": true
 }
