@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { getEnums } from "../services/enumServices";
+import { getEnums } from "../services/requestServices";
 
 const ENUMS_KEY = "enums";
 
