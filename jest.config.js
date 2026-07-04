@@ -5,6 +5,10 @@ module.exports = {
     '<rootDir>/jest.setup.js',
   ],
 
+  moduleNameMapper: {
+  '^aws-amplify/auth$': '<rootDir>/components/__mocks__/awsAmplifyAuth.js',
+},
+
   transformIgnorePatterns: [
     'node_modules/(?!(react-native|@react-native|expo(nent)?|@expo|expo-modules-core|expo-file-system|react-native-country-codes-picker|@react-navigation|aws-amplify|@aws-amplify)/)',
   ],

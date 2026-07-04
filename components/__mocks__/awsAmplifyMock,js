@@ -1,0 +1,11 @@
+module.exports = {
+  fetchAuthSession: jest.fn(() =>
+    Promise.resolve({
+      tokens: {
+        accessToken: {
+          toString: () => 'fake-token',
+        },
+      },
+    })
+  ),
+};
