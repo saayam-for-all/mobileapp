@@ -1,9 +1,6 @@
 module.exports = {
   preset: 'jest-expo',
 
-  setupFilesAfterEnv: [
-    '<rootDir>/jest.setup.js',
-  ],
 
   moduleNameMapper: {
   '^aws-amplify/auth$': '<rootDir>/components/__mocks__/awsAmplifyAuth.js',
