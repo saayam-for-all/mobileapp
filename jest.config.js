@@ -3,7 +3,7 @@ module.exports = {
 
 
   moduleNameMapper: {
-  '^aws-amplify/auth$': '<rootDir>/components/__mocks__/awsAmplifyMock.js',
+  '^aws-amplify/auth$': '<rootDir>awsAmplifyMock.js',
 },
 
   transformIgnorePatterns: [
