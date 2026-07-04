@@ -2,7 +2,7 @@ module.exports = {
   preset: 'jest-expo',
 
   setupFilesAfterEnv: [
-    '/jest.setup.js',
+    '<rootDir>/jest.setup.js',
   ],
 
   transformIgnorePatterns: [
