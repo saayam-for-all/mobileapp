@@ -1,6 +1,6 @@
 // 1️⃣ MOCKS ANTES DE NADA
 jest.mock('expo-font', () => ({
-  __esModule: true, // necesario si usas import Font from 'expo-font'
+  __esModule: true,
   loadAsync: jest.fn().mockResolvedValue(true),
   isLoaded: jest.fn().mockReturnValue(true),
 }));

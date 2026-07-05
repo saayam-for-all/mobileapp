@@ -6,7 +6,7 @@ describe('tests component',() =>{
     it('checks layout',() =>{
        const {getByTestId} = render(
             
-            <BackgroundImage>
+            <BackgroundImage testID="mainComponent">
             <Text>helloWorld</Text>
             </BackgroundImage>
 )
@@ -22,7 +22,7 @@ describe('tests component',() =>{
         
         const {getByTestId,getByText} = render(
             
-            <BackgroundImage>
+            <BackgroundImage testID="mainComponent">
             <Text>helloWorld</Text>
             </BackgroundImage>
 )

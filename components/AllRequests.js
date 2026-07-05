@@ -135,6 +135,7 @@ const AllRequests = ({ data }) => {
       </View>
       <View style={styles.filterRow}>
         <TouchableOpacity
+            testID="navigateButton"
           style={[styles.filterButton, styles.iconButton]}
           onPress={handleNavigate}
         >
@@ -213,14 +214,14 @@ const AllRequests = ({ data }) => {
               </Text>
               <Text style={{ flex: 1, textAlign: "right" }}>
                 {" "}
-                <AntDesign name="right" size={15} color="black" />
+                <AntDesign name="right" size={15} color="black" testID='antDesign' />
               </Text>
             </View>
 
             <View style={{ flexDirection: "row" }}>
               <Text>
                 {" "}
-                <AntDesign name="calendar" size={20} color="black" />{" "}
+                <AntDesign name="calendar" size={20} color="black"  testID='antDesign'/>{" "}
                 {item.creationDate}{" "}
               </Text>
               {/* <Text style={{ flex: 1, textAlign: "right" }}>

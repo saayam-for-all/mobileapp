@@ -9,9 +9,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function BackgroundImage({ children }) {
+export default function BackgroundImage({ children,testID }) {
   return (
-    <ImageBackground source={IMAGE} style={styles.image} blurRadius={5}>
+    <ImageBackground source={IMAGE} style={styles.image} blurRadius={5} testID={testID}>
       {children}
     </ImageBackground>
   );

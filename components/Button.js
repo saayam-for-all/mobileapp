@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, ActivityIndicator, TouchableOpacity, View } from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   buttonStyle: {
     padding: 10,
     backgroundColor: '#2a6bcc',
@@ -32,13 +32,15 @@ const Button = ({
   
   return (
     <TouchableOpacity
+      testID="buttonOne"
       onPress={loading ? null : onPress}
       style={btnStyle}
       disabled={loading}
       activeOpacity={0.7}
     >
       <View style={styles.contentStyle}>
-        <Text style={styles.textStyle}>
+        <Text style={styles.textStyle}
+        testID='textOne'>
           {children}
         </Text>
         {loading && <ActivityIndicator color="white" size="small" />}

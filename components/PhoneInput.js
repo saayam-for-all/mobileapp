@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import {CountryPicker, CountryButton} from "react-native-country-codes-picker";
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     row: {
         width:"100%",
         flexDirection: "row",
@@ -79,17 +79,19 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
   };
 
   return (
-    <View style={{}}>
-        <View style={styles.row}>
+    <View style={{}} testID="viewOne" >
+        <View style={styles.row} testID="viewTwo" >
             <TouchableOpacity
+                testID = "buttonOne"
                 onPress={() => setShow(!show)}
                 style={styles.countryCode}
             >
-                <Text style={{}}>
+                <Text style={{}} testID="textOne">
                     {country_name + " (" + countryCode + ")"}
                 </Text>
             </TouchableOpacity>
             <CountryPicker
+            testID= "dropDownOne"
                 show={show}
                 style={{
                     modal:{
@@ -129,6 +131,7 @@ onChangeCountryName, // *** change another input grid 'country' in signup page
                 popularCountries={['ca','us', 'in']}
             />
             <TextInput
+            testID="textInputOne"
                 style={styles.phone}
                 keyboardType="phone-pad"
                 autoCorrect={false}
