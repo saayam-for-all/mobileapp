@@ -34,6 +34,11 @@ const LocationSearchModal = ({ visible, onClose, onSelectLocation, initialValue 
     onClose();
   };
 
+  const handleFreeTextSelect = () => {
+    onSelectLocation(inputValue.trim());
+    onClose();
+  };
+
   return (
     <Modal
       visible={visible}
@@ -67,6 +72,18 @@ const LocationSearchModal = ({ visible, onClose, onSelectLocation, initialValue 
               autoCorrect={false}
               returnKeyType="search"
             />
+
+            {inputValue.length > 0 && (
+              <TouchableOpacity
+                style={styles.freeTextItem}
+                onPress={handleFreeTextSelect}
+              >
+                <Text style={styles.freeTextLabel}>Use: </Text>
+                <Text style={styles.freeTextValue} numberOfLines={2}>
+                  {inputValue}
+                </Text>
+              </TouchableOpacity>
+            )}
 
             {suggestions.length > 0 && (
               <ScrollView
@@ -155,6 +172,24 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   suggestionsList: {
+    flex: 1,
+  },
+  freeTextItem: {
+    flexDirection: 'row',
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary,
+    backgroundColor: colors.surface,
+  },
+  freeTextLabel: {
+    fontSize: fontSize.lg,
+    color: colors.primary,
+    fontWeight: '600',
+  },
+  freeTextValue: {
+    fontSize: fontSize.lg,
+    color: colors.text,
     flex: 1,
   },
   suggestionItem: {
