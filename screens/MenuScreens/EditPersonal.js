@@ -145,6 +145,7 @@ const EditPersonal = () => {
   const [gender, setGender] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [streetAddress2, setStreetAddress2] = useState("");
+  const [city, setCity] = useState("");
   const [countryOpen, setCountryOpen] = useState(false);
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
@@ -179,6 +180,7 @@ const EditPersonal = () => {
           if (parsed.gender) setGender(parsed.gender);
           if (parsed.streetAddress) setStreetAddress(parsed.streetAddress);
           if (parsed.streetAddress2) setStreetAddress2(parsed.streetAddress2);
+          if (parsed.city) setCity(parsed.city);
           if (parsed.country) setCountry(parsed.country);
           if (parsed.state) setState(parsed.state);
           if (parsed.zipCode) setZipCode(parsed.zipCode);
@@ -244,27 +246,13 @@ const EditPersonal = () => {
   }, [isEditing]);
 
   const validateForm = () => {
-    // Required fields: DOB, Gender, Country, State, Zip Code
-    // Optional fields: Address (streetAddress), Address2 (streetAddress2), Language
-
-    if (!dob.trim()) {
-      Alert.alert("Invalid Date of Birth", "Date of Birth is required.");
+    if (!streetAddress.trim()) {
+      Alert.alert("Invalid Address", "Address is required.");
       return false;
     }
 
-    const dobRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/;
-    if (!dobRegex.test(dob.trim())) {
-      Alert.alert("Invalid Date of Birth", "DOB should be in the format MM/DD/YYYY.");
-      return false;
-    }
-
-    if (!gender.trim()) {
-      Alert.alert("Invalid Gender", "Gender is required.");
-      return false;
-    }
-
-    if (!country.trim()) {
-      Alert.alert("Invalid Country", "Country is required.");
+    if (!city.trim()) {
+      Alert.alert("Invalid City", "City is required.");
       return false;
     }
 
@@ -287,6 +275,7 @@ const EditPersonal = () => {
       gender,
       streetAddress,
       streetAddress2,
+      city,
       country,
       state,
       zipCode,
@@ -307,6 +296,7 @@ const EditPersonal = () => {
         gender,
         streetAddress,
         streetAddress2,
+        city,
         country,
         state,
         zipCode,
@@ -333,6 +323,7 @@ const EditPersonal = () => {
     setGender(backupProfile.gender);
     setStreetAddress(backupProfile.streetAddress);
     setStreetAddress2(backupProfile.streetAddress2);
+    setCity(backupProfile.city);
     setCountry(backupProfile.country);
     setState(backupProfile.state);
     setZipCode(backupProfile.zipCode);
@@ -395,6 +386,14 @@ const EditPersonal = () => {
 
       <TextInput
         style={styles.input}
+        placeholder={t("CITY")}
+        value={city}
+        onChangeText={setCity}
+        editable={isEditing}
+      />
+
+      <TextInput
+        style={styles.input}
         placeholder={t("ZIP_CODE")}
         value={zipCode}
         onChangeText={setZipCode}
@@ -403,7 +402,7 @@ const EditPersonal = () => {
 
       <TextInput
         style={styles.input}
-        placeholder={t("ADDRESS")}
+        placeholder={t("ADDRESS", {optional: ""})}
         value={streetAddress}
         onChangeText={setStreetAddress}
         editable={isEditing}

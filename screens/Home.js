@@ -336,8 +336,8 @@ export default function Home({ signOut }) {
               if (stored) {
                 const parsed = JSON.parse(stored);
                 console.log("[Home] Parsed personal_info:", JSON.stringify(parsed));
-                const hasRequired = parsed.dob && parsed.gender && parsed.country;
-                console.log("[Home] Has required fields (dob, gender, country):", hasRequired);
+                const hasRequired = parsed.streetAddress && parsed.city && parsed.state && parsed.zipCode;
+                console.log("[Home] Has required fields (address, city, state, zipCode):", hasRequired);
                 if (hasRequired) {
                   navigation.navigate("UserRequest");
                   return;

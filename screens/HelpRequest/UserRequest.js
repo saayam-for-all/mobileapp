@@ -234,10 +234,6 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
   };
 
   const handleSubmit = async () => {
-    if (!formData.requestSubject) {
-      Alert.alert('Validation Error', 'Subject is required. Please fill out the Description tab.');
-      return;
-    }
     if (!formData.requestDescription) {
       Alert.alert('Validation Error', 'Description is required. Please fill out the Description tab.');
       return;
@@ -441,7 +437,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
 
             <View style={styles.field}>
               <Text style={styles.label}>
-                Subject <Text style={{ color: 'red' }}>*</Text> (Max 70 characters)
+                Subject (Max 70 characters)
               </Text>
               <Input
                 style={styles.input}
