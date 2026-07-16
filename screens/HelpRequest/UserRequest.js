@@ -193,7 +193,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       };
     }
 
-    if (formData.requestTypeId === 0 && formData.location) {
+    if ((formData.requestTypeId === 0 || !isSelfRequest()) && formData.location) {
       requestBody.requestLocation = formData.location;
     }
 
@@ -247,6 +247,10 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         Alert.alert('Validation Error', 'Please enter a valid email address!');
+        return;
+      }
+      if (!formData.location) {
+        Alert.alert('Validation Error', 'Location is required when submitting a request for someone else.');
         return;
       }
     }
@@ -361,6 +365,7 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
       getUserLocation();
     }
   }, [formData.requestTypeId]);
+
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -677,9 +682,9 @@ export default function UserRequest({ isEdit = false, onClose, requestItem = {} 
               />
             </View>
 
-            {formData.requestTypeId === 0 && (
+            {(formData.requestTypeId === 0 || !isSelfRequest()) && (
               <View style={styles.field}>
-                <Text style={styles.label}>Location</Text>
+                <Text style={styles.label}>Location <Text style={{ color: 'red' }}>*</Text></Text>
                 <TouchableOpacity
                   style={styles.locationInput}
                   onPress={() => setIsLocationModalVisible(true)}
