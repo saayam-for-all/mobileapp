@@ -5,9 +5,12 @@ import { useFocusEffect } from "@react-navigation/native";
 import AuthHandler from "../global/authHandler";
 import { getUserId } from "../services/volunteerServices";
 import { fetchAuthSession, fetchUserAttributes } from 'aws-amplify/auth';
+import { startBackgroundLocationTracking } from "../services/backgroundLocationTracker";
 
 const USER_KEY = 'user';
 const USER_UPDATED_KEY = 'user_updated';
+const STORAGE_KEY_IS_VOLUNTEER = 'bg_isVolunteer';
+const STORAGE_KEY_USER_DB_ID = 'bg_userDbId';
 
 export default function useAuthUser() {
     const [authUser, setAuthUser] = useState(undefined);
@@ -28,6 +31,18 @@ export default function useAuthUser() {
                         if (currentSub && cachedUser?.attributes?.sub === currentSub) {
                             console.log("Using cached user data");
                             setAuthUser(cachedUser);
+
+                            const cachedGroups = cachedUser?.attributes?.groups || [];
+                            const cachedIsVolunteer = cachedGroups.includes("Volunteers") || cachedGroups.includes("Volunteer");
+                            console.log("Cached isVolunteer:", cachedIsVolunteer);
+                            await AsyncStorage.setItem(STORAGE_KEY_IS_VOLUNTEER, cachedIsVolunteer ? "true" : "false");
+                            if (cachedUser?.attributes?.userDbId) {
+                                await AsyncStorage.setItem(STORAGE_KEY_USER_DB_ID, String(cachedUser.attributes.userDbId));
+                            }
+
+                            if (cachedIsVolunteer && cachedUser?.attributes?.userDbId) {
+                                await startBackgroundLocationTracking();
+                            }
                             return;
                         }
                         // Cached user does not match the current session — clear stale data
@@ -50,7 +65,10 @@ export default function useAuthUser() {
                     if (cancelled) return;
                     
                     const groups = session.tokens?.accessToken?.payload["cognito:groups"] || [];
-                    
+
+                    const isVolunteer = groups.includes("Volunteers") || groups.includes("Volunteer");
+                    await AsyncStorage.setItem(STORAGE_KEY_IS_VOLUNTEER, isVolunteer ? "true" : "false");
+
                     let userDbId = null;
                     try {
                         const result = await getUserId(email);
@@ -58,12 +76,17 @@ export default function useAuthUser() {
                             throw new Error("userDbId not found");
                         }
                         userDbId = result.data.user_id;
+                        await AsyncStorage.setItem(STORAGE_KEY_USER_DB_ID, String(userDbId));
                     } catch (dbError) {
                         console.warn("DB lookup failed:", dbError.message);
                     }
-                    
+
                     if (cancelled) return;
-                    
+
+                    if (isVolunteer && userDbId) {
+                        await startBackgroundLocationTracking();
+                    }
+
                     const userData = {
                         attributes: {
                             ...attributes,

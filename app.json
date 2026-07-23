@@ -16,12 +16,18 @@
       "bundleIdentifier": "com.saayam.mobileapp",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "This app needs access to the microphone to record audio messages.",
-        "NSFaceIDUsageDescription": "We use Face ID to securely sign you in to your account."
+        "NSFaceIDUsageDescription": "We use Face ID to securely sign you in to your account.",
+        "NSLocationWhenInUseUsageDescription": "For Volunteers: Saayam needs your location.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Saayam needs background location access to match nearby help requests.",
+        "UIBackgroundModes": ["location"]
       }
     },
     "android": {
       "permissions": [
-        "RECORD_AUDIO"
+        "RECORD_AUDIO",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -55,7 +61,8 @@
       ],
       "expo-localization",
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      "expo-location"
     ]
   }
 }

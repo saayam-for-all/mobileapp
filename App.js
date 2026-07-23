@@ -2,7 +2,7 @@ import './i18n/i18n'
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import 'react-native-get-random-values';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AppNavigation from './navigation';
 import amplifyConfig from './amplifyconfiguration';
 import {Amplify} from 'aws-amplify';
@@ -16,7 +16,6 @@ const LANGUAGE_KEY = "appLanguage";
 
 export default function App() {
   useEffect(() => {
-    // Load saved language preference on app startup
     (async () => {
       try {
         const savedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
@@ -31,7 +30,7 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>          
+    <View style={styles.container}>
       <AppNavigation />
       <StatusBar style="auto" />
     </View>

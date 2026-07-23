@@ -8,6 +8,7 @@ import AuthNavigator from './AuthNavigator';
 import AppNavigator from './AppNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { registerSignOut } from '../global/authHandler';
+import { stopBackgroundLocationTracking } from '../services/backgroundLocationTracker';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,6 +50,7 @@ class AuthLoadingScreen extends React.Component {
 
   async signOut() {
     console.log("Clear local storage");
+    await stopBackgroundLocationTracking();
     await AsyncStorage.clear();
     await signOut()
       .catch((err) => {
