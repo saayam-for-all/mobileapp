@@ -75,7 +75,7 @@ const handleLocationUpdate = async (location) => {
     }
 
     await appendDebugLog(`Reporting: ${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
-    await api.post(endpoints.UPDATE_VOLUNTEER_LOCATION, {
+    const res = await api.post(endpoints.UPDATE_VOLUNTEER_LOCATION, {
       user_id: userDbId,
       latitude: coords.latitude,
       longitude: coords.longitude,
@@ -90,6 +90,7 @@ const handleLocationUpdate = async (location) => {
     ]);
 
     await appendDebugLog(`Reported: ${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
+    await appendDebugLog(`Server response: ${JSON.stringify(res.data)}`);
   } catch (e) {
     await appendDebugLog(`Failed: ${e.message || e}`);
   }
