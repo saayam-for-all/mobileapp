@@ -1,117 +1,105 @@
 import * as Location from 'expo-location';
-import * as TaskManager from 'expo-task-manager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
 import api from './api';
 import endpoints from './endpoints.json';
 import { hasLocationChanged } from '../utils/geo';
-
-const BACKGROUND_LOCATION_TASK = 'BACKGROUND_LOCATION_VOLUNTEER';
 
 const STORAGE_KEY_IS_VOLUNTEER = 'bg_isVolunteer';
 const STORAGE_KEY_USER_DB_ID = 'bg_userDbId';
 const STORAGE_KEY_LAST_LOCATION = 'bg_lastLocation';
 const STORAGE_KEY_LAST_REPORT_TIME = 'bg_lastReportTime';
-const STORAGE_KEY_DEBUG_LOG = 'bg_debugLog';
 
 const MAX_DEBUG_LOG_ENTRIES = 20;
 
+const DEBUG_LOG_PATH = `${FileSystem.documentDirectory}bg_debugLog.json`;
+
 const appendDebugLog = async (message) => {
   try {
-    const raw = await AsyncStorage.getItem(STORAGE_KEY_DEBUG_LOG);
-    const entries = raw ? JSON.parse(raw) : [];
+    let entries = [];
+    const info = await FileSystem.getInfoAsync(DEBUG_LOG_PATH);
+    if (info.exists) {
+      const raw = await FileSystem.readAsStringAsync(DEBUG_LOG_PATH);
+      entries = raw ? JSON.parse(raw) : [];
+    }
     entries.push({ time: new Date().toISOString(), message });
     if (entries.length > MAX_DEBUG_LOG_ENTRIES) {
       entries.splice(0, entries.length - MAX_DEBUG_LOG_ENTRIES);
     }
-    await AsyncStorage.setItem(STORAGE_KEY_DEBUG_LOG, JSON.stringify(entries));
+    await FileSystem.writeAsStringAsync(DEBUG_LOG_PATH, JSON.stringify(entries));
   } catch {
     // silently ignore debug log write failures
   }
 };
 
-let _taskDefined = false;
-let _taskDefineError = null;
+const MIN_REPORT_INTERVAL_MS = 30 * 1000;
+const MIN_DISTANCE_METERS = 10;
 
-const MIN_REPORT_INTERVAL_MS = 5 * 60 * 1000;
-const MIN_DISTANCE_METERS = 50;
+let _watchSubscription = null;
 
-try {
-  TaskManager.defineTask(BACKGROUND_LOCATION_TASK, async ({ data, error }) => {
-    if (error) {
-      await appendDebugLog(`Error: ${error.message || error}`);
+const handleLocationUpdate = async (location) => {
+  await appendDebugLog('LOCATION RECEIVED');
+
+  try {
+    const isVolunteer = await AsyncStorage.getItem(STORAGE_KEY_IS_VOLUNTEER);
+    if (isVolunteer !== 'true') {
+      await appendDebugLog('Skip: not volunteer');
       return;
     }
 
-    try {
-      const isVolunteer = await AsyncStorage.getItem(STORAGE_KEY_IS_VOLUNTEER);
-      if (isVolunteer !== 'true') {
-        await appendDebugLog('Skip: not volunteer');
-        return;
-      }
+    const userDbId = await AsyncStorage.getItem(STORAGE_KEY_USER_DB_ID);
+    if (!userDbId) {
+      await appendDebugLog('Skip: no userDbId');
+      return;
+    }
 
-      const userDbId = await AsyncStorage.getItem(STORAGE_KEY_USER_DB_ID);
-      if (!userDbId) {
-        await appendDebugLog('Skip: no userDbId');
-        return;
-      }
+    const coords = location.coords;
+    if (coords.latitude == null || coords.longitude == null) {
+      await appendDebugLog('Skip: null coords');
+      return;
+    }
 
-      const { locations } = data;
-      if (!locations || locations.length === 0) {
-        await appendDebugLog('Skip: no locations in data');
-        return;
-      }
+    const lastReportTimeStr = await AsyncStorage.getItem(STORAGE_KEY_LAST_REPORT_TIME);
+    const lastReportTime = lastReportTimeStr ? Number(lastReportTimeStr) : 0;
+    if (Date.now() - lastReportTime < MIN_REPORT_INTERVAL_MS) {
+      await appendDebugLog(`Throttled: ${Math.round((Date.now() - lastReportTime) / 1000)}s since last report`);
+      return;
+    }
 
-      const coords = locations[locations.length - 1].coords;
-      if (coords.latitude == null || coords.longitude == null) {
-        await appendDebugLog('Skip: null coords');
-        return;
-      }
+    const stored = await AsyncStorage.getItem(STORAGE_KEY_LAST_LOCATION);
+    const last = stored ? JSON.parse(stored) : null;
 
-      const lastReportTimeStr = await AsyncStorage.getItem(STORAGE_KEY_LAST_REPORT_TIME);
-      const lastReportTime = lastReportTimeStr ? Number(lastReportTimeStr) : 0;
-      if (Date.now() - lastReportTime < MIN_REPORT_INTERVAL_MS) {
-        await appendDebugLog(`Throttled: ${Math.round((Date.now() - lastReportTime) / 1000)}s since last report`);
-        return;
-      }
+    if (last && !hasLocationChanged(last, coords, MIN_DISTANCE_METERS)) {
+      await appendDebugLog('Skip: not moved enough');
+      return;
+    }
 
-      const stored = await AsyncStorage.getItem(STORAGE_KEY_LAST_LOCATION);
-      const last = stored ? JSON.parse(stored) : null;
+    await appendDebugLog(`Reporting: ${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
+    await api.post(endpoints.UPDATE_VOLUNTEER_LOCATION, {
+      user_id: userDbId,
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
 
-      if (last && !hasLocationChanged(last, coords, MIN_DISTANCE_METERS)) {
-        await appendDebugLog('Skip: not moved enough');
-        return;
-      }
-
-      await appendDebugLog(`Reporting: ${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
-      await api.post(endpoints.UPDATE_VOLUNTEER_LOCATION, {
-        user_id: userDbId,
+    await AsyncStorage.multiSet([
+      [STORAGE_KEY_LAST_LOCATION, JSON.stringify({
         latitude: coords.latitude,
         longitude: coords.longitude,
-      });
+      })],
+      [STORAGE_KEY_LAST_REPORT_TIME, String(Date.now())],
+    ]);
 
-      await AsyncStorage.multiSet([
-        [STORAGE_KEY_LAST_LOCATION, JSON.stringify({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        })],
-        [STORAGE_KEY_LAST_REPORT_TIME, String(Date.now())],
-      ]);
-
-      await appendDebugLog(`Reported: ${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
-    } catch (e) {
-      await appendDebugLog(`Failed: ${e.message || e}`);
-    }
-  });
-  _taskDefined = true;
-} catch (e) {
-  _taskDefineError = e.message || String(e);
-}
+    await appendDebugLog(`Reported: ${coords.latitude.toFixed(4)}, ${coords.longitude.toFixed(4)}`);
+  } catch (e) {
+    await appendDebugLog(`Failed: ${e.message || e}`);
+  }
+};
 
 export async function startBackgroundLocationTracking() {
-  await appendDebugLog(`start() called, taskDefined=${_taskDefined}`);
+  await appendDebugLog(`start() called`);
 
-  if (await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)) {
-    await appendDebugLog('start() already started');
+  if (_watchSubscription) {
+    await appendDebugLog('start() already watching');
     return { success: true };
   }
 
@@ -128,19 +116,25 @@ export async function startBackgroundLocationTracking() {
   }
 
   try {
-    await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK, {
-      accuracy: Location.Accuracy.Balanced,
-      distanceInterval: MIN_DISTANCE_METERS,
-      timeInterval: MIN_REPORT_INTERVAL_MS,
-      showsBackgroundLocationIndicator: true,
-      pausesUpdatesAutomatically: false,
-      activityType: Location.ActivityType.Fitness,
-      foregroundService: {
-        notificationTitle: 'Saayam Location Tracking',
-        notificationBody: 'Saayam is tracking your location to help match requests nearby.',
-        notificationColor: '#4A90D9',
+    const providerStatus = await Location.getProviderStatusAsync();
+    await appendDebugLog(`start() providerStatus=${JSON.stringify(providerStatus)}`);
+
+    _watchSubscription = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.Balanced,
+        distanceInterval: MIN_DISTANCE_METERS,
+        timeInterval: MIN_REPORT_INTERVAL_MS,
+        showsBackgroundLocationIndicator: true,
+        pausesUpdatesAutomatically: false,
+        activityType: Location.ActivityType.Fitness,
+        foregroundService: {
+          notificationTitle: 'Saayam Location Tracking',
+          notificationBody: 'Saayam is tracking your location to help match requests nearby.',
+          notificationColor: '#4A90D9',
+        },
       },
-    });
+      handleLocationUpdate,
+    );
 
     await appendDebugLog('start() success');
     return { success: true };
@@ -150,8 +144,8 @@ export async function startBackgroundLocationTracking() {
   }
 }
 
-export function isTaskDefined() {
-  return { defined: _taskDefined, error: _taskDefineError };
+export function isTracking() {
+  return !!_watchSubscription;
 }
 
 export async function markUserAsVolunteer() {
@@ -162,16 +156,23 @@ export async function stopBackgroundLocationTracking() {
   await AsyncStorage.multiRemove([
     STORAGE_KEY_IS_VOLUNTEER,
     STORAGE_KEY_USER_DB_ID,
+    STORAGE_KEY_LAST_LOCATION,
+    STORAGE_KEY_LAST_REPORT_TIME,
   ]);
 
-  if (await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK)) {
-    await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
+  if (_watchSubscription) {
+    _watchSubscription.remove();
+    _watchSubscription = null;
   }
+
+  await clearDebugLog();
 }
 
 export async function getDebugLog() {
   try {
-    const raw = await AsyncStorage.getItem(STORAGE_KEY_DEBUG_LOG);
+    const info = await FileSystem.getInfoAsync(DEBUG_LOG_PATH);
+    if (!info.exists) return [];
+    const raw = await FileSystem.readAsStringAsync(DEBUG_LOG_PATH);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -179,7 +180,9 @@ export async function getDebugLog() {
 }
 
 export async function clearDebugLog() {
-  await AsyncStorage.removeItem(STORAGE_KEY_DEBUG_LOG);
+  try {
+    await FileSystem.deleteAsync(DEBUG_LOG_PATH, { idempotent: true });
+  } catch {
+    // silently ignore
+  }
 }
-
-export { BACKGROUND_LOCATION_TASK };

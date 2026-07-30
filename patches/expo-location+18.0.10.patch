@@ -1,0 +1,42 @@
+diff --git a/node_modules/expo-location/android/src/main/java/expo/modules/location/services/LocationTaskService.kt b/node_modules/expo-location/android/src/main/java/expo/modules/location/services/LocationTaskService.kt
+index 80647ab..4e49598 100644
+--- a/node_modules/expo-location/android/src/main/java/expo/modules/location/services/LocationTaskService.kt
++++ b/node_modules/expo-location/android/src/main/java/expo/modules/location/services/LocationTaskService.kt
+@@ -20,6 +20,7 @@ class LocationTaskService : Service() {
+   private lateinit var mParentContext: Context
+   private val mServiceId = sServiceId++
+   private val mBinder: IBinder = ServiceBinder()
++  private var mIsForegroundStarted = false
+ 
+   inner class ServiceBinder : Binder() {
+     val service: LocationTaskService
+@@ -36,6 +37,15 @@ class LocationTaskService : Service() {
+     if (extras != null) {
+       mChannelId = extras.getString("appId") + ":" + extras.getString("taskName")
+       mKillService = extras.getBoolean("killService", false)
++      if (!mIsForegroundStarted) {
++        val serviceOptions = Bundle().apply {
++          putString("notificationTitle", extras.getString("notificationTitle"))
++          putString("notificationBody", extras.getString("notificationBody"))
++          putString("notificationColor", extras.getString("notificationColor"))
++        }
++        startForeground(serviceOptions)
++        mIsForegroundStarted = true
++      }
+     }
+     return START_REDELIVER_INTENT
+   }
+diff --git a/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt b/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt
+index e659285..f78f1b6 100644
+--- a/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt
++++ b/node_modules/expo-location/android/src/main/java/expo/modules/location/taskConsumers/LocationTaskConsumer.kt
+@@ -197,6 +197,9 @@ class LocationTaskConsumer(context: Context, taskManagerUtils: TaskManagerUtilsI
+       extras.putString("appId", task.appScopeKey)
+       extras.putString("taskName", task.name)
+       extras.putBoolean("killService", serviceOptions.getBoolean("killServiceOnDestroy", false))
++      extras.putString("notificationTitle", serviceOptions.getString("notificationTitle"))
++      extras.putString("notificationBody", serviceOptions.getString("notificationBody"))
++      extras.putString("notificationColor", serviceOptions.getString("notificationColor"))
+       serviceIntent.putExtras(extras)
+       context.startForegroundService(serviceIntent)
+       context.bindService(

@@ -26,7 +26,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated from "react-native-reanimated";
 import useAuthUser from "../hooks/useAuthUser";
 import { colors, borderRadius } from "../styles/theme";
-import { getDebugLog, BACKGROUND_LOCATION_TASK, isTaskDefined } from "../services/backgroundLocationTracker";
+import { getDebugLog, isTracking } from "../services/backgroundLocationTracker";
 
 const styles = StyleSheet.create({
   container: {
@@ -248,16 +248,12 @@ export default function Home({ signOut }) {
 
         <TouchableOpacity
           onPress={async () => {
-            const TaskManager = require("expo-task-manager");
             const Location = require("expo-location");
 
-            const tasks = await TaskManager.getRegisteredTasksAsync();
-            const taskNames = tasks.map((t) => t.taskName || t.name || JSON.stringify(t)).join(", ");
-            const taskRegistered = tasks.some((t) => (t.taskName || t.name) === BACKGROUND_LOCATION_TASK);
-            const defInfo = isTaskDefined();
-            const isStarted = await Location.hasStartedLocationUpdatesAsync(BACKGROUND_LOCATION_TASK);
+            const isWatching = isTracking();
             const fgPerm = await Location.getForegroundPermissionsAsync();
             const bgPerm = await Location.getBackgroundPermissionsAsync();
+            const providerStatus = await Location.getProviderStatusAsync();
 
             const isVolStr = await AsyncStorage.getItem("bg_isVolunteer");
             const userIdStr = await AsyncStorage.getItem("bg_userDbId");
@@ -268,12 +264,10 @@ export default function Home({ signOut }) {
               : log.map((e) => `  [${e.time.slice(11, 19)}] ${e.message}`).join("\n");
 
             const diag = [
-              `Module defined: ${defInfo.defined}`,
-              `Define error: ${defInfo.error || "none"}`,
-              `getRegisteredTasks: [${taskNames || "(empty)"}]`,
-              `Tracking started: ${isStarted}`,
+              `Watching: ${isWatching}`,
               `Foreground perm: ${fgPerm.status}`,
               `Background perm: ${bgPerm.status}`,
+              `Provider: ${JSON.stringify(providerStatus)}`,
               `isVolunteer: ${isVolStr}`,
               `userDbId: ${userIdStr || "(missing)"}`,
               `--- Events ---`,

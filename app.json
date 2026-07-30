@@ -27,7 +27,9 @@
         "RECORD_AUDIO",
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
-        "ACCESS_BACKGROUND_LOCATION"
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -62,7 +64,14 @@
       "expo-localization",
       "expo-asset",
       "expo-font",
-      "expo-location"
+      ["expo-location",{
+        "locationAlwaysAndWhenInUsePermission": "Saayam needs background location access to match nearby help requests.",
+        "locationAlwaysPermission": "Saayam needs background location access to match nearby help requests.",
+        "locationWhenInUsePermission": "For Volunteers: Saayam needs your location.",
+        "isIosBackgroundLocationEnabled": true,
+        "isAndroidBackgroundLocationEnabled": true,
+        "isAndroidForegroundServiceEnabled": true
+      }]
     ]
   }
 }
