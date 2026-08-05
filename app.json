@@ -34,6 +34,7 @@
     },
     "plugins": [
       "./plugins/withAndroidFix.cjs",
+      "./plugins/withIosFmtFix.cjs",
       ["expo-build-properties", {
         "android": {
           "enableJetifier": true,
