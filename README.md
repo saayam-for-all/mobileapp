@@ -36,7 +36,12 @@ Clone and checkout to the branch, then install dependencies:
 npm install
 ```
 
-Works with Expo Go 52.
+Requires a development build — Amplify v6 does not support Expo Go (see Important Notice below).
+
+Run tests:
+```bash
+npx jest
+```
 
 ---
 
@@ -44,7 +49,7 @@ Works with Expo Go 52.
 
 Since Amplify v6 doesn't support Expo Go, a **development build** is required for this branch.
 
-To configure and run the build:
+To build and run on a connected device or running emulator:
 ```bash
 # Android
 npx expo run:android    # or: npm run build:android
@@ -53,9 +58,21 @@ npx expo run:android    # or: npm run build:android
 npx expo run:ios        # or: npm run build:ios
 ```
 
-If successful, you'll see device/emulator options from Expo.
+This compiles the native app, installs it on the device/emulator, and starts Metro.
+
+Alternatively, start the dev server first, then open the dev build:
+```bash
+npx expo start
+```
+then press `a` for Android or `i` for iOS.
 
 > If you see `› Using Expo Go › Press s │ switch to development build`, press `s` to switch to Expo Build, then `a` for Android or `i` for iOS.
+
+---
+
+### Environment Variables
+
+The app reads `EXPO_PUBLIC_API_URL` from `.env` at the project root (tracked in the repo). It points to the production API by default — change it if you need to run against a local backend.
 
 ---
 
